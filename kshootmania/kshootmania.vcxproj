@@ -422,6 +422,9 @@
     <ProjectReference Include="..\ksmaudio\ksmaudio.vcxproj">
       <Project>{590cb790-463c-417a-bb1f-183adf4fe900}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\NocoUI\NocoUI.vcxproj">
+      <Project>{557d3fbd-c267-4eb1-8ad6-2c19af884151}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Font Include="App\assets\font\corporate-logo\Corporate-Logo-Medium-ver3.otf" />
