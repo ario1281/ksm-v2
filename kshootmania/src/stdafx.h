@@ -1,7 +1,31 @@
 ﻿#pragma once
-//# define NO_S3D_USING
+
 #include <Siv3D.hpp>
 #include <CoTaskLib.hpp>
+#include <NocoUI.hpp>
+
+#include <ctime>
+#include <map>
+#include <unordered_map>
+#include <string>
+#include <array>
+#include <vector>
+#include <stack>
+#include <list>
+#include <iterator>
+#include <queue>
+#include <algorithm>
+#include <memory>
+#include <random>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <functional>
+#include <thread>
+#include <atomic>
+#include <mutex>
+#include <future>
+
 #include "kson/kson.hpp"
 #include "common/common_defines.hpp"
 #include "common/asset_management.hpp"
