@@ -1,6 +1,7 @@
 ﻿#include "config_ini.hpp"
 #include "ksm_ini_data.hpp"
 #include "input/key_config.hpp"
+#include "music_game/scroll/hispeed_setting.hpp"
 
 namespace
 {
@@ -204,4 +205,30 @@ void ConfigIni::SetDouble(StringView key, double value)
 void ConfigIni::SetString(StringView key, StringView value)
 {
 	s_configIniData.setString(key, value);
+}
+
+Array<MusicGame::HispeedType> ConfigIni::LoadAvailableHispeedTypes()
+{
+	Array<MusicGame::HispeedType> availableTypes;
+	availableTypes.reserve(static_cast<std::size_t>(MusicGame::HispeedType::EnumCount));
+
+	if (GetBool(Key::kHispeedShowXMod, true))
+	{
+		availableTypes.push_back(MusicGame::HispeedType::XMod);
+	}
+	if (GetBool(Key::kHispeedShowOMod, true))
+	{
+		availableTypes.push_back(MusicGame::HispeedType::OMod);
+	}
+	if (GetBool(Key::kHispeedShowCMod, false))
+	{
+		availableTypes.push_back(MusicGame::HispeedType::CMod);
+	}
+
+	if (availableTypes.empty())
+	{
+		availableTypes.push_back(MusicGame::HispeedType::OMod);
+	}
+
+	return availableTypes;
 }

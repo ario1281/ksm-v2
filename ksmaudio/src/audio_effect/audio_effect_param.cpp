@@ -3,18 +3,68 @@
 #include <algorithm>
 #include <stdexcept>
 #include <cmath>
+#include <iostream>
 #include "ksmaudio/audio_effect/detail/wave_length_utils.hpp"
 
 namespace ksmaudio::AudioEffect
 {
-	// Implementation in HSP: https://github.com/m4saka/kshootmania-v1-hsp/blob/19bfb6acbec8abd304b2e7dae6009df8e8e1f66f/src/scene/play/play_utils.hsp#L405
-	// TODO: 正常な文字列かどうか検証するための関数を別途設ける
-	float StrToValue(Type type, const std::string& str)
+	namespace
 	{
+		// suffixの検証付きでfloatをパース
+		bool ParseFloatWithSuffix(const std::string& str, const std::string& suffix, float* pOutValue, const std::string& typeName = "")
+		{
+			std::size_t pos = 0;
+			try
+			{
+				*pOutValue = std::stof(str, &pos);
+			}
+			catch (...)
+			{
+				if (!typeName.empty())
+				{
+					std::cerr << "[ksmaudio warning] " << typeName << " parse error: " << str << std::endl;
+				}
+				return false;
+			}
+
+			// 不正な文字列を受け付けないようsuffixの開始位置をチェック
+			if (pos + suffix.length() != str.length())
+			{
+				if (!typeName.empty())
+				{
+					std::cerr << "[ksmaudio warning] " << typeName << " invalid suffix: " << str << std::endl;
+				}
+				return false;
+			}
+
+			if (str.substr(pos) != suffix)
+			{
+				if (!typeName.empty())
+				{
+					std::cerr << "[ksmaudio warning] " << typeName << " invalid suffix: " << str << std::endl;
+				}
+				return false;
+			}
+
+			return true;
+		}
+	}
+
+	// Implementation in HSP: https://github.com/m4saka/kshootmania-v1-hsp/blob/19bfb6acbec8abd304b2e7dae6009df8e8e1f66f/src/scene/play/play_utils.hsp#L405
+	float StrToValue(Type type, const std::string& str, bool* pSuccess)
+	{
+		if (pSuccess != nullptr)
+		{
+			*pSuccess = true;
+		}
+
 		try
 		{
 			switch (type)
 			{
+			case Type::kUnspecified:
+				return 0.0f;
+
 			case Type::kLength:
 			case Type::kWaveLength:
 				// value
@@ -22,11 +72,29 @@ namespace ksmaudio::AudioEffect
 				//   < 0: sec
 				if (str.ends_with("ms"))
 				{
-					return -std::max(std::stof(str), 0.0f) / 1000;
+					float value = 0.0f;
+					if (!ParseFloatWithSuffix(str, "ms", &value, "length"))
+					{
+						if (pSuccess != nullptr)
+						{
+							*pSuccess = false;
+						}
+						return 0.0f;
+					}
+					return -std::max(value, 0.0f) / 1000;
 				}
 				else if (str.ends_with('s') && !str.ends_with("es")) // Do not allow "XXXsamples"
 				{
-					return -std::max(std::stof(str), 0.0f);
+					float value = 0.0f;
+					if (!ParseFloatWithSuffix(str, "s", &value, "length"))
+					{
+						if (pSuccess != nullptr)
+						{
+							*pSuccess = false;
+						}
+						return 0.0f;
+					}
+					return -std::max(value, 0.0f);
 				}
 				else if (str.starts_with("1/"))
 				{
@@ -37,15 +105,46 @@ namespace ksmaudio::AudioEffect
 					}
 					else
 					{
+						if (pSuccess != nullptr)
+						{
+							*pSuccess = false;
+						}
 						return 0.0f;
 					}
 				}
-				return std::max(std::stof(str), 0.0f);
+				{
+					const float value = std::stof(str);
+					if (value < 0.0f)
+					{
+						std::cerr << "[ksmaudio warning] length value out of range (>= 0.0): " << value << std::endl;
+					}
+					return std::max(value, 0.0f);
+				}
 
 			case Type::kSample:
 				if (str.ends_with("samples"))
 				{
-					return std::clamp(std::stof(str), 0.0f, 44100.0f);
+					float value = 0.0f;
+					if (!ParseFloatWithSuffix(str, "samples", &value, "sample"))
+					{
+						if (pSuccess != nullptr)
+						{
+							*pSuccess = false;
+						}
+						return 0.0f;
+					}
+					if (value < 0.0f || value > 44100.0f)
+					{
+						std::cerr << "[ksmaudio warning] sample value out of range (0-44100): " << value << std::endl;
+					}
+					return std::clamp(value, 0.0f, 44100.0f);
+				}
+				else
+				{
+					if (pSuccess != nullptr)
+					{
+						*pSuccess = false;
+					}
 				}
 				break;
 
@@ -59,18 +158,83 @@ namespace ksmaudio::AudioEffect
 			case Type::kRate:
 				if (str.ends_with('%'))
 				{
-					return std::clamp(std::stof(str) / 100, 0.0f, 1.0f);
+					float value = 0.0f;
+					if (!ParseFloatWithSuffix(str, "%", &value, "rate"))
+					{
+						if (pSuccess != nullptr)
+						{
+							*pSuccess = false;
+						}
+						return 0.0f;
+					}
+					value = value / 100;
+					if (value < 0.0f || value > 1.0f)
+					{
+						std::cerr << "[ksmaudio warning] rate value out of range (0.0-1.0): " << value << std::endl;
+					}
+					return std::clamp(value, 0.0f, 1.0f);
 				}
-				return std::clamp(std::stof(str), 0.0f, 1.0f);
+				else if (str.starts_with("1/"))
+				{
+					const int d = std::stoi(str.substr(2U)); // 2 = strlen("1/")
+					if (d > 0)
+					{
+						return std::clamp(1.0f / d, 0.0f, 1.0f);
+					}
+					else
+					{
+						if (pSuccess != nullptr)
+						{
+							*pSuccess = false;
+						}
+						return 0.0f;
+					}
+				}
+				{
+					const float value = std::stof(str);
+					if (value < 0.0f || value > 1.0f)
+					{
+						std::cerr << "[ksmaudio warning] rate value out of range (0.0-1.0): " << value << std::endl;
+					}
+					return std::clamp(value, 0.0f, 1.0f);
+				}
 
 			case Type::kFreq:
 				if (str.ends_with("kHz"))
 				{
-					return std::max(std::stof(str), 0.0f) * 1000;
+					float value = 0.0f;
+					if (!ParseFloatWithSuffix(str, "kHz", &value, "freq"))
+					{
+						if (pSuccess != nullptr)
+						{
+							*pSuccess = false;
+						}
+						return 10.0f;
+					}
+					const float freq = std::max(value, 0.0f) * 1000;
+					if (freq < 10.0f || freq > 20000.0f)
+					{
+						std::cerr << "[ksmaudio warning] freq value out of range (10-20000Hz): " << freq << "Hz" << std::endl;
+					}
+					return std::clamp(freq, 10.0f, 20000.0f);
 				}
 				else if (str.ends_with("Hz"))
 				{
-					return std::max(std::stof(str), 0.0f);
+					float value = 0.0f;
+					if (!ParseFloatWithSuffix(str, "Hz", &value, "freq"))
+					{
+						if (pSuccess != nullptr)
+						{
+							*pSuccess = false;
+						}
+						return 10.0f;
+					}
+					const float freq = std::max(value, 0.0f);
+					if (freq < 10.0f || freq > 20000.0f)
+					{
+						std::cerr << "[ksmaudio warning] freq value out of range (10-20000Hz): " << freq << "Hz" << std::endl;
+					}
+					return std::clamp(freq, 10.0f, 20000.0f);
 				}
 				return 0.0f;
 
@@ -91,6 +255,10 @@ namespace ksmaudio::AudioEffect
 							return -(value + 48.0f);
 						}
 					}
+					else
+					{
+						std::cerr << "[ksmaudio warning] pitch value out of range (-48.0-48.0): " << value << std::endl;
+					}
 				}
 				return 0.0f;
 
@@ -100,17 +268,44 @@ namespace ksmaudio::AudioEffect
 			case Type::kFloat:
 				return std::stof(str);
 
+			case Type::kDB:
+				if (str.ends_with("dB"))
+				{
+					float value = 0.0f;
+					if (!ParseFloatWithSuffix(str, "dB", &value, "dB"))
+					{
+						if (pSuccess != nullptr)
+						{
+							*pSuccess = false;
+						}
+						return 0.0f;
+					}
+					return value;
+				}
+				return 0.0f;
+
 			case Type::kFilename:
 				return 0.0f;
 			}
 		}
 		catch ([[maybe_unused]] const std::invalid_argument& e)
 		{
-			// Just ignore errors here
+			if (pSuccess != nullptr)
+			{
+				*pSuccess = false;
+			}
 		}
 		catch ([[maybe_unused]] const std::out_of_range& e)
 		{
-			// Just ignore errors here
+			if (pSuccess != nullptr)
+			{
+				*pSuccess = false;
+			}
+		}
+
+		if (pSuccess != nullptr)
+		{
+			*pSuccess = false;
 		}
 		return 0.0f;
 	}
@@ -121,15 +316,29 @@ namespace ksmaudio::AudioEffect
 		const std::size_t pos2FindStart = ((pos1 == std::string::npos) ? 0U : pos1 + 1U/*'>'*/) + 1U/*negative sign '-'*/;
 		const std::size_t pos2 = str.find('-', pos2FindStart);
 
-		const std::string offStr = str.substr(0U, pos1);
-		const std::string onMinStr = (pos1 == std::string::npos) ? offStr : str.substr(pos1 + 1U/*'>'*/, pos2);
+		const std::string offStr = (pos1 == std::string::npos) ? ((pos2 == std::string::npos) ? str : str.substr(0U, pos2)) : str.substr(0U, pos1);
+		const std::string onMinStr = (pos1 == std::string::npos) ? offStr : ((pos2 == std::string::npos) ? str.substr(pos1 + 1U/*'>'*/) : str.substr(pos1 + 1U/*'>'*/, pos2 - pos1 - 1U));
 		const std::string onMaxStr = (pos2 == std::string::npos) ? onMinStr : str.substr(pos2 + 1U/*'-'*/);
 
+		bool offSuccess = true;
+		bool onMinSuccess = true;
+		bool onMaxSuccess = true;
+
 		ValueSet valueSet = {
-			.off = StrToValue(type, offStr),
-			.onMin = StrToValue(type, onMinStr),
-			.onMax = StrToValue(type, onMaxStr),
+			.off = StrToValue(type, offStr, &offSuccess),
+			.onMin = StrToValue(type, onMinStr, &onMinSuccess),
+			.onMax = StrToValue(type, onMaxStr, &onMaxSuccess),
 		};
+
+		// いずれかのパースに失敗した場合
+		if (!offSuccess || !onMinSuccess || !onMaxSuccess)
+		{
+			if (pSuccess != nullptr)
+			{
+				*pSuccess = false;
+			}
+			return {};
+		}
 
 		// For length parameters, the min and max values must have the same sign.
 		// Otherwise, a value set of 0 is returned.
@@ -245,11 +454,11 @@ namespace ksmaudio::AudioEffect
 
 	TapestopTriggerParam DefineTapestopTriggerParam(const std::string& valueSetStr)
 	{
-		return TapestopTriggerParam(StrToValueSet(Type::kSwitch, valueSetStr));
+		return TapestopTriggerParam{ StrToValueSet(Type::kSwitch, valueSetStr) };
 	}
 
 	UpdateTriggerParam DefineUpdateTriggerParam(const std::string& valueSetStr)
 	{
-		return UpdateTriggerParam(StrToValueSet(Type::kSwitch, valueSetStr));
+		return UpdateTriggerParam{ StrToValueSet(Type::kSwitch, valueSetStr) };
 	}
 }

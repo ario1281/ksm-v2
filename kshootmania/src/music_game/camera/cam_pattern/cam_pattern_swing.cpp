@@ -12,13 +12,11 @@ namespace MusicGame::Camera
 	{
 		assert(direction == 1 || direction == -1);
 
-		// swingがなければ何もしない
 		if (!m_swingEvents.contains(laserSlamPulse))
 		{
 			return;
 		}
 
-		// 既に再生済みの場合何もしない
 		if (m_alreadyInvokedEventPulses.contains(laserSlamPulse))
 		{
 			return;
@@ -26,16 +24,18 @@ namespace MusicGame::Camera
 
 		const auto& swingEvent = m_swingEvents.at(laserSlamPulse);
 
-		// 直角LASERとswing方向が一致しない場合は何もしない
 		if (swingEvent.d != direction)
 		{
 			return;
 		}
 
-		// swing開始
 		m_startPulse = currentPulse;
 		m_durationRelPulse = swingEvent.length;
 		m_direction = direction;
+		m_scale = swingEvent.v.scale;
+		m_repeat = swingEvent.v.repeat;
+		m_decayOrder = swingEvent.v.decayOrder;
+
 		m_alreadyInvokedEventPulses.insert(laserSlamPulse);
 	}
 
@@ -47,20 +47,42 @@ namespace MusicGame::Camera
 		}
 
 		const kson::RelPulse elapsedPulse = currentPulse - m_startPulse;
-
-		// ハイウェイの角度計算
-		const double rate = static_cast<double>(elapsedPulse) / static_cast<double>(m_durationRelPulse);
-		if (rate < 1.0)
+		if (elapsedPulse >= m_durationRelPulse)
 		{
-			double absDegrees = 0;
-			constexpr double kDuration = 360.0;
-			if (rate < 360.0 / kDuration)
-			{
-				absDegrees = -Sin(Math::ToRadians((rate * kDuration - 360.0) * 9 / 8)) * 90.0;
-			}
-
-			const double degrees = -m_direction * absDegrees;
-			camStatusRef.shiftX += degrees;
+			return;
 		}
+
+		const double rate = static_cast<double>(elapsedPulse) / static_cast<double>(m_durationRelPulse);
+
+		// ばねエフェクトの正弦波の値を計算
+		const double sineValue = Sin(Math::Pi * m_repeat * rate);
+
+		// 減衰を適用
+		double decayValue = 1.0;
+		if (m_decayOrder == 1)
+		{
+			// 線形
+			decayValue = 1.0 - rate;
+		}
+		else if (m_decayOrder == 2)
+		{
+			// 2次
+			decayValue = Pow(1.0 - rate, 2.0);
+		}
+
+		const double swingValue = 10.0 * sineValue * decayValue * (m_scale / 50.0) * m_direction;
+
+		camStatusRef.shiftX += swingValue / 2.0;
+	}
+
+	bool CamPatternSwing::hasEvent(kson::Pulse laserSlamPulse, int32 direction) const
+	{
+		if (!m_swingEvents.contains(laserSlamPulse))
+		{
+			return false;
+		}
+
+		const auto& swingEvent = m_swingEvents.at(laserSlamPulse);
+		return swingEvent.d == direction;
 	}
 }

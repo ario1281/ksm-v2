@@ -10,7 +10,15 @@ struct SelectFolderState
 		kFavorite,
 	};
 
+	enum class SortMode
+	{
+		kName = 0,
+		kLevel,
+	};
+
 	FolderType folderType = kNone;
+
+	SortMode sortMode = SortMode::kName;
 
 	String fullPath;
 };

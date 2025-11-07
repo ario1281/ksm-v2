@@ -1,10 +1,19 @@
 ﻿#include <Siv3D.hpp>
 #include <CoTaskLib.hpp>
+#include <NocoUI.hpp>
 #include "common/frame_rate_limit.hpp"
 #include "common/ime_utils.hpp"
+#include "common/asset_management.hpp"
 #include "addon/auto_mute_addon.hpp"
+#include "addon/disable_ime_addon.hpp"
 #include "ksmaudio/ksmaudio.hpp"
+#include "runtime_config.hpp"
 #include "scene/title/title_scene.hpp"
+#include "input/key_config.hpp"
+
+#ifdef __APPLE__
+#include <ksmplatform_macos/input_method.h>
+#endif
 
 void CreateHighScoreBackup()
 {
@@ -18,7 +27,7 @@ void CreateHighScoreBackup()
 	FileSystem::Copy(U"score", U"score_backup", CopyOption::UpdateExisting);
 }
 
-void Main()
+void KSMMain()
 {
 	// Escキーによるプログラム終了を無効化
 	System::SetTerminationTriggers(UserAction::CloseButtonClicked);
@@ -48,6 +57,9 @@ void Main()
 	// config.iniを読み込み
 	ConfigIni::Load();
 
+	// ランタイム設定を初期化
+	RuntimeConfig::RestoreJudgmentModesFromConfigIni();
+
 	// 言語ファイルを読み込み
 	I18n::LoadLanguage(ConfigIni::GetString(ConfigIni::Key::kLanguage));
 
@@ -67,13 +79,23 @@ void Main()
 
 	Addon::Register(AutoMuteAddon::kAddonName, std::make_unique<AutoMuteAddon>(), 1);
 
+#if defined(_WIN32) || defined(__APPLE__)
+	Addon::Register(DisableIMEAddon::kAddonName, std::make_unique<DisableIMEAddon>(), 2);
+#endif
+
 	// 毎フレーム連続してアセット生成した時の警告を無効化
 	// (楽曲選択でのスクロールにおいては、正常系でもテクスチャ読み込みが毎フレーム発生するため)
 	Profiler::EnableAssetCreationWarning(false);
 
-#ifdef _WIN32
-	// IME無効化
+#if defined(_WIN32) || defined(__APPLE__)
+	// 起動時はIME無効化を一度実行
+	// (これは起動時のものなので、IME無効化設定とは関係なく必ず実行)
 	IMEUtils::DetachIMEContext();
+#endif
+
+#ifdef __APPLE__
+	// macOS: 英数・かなキーのイベントタップを開始してIME切り替えを防ぐ
+	KSMPlatformMacOS_StartBlockingIMEKeys();
 #endif
 
 #ifdef _DEBUG
@@ -81,14 +103,26 @@ void Main()
 	Console.open();
 #endif
 
-	// コルーチンライブラリ初期化
+	// ライブラリ初期化
 	Co::Init();
+	noco::Init();
+
+	// NocoUIのグローバルデフォルトフォントを設定
+	noco::SetGlobalDefaultFont(AssetManagement::SystemFont());
 
 	// メインループ
 	const auto sceneRunner = Co::PlaySceneFrom<TitleScene>(TitleMenuItem::kStart).runScoped();
 	
 	while (System::Update())
 	{
+#ifdef __APPLE__
+		// macOSプラットフォーム特有のキーボード状態を更新
+		KeyConfig::UpdatePlatformKeyboard();
+
+		// テキスト編集中かどうかを設定(テキスト編集中はIMEキーをブロックしない)
+		KSMPlatformMacOS_SetIsEditingText(noco::IsEditingTextBox());
+#endif
+
 		if (sceneRunner.done())
 		{
 			break;
@@ -98,6 +132,24 @@ void Main()
 	// config.iniを保存
 	ConfigIni::Save();
 
+#ifdef __APPLE__
+	// macOS: 英数・かなキーのイベントタップを停止
+	KSMPlatformMacOS_StopBlockingIMEKeys();
+#endif
+
 	// 音声のバックエンドを終了
 	ksmaudio::Terminate();
+}
+
+void Main()
+{
+	try
+	{
+		KSMMain();
+	}
+	catch (const Error& e)
+	{
+		System::MessageBoxOK(e.what(), MessageBoxStyle::Error);
+		throw;
+	}
 }

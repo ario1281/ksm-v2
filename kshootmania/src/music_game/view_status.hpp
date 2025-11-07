@@ -13,6 +13,7 @@ namespace MusicGame
 
 		int32 score = 0;
 		double gaugePercentage = 0.0;
+		int32 gaugePercentageInt = 0; // 切り捨てで整数化したゲージパーセンテージ
 		int32 combo = 0;
 		bool isNoError = true;
 	};

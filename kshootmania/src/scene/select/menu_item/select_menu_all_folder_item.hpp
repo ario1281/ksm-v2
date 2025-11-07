@@ -18,9 +18,24 @@ public:
 		return kAllFolderSpecialPath;
 	}
 
+	virtual bool isFolder() const override
+	{
+		return true;
+	}
+
 	virtual void decide(const SelectMenuEventContext& context, int32 difficultyIdx) override;
 
-	virtual void drawCenter(int32 difficultyIdx, const RenderTexture& renderTexture, const SelectMenuItemGraphicAssets& assets) const override;
+	/// @brief Canvasのパラメータを設定(中央の項目)
+	/// @param context イベントコンテキスト
+	/// @param canvas 設定対象のCanvas
+	/// @param difficultyIdx 現在選択中の難易度のインデックス(0～3)
+	virtual void setCanvasParamsCenter(const SelectMenuEventContext& context, noco::Canvas& canvas, int32 difficultyIdx) const override;
 
-	virtual void drawUpperLower(int32 difficultyIdx, const RenderTexture& renderTexture, const SelectMenuItemGraphicAssets& assets, bool isUpper) const override;
+	/// @brief Canvasのパラメータを設定(上下の項目)
+	/// @param context イベントコンテキスト
+	/// @param canvas 設定対象のCanvas
+	/// @param difficultyIdx 現在選択中の難易度のインデックス(0～3)
+	/// @param paramNamePrefix パラメータ名のプレフィックス(例:"top0_")
+	/// @param nodeName ノード名
+	virtual void setCanvasParamsTopBottom(const SelectMenuEventContext& context, noco::Canvas& canvas, int32 difficultyIdx, StringView paramNamePrefix, StringView nodeName) const override;
 };

@@ -10,11 +10,16 @@ namespace MusicGame::Graphics
 	{
 	private:
 		const Texture m_jacketTexture;
+		const Vec2 m_jacketPosition;
 		const SizeF m_scaledJacketSize;
 
 		const RenderTexture m_titlePanelBaseTexture;
+		const Vec2 m_titlePanelPosition;
 
 		const Texture m_detailPanelBaseTexture;
+		const Vec2 m_detailPanelPosition;
+
+		const Texture m_positionMarkerTexture;
 
 		const TiledTexture m_difficultyTexture;
 		const TextureRegion m_difficultyTextureRegion;
@@ -30,6 +35,6 @@ namespace MusicGame::Graphics
 	public:
 		explicit SongInfoPanel(const kson::ChartData& chartData, FilePathView parentPath);
 
-		void draw(double currentBPM, const Scroll::HighwayScrollContext& highwayScrollContext) const;
+		void draw(double currentTimeSec, Duration bgmDuration, double currentBPM, const Scroll::HighwayScrollContext& highwayScrollContext, bool hasMovie) const;
 	};
 }

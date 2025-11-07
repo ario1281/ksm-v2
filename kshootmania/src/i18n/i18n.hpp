@@ -66,6 +66,7 @@ namespace I18n
 		kTurnRandom = 18,
 		kAssistTick = 30,
 		kAssistTickOn = 31,
+		kAssistTickOff = 32,
 		kAutoSync = 37,
 		kAutoSyncOnHigh = 38,
 		kAutoSyncOnMid = 39,
@@ -81,10 +82,10 @@ namespace I18n
 		kMovieOff = 61,
 		kMovieOn = 62,
 		kHispeed = 63,
-		kInfoPlayCount = 70,
-		kInfoClear = 71,
-		kInfoFullCombo = 72,
-		kInfoPerfect = 73,
+		kPlayStatsPlayCount = 70,
+		kPlayStatsClear = 71,
+		kPlayStatsFullCombo = 72,
+		kPlayStatsPerfect = 73,
 	};
 
 	enum class Play : int32

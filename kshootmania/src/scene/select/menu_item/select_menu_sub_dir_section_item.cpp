@@ -1,29 +1,44 @@
 ﻿#include "select_menu_sub_dir_section_item.hpp"
-#include "scene/select/select_menu_graphics.hpp"
+#include "common/fs_utils.hpp"
 
-SelectMenuSubDirSectionItem::SelectMenuSubDirSectionItem(FilePathView fullPath)
+SelectMenuSubDirSectionItem::SelectMenuSubDirSectionItem(FilePathView fullPath, const Optional<String>& customDisplayName)
 	: m_fullPath(fullPath)
-	, m_displayName(FsUtils::DirectoryNameByDirectoryPath(m_fullPath))
+	, m_displayName(customDisplayName.value_or(FsUtils::DirectoryNameByDirectoryPath(m_fullPath)))
 {
 }
 
 void SelectMenuSubDirSectionItem::decide(const SelectMenuEventContext& context, [[maybe_unused]] int32 difficultyIdx)
 {
-	//Print << U"Not Implemented (SelectMenuSubDirSectionItem::decide)";
+	context.fnMoveToNextSubDirSection();
 }
 
-void SelectMenuSubDirSectionItem::drawCenter([[maybe_unused]] int32 difficultyIdx, const RenderTexture& renderTexture, const SelectMenuItemGraphicAssets& assets) const
+void SelectMenuSubDirSectionItem::decideAutoPlay(const SelectMenuEventContext& context, [[maybe_unused]] int32 difficultyIdx)
 {
-	Shader::Copy(assets.subDirItemTextures.center, renderTexture);
-
-	const ScopedRenderTarget2D scopedRenderTarget(renderTexture);
-	assets.font(m_displayName).drawAt(44, Vec2{ 16 + 740 / 2, 135 + 102 / 2 });
+	context.fnMoveToPrevSubDirSection();
 }
 
-void SelectMenuSubDirSectionItem::drawUpperLower([[maybe_unused]] int32 difficultyIdx, const RenderTexture& renderTexture, const SelectMenuItemGraphicAssets& assets, bool isUpper) const
+void SelectMenuSubDirSectionItem::setCanvasParamsCenter([[maybe_unused]] const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx) const
 {
-	Shader::Copy(isUpper ? assets.subDirItemTextures.upperHalf : assets.subDirItemTextures.lowerHalf, renderTexture);
+	canvas.setParamValues({
+		{ U"center_isDirectory", false },
+		{ U"center_isSubDirectory", true },
+		{ U"center_isSong", false },
+		{ U"center_title", m_displayName },
+	});
+}
 
-	const ScopedRenderTarget2D scopedRenderTarget(renderTexture);
-	assets.font(m_displayName).drawAt(38, isUpper ? Vec2{ 16 + 770 / 2, 12 + 86 / 2 } : Vec2{ 16 + 770 / 2, 126 + 86 / 2 });
+void SelectMenuSubDirSectionItem::setCanvasParamsTopBottom([[maybe_unused]] const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx, StringView paramNamePrefix, [[maybe_unused]] StringView nodeName) const
+{
+	canvas.setParamValues({
+		{ paramNamePrefix + U"isDirectory", false },
+		{ paramNamePrefix + U"isSubDirectory", true },
+		{ paramNamePrefix + U"isSong", false },
+		{ paramNamePrefix + U"title", m_displayName },
+	});
+}
+
+void SelectMenuSubDirSectionItem::showInFileManager([[maybe_unused]] int32 difficultyIdx) const
+{
+	// サブフォルダをエクスプローラで開く
+	System::ShowInFileManager(m_fullPath);
 }

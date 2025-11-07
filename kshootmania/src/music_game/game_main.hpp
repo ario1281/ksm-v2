@@ -9,6 +9,7 @@
 #include "audio/bgm.hpp"
 #include "audio/assist_tick.hpp"
 #include "audio/laser_slam_se.hpp"
+#include "audio/fx_chip_se.hpp"
 #include "audio/audio_effect_main.hpp"
 #include "ui/hispeed_setting_menu.hpp"
 #include "graphics/graphics_main.hpp"
@@ -22,7 +23,7 @@ namespace MusicGame
 
 		PlayOption playOption;
 
-		bool assistTickEnabled = false;
+		AssistTickMode assistTickMode = AssistTickMode::kOff;
 	};
 
 	class GameMain
@@ -35,9 +36,16 @@ namespace MusicGame
 
 		FilePath m_parentPath;
 
+		// 初回更新かどうか
+		// TODO: 消したい
+		bool m_isFirstUpdate = true;
+
 		// 譜面情報
 		const kson::ChartData m_chartData;
 		const kson::TimingCache m_timingCache;
+
+		// プレイオプション
+		const PlayOption m_playOption;
 
 		// 判定
 		Judgment::JudgmentMain m_judgmentMain;
@@ -53,6 +61,8 @@ namespace MusicGame
 		Audio::BGM m_bgm;
 		Audio::AssistTick m_assistTick;
 		Audio::LaserSlamSE m_laserSlamSE;
+		Audio::FXChipSE m_fxChipSE;
+		ksmaudio::Sample m_hardFailedSound;
 
 		// 音声エフェクト
 		Audio::AudioEffectMain m_audioEffectMain;
@@ -67,11 +77,16 @@ namespace MusicGame
 		GameStatus m_gameStatus;
 		ViewStatus m_viewStatus;
 		bool m_isFinishedPrev = false;
-		bool m_isFirstUpdate = true;
+
+		// 再生制御
+		bool m_isPaused = false;
+		Stopwatch m_fastForwardStopwatch;
 
 		void updateStatus();
 
 		void updateHighwayScroll();
+
+		void processPlaybackControl();
 
 	public:
 		explicit GameMain(const GameCreateInfo& createInfo);
@@ -82,6 +97,7 @@ namespace MusicGame
 
 		void draw() const;
 
+		/// @brief プレイ終了のために判定処理をロックし、残りの未判定ノーツをERROR判定にする
 		void lockForExit();
 
 		void terminate();

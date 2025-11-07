@@ -1,4 +1,6 @@
 ﻿#include "ksc_io.hpp"
+#include "common/fs_utils.hpp"
+#include "ini/config_ini.hpp"
 
 namespace KscIo
 {
@@ -20,7 +22,8 @@ namespace KscIo
 
 			// サブフォルダの存在を考慮する必要があるため、songsフォルダからの相対パスを使用してkscファイルのパスを生成
 			const auto relativeChartFilePath = FileSystem::RelativePath(chartFilePath, FileSystem::FullPath(U"songs")); // TODO: songsフォルダ以外が指定可能になったら要修正
-			*pFilePath = U"score/PLAYER/{}.ksc"_fmt(FsUtils::EliminateExtension(relativeChartFilePath));
+			const String currentPlayer{ ConfigIni::GetString(ConfigIni::Key::kCurrentPlayer) };
+			*pFilePath = U"score/{}/{}.ksc"_fmt(currentPlayer, FsUtils::EliminateExtension(relativeChartFilePath));
 			return true;
 		}
 
@@ -29,6 +32,11 @@ namespace KscIo
 			if (pHighScoreInfo == nullptr)
 			{
 				assert(false && "pHighScoreInfo must not be NULL");
+				return false;
+			}
+
+			if (!FileSystem::Exists(kscFilePath))
+			{
 				return false;
 			}
 

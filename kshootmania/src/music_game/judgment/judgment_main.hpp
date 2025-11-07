@@ -23,6 +23,7 @@ namespace MusicGame::Judgment
 
 		void update(const kson::ChartData& chartData, GameStatus& gameStatusRef, ViewStatus& viewStatusRef);
 
+		/// @brief プレイ終了のために判定処理をロックし、残りの未判定ノーツをERROR判定にする
 		void lockForExit();
 
 		/// @brief PlayResultを取得

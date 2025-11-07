@@ -1,6 +1,6 @@
 ﻿#include "select_menu_dir_folder_item.hpp"
-#include "scene/select/select_menu_graphics.hpp"
 #include "graphics/font_utils.hpp"
+#include "common/fs_utils.hpp"
 
 SelectMenuDirFolderItem::SelectMenuDirFolderItem(IsCurrentFolderYN isCurrentFolder, FilePathView fullPath)
 	: m_isCurrentFolder(isCurrentFolder)
@@ -21,22 +21,28 @@ void SelectMenuDirFolderItem::decide(const SelectMenuEventContext& context, [[ma
 	}
 }
 
-void SelectMenuDirFolderItem::drawCenter([[maybe_unused]] int32 difficultyIdx, const RenderTexture& renderTexture, const SelectMenuItemGraphicAssets& assets) const
+void SelectMenuDirFolderItem::setCanvasParamsCenter([[maybe_unused]] const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx) const
 {
-	Shader::Copy(assets.dirItemTextures.center, renderTexture);
-
-	const String displayName = FolderDisplayNameCenter(m_displayName, m_isCurrentFolder);
-
-	const ScopedRenderTarget2D scopedRenderTarget(renderTexture);
-	FontUtils::DrawTextCenterWithFitWidth(assets.fontBold(displayName), 44, 42, { 36, 135, 700, 102 });
+	canvas.setParamValues({
+		{ U"center_isDirectory", true },
+		{ U"center_isSubDirectory", false },
+		{ U"center_isSong", false },
+		{ U"center_title", FolderDisplayNameCenter(m_displayName, m_isCurrentFolder) },
+	});
 }
 
-void SelectMenuDirFolderItem::drawUpperLower([[maybe_unused]] int32 difficultyIdx, const RenderTexture& renderTexture, const SelectMenuItemGraphicAssets& assets, bool isUpper) const
+void SelectMenuDirFolderItem::setCanvasParamsTopBottom([[maybe_unused]] const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx, StringView paramNamePrefix, [[maybe_unused]] StringView nodeName) const
 {
-	Shader::Copy(isUpper ? assets.dirItemTextures.upperHalf : assets.dirItemTextures.lowerHalf, renderTexture);
+	canvas.setParamValues({
+		{ paramNamePrefix + U"isDirectory", true },
+		{ paramNamePrefix + U"isSubDirectory", false },
+		{ paramNamePrefix + U"isSong", false },
+		{ paramNamePrefix + U"title", FolderDisplayNameTopBottom(m_displayName, m_isCurrentFolder) },
+	});
+}
 
-	const String displayName = FolderDisplayNameUpperLower(m_displayName, m_isCurrentFolder);
-
-	const ScopedRenderTarget2D scopedRenderTarget(renderTexture);
-	FontUtils::DrawTextCenterWithFitWidth(assets.font(displayName), 38, 36, isUpper ? Rect{ 26, 17, 750, 86 } : Rect{ 26, 131, 750, 86 });
+void SelectMenuDirFolderItem::showInFileManager([[maybe_unused]] int32 difficultyIdx) const
+{
+	// フォルダをエクスプローラで開く
+	System::ShowInFileManager(m_fullPath);
 }

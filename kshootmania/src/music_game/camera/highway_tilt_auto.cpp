@@ -41,8 +41,8 @@ namespace MusicGame::Camera
 						const auto& [_, section] = *itr;
 						if (!section.v.empty())
 						{
-							const auto& [_, v] = *section.v.begin();
-							tiltFactor += isLeftLaser ? v.v : -(1.0 - v.v);
+							const auto& [_, point] = *section.v.begin();
+							tiltFactor += isLeftLaser ? point.v.v : -(1.0 - point.v.v);
 						}
 					}
 				}
@@ -96,7 +96,7 @@ namespace MusicGame::Camera
 		}
 	}
 
-	void HighwayTiltAuto::updateTiltFactor(const kson::LaserLane<kson::LaserSection>& lanes, const kson::TiltInfo& tilt, kson::Pulse currentPulse)
+	void HighwayTiltAuto::updateTiltFactor(const kson::LaserLane<kson::LaserSection>& lanes, const kson::ByPulse<kson::TiltValue>& tilt, kson::Pulse currentPulse)
 	{
 		const double prevSmoothedTiltFactor = m_smoothedTiltFactor;
 
@@ -106,7 +106,7 @@ namespace MusicGame::Camera
 		m_smoothedTiltFactor = Interpolate(m_smoothedTiltFactor, targetTiltFactor, speed, Scene::DeltaTime());
 
 		// 傾きキープ
-		const bool keepEnabled = kson::ValueAtOrDefault(tilt.keep, currentPulse, false);
+		const bool keepEnabled = kson::AutoTiltKeepAt(tilt, currentPulse);
 		if (keepEnabled)
 		{
 			// 前回フレームより傾きが小さいor逆方向に傾いている場合はキープ
@@ -122,16 +122,16 @@ namespace MusicGame::Camera
 		m_prevTargetTiltFactor = targetTiltFactor;
 	}
 
-	void HighwayTiltAuto::updateTiltScale(const kson::LaserLane<kson::LaserSection>& lanes, const kson::TiltInfo& tilt, kson::Pulse currentPulse)
+	void HighwayTiltAuto::updateTiltScale(const kson::ByPulse<kson::TiltValue>& tilt, kson::Pulse currentPulse)
 	{
-		const double targetTiltScale = kson::ValueAtOrDefault(tilt.scale, currentPulse, 1.0);
+		const double targetTiltScale = kson::AutoTiltScaleAt(tilt, currentPulse);
 		m_tiltScale = Interpolate(m_tiltScale, targetTiltScale, kTiltScaleInterpolationSpeed, Scene::DeltaTime());
 	}
 
-	void HighwayTiltAuto::update(const kson::LaserLane<kson::LaserSection>& lanes, const kson::TiltInfo& tilt, kson::Pulse currentPulse)
+	void HighwayTiltAuto::update(const kson::LaserLane<kson::LaserSection>& lanes, const kson::ByPulse<kson::TiltValue>& tilt, kson::Pulse currentPulse)
 	{
 		updateTiltFactor(lanes, tilt, currentPulse);
-		updateTiltScale(lanes, tilt, currentPulse);
+		updateTiltScale(tilt, currentPulse);
 	}
 
 	double HighwayTiltAuto::radians() const

@@ -21,37 +21,20 @@ private:
 
 	LinearMenu m_menu;
 
-	TiledTexture m_menuItemTexture
-	{
-		TitleTexture::kMenuItem,
-		{
-			.row = kItemEnumCount,
-			.column = 2, // 加算テクスチャと減算テクスチャの2枚
-			.sourceScale = SourceScale::k3x,
-			.sourceSize = { 525, 75 },
-		}
-	};
-
-	TiledTexture m_menuCursorTexture{ TitleTexture::kMenuCursor, SourceScale::k3x };
+	std::shared_ptr<noco::Canvas> m_titleSceneCanvas;
 
 	Stopwatch m_stopwatch { StartImmediately::Yes };
-
-	double m_easedCursorPos = 0.0;
 
 	ksmaudio::Sample m_selectSe{ "se/title_sel.wav" };
 
 	Co::TaskFinishSource<TitleMenuItem> m_selectedMenuItemSource;
 
+	void refreshCanvasMenuCursor();
+
 public:
-	explicit TitleMenu(TitleMenuItem defaultMenuitem);
-
-	TitleMenu(TitleMenu&&) = default;
-
-	TitleMenu& operator=(TitleMenu&&) = default;
+	explicit TitleMenu(TitleMenuItem defaultMenuitem, const std::shared_ptr<noco::Canvas>& titleSceneCanvas);
 
 	void update();
-
-	void draw() const;
 
 	Co::Task<TitleMenuItem> selectedMenuItemAsync()
 	{

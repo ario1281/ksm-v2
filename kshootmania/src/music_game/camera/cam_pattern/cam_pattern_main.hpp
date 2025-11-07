@@ -10,9 +10,9 @@ namespace MusicGame::Camera
 	class CamPatternMain
 	{
 	private:
-		CamPatternSpin m_spin;			// 一回転
-		CamPatternHalfSpin m_halfSpin;	// 半回転
-		CamPatternSwing m_swing;		// 左右振動
+		CamPatternSpin m_spin;
+		CamPatternHalfSpin m_halfSpin;
+		CamPatternSwing m_swing;
 
 	public:
 		explicit CamPatternMain(const kson::ChartData& chartData);
@@ -20,5 +20,7 @@ namespace MusicGame::Camera
 		void onLaserSlamJudged(kson::Pulse laserSlamPulse, int32 direction, kson::Pulse currentPulse);
 
 		void applyToCamStatus(CamStatus& camStatusRef, kson::Pulse currentPulse) const;
+
+		bool hasSwingEvent(kson::Pulse laserSlamPulse, int32 direction) const;
 	};
 }

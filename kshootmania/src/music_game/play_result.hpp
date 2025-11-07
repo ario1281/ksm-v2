@@ -19,7 +19,7 @@ namespace MusicGame
 
 		double gaugePercentage = 0.0;
 
-		double gaugePercentageHard = 0.0;
+		double gaugePercentageForGrade = 0.0;
 
 		bool isAborted() const;
 

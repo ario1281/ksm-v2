@@ -1,33 +1,30 @@
 ﻿#include "select_menu_song_item.hpp"
 #include "graphics/font_utils.hpp"
 #include "scene/select/select_difficulty_menu.hpp"
-#include "scene/select/select_menu_graphics.hpp"
 
 namespace
 {
-	void DrawJacketImage(FilePathView filePath, const Vec2& pos, SizeF size)
+	std::shared_ptr<noco::Node> GetJacketNode(noco::Canvas& canvas, StringView itemNodeName)
 	{
-		// TODO: Cache jacket image texture
+		if (const auto itemNode = canvas.findByName(itemNodeName))
+		{
+			return itemNode->findByName(U"JacketImage");
+		}
+		return nullptr;
+	}
 
-		if (!FileSystem::IsFile(filePath))
+	std::shared_ptr<noco::Node> GetIconNode(noco::Canvas& canvas, StringView itemNodeName)
+	{
+		if (const auto itemNode = canvas.findByName(itemNodeName))
 		{
-			return;
+			return itemNode->findByName(U"Icon");
 		}
-
-		const Texture jacketTexture(filePath);
-		if (jacketTexture.width() < jacketTexture.height())
-		{
-			size.x *= static_cast<double>(jacketTexture.width()) / jacketTexture.height();
-		}
-		else if (jacketTexture.height() < jacketTexture.width())
-		{
-			size.y *= static_cast<double>(jacketTexture.height()) / jacketTexture.width();
-		}
-		jacketTexture.resized(size).draw(pos); 
+		return nullptr;
 	}
 }
 
 SelectMenuSongItem::SelectMenuSongItem(const FilePath& songDirectoryPath)
+	: m_fullPath(songDirectoryPath)
 {
 	const Array<FilePath> chartFilePaths = FileSystem::DirectoryContents(songDirectoryPath, Recursive::No);
 	for (const auto& chartFilePath : chartFilePaths)
@@ -41,7 +38,7 @@ SelectMenuSongItem::SelectMenuSongItem(const FilePath& songDirectoryPath)
 
 		if (chartInfo->hasError())
 		{
-			Logger << U"[SelectMenu] KSH Loading Error: {} ({})"_fmt(chartInfo->errorString(), chartFilePath);
+			Logger << U"[ksm warning] SelectMenuSongItem::SelectMenuSongItem: KSH Loading Error (error:'{}', chartFilePath:'{}')"_fmt(chartInfo->errorString(), chartFilePath);
 			continue;
 		}
 
@@ -49,13 +46,13 @@ SelectMenuSongItem::SelectMenuSongItem(const FilePath& songDirectoryPath)
 		if (difficultyIdx < 0 || kNumDifficulties <= difficultyIdx) [[unlikely]]
 		{
 			// 未知の難易度の場合は一番右の難易度にする
-			Logger << U"[SelectMenu] Difficulty index out of range: {} ({})"_fmt(difficultyIdx, chartFilePath);
+			Logger << U"[ksm warning] SelectMenuSongItem::SelectMenuSongItem: Difficulty index out of range (difficultyIdx:{}, chartFilePath:'{}')"_fmt(difficultyIdx, chartFilePath);
 			difficultyIdx = kNumDifficulties - 1;
 		}
 
 		if (m_chartInfos[difficultyIdx] != nullptr) [[unlikely]]
 		{
-			Logger << U"[SelectMenu] Skip duplication (difficultyIdx:{}): {}"_fmt(difficultyIdx, chartFilePath);
+			Logger << U"[ksm warning] SelectMenuSongItem::SelectMenuSongItem: Skip duplication (difficultyIdx:{}, chartFilePath:'{}')"_fmt(difficultyIdx, chartFilePath);
 			continue;
 		}
 
@@ -69,14 +66,14 @@ void SelectMenuSongItem::decide(const SelectMenuEventContext& context, int32 dif
 {
 	if (difficultyIdx < 0 || kNumDifficulties <= difficultyIdx)
 	{
-		Logger << U"[SelectMenu] Difficulty index out of range: {} ({})"_fmt(difficultyIdx, m_fullPath);
+		Logger << U"[ksm warning] SelectMenuSongItem::decide: Difficulty index out of range (difficultyIdx:{}, fullPath:'{}')"_fmt(difficultyIdx, m_fullPath);
 		return;
 	}
 
 	const SelectChartInfo* pChartInfo = chartInfoPtr(difficultyIdx);
 	if (pChartInfo == nullptr)
 	{
-		Logger << U"[SelectMenu] pChartInfo is null (difficultyIdx:{}): {}"_fmt(difficultyIdx, m_fullPath);
+		Logger << U"[ksm warning] SelectMenuSongItem::decide: pChartInfo is null (difficultyIdx:{}, fullPath:'{}')"_fmt(difficultyIdx, m_fullPath);
 		return;
 	}
 	const FilePath chartFilePath = FilePath{ pChartInfo->chartFilePath() };
@@ -87,14 +84,14 @@ void SelectMenuSongItem::decideAutoPlay(const SelectMenuEventContext& context, i
 {
 	if (difficultyIdx < 0 || kNumDifficulties <= difficultyIdx)
 	{
-		Logger << U"[SelectMenu] Difficulty index out of range: {} ({})"_fmt(difficultyIdx, m_fullPath);
+		Logger << U"[ksm warning] SelectMenuSongItem::decideAutoPlay: Difficulty index out of range (difficultyIdx:{}, fullPath:'{}')"_fmt(difficultyIdx, m_fullPath);
 		return;
 	}
 
 	const SelectChartInfo* pChartInfo = chartInfoPtr(difficultyIdx);
 	if (pChartInfo == nullptr)
 	{
-		Logger << U"[SelectMenu] pChartInfo is null (difficultyIdx:{}): {}"_fmt(difficultyIdx, m_fullPath);
+		Logger << U"[ksm warning] SelectMenuSongItem::decideAutoPlay: pChartInfo is null (difficultyIdx:{}, fullPath:'{}')"_fmt(difficultyIdx, m_fullPath);
 		return;
 	}
 	const FilePath chartFilePath = FilePath{ pChartInfo->chartFilePath() };
@@ -112,49 +109,98 @@ const SelectChartInfo* SelectMenuSongItem::chartInfoPtr(int difficultyIdx) const
 	return m_chartInfos[difficultyIdx].get();
 }
 
-void SelectMenuSongItem::drawCenter(int32 difficultyIdx, const RenderTexture& renderTexture, const SelectMenuItemGraphicAssets& assets) const
+void SelectMenuSongItem::setCanvasParamsCenter(const SelectMenuEventContext& context, noco::Canvas& canvas, int32 difficultyIdx) const
 {
-	Shader::Copy(assets.songItemTextures.center, renderTexture);
+	canvas.setParamValues({
+		{ U"center_isSong", true },
+		{ U"center_isDirectory", false },
+		{ U"center_isSubDirectory", false },
+	});
 
-	const ScopedRenderTarget2D scopedRenderTarget(renderTexture);
-
-	const SelectChartInfo* pChartInfo = chartInfoPtr(difficultyIdx);
-	if (pChartInfo == nullptr)
+	// 各難易度の存在有無とレベルを設定
+	for (int32 i = 0; i < kNumDifficulties; ++i)
 	{
-		assert(false && "SelectMenuSongItem::drawCenter: invalid difficultyIdx");
-		return;
+		const bool exists = m_chartInfos[i] != nullptr;
+		const int32 levelIndex = exists ? m_chartInfos[i]->level() - 1 : -1;
+		canvas.setParamValues({
+			{ U"center_difficulty{}Enabled"_fmt(i), exists },
+			{ U"center_difficulty{}LevelIndex"_fmt(i), levelIndex },
+		});
 	}
 
-	// Title
-	FontUtils::DrawTextCenterWithFitWidth(assets.fontBold(pChartInfo->title()), 27, 25, { 16, 12, 462, 36 });
+	// 選択中の難易度の情報を設定
+	if (difficultyIdx >= 0 && difficultyIdx < kNumDifficulties && m_chartInfos[difficultyIdx] != nullptr)
+	{
+		const SelectChartInfo* pChartInfo = m_chartInfos[difficultyIdx].get();
+		const HighScoreInfo& highScoreInfo = pChartInfo->highScoreInfo();
 
-	// Artist
-	FontUtils::DrawTextCenterWithFitWidth(assets.font(pChartInfo->artist()), 23, 22, { 16, 48, 462, 36 });
+		// TODO: 一旦NORMALゲージ固定
+		const GaugeType gaugeType = GaugeType::kNormalGauge;
 
-	// Jacket
-	DrawJacketImage(pChartInfo->jacketFilePath(), { 492, 22 }, { 254, 254 });
+		canvas.setParamValues({
+			{ U"center_title", pChartInfo->title() },
+			{ U"center_artist", pChartInfo->artist() },
+			{ U"center_bpm", pChartInfo->dispBPM() },
+			{ U"center_jacketAuthor", pChartInfo->jacketAuthor() },
+			{ U"center_information", pChartInfo->information() },
+			{ U"center_chartAuthor", pChartInfo->chartAuthor() },
+			{ U"center_difficultyCursorState", U"difficulty{}"_fmt(difficultyIdx) },
+			{ U"center_medalIndex", static_cast<int32>(highScoreInfo.medal()) },
+			{ U"center_highScoreGradeIndex", static_cast<int32>(highScoreInfo.grade(gaugeType)) },
+			{ U"center_highScore", U"{:08d}"_fmt(highScoreInfo.score(gaugeType)) },
+			{ U"center_gaugePercentage", ToString(highScoreInfo.percent(gaugeType)) },
+		});
 
-	// Jacket author (Illustrated by)
-	FontUtils::DrawTextLeftWithFitWidth(assets.font(pChartInfo->jacketAuthor()), 17, 15, { 630, 290, 110, 18 }, Palette::Black, 1);
+		// ジャケット画像を設定
+		// TODO: タグ等で取得可能にする
+		const Texture& jacketTexture = context.fnGetJacketTexture(pChartInfo->jacketFilePath());
+		if (const auto jacketNode = GetJacketNode(canvas, U"CenterItem"))
+		{
+			if (const auto sprite = jacketNode->getComponent<noco::Sprite>())
+			{
+				sprite->setTexture(jacketTexture);
+				if (jacketTexture.isEmpty())
+				{
+					sprite->setColor(ColorF{ 0.0, 0.0 });
+				}
+				else
+				{
+					sprite->setColor(Palette::White);
+				}
+			}
+		}
 
-	// Chart author (Effected by)
-	FontUtils::DrawTextLeftWithFitWidth(assets.font(pChartInfo->chartAuthor()), 18, 17, { 154, 293, 320, 22 }, Palette::White, 1);
+		// アイコン画像を設定
+		// TODO: タグ等で取得可能にする
+		if (const auto iconNode = GetIconNode(canvas, U"CenterItem"))
+		{
+			if (pChartInfo->iconFilePath().isEmpty())
+			{
+				// アイコンが指定されていない場合は非表示
+				iconNode->setActive(false);
+			}
+			else
+			{
+				// アイコンが指定されている場合はテクスチャロードして表示
+				const Texture& iconTexture = context.fnGetIconTexture(pChartInfo->iconFilePath());
+				iconNode->setActive(!iconTexture.isEmpty());
+				if (const auto sprite = iconNode->getComponent<noco::Sprite>())
+				{
+					sprite->setTexture(iconTexture);
+				}
+			}
+		}
 
-	// クリアメダル・ハイスコア・グレードを描画
-	const GaugeType gaugeType = GaugeType::kNormalGauge; // TODO: 現在選択中のゲージタイプを反映
-	const auto& highScoreInfo = pChartInfo->highScoreInfo();
-	assets.highScoreMedalTexture(static_cast<int32>(highScoreInfo.medal())).scaled(kScale2x).draw(42, 323);
-	const TextureFontTextLayout highScoreTextLayout({ 17, 15 }, TextureFontTextLayout::Align::Left, 8, 18.5);
-	assets.highScoreNumberTextureFont.draw(highScoreTextLayout, { 160, 342 }, highScoreInfo.score(gaugeType), ZeroPaddingYN::Yes);
-	assets.highScoreGradeTexture(static_cast<int32>(highScoreInfo.grade(gaugeType))).scaled(kScale2x).draw(334, 327);
+		// TODO: title_img, artist_imgの設定
+	}
+	else
+	{
+		throw Error{ U"Invalid difficultyIdx: {} (fullPath={})"_fmt(difficultyIdx, m_fullPath) };
+	}
 }
 
-void SelectMenuSongItem::drawUpperLower(int32 difficultyIdx, const RenderTexture& renderTexture, const SelectMenuItemGraphicAssets& assets, bool isUpper) const
+void SelectMenuSongItem::setCanvasParamsTopBottom(const SelectMenuEventContext& context, noco::Canvas& canvas, int32 difficultyIdx, StringView paramNamePrefix, [[maybe_unused]] StringView nodeName) const
 {
-	Shader::Copy(isUpper ? assets.songItemTextures.upperHalf : assets.songItemTextures.lowerHalf, renderTexture);
-
-	const ScopedRenderTarget2D scopedRenderTarget(renderTexture);
-
 	// 難易度が存在しない場合は代替カーソル値を使用して譜面情報を取得
 	// (曲名・アーティスト名・ジャケット画像はカーソル難易度が存在しない場合でも常に描画する必要があるため。
 	//  なお、difficultyIdxには既にCenterの項目の代替カーソル値が適用済みである、つまりCenterの項目における存在しない難易度を選択中の場合は存在する難易度の値に置換済みである点に注意。
@@ -167,43 +213,76 @@ void SelectMenuSongItem::drawUpperLower(int32 difficultyIdx, const RenderTexture
 	const SelectChartInfo* pAltChartInfo = chartInfoPtr(altDifficultyIdx);
 	if (pAltChartInfo == nullptr)
 	{
-		assert(false && "SelectMenuSongItem::drawUpperLower: pAltChartInfo is null");
+		assert(false && "SelectMenuSongItem::setCanvasParamsTopBottom: pAltChartInfo is null");
 		return;
 	}
 
-	// 曲名を描画
-	FontUtils::DrawTextCenterWithFitWidth(assets.fontBold(pAltChartInfo->title()), 28, 26, { 22, isUpper ? 10 : 117, 556, 40 });
+	const HighScoreInfo& highScoreInfo = pAltChartInfo->highScoreInfo();
+	const GaugeType gaugeType = GaugeType::kNormalGauge; // TODO: ゲージタイプの取得方法を確認
 
-	// アーティスト名を描画
-	FontUtils::DrawTextCenterWithFitWidth(assets.font(pAltChartInfo->artist()), 24, 22, { 245, isUpper ? 67 : 171, 324, 40 });
+	canvas.setParamValues({
+		{ paramNamePrefix + U"isSong", true },
+		{ paramNamePrefix + U"isDirectory", false },
+		{ paramNamePrefix + U"isSubDirectory", false },
+		{ paramNamePrefix + U"title", pAltChartInfo->title() },
+		{ paramNamePrefix + U"artist", pAltChartInfo->artist() },
+		{ paramNamePrefix + U"levelIndex", pAltChartInfo->level() },
+		{ paramNamePrefix + U"medalIndex", static_cast<int32>(highScoreInfo.medal()) },
+		{ paramNamePrefix + U"highScoreGradeIndex", static_cast<int32>(highScoreInfo.grade(gaugeType)) },
+	});
 
-	// ジャケット画像を描画
-	DrawJacketImage(pAltChartInfo->jacketFilePath(), { 600, 10 }, { 208, 208 });
-
-	// レベル・クリアメダル・グレードは、現在カーソルの難易度が存在しない場合は表示しないようにする必要がある
-	// そのため、difficultyIdxのままの難易度で取得したpChartInfoを使用する
-	if (const SelectChartInfo* pChartInfo = chartInfoPtr(difficultyIdx))
+	// ジャケット画像を設定
+	// TODO: タグ等で取得可能にする
+	const Texture jacketTexture = context.fnGetJacketTexture(pAltChartInfo->jacketFilePath());
+	if (const auto jacketNode = GetJacketNode(canvas, nodeName))
 	{
-		// レベルを描画
-		const int32 level = pChartInfo->level();
-		if (kLevelMin <= level && level <= kLevelMax)
+		if (const auto sprite = jacketNode->getComponent<noco::Sprite>())
 		{
-			const int32 textureRow = level - kLevelMin;
-			assets.songLevelNumberTexture(textureRow).scaled(0.25).draw(26, isUpper ? 74 : 180);
+			sprite->setTexture(jacketTexture);
+			if (jacketTexture.isEmpty())
+			{
+				sprite->setColor(ColorF{ 0.0, 0.0 });
+			}
+			else
+			{
+				sprite->setColor(Palette::White);
+			}
+		}
+	}
+
+	// アイコン画像を設定
+	// TODO: タグ等で取得可能にする
+	if (const auto iconNode = GetIconNode(canvas, nodeName))
+	{
+		if (pAltChartInfo->iconFilePath().isEmpty())
+		{
+			// アイコンが指定されていない場合は非表示
+			iconNode->setActive(false);
 		}
 		else
 		{
-			assert(false && "SelectMenuSongItem::drawUpperLower: level out of range");
+			// アイコンが指定されている場合はテクスチャロードして表示
+			const Texture iconTexture = context.fnGetIconTexture(pAltChartInfo->iconFilePath());
+			iconNode->setActive(!iconTexture.isEmpty());
+			if (const auto sprite = iconNode->getComponent<noco::Sprite>())
+			{
+				sprite->setTexture(iconTexture);
+			}
 		}
+	}
 
-		// クリアメダル・グレードを描画
-		const GaugeType gaugeType = GaugeType::kNormalGauge; // TODO: 現在選択中のゲージタイプを反映
-		const auto& highScoreInfo = pChartInfo->highScoreInfo();
-		assets.highScoreMedalTexture(static_cast<int32>(highScoreInfo.medal())).scaled(kScale2x).draw(70, isUpper ? 70 : 176);
-		assets.highScoreGradeTexture(static_cast<int32>(highScoreInfo.grade(gaugeType))).scaled(kScale2x).draw(183, isUpper ? 75 : 181);
-	}
-	else
+	// TODO: title_img, artist_imgの設定
+}
+
+void SelectMenuSongItem::showInFileManager(int32 difficultyIdx) const
+{
+	// 選択中の難易度の譜面ファイルを取得
+	const SelectChartInfo* pChartInfo = chartInfoPtr(difficultyIdx);
+	if (pChartInfo == nullptr)
 	{
-		assets.highScoreGradeTexture(static_cast<int32>(Grade::kNoGrade)).scaled(kScale2x).draw(183, isUpper ? 75 : 181);
+		return;
 	}
+
+	// エクスプローラで譜面ファイルを選択状態で開く
+	System::ShowInFileManager(pChartInfo->chartFilePath());
 }

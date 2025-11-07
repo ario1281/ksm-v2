@@ -18,6 +18,7 @@ namespace ksmaudio::AudioEffect
 		kPitch,
 		kInt,
 		kFloat,
+		kDB,
 		kFilename,
 	};
 
@@ -30,9 +31,9 @@ namespace ksmaudio::AudioEffect
 		float onMax = 0.0f;
 	};
 
-	float StrToValue(Type type, const std::string& str);
+	float StrToValue(Type type, const std::string& str, bool* pSuccess = nullptr);
 
-	ValueSet StrToValueSet(Type type, const std::string& str, bool* pIsError = nullptr);
+	ValueSet StrToValueSet(Type type, const std::string& str, bool* pSuccess = nullptr);
 
 	bool ValueAsBool(float value);
 
@@ -119,7 +120,7 @@ namespace ksmaudio::AudioEffect
 		}
 	};
 
-	struct UpdateTriggerParam
+	class UpdateTriggerParam
 	{
 	private:
 		Param m_innerParam;
@@ -183,6 +184,7 @@ namespace ksmaudio::AudioEffect
 		kUnknown,
 		kAttackTime,
 		kBandwidth,
+		kChunkSize,
 		kDelay,
 		kDepth,
 		kFeedback,
@@ -193,8 +195,10 @@ namespace ksmaudio::AudioEffect
 		kFreq2,
 		kFreqMax,
 		kGain,
+		kHiCutGain,
 		kHoldTime,
 		kMix,
+		kOverlap,
 		kPeriod,
 		kPitch,
 		kQ,
@@ -215,6 +219,7 @@ namespace ksmaudio::AudioEffect
 
 	inline const std::unordered_map<std::string, ParamID> kStrToParamID{
 		{ "attack_time", ParamID::kAttackTime },
+		{ "chunk_size", ParamID::kChunkSize },
 		{ "delay", ParamID::kDelay },
 		{ "depth", ParamID::kDepth },
 		{ "feedback_level", ParamID::kFeedbackLevel },
@@ -225,8 +230,10 @@ namespace ksmaudio::AudioEffect
 		{ "freq_2", ParamID::kFreq2 },
 		{ "freq_max", ParamID::kFreqMax },
 		{ "gain", ParamID::kGain },
+		{ "hi_cut_gain", ParamID::kHiCutGain },
 		{ "hold_time", ParamID::kHoldTime },
 		{ "mix", ParamID::kMix },
+		{ "overlap", ParamID::kOverlap },
 		{ "period", ParamID::kPeriod },
 		{ "pitch", ParamID::kPitch },
 		{ "q", ParamID::kQ },
@@ -248,6 +255,8 @@ namespace ksmaudio::AudioEffect
 	inline const std::unordered_map<ParamID, Type> kParamIDType{
 		{ ParamID::kUnknown, Type::kUnspecified },
 		{ ParamID::kAttackTime, Type::kLength },
+		{ ParamID::kBandwidth, Type::kFloat },
+		{ ParamID::kChunkSize, Type::kSample },
 		{ ParamID::kDelay, Type::kSample },
 		{ ParamID::kDepth, Type::kSample },
 		{ ParamID::kFeedback, Type::kRate },
@@ -258,8 +267,10 @@ namespace ksmaudio::AudioEffect
 		{ ParamID::kFreq2, Type::kFreq },
 		{ ParamID::kFreqMax, Type::kFreq },
 		{ ParamID::kGain, Type::kRate },
+		{ ParamID::kHiCutGain, Type::kDB },
 		{ ParamID::kHoldTime, Type::kLength },
 		{ ParamID::kMix, Type::kRate },
+		{ ParamID::kOverlap, Type::kRate },
 		{ ParamID::kPeriod, Type::kLength },
 		{ ParamID::kPitch, Type::kPitch },
 		{ ParamID::kQ, Type::kFloat },

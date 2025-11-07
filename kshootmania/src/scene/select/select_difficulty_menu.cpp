@@ -15,25 +15,6 @@ SelectDifficultyMenu::SelectDifficultyMenu(const SelectMenu* pSelectMenu)
 			.defaultCursor = kDifficultyIdxLight,
 		})
 	, m_pSelectMenu(pSelectMenu)
-	, m_difficultyTexture(SelectTexture::kSongDifficulty,
-		{
-			.row = 2,
-			.column = kNumDifficulties,
-			.sourceScale = SourceScale::k1x,
-			.sourceSize = { 115, 110 },
-		})
-	, m_levelNumberTexture(SelectTexture::kSongLevelNumber,
-		{
-			.row = kLevelMax,
-			.sourceScale = SourceScale::kL,
-			.sourceSize = { 150, 120 },
-		})
-	, m_cursorTexture(SelectTexture::kSongDifficultyCursor,
-		{
-			.row = 12,
-			.sourceScale = SourceScale::kL,
-			.sourceSize = { 200, 200 },
-		})
 	, m_stopwatch(StartImmediately::Yes)
 {
 }
@@ -49,6 +30,13 @@ void SelectDifficultyMenu::update()
 	// カーソルが変更なしの場合は特に何もしなくてOK
 	if (deltaCursor == 0)
 	{
+		return;
+	}
+
+	// メニューが空の場合は何もしない
+	if (m_pSelectMenu->empty())
+	{
+		m_menu.setCursor(cursorPrev);
 		return;
 	}
 
@@ -93,39 +81,6 @@ void SelectDifficultyMenu::update()
 		}
 	}
 	m_menu.setCursor(newCursor);
-}
-
-void SelectDifficultyMenu::draw(const Vec2& shakeVec) const
-{
-	const ISelectMenuItem& menuItem = m_pSelectMenu->cursorMenuItem();
-	if (!menuItem.difficultyMenuExists())
-	{
-		return;
-	}
-
-	const Vec2 baseVec = Scaled(65, 128) + LeftMarginVec() + shakeVec;
-
-	for (int32 difficultyIdx = 0; difficultyIdx < kNumDifficulties; ++difficultyIdx)
-	{
-		const SelectChartInfo* pChartInfo = menuItem.chartInfoPtr(difficultyIdx);
-
-		// 難易度項目の背景を描画
-		// Note: KSMv1でテクスチャの比率とは異なる縦横比で描画されていたので、ここでもそれを再現するために大きさ指定でリサイズしている
-		m_difficultyTexture(pChartInfo != nullptr ? 1 : 0, difficultyIdx).resized(ScaledL(220, 220)).draw(baseVec + ScaledL(50 + 236 * difficultyIdx, 324));
-
-		// レベルの数字を描画
-		if (pChartInfo != nullptr)
-		{
-			m_levelNumberTexture(Clamp(pChartInfo->level() - 1, 0, kLevelMax - 1)).draw(baseVec + ScaledL(86 + 236 * difficultyIdx, 358));
-		}
-	}
-
-	// カーソルのアニメーションを描画
-	{
-		const ScopedRenderStates2D renderState(BlendState::Additive);
-		const Vec2 position = Scaled(65 - 13, 125) + ScaledL(236 * cursor(), 246) + LeftMarginVec() + shakeVec;
-		m_cursorTexture(static_cast<int32>(m_stopwatch.sF() / 0.07) % 12).scaled(2.0).draw(position);
-	}
 }
 
 int32 SelectDifficultyMenu::cursor() const

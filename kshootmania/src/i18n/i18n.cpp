@@ -1,4 +1,5 @@
 ﻿#include "i18n.hpp"
+#include "../common/asset_management.hpp"
 
 namespace
 {
@@ -114,13 +115,15 @@ void I18n::LoadLanguage(StringView name, StringView fallback)
 			}
 		}
 	}
+
+	AssetManagement::RefreshSystemFontForCurrentLanguage();
 }
 
 StringView I18n::Get(Category category, int32 keyIdx)
 {
 	if (category < 0 || kCategoryMax <= category || keyIdx < 0 || kKeyIdxMax <= keyIdx)
 	{
-		Print << U"Warning: Failed to read from language dictionary! (key:'m{:0>2}-{:0>3}')"_fmt(std::to_underlying(category), keyIdx);
+		Print << U"Warning: Failed to read from language dictionary! (key:'m{:0>2}-{:0>3}')"_fmt(static_cast<std::underlying_type_t<Category>>(category), keyIdx);
 		return U"";
 	}
 	return s_i18nDictionary[category][keyIdx];

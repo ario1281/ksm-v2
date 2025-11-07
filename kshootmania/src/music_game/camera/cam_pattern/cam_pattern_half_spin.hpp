@@ -22,6 +22,5 @@ namespace MusicGame::Camera
 		void onLaserSlamJudged(kson::Pulse laserSlamPulse, int32 direction, kson::Pulse currentPulse);
 
 		void applyToCamStatus(CamStatus& camStatusRef, kson::Pulse currentPulse) const;
-
 	};
 }

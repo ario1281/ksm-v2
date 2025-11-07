@@ -32,6 +32,12 @@ public:
 
 	int32 level() const;
 
+	String dispBPM() const;
+
+	double stdBPM() const;
+
+	double stdBPMForHispeedTypeChange() const;
+
 	FilePath previewBGMFilePath() const;
 
 	SecondsF previewBGMOffset() const;
@@ -45,6 +51,9 @@ public:
 	String information() const;
 
 	const HighScoreInfo& highScoreInfo() const;
+
+	// 現在のプレイ設定でハイスコア情報を再読み込み
+	void reloadHighScoreInfo();
 
 	bool hasError() const;
 

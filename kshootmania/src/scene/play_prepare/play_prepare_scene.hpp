@@ -1,8 +1,9 @@
 ﻿#pragma once
 #include <CoTaskLib.hpp>
-#include "play_prepare_assets.hpp"
-#include "play_prepare_panel.hpp"
 #include "ksmaudio/ksmaudio.hpp"
+#include "play_prepare_assets.hpp"
+#include "music_game/ui/hispeed_setting_menu.hpp"
+#include "music_game/scroll/highway_scroll.hpp"
 
 class PlayPrepareScene : public Co::SceneBase
 {
@@ -15,13 +16,13 @@ private:
 
 	const kson::ChartData m_chartData;
 
-	const Texture m_bgTexture{ TextureAsset(PlayPrepareTexture::kBG) };
+	std::shared_ptr<noco::Canvas> m_canvas;
 
-	const Texture m_jacketTexture;
+	MusicGame::HispeedSettingMenu m_hispeedMenu;
 
-	PlayPreparePanel m_playPreparePanel;
+	MusicGame::Scroll::HighwayScroll m_highwayScroll;
 
-	double m_jacketScale = 1.0;
+	Stopwatch m_stopwatchSinceHispeedChange{ StartImmediately::Yes };
 
 public:
 	explicit PlayPrepareScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay);
@@ -30,7 +31,11 @@ public:
 
 	virtual Co::Task<void> start() override;
 
+	void update();
+
 	virtual void draw() const override;
 
 	virtual Co::Task<void> fadeIn() override;
+
+	virtual Co::Task<void> postFadeOut() override;
 };

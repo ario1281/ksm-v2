@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <unordered_map>
 
 enum class OptionKeyConfigCursor
 {
@@ -34,6 +35,11 @@ private:
 	const Font m_font = AssetManagement::SystemFont();
 
 	const TiledTexture m_fxLRTexture;
+
+#ifdef __APPLE__
+	// macOSプラットフォーム特有キーの前フレーム状態を管理
+	std::unordered_map<int, bool> m_platformKeyWasPressed;
+#endif
 
 	void setInput(const Input& input);
 

@@ -11,6 +11,9 @@ private:
 
 	// 数値オプション用
 	const String m_suffixStr;
+	const String m_suffixStrZero;
+	const String m_suffixStrPositive;
+	const String m_suffixStrNegative;
 
 	// 選択肢オプション用
 	const Array<std::pair<String, String>> m_valueDisplayNamePairs;
@@ -32,6 +35,9 @@ public:
 		int32 valueDefault = 0;
 		int32 valueStep = 0;
 		String suffixStr;
+		String suffixStrZero;
+		String suffixStrPositive;
+		String suffixStrNegative;
 
 		// 選択肢オプション用
 		Array<std::pair<String, String>> valueDisplayNamePairs;
@@ -52,6 +58,10 @@ public:
 		static CreateInfo Enum(StringView configIniKey, const Array<std::pair<double, String>>& valueDisplayNamePairs);
 
 		static CreateInfo Int(StringView configIniKey, int32 valueMin = std::numeric_limits<int32>::min(), int32 valueMax = std::numeric_limits<int32>::max(), int32 valueDefault = 0, StringView suffixStr = U"", int32 valueStep = 1);
+
+		CreateInfo& setAdditionalSuffixes(StringView suffixStrZero, StringView suffixStrPositive, StringView suffixStrNegative)&;
+
+		CreateInfo&& setAdditionalSuffixes(StringView suffixStrZero, StringView suffixStrPositive, StringView suffixStrNegative)&&;
 
 		CreateInfo& setKeyTextureIdx(int32 idx)&;
 

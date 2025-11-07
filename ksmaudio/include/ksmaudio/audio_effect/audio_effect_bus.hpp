@@ -84,7 +84,7 @@ namespace ksmaudio::AudioEffect
 
 		template <typename T>
 		void emplaceAudioEffect(const std::string& name,
-			const std::unordered_map<std::string, std::string>& params,
+			const std::map<std::string, std::string>& params,
 			const std::unordered_map<std::string, std::map<float, std::string>>& paramChanges = {},
 			const std::set<float>& updateTriggerTiming = {})
 			requires std::derived_from<T, AudioEffect::IAudioEffect>
@@ -97,5 +97,10 @@ namespace ksmaudio::AudioEffect
 		bool audioEffectContainsName(const std::string& name) const;
 
 		std::size_t audioEffectNameToIdx(const std::string& name) const;
+
+		// インデックスを別のバスのインデックスに変換
+		// このバスのインデックスから名前を取得し、otherBusでその名前に対応するインデックスを返す
+		// otherBusに同じ名前のエフェクトが存在しない場合はstd::nulloptを返す
+		std::optional<std::size_t> convertIdxToOtherBus(std::size_t idx, const AudioEffectBus& otherBus) const;
     };
 }

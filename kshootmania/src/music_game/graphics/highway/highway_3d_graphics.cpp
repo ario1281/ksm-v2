@@ -49,35 +49,60 @@ namespace MusicGame::Graphics
 	void Highway3DGraphics::update(const ViewStatus& viewStatus)
 	{
 		// メッシュの頂点座標を更新
-		// HSP版の該当箇所: https://github.com/m4saka/kshootmania-v1-hsp/blob/d2811a09e2d75dad5cc152d7c4073897061addb7/src/scene/play/play_draw_frame.hsp#L779-L821
+		// HSP版の該当箇所: https://github.com/kshootmania/ksm-v1/blob/d2811a09e2d75dad5cc152d7c4073897061addb7/src/scene/play/play_draw_frame.hsp#L779-L821
 
 		const auto& camStatus = viewStatus.camStatus;
-		const double zoom = Camera::ScaledCamZoomValue(camStatus.zoom);
-		const double rotationX = ToRadians(camStatus.rotationX * 360 / 2400);
-		const double sinRotationX = Sin(rotationX);
-		const double cosRotationX = Cos(rotationX);
+		const double scaledZoomBottom = Camera::ScaledCamZoomBottomValue(camStatus.zoomBottom);
 
-		m_meshData.vertices[0].pos.y = kPlaneHeightAboveJdgline * sinRotationX / 2.5; // 奥の辺 上方向
-		m_meshData.vertices[1].pos.y = m_meshData.vertices[0].pos.y;
-		m_meshData.vertices[2].pos.y = -zoom * 100 * Sin(kCameraToJdglineRadians) * kPlaneHeight / kPlaneHeightAboveJdgline - kPlaneHeightBelowJdgline * sinRotationX / 2.5; // 手前の辺 上方向
-		m_meshData.vertices[3].pos.y = m_meshData.vertices[2].pos.y;
-		m_meshData.vertices[0].pos.z = -kPlaneHeightAboveJdgline / 2 + kPlaneHeightAboveJdgline * cosRotationX; // 奥の辺 手前方向
-		m_meshData.vertices[1].pos.z = m_meshData.vertices[0].pos.z;
-		m_meshData.vertices[2].pos.z = -kPlaneHeightAboveJdgline / 2 - kPlaneHeightBelowJdgline / 2 * cosRotationX - zoom * 100 * Cos(kCameraToJdglineRadians) * kPlaneHeight / kPlaneHeightAboveJdgline; // 手前の辺 手前方向
-		m_meshData.vertices[3].pos.z = m_meshData.vertices[2].pos.z;
-
-		const double rotationXMod = MathUtils::WrappedFmod(rotationX, Math::TwoPi);
-		const bool shouldFlipTriangles = Math::Pi - kHighwayRotationXByCamera <= rotationXMod && rotationXMod < Math::TwoPi - kHighwayRotationXByCamera;
-		if (shouldFlipTriangles != m_trianglesFlipped)
+		if (camStatus.useLegacyZoomTop)
 		{
-			m_meshData.flipTriangles();
-			m_trianglesFlipped = shouldFlipTriangles;
+			// KSHバージョン167未満の場合、zoom_topは移動として扱う
+			// HSP版: https://github.com/kshootmania/ksm-v1/blob/ea05374a3ece796612b29d927cb3c6f5aabb266e/src/scene/play/play_draw_frame.hsp#L828-L841
+			const double legacyZoomTop = camStatus.zoomTop;
+			const double heightRatio = kPlaneHeightBelowJdgline / kPlaneHeightAboveJdgline; // sr/lr
+
+			m_meshData.vertices[0].pos.y = -legacyZoomTop * 100 * Sin(kCameraToJdglineRadians); // 奥の辺 上方向
+			m_meshData.vertices[1].pos.y = m_meshData.vertices[0].pos.y;
+			m_meshData.vertices[0].pos.z = kPlaneHeight / 2 + legacyZoomTop * 100 * Cos(kCameraToJdglineRadians); // 奥の辺 手前方向(v1とZ軸の向きが逆なので符号を反転)
+			m_meshData.vertices[1].pos.z = m_meshData.vertices[0].pos.z;
+
+			m_meshData.vertices[2].pos.y = -scaledZoomBottom * 100 * Sin(kCameraToJdglineRadians) * kPlaneHeight / kPlaneHeightAboveJdgline // 手前の辺 上方向
+			                              + legacyZoomTop * 100 * heightRatio * Sin(kCameraToJdglineRadians);
+			m_meshData.vertices[3].pos.y = m_meshData.vertices[2].pos.y;
+			m_meshData.vertices[2].pos.z = -kPlaneHeight / 2 // 手前の辺 手前方向(v1とZ軸の向きが逆なので符号を反転)
+			                              - scaledZoomBottom * 100 * Cos(kCameraToJdglineRadians) * kPlaneHeight / kPlaneHeightAboveJdgline
+			                              - legacyZoomTop * 100 * heightRatio * Cos(kCameraToJdglineRadians);
+			m_meshData.vertices[3].pos.z = m_meshData.vertices[2].pos.z;
+		}
+		else
+		{
+			// KSHバージョン167以降の場合、zoom_topは判定ラインまわりの回転として扱う
+			const double rotationX = ToRadians(camStatus.zoomTop * 360 / 2400);
+			const double sinRotationX = Sin(rotationX);
+			const double cosRotationX = Cos(rotationX);
+
+			m_meshData.vertices[0].pos.y = kPlaneHeightAboveJdgline * sinRotationX / 2.5; // 奥の辺 上方向
+			m_meshData.vertices[1].pos.y = m_meshData.vertices[0].pos.y;
+			m_meshData.vertices[2].pos.y = -scaledZoomBottom * 100 * Sin(kCameraToJdglineRadians) * kPlaneHeight / kPlaneHeightAboveJdgline - kPlaneHeightBelowJdgline * sinRotationX / 2.5; // 手前の辺 上方向
+			m_meshData.vertices[3].pos.y = m_meshData.vertices[2].pos.y;
+			m_meshData.vertices[0].pos.z = -kPlaneHeightAboveJdgline / 2 + kPlaneHeightAboveJdgline * cosRotationX; // 奥の辺 手前方向(v1とZ軸の向きが逆なので符号を反転)
+			m_meshData.vertices[1].pos.z = m_meshData.vertices[0].pos.z;
+			m_meshData.vertices[2].pos.z = -kPlaneHeightAboveJdgline / 2 - kPlaneHeightBelowJdgline / 2 * cosRotationX - scaledZoomBottom * 100 * Cos(kCameraToJdglineRadians) * kPlaneHeight / kPlaneHeightAboveJdgline; // 手前の辺 手前方向(v1とZ軸の向きが逆なので符号を反転)
+			m_meshData.vertices[3].pos.z = m_meshData.vertices[2].pos.z;
+
+			const double rotationXMod = MathUtils::WrappedFmod(rotationX, Math::TwoPi);
+			const bool shouldFlipTriangles = Math::Pi - kHighwayRotationXByCamera <= rotationXMod && rotationXMod < Math::TwoPi - kHighwayRotationXByCamera;
+			if (shouldFlipTriangles != m_trianglesFlipped)
+			{
+				m_meshData.flipTriangles();
+				m_trianglesFlipped = shouldFlipTriangles;
+			}
 		}
 
 		m_mesh.fill(m_meshData);
 	}
 
-	void Highway3DGraphics::draw2D(const kson::ChartData& chartData, const kson::TimingCache& timingCache, const GameStatus& gameStatus, const ViewStatus& viewStatus, const Scroll::HighwayScrollContext& highwayScrollContext) const
+	void Highway3DGraphics::draw2D(const kson::ChartData& chartData, const PlayOption& playOption, const kson::TimingCache& timingCache, const GameStatus& gameStatus, const ViewStatus& viewStatus, const Scroll::HighwayScrollContext& highwayScrollContext) const
 	{
 		m_renderTexture.drawBaseTexture(viewStatus.camStatus.centerSplit);
 
@@ -147,19 +172,19 @@ namespace MusicGame::Graphics
 		}
 
 		// BT/FXノーツの描画
-		m_buttonNoteGraphics.draw(chartData, gameStatus, viewStatus, highwayScrollContext, m_renderTexture);
+		m_buttonNoteGraphics.draw(chartData, gameStatus, viewStatus, playOption, highwayScrollContext, m_renderTexture);
 
 		// キービームの描画
 		m_keyBeamGraphics.draw(gameStatus, viewStatus, m_renderTexture);
 
 		// レーザーノーツの描画
-		m_laserNoteGraphics.draw(chartData, gameStatus, highwayScrollContext, m_renderTexture);
+		m_laserNoteGraphics.draw(chartData, playOption, gameStatus, highwayScrollContext, m_renderTexture);
 	}
 
-	void Highway3DGraphics::draw3D(const GameStatus& gameStatus, const ViewStatus& viewStatus) const
+	void Highway3DGraphics::draw3D(const ViewStatus& viewStatus) const
 	{
 		// レンダーテクスチャを3D空間上へ描画
-		const double radians = Math::ToRadians(viewStatus.camStatus.rotationZ + viewStatus.camStatus.rotationZHighway) + viewStatus.tiltRadians;
+		const double radians = Math::ToRadians(viewStatus.camStatus.rotationDeg + viewStatus.camStatus.rotationDegHighway) + viewStatus.tiltRadians;
 		const double shiftX = viewStatus.camStatus.shiftX;
 		const Transformer3D transform(Camera::CamShiftXMatrix(shiftX) * TiltTransformMatrix(radians));
 		m_renderTexture.draw3D(m_mesh);

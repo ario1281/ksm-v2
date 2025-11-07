@@ -12,13 +12,11 @@ namespace MusicGame::Camera
 	{
 		assert(direction == 1 || direction == -1);
 
-		// 半回転がなければ何もしない
 		if (!m_halfSpinEvents.contains(laserSlamPulse))
 		{
 			return;
 		}
 
-		// 既に再生済みの場合何もしない
 		if (m_alreadyInvokedEventPulses.contains(laserSlamPulse))
 		{
 			return;
@@ -26,13 +24,11 @@ namespace MusicGame::Camera
 
 		const auto& halfSpinEvent = m_halfSpinEvents.at(laserSlamPulse);
 
-		// 直角LASERと回転の方向が一致しない場合何もしない
 		if (halfSpinEvent.d != direction)
 		{
 			return;
 		}
 
-		// 回転開始
 		m_startPulse = currentPulse;
 		m_durationRelPulse = halfSpinEvent.length;
 		m_direction = direction;
@@ -48,12 +44,9 @@ namespace MusicGame::Camera
 
 		const kson::RelPulse elapsedPulse = currentPulse - m_startPulse;
 
-		// ハイウェイの角度計算
 		const double rate = static_cast<double>(elapsedPulse) / static_cast<double>(m_durationRelPulse);
 		if (rate < 1.0)
 		{
-			// 60度, 15度ずつ左右に揺らす
-			// HSP版: https://github.com/kshootmania/ksm-v1/blob/b26026420fa164310bf25f93c218bb83480faef8/src/scene/play/play_game_logic.hsp#L233-L244
 			double absDegrees;
 			constexpr double kDuration = 400.0;
 			if (rate < 110.0 / kDuration)
@@ -74,20 +67,18 @@ namespace MusicGame::Camera
 			}
 
 			const double degrees = -m_direction * absDegrees;
-			camStatusRef.rotationZHighway += degrees;
+			camStatusRef.rotationDegHighway += degrees;
 		}
 
-		// 判定ラインの角度計算
 		if (rate < 1.5)
 		{
 			const double decayRate = (rate > 1.0) ? ((1.5 - rate) / (1.5 - 1.0)) : 1.0;
-			camStatusRef.rotationZJdgline += -m_direction * Sin(Math::TwoPi * rate) * 20 * decayRate;
+			camStatusRef.rotationDegJdgline += -m_direction * Sin(Math::TwoPi * rate) * 20 * decayRate;
 		}
 
-		// 背景アニメーションの角度計算
 		if (rate < 0.75)
 		{
-			camStatusRef.rotationZLayer += -m_direction * Sin(rate * 1.1 / 0.75) / Sin(1.1) * 360;
+			camStatusRef.rotationDegLayer += -m_direction * Sin(rate * 1.1 / 0.75) / Sin(1.1) * 360;
 		}
 	}
 }

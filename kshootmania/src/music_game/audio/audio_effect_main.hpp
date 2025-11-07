@@ -16,10 +16,11 @@ namespace MusicGame::Audio
 		std::array<bool, kson::kNumLaserLanesSZ> laserIsOnOrNone;
 	};
 
-	struct AudioEffectInvocation
+	struct DSPAudioEffectInvocation
 	{
 		std::size_t audioEffectIdx;
 
+		// longEventの上書きパラメータ
 		ksmaudio::AudioEffect::ParamValueSetDict overrideParams;
 
 		// LASER音声エフェクトの種類がpeaking_filterかどうか
@@ -27,11 +28,21 @@ namespace MusicGame::Audio
 		bool isPeakingFilterLaser = false;
 	};
 
+	struct SwitchAudioInvocation
+	{
+		std::size_t switchAudioIdx;
+	};
+
+	using AudioEffectInvocation = std::variant<DSPAudioEffectInvocation, SwitchAudioInvocation>;
+
 	class AudioEffectMain
 	{
 	private:
 		const kson::FXLane<Optional<AudioEffectInvocation>> m_longFXNoteInvocations;
 		const kson::ByPulse<Optional<AudioEffectInvocation>> m_laserPulseInvocations;
+
+		const double m_audioProcDelaySec;
+		const double m_peakingFilterDelaySec;
 
 		std::array<bool, kson::kNumFXLanesSZ> m_longFXPressedPrev = { false, false };
 
@@ -44,8 +55,8 @@ namespace MusicGame::Audio
 		const Optional<AudioEffectInvocation>& getActiveLaserAudioEffectInvocation(kson::Pulse currentPulseForAudio) const;
 		
 	public:
-		AudioEffectMain(BGM& bgm, const kson::ChartData& chartData, const kson::TimingCache& timingCache);
+		AudioEffectMain(BGM& bgm, const kson::ChartData& chartData, const kson::TimingCache& timingCache, const FilePath& parentPath, double audioProcDelaySec);
 
-		void update(BGM& bgm, const kson::ChartData& chartData, const kson::TimingCache& timingCache, const AudioEffectInputStatus& inputStatus);
+		void update(BGM& bgm, const kson::ChartData& chartData, const kson::TimingCache& timingCache, const AudioEffectInputStatus& inputStatus, kson::Pulse currentPulseForSwitchAudio);
 	};
 }

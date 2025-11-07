@@ -26,6 +26,12 @@ https://github.com/kshootmania/ksm-v2/wiki#%E9%96%8B%E7%99%BA%E7%8A%B6%E6%B3%81
     - 下記からインストーラをダウンロードして実行してください / Download and run the installer below
         - https://github.com/Siv3D/OpenSiv3D#downloads
 
+## Contributionについて
+
+本プロジェクトは実装途中の段階であり、満たす必要がある要件(互換性に関する必須事項など)が十分にドキュメント化されていないため、機能実装についてのContributionは当面の間受け付けておりません。
+
+既存処理の不具合修正に関するContributionについてはPull Requestにて歓迎いたします。
+
 ## Contributors
 
 @m4saka, @ario1281

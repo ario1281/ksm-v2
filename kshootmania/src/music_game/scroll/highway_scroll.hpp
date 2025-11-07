@@ -18,6 +18,9 @@ namespace MusicGame::Scroll
 		const kson::TimingCache* const m_pTimingCache;
 		const GameStatus* const m_pGameStatus;
 
+		/// @brief scrollSpeedに負の値が含まれているか(コンストラクタで事前計算)
+		const bool m_hasNegativeScrollSpeed;
+
 	public:
 		/// @brief コンストラクタ
 		/// @param pHighwayScroll HighwayScrollのポインタ(メンバ関数呼出時点で有効なポインタであること)
@@ -36,6 +39,15 @@ namespace MusicGame::Scroll
 		/// @brief HighwayScrollへの参照を返す
 		/// @return HighwayScrollへの参照
 		const HighwayScroll& highwayScroll() const;
+
+		/// @brief scrollSpeedに負の値が含まれているかを返す
+		/// @return 負の値が含まれていればtrue
+		bool hasNegativeScrollSpeed() const;
+
+		/// @brief 指定したPulse位置でのscrollSpeedが正であるかを返す
+		/// @param pulse Pulse位置
+		/// @return scrollSpeedが0以上ならtrue
+		bool isScrollSpeedPositiveAt(kson::Pulse pulse) const;
 	};
 
 	/// @brief Highway上のスクロール計算(ハイスピードおよびscroll_speedの計算)
@@ -48,8 +60,8 @@ namespace MusicGame::Scroll
 		/// @brief ハイスピード設定
 		HispeedSetting m_hispeedSetting;
 
-		/// @brief 現在のハイスピード値
-		double m_currentBPM = 120.0;
+		/// @brief 現在のBPM
+		double m_currentBPM = kDefaultBPM;
 
 		/// @brief ハイスピード係数
 		double m_hispeedFactor = 0.0;
@@ -78,7 +90,7 @@ namespace MusicGame::Scroll
 		/// @param gameStatus ゲーム状態
 		/// @param hispeedSetting ハイスピード設定
 		/// @return 相対Pulse数換算値
-		/// @note HSP版: https://github.com/m4saka/kshootmania-v1-hsp/blob/1c75880b545d1232eeffc4bb3fc19704a3622f73/src/scene/play/play_utils.hsp#L246-L269
+		/// @note HSP版: https://github.com/kshootmania/ksm-v1/blob/1c75880b545d1232eeffc4bb3fc19704a3622f73/src/scene/play/play_utils.hsp#L246-L269
 		double getRelPulseEquvalent(kson::Pulse pulse, const kson::BeatInfo& beatInfo, const kson::TimingCache& timingCache, const GameStatus& gameStatus) const;
 
 	public:
@@ -101,12 +113,6 @@ namespace MusicGame::Scroll
 		/// @brief ハイスピード設定を返す
 		/// @return ハイスピード設定
 		const HispeedSetting& hispeedSetting() const;
-
-		/// @brief 現在のハイスピード値に最も近いハイスピード値が得られるハイスピード設定値を返す(ハイスピードの種類変更時に前の種類での値に最も近い設定にするために使用)
-		/// @param targetHispeedType 対象とするハイスピードの種類
-		/// @return ハイスピード設定値
-		/// @remarks 戻り値は範囲外の値を丸めたり25刻みにしたりしないので、使用側で適用すること
-		int32 nearestHispeedSettingValue(HispeedType targetHispeedType) const;
 
 		/// @brief 現在のハイスピード値を返す
 		/// @return ハイスピード値

@@ -19,6 +19,8 @@ inline constexpr StringView kKSONExtension = U"kson";
 
 constexpr double kPastTimeSec = -100000.0;
 
+constexpr double kDefaultBPM = 120.0;
+
 enum class Medal : int32
 {
 	kNoMedal = 0,
@@ -69,6 +71,8 @@ enum class TurnMode : int32
 	kNormal = 0,
 	kMirror,
 	kRandom,
+
+	kCount,
 };
 
 enum class JudgmentPlayMode : int32
@@ -78,3 +82,69 @@ enum class JudgmentPlayMode : int32
 	kAuto,
 	kHide,
 };
+
+enum class AssistTickMode : int32
+{
+	kOff = 0,
+	kOn,
+
+	kCount,
+};
+
+// TODO: プレイ側で実装
+enum class AutoSyncMode : int32
+{
+	kOff = 0,
+	kLow,
+	kMid,
+	kHigh,
+
+	kCount,
+};
+
+// TODO: プレイ側で実装
+enum class FastSlowMode : int32
+{
+	kHide = 0,
+	kShow,
+
+	kCount,
+};
+
+// TODO: プレイ側で実装
+enum class NoteSkinType : int32
+{
+	kDefault = 0,
+	kNote,
+
+	kCount,
+};
+
+// TODO: プレイ側で実装
+enum class MovieMode : int32
+{
+	kOff = 0,
+	kOn,
+
+	kCount,
+};
+
+#ifdef __APPLE__
+// macOSプラットフォーム特有のキー定義
+constexpr int32 kPlatformKeyCodeOffset = 0x10000;
+
+struct PlatformKeyDef
+{
+	// config.iniに保存される値(0x10000 + 仮想キーコード)
+	int32 code;
+
+	// macOSの仮想キーコード
+	int nativeCode;
+};
+
+// macOSの仮想キーコードは IOKit/hidsystem/ev_keymap.h で定義
+inline constexpr std::array<PlatformKeyDef, 2> kPlatformKeys = {{
+	{ kPlatformKeyCodeOffset + 0x66, 0x66 }, // kVK_JIS_Eisu(英数)
+	{ kPlatformKeyCodeOffset + 0x68, 0x68 }, // kVK_JIS_Kana(かな)
+}};
+#endif

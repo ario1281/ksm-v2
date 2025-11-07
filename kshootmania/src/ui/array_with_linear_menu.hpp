@@ -222,21 +222,23 @@ template<typename T>
 auto& ArrayWithLinearMenu<T>::atCyclic(int32 idx)
 {
 	const int32 size = static_cast<int32>(m_array.size());
-	if (size > 0)
+	if (size == 0)
 	{
-		if (idx < 0)
+		throw Error{ U"ArrayWithLinearMenu::atCyclic() called on empty array" };
+	}
+
+	if (idx < 0)
+	{
+		while (idx < 0)
 		{
-			while (idx < 0)
-			{
-				idx += size;
-			}
+			idx += size;
 		}
-		else
+	}
+	else
+	{
+		while (idx >= size)
 		{
-			while (idx >= size)
-			{
-				idx -= size;
-			}
+			idx -= size;
 		}
 	}
 
@@ -247,21 +249,23 @@ template<typename T>
 const auto& ArrayWithLinearMenu<T>::atCyclic(int32 idx) const
 {
 	const int32 size = static_cast<int32>(m_array.size());
-	if (size > 0)
+	if (size == 0)
 	{
-		if (idx < 0)
+		throw Error{ U"ArrayWithLinearMenu::atCyclic() called on empty array" };
+	}
+
+	if (idx < 0)
+	{
+		while (idx < 0)
 		{
-			while (idx < 0)
-			{
-				idx += size;
-			}
+			idx += size;
 		}
-		else
+	}
+	else
+	{
+		while (idx >= size)
 		{
-			while (idx >= size)
-			{
-				idx -= size;
-			}
+			idx -= size;
 		}
 	}
 

@@ -10,9 +10,18 @@ namespace MusicGame::Graphics
 		const NumberTextureFont m_numberTextureFont;
 		const TextureFontTextLayout m_numberLayout;
 
+		int32 m_targetScore = 0;
+		int32 m_startScore = 0;
+		int32 m_displayedScore = 0;
+		Stopwatch m_animationTimer;
+
+		static constexpr Duration kAnimationDuration = 0.2s;
+
 	public:
 		ScorePanel();
 
-		void draw(int32 score) const;
+		void update(int32 score);
+
+		void draw() const;
 	};
 }

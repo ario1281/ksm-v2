@@ -38,6 +38,13 @@ namespace MusicGame::Graphics
 		}
 
 		const PlayFinishStatus& playFinishStatus = gameStatus.playFinishStatus.value();
+
+		// HARDゲージ落ち時はFAILED表示を出さない
+		if (playFinishStatus.isHardGaugeFailed)
+		{
+			return;
+		}
+
 		const double secSincePlayFinish = gameStatus.currentTimeSec - playFinishStatus.finishTimeSec;
 		if (secSincePlayFinish < kStartSec)
 		{

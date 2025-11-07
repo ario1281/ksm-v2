@@ -21,23 +21,60 @@ namespace MusicGame::Graphics
 		constexpr Float3 kLayerBillboardPosition = Float3{ 0, -41.0f, 0 };
 		constexpr Float2 kLayerBillboardSize = Float2{ 880.0f, 704.0f } * 0.65f;
 
-		FilePath BGFilePath(const kson::ChartData& chartData, FilePathView parentPath)
+		std::array<Texture, 2> LoadBGTextures(const kson::ChartData& chartData, FilePathView parentPath)
 		{
-			const String filename = Unicode::FromUTF8(chartData.bg.legacy.bg[0].filename);
-			if (FileSystem::Extension(filename).empty())
+			std::array<Texture, 2> textures;
+
+			for (size_t i = 0; i < chartData.bg.legacy.bg.size(); ++i)
 			{
-				// 標準の背景
-				return U"imgs/bg/{}0.jpg"_fmt(filename);
+				const String filename = Unicode::FromUTF8(chartData.bg.legacy.bg[i].filename);
+
+				if (filename.isEmpty())
+				{
+					if (i == 0)
+					{
+						// bg[0]が空の場合はデフォルトの背景
+						textures[i] = Texture(U"imgs/bg/desert{}.jpg"_fmt(i));
+					}
+					else
+					{
+						// bg[1]が空の場合はbg[0]と同じテクスチャを使用
+						textures[i] = textures[0];
+					}
+					continue;
+				}
+
+				if (FileSystem::Extension(filename).empty())
+				{
+					// 標準の背景
+					const String filePath = U"imgs/bg/{}{}.jpg"_fmt(filename, i);
+					if (FileSystem::Exists(filePath))
+					{
+						textures[i] = Texture(filePath);
+					}
+					else
+					{
+						// 存在しない場合はデフォルトの背景
+						textures[i] = Texture(U"imgs/bg/desert{}.jpg"_fmt(i));
+					}
+				}
+				else
+				{
+					// 標準の背景でなければ、譜面ファイルと同じディレクトリのファイル名として参照
+					const String filePath = FileSystem::PathAppend(parentPath, filename);
+					if (FileSystem::Exists(filePath))
+					{
+						textures[i] = Texture(filePath);
+					}
+					else
+					{
+						// 存在しない場合は、デフォルトの背景
+						textures[i] = Texture(U"imgs/bg/desert{}.jpg"_fmt(i));
+					}
+				}
 			}
 
-			// 標準の背景でなければ、譜面ファイルと同じディレクトリのファイル名として参照
-			const String filePath = FileSystem::PathAppend(parentPath, filename);
-			if (!FileSystem::Exists(filePath))
-			{
-				// 存在しない場合は、デフォルトの背景(desert)を返す
-				return U"imgs/bg/desert0.jpg";
-			}
-			return filePath;
+			return textures;
 		}
 
 		FilePath LayerFilePath(const kson::ChartData& chartData, FilePathView parentPath)
@@ -59,6 +96,18 @@ namespace MusicGame::Graphics
 			return filePath;
 		}
 
+		FilePath MovieFilePath(const kson::ChartData& chartData, FilePathView parentPath)
+		{
+			const String filename = Unicode::FromUTF8(chartData.bg.legacy.movie.filename);
+			if (filename.isEmpty())
+			{
+				return U"";
+			}
+
+			// 動画は譜面ファイルと同じディレクトリから読み込む
+			return FileSystem::PathAppend(parentPath, filename);
+		}
+
 		std::array<Array<RenderTexture>, 2> SplitLayerTexture(FilePathView layerFilePath)
 		{
 			const TiledTexture tiledTexture(Texture(layerFilePath),
@@ -69,7 +118,7 @@ namespace MusicGame::Graphics
 				});
 
 			std::array<Array<RenderTexture>, 2> renderTextures;
-			for (int32 i = 0; i < 2; ++i)
+			for (size_t i = 0; i < renderTextures.size(); ++i)
 			{
 				renderTextures[i].reserve(tiledTexture.column());
 				for (int32 j = 0; j < tiledTexture.column(); ++j)
@@ -88,8 +137,13 @@ namespace MusicGame::Graphics
 	void GraphicsMain::drawBG(const ViewStatus& viewStatus) const
 	{
 		const ScopedRenderStates3D samplerState(SamplerState::ClampNearest);
+
+		// ゲージパーセンテージに応じてBGテクスチャのインデックスを決定
+		const int32 percentThreshold = (m_playOption.gaugeType == GaugeType::kHardGauge) ? kGaugePercentageThresholdHardWarning : kGaugePercentageThreshold;
+		const int32 bgTextureIndex = viewStatus.gaugePercentageInt >= percentThreshold ? 1 : 0;
+
 		double bgTiltRadians = viewStatus.tiltRadians / 3;
-		m_bgBillboardMesh.draw(m_bgTransform * TiltTransformMatrix(bgTiltRadians, kBGBillboardPosition), m_bgTexture);
+		m_bgBillboardMesh.draw(m_bgTransform * TiltTransformMatrix(bgTiltRadians, kBGBillboardPosition), m_bgTextures[bgTextureIndex]);
 	}
 
 	void GraphicsMain::drawLayer(const kson::ChartData& chartData, const GameStatus& gameStatus, const ViewStatus& viewStatus) const
@@ -100,41 +154,84 @@ namespace MusicGame::Graphics
 		double layerTiltRadians = 0.0;
 		if (chartData.bg.legacy.layer.rotation.tilt)
 		{
-			layerTiltRadians += viewStatus.tiltRadians * 0.8 + Math::ToRadians(viewStatus.camStatus.rotationZLayer);
+			layerTiltRadians += viewStatus.tiltRadians * 0.8;
+		}
+		if (chartData.bg.legacy.layer.rotation.spin)
+		{
+			layerTiltRadians += Math::ToRadians(viewStatus.camStatus.rotationDegLayer);
 		}
 
-		// TODO: Layer speed specified by KSH
-		// TODO: Use different layer texture index depending on gauge percentage
-		if (!m_layerFrameTextures[0].empty())
+		// ゲージパーセンテージに応じてレイヤーテクスチャのインデックスを決定
+		const int32 percentThreshold = (m_playOption.gaugeType == GaugeType::kHardGauge) ? kGaugePercentageThresholdHardWarning : kGaugePercentageThreshold;
+		const int32 layerTextureIndex = viewStatus.gaugePercentageInt >= percentThreshold ? 1 : 0;
+
+		if (!m_layerFrameTextures[layerTextureIndex].empty())
 		{
-			const int32 layerFrame = MathUtils::WrappedMod(static_cast<int32>(gameStatus.currentPulse * 1000 / 35 / kson::kResolution4), static_cast<int32>(m_layerFrameTextures[0].size()));
-			m_bgBillboardMesh.draw(m_layerTransform * TiltTransformMatrix(layerTiltRadians, kLayerBillboardPosition), m_layerFrameTextures[0].at(layerFrame));
+			// レイヤーアニメーション速度の計算
+			int32 layerFrame = 0;
+			const std::int32_t duration = chartData.bg.legacy.layer.duration;
+			if (duration == 0)
+			{
+				// duration == 0の場合、テンポ同期(1フレーム = 0.035小節)
+				layerFrame = MathUtils::WrappedMod(static_cast<int32>(gameStatus.currentPulse * 1000 / 35 / kson::kResolution4), static_cast<int32>(m_layerFrameTextures[layerTextureIndex].size()));
+			}
+			else
+			{
+				// duration != 0の場合、固定速度(ミリ秒単位)
+				const double absDuration = std::abs(duration);
+				const double frameTimeMs = gameStatus.currentTimeSec * 1000.0;
+				const int32 frameCount = static_cast<int32>(m_layerFrameTextures[layerTextureIndex].size());
+
+				if (duration > 0)
+				{
+					// 正再生
+					layerFrame = MathUtils::WrappedMod(static_cast<int32>(frameTimeMs * frameCount / absDuration), frameCount);
+				}
+				else
+				{
+					// 逆再生
+					layerFrame = MathUtils::WrappedMod(frameCount - static_cast<int32>(frameTimeMs * frameCount / absDuration) - 1, frameCount);
+				}
+			}
+
+			m_bgBillboardMesh.draw(m_layerTransform * TiltTransformMatrix(layerTiltRadians, kLayerBillboardPosition), m_layerFrameTextures[layerTextureIndex].at(layerFrame));
 		}
 	}
 
 	GraphicsMain::GraphicsMain(const kson::ChartData& chartData, FilePathView parentPath, const PlayOption& playOption)
 		: m_camera(Scene::Size(), kCameraVerticalFOV, kCameraPosition, kCameraLookAt)
 		, m_bgBillboardMesh(MeshData::Billboard())
-		, m_bgTexture(BGFilePath(chartData, parentPath))
+		, m_bgTextures(LoadBGTextures(chartData, parentPath))
 		, m_bgTransform(m_camera.billboard(kBGBillboardPosition, kBGBillboardSize))
 		, m_layerFrameTextures(SplitLayerTexture(LayerFilePath(chartData, parentPath)))
 		, m_layerTransform(m_camera.billboard(kLayerBillboardPosition, kLayerBillboardSize))
 		, m_jdgoverlay3DGraphics(m_camera)
 		, m_songInfoPanel(chartData, parentPath)
 		, m_gaugePanel(playOption.gaugeType)
+		, m_laserApproachIndicator(chartData)
+		, m_moviePanel(MovieFilePath(chartData, parentPath), chartData.bg.legacy.movie.offset / 1000.0, playOption.movieEnabled)
+		, m_playOption(playOption)
 	{
 	}
 
-	void GraphicsMain::update(const ViewStatus& viewStatus)
+	void GraphicsMain::prepareMovie(double globalOffsetSec)
+	{
+		m_moviePanel.prepare(globalOffsetSec);
+	}
+
+	void GraphicsMain::update(const GameStatus& gameStatus, const ViewStatus& viewStatus, const kson::TimingCache& timingCache)
 	{
 		m_comboOverlay.update(viewStatus);
+		m_scorePanel.update(viewStatus.score);
 		m_highway3DGraphics.update(viewStatus);
+		m_laserApproachIndicator.update(gameStatus, timingCache);
+		m_moviePanel.update(gameStatus.currentTimeSec);
 	}
 
-	void GraphicsMain::draw(const kson::ChartData& chartData, const kson::TimingCache& timingCache, const GameStatus& gameStatus, const ViewStatus& viewStatus, const Scroll::HighwayScrollContext& highwayScrollContext) const
+	void GraphicsMain::draw(const kson::ChartData& chartData, const kson::TimingCache& timingCache, const GameStatus& gameStatus, const ViewStatus& viewStatus, const Scroll::HighwayScrollContext& highwayScrollContext, Duration bgmDuration) const
 	{
 		// 各レンダーテクスチャを用意
-		m_highway3DGraphics.draw2D(chartData, timingCache, gameStatus, viewStatus, highwayScrollContext);
+		m_highway3DGraphics.draw2D(chartData, m_playOption, timingCache, gameStatus, viewStatus, highwayScrollContext);
 		m_jdgoverlay3DGraphics.draw2D(gameStatus, viewStatus);
 		Graphics2D::Flush();
 
@@ -142,17 +239,37 @@ namespace MusicGame::Graphics
 		Graphics3D::SetCameraTransform(m_camera);
 		drawBG(viewStatus);
 		drawLayer(chartData, gameStatus, viewStatus);
-		m_highway3DGraphics.draw3D(gameStatus, viewStatus);
-		m_jdgline3DGraphics.draw3D(gameStatus, viewStatus);
-		m_jdgoverlay3DGraphics.draw3D(gameStatus, viewStatus);
+		m_highway3DGraphics.draw3D(viewStatus);
+		m_jdgline3DGraphics.draw3D(viewStatus);
+		m_jdgoverlay3DGraphics.draw3D(viewStatus);
 		m_laserCursor3DGraphics.draw3D(gameStatus, viewStatus, m_camera);
 
 		// 手前に表示する2DのHUDを描画
-		m_songInfoPanel.draw(gameStatus.currentBPM, highwayScrollContext);
-		m_scorePanel.draw(viewStatus.score);
+		m_songInfoPanel.draw(gameStatus.currentTimeSec, bgmDuration, gameStatus.currentBPM, highwayScrollContext, m_moviePanel.isEnabled());
+		m_scorePanel.draw();
 		m_gaugePanel.draw(viewStatus.gaugePercentage, gameStatus.currentPulse);
 		m_comboOverlay.draw();
 		m_frameRateMonitor.draw();
 		m_achievementPanel.draw(gameStatus);
+		m_laserApproachIndicator.draw(gameStatus.currentTimeSec);
+		m_moviePanel.draw();
+
+		// HARDゲージ落ち時の赤色オーバーレイ
+		if (gameStatus.playFinishStatus.has_value() && gameStatus.playFinishStatus->isHardGaugeFailed)
+		{
+			constexpr double kFadeTimeSec = 0.75;
+			const double elapsedSec = gameStatus.currentTimeSec - gameStatus.playFinishStatus->finishTimeSec;
+			const double t = Clamp(elapsedSec / kFadeTimeSec, 0.0, 1.0);
+			const uint8 g = static_cast<uint8>(48 + 128 - static_cast<int32>(128 * t));
+			const Color overlayColor{ 255, g, 0 };
+
+			const ScopedRenderStates2D blend{ BlendState::Additive };
+			Scene::Rect().draw(overlayColor);
+		}
+	}
+
+	bool GraphicsMain::hasMovie() const
+	{
+		return m_moviePanel.isEnabled();
 	}
 }

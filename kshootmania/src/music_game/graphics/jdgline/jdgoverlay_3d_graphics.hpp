@@ -22,7 +22,7 @@ namespace MusicGame::Graphics
 		const Mat4x4 m_transform;
 		const Mesh m_mesh;
 
-		const TiledTexture& chipAnimTexture(Judgment::JudgmentResult type) const;
+		const TiledTexture& chipAnimTexture(Judgment::ChipAnimType type) const;
 
 		void drawChipAnimCommon(const GameStatus& gameStatus, const ViewStatus& viewStatus, bool isBT) const;
 
@@ -45,6 +45,6 @@ namespace MusicGame::Graphics
 
 		void draw2D(const GameStatus& gameStatus, const ViewStatus& viewStatus) const;
 
-		void draw3D(const GameStatus& gameStatus, const ViewStatus& viewStatus) const;
+		void draw3D(const ViewStatus& viewStatus) const;
 	};
 }

@@ -1,4 +1,5 @@
 ﻿#include "note_graphics_utils.hpp"
+#include "common/common_defines.hpp"
 
 namespace MusicGame::Graphics::NoteGraphicsUtils
 {
@@ -68,5 +69,59 @@ namespace MusicGame::Graphics::NoteGraphicsUtils
 		const int32 idx = static_cast<int32>(dIdx);
 		const double lerpRate = dIdx - idx;
 		return MathUtils::RoundToInt(std::lerp(kHeightTable[Clamp(idx, 0, kTableSize - 1)], kHeightTable[Clamp(idx + 1, 0, kTableSize - 1)], lerpRate));
+	}
+
+	int32 CalcChipNoteColorIndex(kson::Pulse y, const kson::BeatInfo& beatInfo, NoteSkinType noteSkin)
+	{
+		if (noteSkin == NoteSkinType::kDefault)
+		{
+			return 0;
+		}
+
+		const std::int64_t measureIdx = y / kson::kResolution;
+
+		const auto& timeSigMap = beatInfo.timeSig;
+		auto it = timeSigMap.upper_bound(measureIdx);
+		if (it != timeSigMap.begin())
+		{
+			--it;
+		}
+
+		const kson::TimeSig& timeSig = it != timeSigMap.end() ? it->second : kson::TimeSig{ 4, 4 };
+		const kson::Pulse measureStartY = measureIdx * kson::kResolution;
+		const kson::Pulse positionInMeasure = y - measureStartY;
+		const int32 div = kson::kResolution * 4 * timeSig.n / timeSig.d;
+
+		if (div == 0)
+		{
+			return 0;
+		}
+
+		// 小節の分割数と色インデックス
+		constexpr std::array<std::pair<int32, int32>, 8> kNoteTypeColorMap = {{
+			{4, 1},
+			{8, 2},
+			{12, 3},
+			{16, 4},
+			{24, 5},
+			{32, 6},
+			{48, 7},
+			{64, 8},
+		}};
+
+		if (positionInMeasure == 0)
+		{
+			return 1;
+		}
+
+		for (const auto& [noteType, colorIndex] : kNoteTypeColorMap)
+		{
+			if (div >= noteType && div % noteType == 0 && positionInMeasure % (div / noteType) == 0)
+			{
+				return colorIndex;
+			}
+		}
+
+		return 0;
 	}
 }

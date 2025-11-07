@@ -14,7 +14,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "kson", "kson\kson.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ksmaudio", "ksmaudio\ksmaudio.vcxproj", "{590CB790-463C-417A-BB1F-183ADF4FE900}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NocoUI", "NocoUI\NocoUI.vcxproj", "{557D3FBD-C267-4EB1-8AD6-2C19AF884151}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NocoUI", "kshootmania\third_party\NocoUI\NocoUI.vcxproj", "{557D3FBD-C267-4EB1-8AD6-2C19AF884151}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

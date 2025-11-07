@@ -33,8 +33,8 @@ namespace ksmaudio::AudioEffect
 		public:
 			explicit Timeline(const std::map<float, T>& map)
 				: m_map(std::make_shared<const std::map<float, T>>(map))
-				, m_cursorItr(m_map->cbegin())
-				, m_nextCursorItr(m_map->empty() ? m_map->cend() : std::next(m_map->cbegin()))
+				, m_cursorItr(m_map->cend()) // 最初の要素への到達も検出が必要のため、初期値はcbeginではなくcendとする
+				, m_nextCursorItr(m_map->cbegin())
 			{
 			}
 
@@ -106,7 +106,7 @@ namespace ksmaudio::AudioEffect
 		const ParamValueSetDict& currentParams() const;
 	};
 
-	ParamValueSetDict StrDictToParamValueSetDict(const std::unordered_map<std::string, std::string>& strDict);
+	ParamValueSetDict StrDictToParamValueSetDict(const std::map<std::string, std::string>& strDict);
 
 	std::unordered_map<ParamID, std::map<float, ValueSet>> StrTimelineToValueSetTimeline(const std::unordered_map<std::string, std::map<float, std::string>>& strTimeline);
 }

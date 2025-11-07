@@ -56,9 +56,9 @@ namespace MusicGame::Graphics
 		constexpr double kLaserRippleAnimAlpha = 133.0 / 255;
 	}
 
-	const TiledTexture& Jdgoverlay3DGraphics::chipAnimTexture(Judgment::JudgmentResult type) const
+	const TiledTexture& Jdgoverlay3DGraphics::chipAnimTexture(Judgment::ChipAnimType type) const
 	{
-		using enum Judgment::JudgmentResult;
+		using enum Judgment::ChipAnimType;
 
 		switch (type)
 		{
@@ -66,8 +66,8 @@ namespace MusicGame::Graphics
 			return m_chipCriticalTexture;
 
 		case kNearFast:
-		case kNearSlow:
-			return m_chipNearTexture; // TODO: Fast near
+		case kNear:
+			return m_chipNearTexture;
 
 		case kError:
 			return m_chipErrorTexture;
@@ -88,14 +88,15 @@ namespace MusicGame::Graphics
 			for (const auto& chipAnimState : laneStatus.chipAnim.array()) // 加算合成なので順番は気にしなくてOK
 			{
 				const double sec = gameStatus.currentTimeSec - chipAnimState.startTimeSec;
-				if (sec < 0.0 || kChipAnimDurationSec <= sec || chipAnimState.type == Judgment::JudgmentResult::kUnspecified)
+				if (sec < 0.0 || kChipAnimDurationSec <= sec || chipAnimState.type == Judgment::ChipAnimType::kUnspecified)
 				{
 					continue;
 				}
 
 				const int32 frameIdx = static_cast<int32>(sec / kChipAnimDurationSec * kChipAnimFrames);
+				const int32 columnIdx = chipAnimState.type == Judgment::ChipAnimType::kNearFast ? 1 : 0; // FASTの場合は列が異なる
 				const Vec2 position = Scaled(kTextureSize.x / 4 + 92 + (isBT ? 0 : 30) + (isBT ? kBTLaneDiffX : kFXLaneDiffX) * laneIdx + centerSplitShiftX, 17);
-				chipAnimTexture(chipAnimState.type)(frameIdx).resized(Scaled(kChipAnimSize)).draw(position);
+				chipAnimTexture(chipAnimState.type)(frameIdx, columnIdx).resized(Scaled(kChipAnimSize)).draw(position);
 			}
 		}
 	}
@@ -172,7 +173,13 @@ namespace MusicGame::Graphics
 				// カーソルがクリティカル判定の範囲内でない
 				continue;
 			}
-			const double cursorX = laneStatus.cursorWide ? ((laneStatus.cursorX.value() - 0.5) * 2 + 0.5) : laneStatus.cursorX.value();
+			const auto cursorXOpt = laneStatus.cursorXForDraw();
+			if (!cursorXOpt.has_value())
+			{
+				// カーソルが出ていない
+				continue;
+			}
+			const double cursorX = laneStatus.cursorWide ? ((cursorXOpt.value() - 0.5) * 2 + 0.5) : cursorXOpt.value();
 			const Vec2 position = Scaled(kTextureSize.x / 4 + 28 + static_cast<int32>(295 * cursorX), 17);
 			m_laserAnimTexture(frameIdx, i).resized(size).draw(position);
 		}
@@ -229,7 +236,7 @@ namespace MusicGame::Graphics
 			})
 		, m_chipErrorTexture(kChipErrorAnimTextureFilename,
 			{
-				.row = kChipAnimFrames, // TODO: FAST
+				.row = kChipAnimFrames,
 				.sourceScale = SourceScale::kNoScaling,
 				.sourceSize = kChipAnimSourceSize,
 			})
@@ -271,14 +278,16 @@ namespace MusicGame::Graphics
 		drawLaserRippleAnim(gameStatus);
 	}
 
-	void Jdgoverlay3DGraphics::draw3D(const GameStatus& gameStatus, const ViewStatus& viewStatus) const
+	void Jdgoverlay3DGraphics::draw3D(const ViewStatus& viewStatus) const
 	{
 		// レンダーテクスチャを3D空間上に描画
 		const ScopedRenderStates3D blendState(BlendState::Additive);
-		const double scale = Camera::JdgoverlayScale(viewStatus.camStatus.zoom);
+		const double scale = viewStatus.camStatus.useLegacyJdgScale
+			? Camera::LegacyJdgoverlayScale(viewStatus.camStatus.zoomBottom)
+			: Camera::JdgoverlayScale(viewStatus.camStatus.zoomBottom);
 		const double shiftX = viewStatus.camStatus.shiftX;
-		const Vec3 shiftXVec = Vec3::Right(Camera::ScaledCamShiftXValue(shiftX));
-		const double radians = Math::ToRadians(viewStatus.camStatus.rotationZHighway) + viewStatus.tiltRadians;
+		const Vec3 shiftXVec = Vec3::Right(shiftX);
+		const double radians = Math::ToRadians(viewStatus.camStatus.rotationDeg + viewStatus.camStatus.rotationDegHighway) + viewStatus.tiltRadians;
 		const Transformer3D transform(Mat4x4::Translate(shiftXVec) * Mat4x4::Scale(scale, kPlaneCenter) * TiltTransformMatrix(radians));
 		m_mesh.draw(m_transform, m_renderTexture);
 	}

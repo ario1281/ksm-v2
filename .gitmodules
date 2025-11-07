@@ -4,3 +4,6 @@
 [submodule "kshootmania/third_party/CoTaskLib"]
 	path = kshootmania/third_party/CoTaskLib
 	url = https://github.com/m4saka/CoTaskLib.git
+[submodule "kshootmania/third_party/NocoUI"]
+	path = kshootmania/third_party/NocoUI
+	url = https://github.com/m4saka/NocoUI.git

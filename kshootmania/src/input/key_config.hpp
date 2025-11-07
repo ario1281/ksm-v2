@@ -1,5 +1,10 @@
 ﻿#pragma once
 #include <CoTaskLib.hpp>
+#include "common/common_defines.hpp"
+
+#ifdef __APPLE__
+#include <ksmplatform_macos/input_method.h>
+#endif
 
 using StartRequiredForBTFXLaserYN = YesNo<struct StartRequiredForBTFXLaserYN_tag>;
 
@@ -88,6 +93,11 @@ namespace KeyConfig
 
 	void SaveToConfigIni();
 
+#ifdef __APPLE__
+	// macOSプラットフォーム特有のキーボード状態を更新(毎フレーム呼び出す)
+	void UpdatePlatformKeyboard();
+#endif
+
 	bool Pressed(Button button);
 
 	Optional<KeyConfig::Button> LastPressedLaserButton(Button button1, Button button2);
@@ -96,7 +106,7 @@ namespace KeyConfig
 
 	void ClearInput(Button button);
 
-	Co::Task<void> WaitForDown(Button button);
+	Co::Task<void> WaitUntilDown(Button button);
 
 	bool Up(Button button);
 

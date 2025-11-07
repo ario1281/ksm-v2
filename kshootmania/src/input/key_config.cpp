@@ -1,10 +1,31 @@
 ﻿#include "key_config.hpp"
+#include "ini/config_ini.hpp"
 
 namespace
 {
 	// キーコンフィグの設定画面や保存時などに配列サイズが固定のほうが都合が良いのでs3d::InputGroupは不使用
 	using ConfigSetArray = std::array<Input, KeyConfig::kButtonEnumCount>;
 	std::array<ConfigSetArray, KeyConfig::kConfigSetEnumCount> s_configSetArray;
+
+#ifdef __APPLE__
+	struct PlatformKeyState
+	{
+		bool previousPressed = false;
+		bool currentPressed = false;
+
+		void update(bool pressed)
+		{
+			previousPressed = currentPressed;
+			currentPressed = pressed;
+		}
+
+		bool pressed() const { return currentPressed; }
+		bool down() const { return currentPressed && !previousPressed; }
+		bool up() const { return !currentPressed && previousPressed; }
+	};
+
+	std::array<PlatformKeyState, kPlatformKeys.size()> s_platformKeyStates;
+#endif
 
 	constexpr std::array<InputDeviceType, KeyConfig::kConfigSetEnumCount> kConfigSetDeviceTypes = {
 		InputDeviceType::Keyboard,
@@ -49,6 +70,101 @@ namespace
 		s_configSetArray[KeyConfig::kKeyboard1][KeyConfig::kRight] = KeyRight;
 		s_configSetArray[KeyConfig::kKeyboard1][KeyConfig::kBackspace] = KeyBackspace;
 	}
+
+	bool IsBT3PlusStartPressed()
+	{
+		if (!ConfigIni::GetBool(ConfigIni::Key::kUse3BTsPlusStartAsBack, true))
+		{
+			return false;
+		}
+
+		bool startPressed = false;
+		for (const auto& configSet : s_configSetArray)
+		{
+			if (configSet[KeyConfig::kStart].pressed())
+			{
+				startPressed = true;
+				break;
+			}
+		}
+		if (!startPressed)
+		{
+			return false;
+		}
+
+		int32 btPressedCount = 0;
+		for (int32 btIdx = KeyConfig::kBT_A; btIdx <= KeyConfig::kBT_D; ++btIdx)
+		{
+			for (const auto& configSet : s_configSetArray)
+			{
+				if (configSet[btIdx].pressed())
+				{
+					++btPressedCount;
+					break;
+				}
+			}
+		}
+
+		return btPressedCount >= 3;
+	}
+
+	bool IsBT3PlusStartDown()
+	{
+		if (!IsBT3PlusStartPressed())
+		{
+			return false;
+		}
+
+		for (const auto& configSet : s_configSetArray)
+		{
+			if (configSet[KeyConfig::kStart].down())
+			{
+				return true;
+			}
+		}
+
+		for (int32 btIdx = KeyConfig::kBT_A; btIdx <= KeyConfig::kBT_D; ++btIdx)
+		{
+			for (const auto& configSet : s_configSetArray)
+			{
+				if (configSet[btIdx].down())
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	bool IsBT3PlusStartUp()
+	{
+		if (IsBT3PlusStartPressed())
+		{
+			return false;
+		}
+
+		for (const auto& configSet : s_configSetArray)
+		{
+			if (configSet[KeyConfig::kStart].up())
+			{
+				return true;
+			}
+		}
+
+		for (int32 btIdx = KeyConfig::kBT_A; btIdx <= KeyConfig::kBT_D; ++btIdx)
+		{
+			for (const auto& configSet : s_configSetArray)
+			{
+				if (configSet[btIdx].up())
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 }
 
 void KeyConfig::SetConfigValueByCommaSeparated(ConfigSet targetConfigSet, StringView configValue)
@@ -57,13 +173,13 @@ void KeyConfig::SetConfigValueByCommaSeparated(ConfigSet targetConfigSet, String
 
 	if (targetConfigSet < 0 || kConfigSetEnumCount <= targetConfigSet)
 	{
-		Print << U"Warning: Invalid key config target '{}'!"_fmt(std::to_underlying(targetConfigSet));
+		Logger << U"[ksm warning] Invalid key config target '{}'!"_fmt(static_cast<std::underlying_type_t<ConfigSet>>(targetConfigSet));
 		return;
 	}
 
 	if (values.size() != kConfigurableButtonEnumCount)
 	{
-		Print << U"Warning: Key configuration ({}) is ignored because value count does not match! (expected:{}, actual:{})"_fmt(kConfigSetNames[targetConfigSet], std::to_underlying(kConfigurableButtonEnumCount), values.size());
+		Logger << U"[ksm warning] Key configuration ({}) is ignored because value count does not match! (expected:{}, actual:{})"_fmt(kConfigSetNames[targetConfigSet], static_cast<int32>(kConfigurableButtonEnumCount), values.size());
 		values = String(kDefaultConfigValues[targetConfigSet]).split(U',');
 	}
 
@@ -87,9 +203,10 @@ void KeyConfig::SetConfigValueByCommaSeparated(ConfigSet targetConfigSet, String
 
 	for (int32 i = 0; i < kConfigurableButtonEnumCount; ++i)
 	{
-		if (0 <= intValues[i] && intValues[i] < 0x100)
+		const int32 code = intValues[i];
+		if (code >= 0)
 		{
-			s_configSetArray[targetConfigSet][i] = Input(kConfigSetDeviceTypes[targetConfigSet], static_cast<uint8>(intValues[i]));
+			s_configSetArray[targetConfigSet][i] = Input(kConfigSetDeviceTypes[targetConfigSet], static_cast<uint8>(code));
 		}
 		else
 		{
@@ -104,12 +221,12 @@ void KeyConfig::SetConfigValue(ConfigSet targetConfigSet, ConfigurableButton but
 {
 	if (targetConfigSet < 0 || kConfigSetEnumCount <= targetConfigSet)
 	{
-		throw Error(U"Warning: Invalid key config target '{}'!"_fmt(std::to_underlying(targetConfigSet)));
+		throw Error(U"Warning: Invalid key config target '{}'!"_fmt(static_cast<std::underlying_type_t<ConfigSet>>(targetConfigSet)));
 	}
 
 	if (button < 0 || kConfigurableButtonEnumCount <= button)
 	{
-		throw Error(U"Warning: Invalid key config button '{}'!"_fmt(std::to_underlying(button)));
+		throw Error(U"Warning: Invalid key config button '{}'!"_fmt(static_cast<std::underlying_type_t<ConfigurableButton>>(button)));
 	}
 
 	s_configSetArray[targetConfigSet][button] = input;
@@ -121,16 +238,27 @@ const Input& KeyConfig::GetConfigValue(ConfigSet targetConfigSet, ConfigurableBu
 {
 	if (targetConfigSet < 0 || kConfigSetEnumCount <= targetConfigSet)
 	{
-		throw Error(U"Warning: Invalid key config target '{}'!"_fmt(std::to_underlying(targetConfigSet)));
+		throw Error(U"Warning: Invalid key config target '{}'!"_fmt(static_cast<std::underlying_type_t<ConfigSet>>(targetConfigSet)));
 	}
 
 	if (button < 0 || kConfigurableButtonEnumCount <= button)
 	{
-		throw Error(U"Warning: Invalid key config button '{}'!"_fmt(std::to_underlying(button)));
+		throw Error(U"Warning: Invalid key config button '{}'!"_fmt(static_cast<std::underlying_type_t<ConfigurableButton>>(button)));
 	}
 
 	return s_configSetArray[targetConfigSet][button];
 }
+
+#ifdef __APPLE__
+void KeyConfig::UpdatePlatformKeyboard()
+{
+	for (size_t i = 0; i < kPlatformKeys.size(); ++i)
+	{
+		const bool pressed = KSMPlatformMacOS_IsKeyPressed(kPlatformKeys[i].nativeCode);
+		s_platformKeyStates[i].update(pressed);
+	}
+}
+#endif
 
 void KeyConfig::SaveToConfigIni()
 {
@@ -170,7 +298,35 @@ bool KeyConfig::Pressed(Button button)
 
 	for (const auto& configSet : s_configSetArray)
 	{
-		if (configSet[button].pressed())
+		const auto& input = configSet[button];
+		if (input.deviceType() == InputDeviceType::Keyboard)
+		{
+#ifdef __APPLE__
+			bool isPlatformKey = false;
+			for (size_t i = 0; i < kPlatformKeys.size(); ++i)
+			{
+				if (input.code() == (kPlatformKeys[i].code - kPlatformKeyCodeOffset))
+				{
+					if (s_platformKeyStates[i].pressed())
+					{
+						return true;
+					}
+					isPlatformKey = true;
+					break;
+				}
+			}
+			if (!isPlatformKey && input.pressed())
+			{
+				return true;
+			}
+#else
+			if (input.pressed())
+			{
+				return true;
+			}
+#endif
+		}
+		else if (input.pressed())
 		{
 			return true;
 		}
@@ -187,7 +343,15 @@ bool KeyConfig::Pressed(Button button)
 			}
 		}
 	}
-	
+
+	if (button == kBack)
+	{
+		if (IsBT3PlusStartPressed())
+		{
+			return true;
+		}
+	}
+
 	return false;
 }
 
@@ -226,7 +390,35 @@ bool KeyConfig::Down(Button button)
 
 	for (const auto& configSet : s_configSetArray)
 	{
-		if (configSet[button].down())
+		const auto& input = configSet[button];
+		if (input.deviceType() == InputDeviceType::Keyboard)
+		{
+#ifdef __APPLE__
+			bool isPlatformKey = false;
+			for (size_t i = 0; i < kPlatformKeys.size(); ++i)
+			{
+				if (input.code() == (kPlatformKeys[i].code - kPlatformKeyCodeOffset))
+				{
+					if (s_platformKeyStates[i].down())
+					{
+						return true;
+					}
+					isPlatformKey = true;
+					break;
+				}
+			}
+			if (!isPlatformKey && input.down())
+			{
+				return true;
+			}
+#else
+			if (input.down())
+			{
+				return true;
+			}
+#endif
+		}
+		else if (input.down())
 		{
 			return true;
 		}
@@ -241,6 +433,14 @@ bool KeyConfig::Down(Button button)
 			{
 				return true;
 			}
+		}
+	}
+
+	if (button == kBack)
+	{
+		if (IsBT3PlusStartDown())
+		{
+			return true;
 		}
 	}
 
@@ -269,12 +469,12 @@ void KeyConfig::ClearInput(Button button)
 	}
 }
 
-Co::Task<void> KeyConfig::WaitForDown(Button button)
+Co::Task<void> KeyConfig::WaitUntilDown(Button button)
 {
-	co_await Co::WaitUntil([button]() { return Down(button); });
-
-	// 即座に次シーンに遷移した場合に多重に反応しないよう、入力をクリアする必要がある
+	// 前シーンの入力で多重に反応しないよう、入力をクリア
 	ClearInput(button);
+
+	return Co::WaitUntil([button]() { return Down(button); });
 }
 
 bool KeyConfig::Up(Button button)
@@ -292,10 +492,47 @@ bool KeyConfig::Up(Button button)
 
 	for (const auto& configSet : s_configSetArray)
 	{
-		if (configSet[button].up())
+		const auto& input = configSet[button];
+		if (input.deviceType() == InputDeviceType::Keyboard)
+		{
+#ifdef __APPLE__
+			bool isPlatformKey = false;
+			for (size_t i = 0; i < kPlatformKeys.size(); ++i)
+			{
+				if (input.code() == (kPlatformKeys[i].code - kPlatformKeyCodeOffset))
+				{
+					if (s_platformKeyStates[i].up())
+					{
+						return true;
+					}
+					isPlatformKey = true;
+					break;
+				}
+			}
+			if (!isPlatformKey && input.up())
+			{
+				return true;
+			}
+#else
+			if (input.up())
+			{
+				return true;
+			}
+#endif
+		}
+		else if (input.up())
 		{
 			return true;
 		}
 	}
+
+	if (button == kBack)
+	{
+		if (IsBT3PlusStartUp())
+		{
+			return true;
+		}
+	}
+
 	return false;
 }

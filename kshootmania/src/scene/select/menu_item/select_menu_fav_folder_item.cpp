@@ -1,30 +1,33 @@
 ﻿#include "select_menu_fav_folder_item.hpp"
-#include "scene/select/select_menu_graphics.hpp"
 
 SelectMenuFavFolderItem::SelectMenuFavFolderItem(IsCurrentFolderYN isCurrentFolder, FilePathView fullPath)
 	: m_isCurrentFolder(isCurrentFolder)
 	, m_fullPath(fullPath)
-	, m_displayName(FileSystem::BaseName(m_fullPath))
+	, m_displayName(FileSystem::FileName(m_fullPath))
 {
 }
 
-void SelectMenuFavFolderItem::decide(const SelectMenuEventContext& context, [[maybe_unused]] int32 difficultyIdx)
+void SelectMenuFavFolderItem::decide([[maybe_unused]] const SelectMenuEventContext& context, [[maybe_unused]] int32 difficultyIdx)
 {
 	//Print << U"Not Implemented (SelectMenuFavFolderItem::decide)";
 }
 
-void SelectMenuFavFolderItem::drawCenter([[maybe_unused]] int32 difficultyIdx, const RenderTexture& renderTexture, const SelectMenuItemGraphicAssets& assets) const
+void SelectMenuFavFolderItem::setCanvasParamsCenter([[maybe_unused]] const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx) const
 {
-	Shader::Copy(assets.dirItemTextures.center, renderTexture);
-
-	const ScopedRenderTarget2D scopedRenderTarget(renderTexture);
-	assets.font(FolderDisplayNameCenter(m_displayName, m_isCurrentFolder)).drawAt(44, Vec2{ 16 + 740 / 2, 135 + 102 / 2 });
+	canvas.setParamValues({
+		{ U"center_isDirectory", true },
+		{ U"center_isSubDirectory", false },
+		{ U"center_isSong", false },
+		{ U"center_title", FolderDisplayNameCenter(m_displayName, m_isCurrentFolder) },
+	});
 }
 
-void SelectMenuFavFolderItem::drawUpperLower([[maybe_unused]] int32 difficultyIdx, const RenderTexture& renderTexture, const SelectMenuItemGraphicAssets& assets, bool isUpper) const
+void SelectMenuFavFolderItem::setCanvasParamsTopBottom([[maybe_unused]] const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx, StringView paramNamePrefix, [[maybe_unused]] StringView nodeName) const
 {
-	Shader::Copy(isUpper ? assets.dirItemTextures.upperHalf : assets.dirItemTextures.lowerHalf, renderTexture);
-
-	const ScopedRenderTarget2D scopedRenderTarget(renderTexture);
-	assets.font(FolderDisplayNameUpperLower(m_displayName, m_isCurrentFolder)).drawAt(38, isUpper ? Vec2{ 16 + 770 / 2, 12 + 86 / 2 } : Vec2{ 16 + 770 / 2, 126 + 86 / 2 });
+	canvas.setParamValues({
+		{ paramNamePrefix + U"isDirectory", true },
+		{ paramNamePrefix + U"isSubDirectory", false },
+		{ paramNamePrefix + U"isSong", false },
+		{ paramNamePrefix + U"title", FolderDisplayNameTopBottom(m_displayName, m_isCurrentFolder) },
+	});
 }

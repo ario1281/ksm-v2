@@ -5,13 +5,15 @@ namespace MusicGame::Camera
 {
 	struct CamStatus
 	{
-		double zoom = 0.0;
+		double zoomBottom = 0.0;
 		double shiftX = 0.0;
-		double rotationX = 0.0;
-		double rotationZ = 0.0;
-		double rotationZHighway = 0.0;
-		double rotationZJdgline = 0.0;
-		double rotationZLayer = 0.0;
+		double zoomTop = 0.0;
+		bool useLegacyZoomTop = false;
+		bool useLegacyJdgScale = false;
+		double rotationDeg = 0.0;
+		double rotationDegHighway = 0.0;
+		double rotationDegJdgline = 0.0;
+		double rotationDegLayer = 0.0;
 		double centerSplit = 0.0;
 	};
 
@@ -20,8 +22,14 @@ namespace MusicGame::Camera
 	private:
 		CamStatus m_status;
 
+		// KSHバージョン167未満での視点変更の緩和時間適用
+		bool m_useLegacyZoomRelaxation = false;
+		double m_legacyCurrentZoomTop = 0.0;
+		double m_legacyCurrentZoomBottom = 0.0;
+		double m_legacyCurrentZoomSide = 0.0;
+
 	public:
-		CamSystem() = default;
+		explicit CamSystem(const kson::ChartData& chartData);
 
 		void update(const kson::ChartData& chartData, kson::Pulse currentPulse);
 

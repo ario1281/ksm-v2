@@ -10,7 +10,8 @@ void KSMIniData::load(FilePathView path)
 {
 	if (!FileSystem::Exists(path))
 	{
-		Print << U"Warning: Could not find INI file '{}'!"_fmt(path);
+		Logger << U"[ksm error] Could not find INI file '{}'!"_fmt(path);
+		return;
 	}
 
 	TextReader reader(path);
@@ -110,7 +111,7 @@ void KSMIniData::save(FilePathView path) const
 	}
 	else
 	{
-		Print << U"Warning: Could not save INI file '{}'!"_fmt(path);
+		Logger << U"[ksm error] Could not save INI file '{}'!"_fmt(path);
 	}
 }
 
@@ -137,7 +138,7 @@ int32 KSMIniData::getInt(StringView key, int32 defaultValue) const
 	}
 	catch (const ParseError&)
 	{
-		Print << U"Warning: The field '{}' in INI file is ignored! (The value '{}' is not an integer.)"_fmt(m_hashTable.at(key));
+		Logger << U"[ksm warning] The field '{}' in INI file is ignored! (The value '{}' is not an integer.)"_fmt(key, m_hashTable.at(key));
 		return defaultValue;
 	}
 }
@@ -155,7 +156,7 @@ double KSMIniData::getDouble(StringView key, double defaultValue) const
 	}
 	catch (const ParseError&)
 	{
-		Print << U"Warning: The field '{}' in INI file is ignored! (The value '{}' is not a number.)"_fmt(m_hashTable.at(key));
+		Logger << U"[ksm warning] The field '{}' in INI file is ignored! (The value '{}' is not a number.)"_fmt(key, m_hashTable.at(key));
 		return defaultValue;
 	}
 }

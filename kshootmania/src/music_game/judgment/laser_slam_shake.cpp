@@ -5,7 +5,7 @@ namespace MusicGame::Judgment
 	double LaserSlamShake::shiftX(double currentTimeSec) const
 	{
 		constexpr double kShakeDurationSec = 0.15;
-		constexpr double kShakeMaxShiftX = 12.5;
+		constexpr double kShakeMaxShiftX = 17.0 * 50.0 / 150.0 / 2.0;
 		const double diffTimeSec = currentTimeSec - m_startSec;
 		if (diffTimeSec < kShakeDurationSec)
 		{

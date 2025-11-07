@@ -1,4 +1,5 @@
 ﻿#include "hispeed_setting_menu.hpp"
+#include "input/platform_key.hpp"
 
 namespace MusicGame
 {
@@ -104,6 +105,29 @@ namespace MusicGame
 			return Clamp(MathUtils::RoundToInt(static_cast<double>(value) / cursorStep) * cursorStep, cursorMin, cursorMax);
 		}
 
+		/// @brief 現在のハイスピード値に最も近いハイスピード値が得られるハイスピード設定値を計算(ハイスピードの種類変更時に前の種類での値に最も近い設定にするために使用)
+		/// @param currentHispeed 現在のハイスピード値
+		/// @param currentBPM 現在のBPM
+		/// @param stdBPM O-mod用の基準BPM
+		/// @param targetHispeedType 対象とするハイスピードの種類
+		/// @return ハイスピード設定値
+		/// @remarks 戻り値は範囲外の値を丸めたり25刻みにしたりしないので、使用側で適用すること
+		int32 NearestHispeedSettingValue(int32 currentHispeed, double currentBPM, double stdBPM, HispeedType targetHispeedType)
+		{
+			switch (targetHispeedType)
+			{
+			case HispeedType::XMod:
+				return MathUtils::RoundToInt(currentHispeed * 10 / Max(currentBPM, 1.0));
+			case HispeedType::OMod:
+				return MathUtils::RoundToInt(currentHispeed * stdBPM / Max(currentBPM, 1.0));
+			case HispeedType::CMod:
+				return currentHispeed;
+			default:
+				assert(false && "Unknown hispeed type");
+				return 0;
+			}
+		}
+
 		String HispeedSettingToString(const HispeedSetting& hispeedSetting)
 		{
 			switch (hispeedSetting.type)
@@ -182,9 +206,9 @@ namespace MusicGame
 		m_valueMenu.setCursor(hispeedSetting.value);
 	}
 
-	HispeedSettingMenu::HispeedSettingMenu()
+	HispeedSettingMenu::HispeedSettingMenu(const Array<HispeedType>& availableHispeedTypes, const HispeedSetting& hispeedSetting, double stdBPM, double initialBPM)
 		: m_typeMenu(
-			LoadAvailableTypesFromConfigIni(),
+			availableHispeedTypes,
 			LinearMenu::CreateInfoWithCursorMinMax{
 				.cursorInputCreateInfo = {
 					.type = CursorInput::Type::Horizontal,
@@ -207,12 +231,37 @@ namespace MusicGame
 				.cursorMax = 0,
 				.cyclic = IsCyclicMenuYN::No,
 			})
+		, m_stdBPM(stdBPM)
 	{
-		loadFromConfigIni();
+		setHispeedSetting(hispeedSetting);
+
+		// m_currentHispeedを初期化
+		switch (hispeedSetting.type)
+		{
+		case HispeedType::XMod:
+			m_currentHispeed = MathUtils::RoundToInt(hispeedSetting.value * initialBPM / 10.0);
+			break;
+		case HispeedType::OMod:
+			m_currentHispeed = MathUtils::RoundToInt(hispeedSetting.value * initialBPM / m_stdBPM);
+			break;
+		case HispeedType::CMod:
+			m_currentHispeed = hispeedSetting.value;
+			break;
+		default:
+			assert(false && "Unknown hispeed type");
+			m_currentHispeed = 0;
+			break;
+		}
 	}
 
-	bool HispeedSettingMenu::update(const Scroll::HighwayScroll& highwayScroll)
+	bool HispeedSettingMenu::update(double currentBPM)
 	{
+		// Ctrlキー押下中は早送り機能と干渉するため、ハイスピードメニューの操作を無効化
+		if (PlatformKey::KeyCommandControl.pressed())
+		{
+			return false;
+		}
+
 		m_typeMenu.update();
 		m_valueMenu.update();
 
@@ -222,8 +271,26 @@ namespace MusicGame
 
 			// 新しいハイスピードの種類で現在の値に最も近いハイスピード設定値を調べて設定
 			const HispeedType hispeedType = m_typeMenu.cursorValue();
-			const int32 nearestValue = highwayScroll.nearestHispeedSettingValue(hispeedType);
+			const int32 nearestValue = NearestHispeedSettingValue(m_currentHispeed, currentBPM, m_stdBPM, hispeedType);
 			m_valueMenu.setCursor(ApplyConstraints(nearestValue, hispeedType));
+		}
+
+		// 現在のハイスピード値を更新
+		const HispeedSetting setting = hispeedSetting();
+		switch (setting.type)
+		{
+		case HispeedType::XMod:
+			m_currentHispeed = MathUtils::RoundToInt(setting.value * currentBPM / 10.0);
+			break;
+		case HispeedType::OMod:
+			m_currentHispeed = MathUtils::RoundToInt(setting.value * currentBPM / m_stdBPM);
+			break;
+		case HispeedType::CMod:
+			m_currentHispeed = setting.value;
+			break;
+		default:
+			assert(false && "Unknown hispeed type");
+			break;
 		}
 
 		// 値に変更があったか返す

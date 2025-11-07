@@ -8,9 +8,12 @@ namespace MusicGame
 	class HispeedSettingMenu
 	{
 	private:
-		const std::function<int32()> m_fnGetCurrentHispeed;
 		ArrayWithLinearMenu<HispeedType> m_typeMenu;
 		LinearMenu m_valueMenu;
+
+		double m_stdBPM = kDefaultBPM;
+
+		int32 m_currentHispeed = 0;
 
 		void refreshValueMenuConstraints();
 
@@ -18,13 +21,16 @@ namespace MusicGame
 
 	public:
 		/// @brief コンストラクタ
-		/// @param fnGetCurrentHispeed 現在のハイスピード値(倍率適用後の値)を取得する関数ポインタ(type変更時はこの戻り値に最も近い値に設定される)
-		/// @remarks 内部でConfigIniを参照するため、ConfigIniが初期化済みである必要がある
-		HispeedSettingMenu();
+		/// @param availableHispeedTypes 使用可能なハイスピードの種類
+		/// @param hispeedSetting 初期ハイスピード設定
+		/// @param stdBPM O-mod用の基準BPM
+		/// @param initialBPM 初期BPM(m_currentHispeedの初期化に使用)
+		HispeedSettingMenu(const Array<HispeedType>& availableHispeedTypes, const HispeedSetting& hispeedSetting, double stdBPM, double initialBPM);
 
 		/// @brief 毎フレームの更新
+		/// @param currentBPM 現在のBPM(最も近い値でtypeを切り替えるために使用)
 		/// @return 値に変更があった場合はtrueを返す
-		bool update(const Scroll::HighwayScroll& highwayScroll);
+		bool update(double currentBPM);
 
 		/// @brief ConfigIniから読み込んでメニューに反映
 		/// @remarks ハイスピード設定の表示/非表示設定に更新があっても反映されない点に注意

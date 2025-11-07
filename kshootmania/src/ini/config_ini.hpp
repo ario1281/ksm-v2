@@ -1,5 +1,10 @@
 ﻿#pragma once
 
+namespace MusicGame
+{
+	enum class HispeedType;
+}
+
 namespace ConfigIni
 {
 	namespace Key
@@ -23,8 +28,8 @@ namespace ConfigIni
 		constexpr StringView kLaserInputType = U"laserinput";
 		constexpr StringView kAssistTick = U"assisttick";
 		constexpr StringView kDisableIME = U"disableime";
-		constexpr StringView kTimingAdjust = U"inputdelay";
-		constexpr StringView kLaserTimingAdjust = U"laserdelay";
+		constexpr StringView kInputDelay = U"inputdelay";
+		constexpr StringView kLaserInputDelay = U"laserdelay";
 		constexpr StringView kLaserMouseDirectionX = U"mouse_directionx";
 		constexpr StringView kLaserMouseDirectionY = U"mouse_directiony";
 		constexpr StringView kLaserSignalSensitivity = U"mouse_sensitivity";
@@ -54,7 +59,6 @@ namespace ConfigIni
 		constexpr StringView kSelectDifficulty = U"currentlevel";
 		constexpr StringView kSelectSortType = U"mselview";
 		constexpr StringView kHispeed = U"hispeed";
-		constexpr StringView kEffRateType = U"effratetype";
 		constexpr StringView kShowFastSlow = U"viewtiming";
 		constexpr StringView kNoteSkin = U"noteskin";
 		constexpr StringView kBGMovie = U"backgroundmovie";
@@ -64,7 +68,7 @@ namespace ConfigIni
 
 		// Other advanced audio settings
 		constexpr StringView kGlobalOffset = U"globaloffset";
-		constexpr StringView kAudioFXDelay = U"soundfx_delay";
+		constexpr StringView kAudioProcDelay = U"soundfx_delay";
 		constexpr StringView kVisualOffset = U"visual_offset";
 		constexpr StringView kAutoPlaySE = U"auto_play_se";
 
@@ -161,4 +165,8 @@ namespace ConfigIni
 	void SetDouble(StringView key, double value);
 
 	void SetString(StringView key, StringView value);
+
+	/// @brief ConfigIniから利用可能なハイスピードタイプを読み込み
+	/// @return 利用可能なハイスピードタイプの配列
+	Array<MusicGame::HispeedType> LoadAvailableHispeedTypes();
 }

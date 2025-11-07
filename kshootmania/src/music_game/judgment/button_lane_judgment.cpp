@@ -26,8 +26,14 @@ namespace MusicGame::Judgment
 			return pulseToSec;
 		}
 
-		kson::ByPulse<JudgmentResult> CreateChipNoteJudgmentArray(const kson::ByPulse<kson::Interval>& lane)
+		kson::ByPulse<JudgmentResult> CreateChipNoteJudgmentArray(const kson::ByPulse<kson::Interval>& lane, JudgmentPlayMode judgmentPlayMode)
 		{
+			// Offモードの場合は空配列を返す
+			if (judgmentPlayMode == JudgmentPlayMode::kOff)
+			{
+				return {};
+			}
+
 			kson::ByPulse<JudgmentResult> judgmentArray;
 
 			for (const auto& [y, note] : lane)
@@ -43,8 +49,14 @@ namespace MusicGame::Judgment
 
 		using LongNoteJudgment = ButtonLaneJudgment::LongNoteJudgment;
 
-		kson::ByPulse<ButtonLaneJudgment::LongNoteJudgment> CreateLongNoteJudgmentArray(const kson::ByPulse<kson::Interval>& lane, const kson::BeatInfo& beatInfo)
+		kson::ByPulse<ButtonLaneJudgment::LongNoteJudgment> CreateLongNoteJudgmentArray(const kson::ByPulse<kson::Interval>& lane, const kson::BeatInfo& beatInfo, JudgmentPlayMode judgmentPlayMode)
 		{
+			// Offモードの場合は空配列を返す
+			if (judgmentPlayMode == JudgmentPlayMode::kOff)
+			{
+				return {};
+			}
+
 			// HSP版: https://github.com/kshootmania/ksm-v1/blob/8deaf1fd147f6e13ac6665731e1ff1e00c5b4176/src/scene/play/play_chart_load.hsp#L1707-L1761
 
 			kson::ByPulse<LongNoteJudgment> judgmentArray;
@@ -101,9 +113,41 @@ namespace MusicGame::Judgment
 			}
 			return false;
 		}
+
+		bool HasFXChipKeySound(const kson::ChartData& chartData, KeyConfig::Button button, kson::Pulse pulse)
+		{
+			if (button != KeyConfig::kFX_L && button != KeyConfig::kFX_R)
+			{
+				// FXレーンでない場合は対象外
+				return false;
+			}
+
+			const std::size_t laneIdx = button - KeyConfig::kFX_L;
+			const auto& chipEvent = chartData.audio.keySound.fx.chipEvent;
+
+			for (const auto& [filename, lanes] : chipEvent)
+			{
+				if (laneIdx >= lanes.size())
+				{
+					continue;
+				}
+
+				if (lanes[laneIdx].contains(pulse))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
 	}
 
-	void ButtonLaneJudgment::processKeyDown(const kson::ByPulse<kson::Interval>& lane, kson::Pulse currentPulse, double currentTimeSec, ButtonLaneStatus& laneStatusRef, JudgmentHandler& judgmentHandlerRef)
+	double ButtonLaneJudgment::errorWindowSec() const
+	{
+		return m_gaugeType == GaugeType::kEasyGauge ? TimingWindow::ChipNote::kWindowSecErrorEasy : TimingWindow::ChipNote::kWindowSecError;
+	}
+
+	void ButtonLaneJudgment::processKeyDown(const kson::ChartData& chartData, const kson::ByPulse<kson::Interval>& lane, kson::Pulse currentPulse, double currentTimeSec, double currentTimeSecForDraw, ButtonLaneStatus& laneStatusRef, JudgmentHandler& judgmentHandlerRef)
 	{
 		using namespace TimingWindow;
 
@@ -117,7 +161,7 @@ namespace MusicGame::Judgment
 			const auto& [y, note] = *itr;
 			const double sec = m_pulseToSec.at(y);
 			const double endSec = (note.length == 0) ? sec : m_pulseToSec.at(y + note.length);
-			if (currentTimeSec - endSec >= ChipNote::kWindowSecError)
+			if (currentTimeSec - endSec >= errorWindowSec())
 			{
 				continue;
 			}
@@ -157,37 +201,69 @@ namespace MusicGame::Judgment
 			}
 		}
 
-		laneStatusRef.keyBeamTimeSec = currentTimeSec;
+		laneStatusRef.keyBeamTimeSec = currentTimeSecForDraw;
 		laneStatusRef.keyBeamType = KeyBeamType::kDefault;
 
 		if (found)
 		{
 			// チップノーツの判定
-			Optional<JudgmentResult> chipAnimType = none;
+			Optional<ChipAnimType> chipAnimType = none;
 			if (minDistance < ChipNote::kWindowSecCritical)
 			{
 				// CRITICAL判定
 				m_chipJudgmentArray.at(nearestNotePulse) = JudgmentResult::kCritical;
 				judgmentHandlerRef.onChipJudged(JudgmentResult::kCritical);
 				laneStatusRef.keyBeamType = KeyBeamType::kCritical;
-				chipAnimType = JudgmentResult::kCritical;
+				chipAnimType = ChipAnimType::kCritical;
 			}
 			else if (minDistance < ChipNote::kWindowSecNear)
 			{
 				// NEAR判定
-				const auto judgmentResult = isFast ? JudgmentResult::kNearFast : JudgmentResult::kNearSlow;
-				m_chipJudgmentArray.at(nearestNotePulse) = judgmentResult;
-				judgmentHandlerRef.onChipJudged(judgmentResult);
-				laneStatusRef.keyBeamType = KeyBeamType::kNear; // TODO: fast/slow
-				chipAnimType = judgmentResult;
+				if (isFast && HasFXChipKeySound(chartData, m_keyConfigButton, nearestNotePulse))
+				{
+					// 効果音付きチップFXノーツの場合、FAST NEARは出さずCRITICAL判定扱いとする
+					// (効果音の再生遅延を気にして早押しした場合にNEARにならないようにするための仕様)
+					m_chipJudgmentArray.at(nearestNotePulse) = JudgmentResult::kCritical;
+					judgmentHandlerRef.onChipJudged(JudgmentResult::kCritical);
+					laneStatusRef.keyBeamType = KeyBeamType::kCritical;
+					chipAnimType = ChipAnimType::kCritical;
+				}
+				else
+				{
+					const auto judgmentResult = isFast ? JudgmentResult::kNearFast : JudgmentResult::kNearSlow;
+					m_chipJudgmentArray.at(nearestNotePulse) = judgmentResult;
+					judgmentHandlerRef.onChipJudged(judgmentResult);
+
+					// FAST/SLOW表示設定に応じてキービームの種類を設定
+					if (m_fastSlowMode == FastSlowMode::kShow)
+					{
+						laneStatusRef.keyBeamType = isFast ? KeyBeamType::kNearFast : KeyBeamType::kNearSlow;
+						chipAnimType = isFast ? ChipAnimType::kNearFast : ChipAnimType::kNear;
+					}
+					else
+					{
+						laneStatusRef.keyBeamType = KeyBeamType::kNear;
+						chipAnimType = ChipAnimType::kNear;
+					}
+				}
 			}
-			else if (minDistance < ChipNote::kWindowSecError) // TODO: easy gauge
+			else if (minDistance < errorWindowSec())
 			{
 				// ERROR判定
 				m_chipJudgmentArray.at(nearestNotePulse) = JudgmentResult::kError;
 				judgmentHandlerRef.onChipJudged(JudgmentResult::kError);
-				laneStatusRef.keyBeamType = KeyBeamType::kDefault;
-				chipAnimType = JudgmentResult::kError; // TODO: fast/slow
+
+				// FAST/SLOW表示設定に応じてキービームの種類を設定
+				if (m_fastSlowMode == FastSlowMode::kShow && isFast)
+				{
+					laneStatusRef.keyBeamType = KeyBeamType::kErrorFast;
+				}
+				else
+				{
+					laneStatusRef.keyBeamType = KeyBeamType::kDefault;
+				}
+
+				chipAnimType = ChipAnimType::kError;
 			}
 
 			if (chipAnimType.has_value())
@@ -196,6 +272,13 @@ namespace MusicGame::Judgment
 					.startTimeSec = currentTimeSec,
 					.type = *chipAnimType,
 				});
+
+				// FXチップのキー音再生用にタイミングを記録
+				if (*chipAnimType != ChipAnimType::kError)
+				{
+					laneStatusRef.lastChipJudgedTimeSec = currentTimeSec;
+					laneStatusRef.lastJudgedChipPulse = nearestNotePulse;
+				}
 			}
 		}
 	}
@@ -235,12 +318,12 @@ namespace MusicGame::Judgment
 		}
 	}
 
-	void ButtonLaneJudgment::processPassedNoteJudgment(const kson::ByPulse<kson::Interval>& lane, kson::Pulse currentPulse, double currentTimeSec, ButtonLaneStatus& laneStatusRef, JudgmentHandler& judgmentHandlerRef, IsAutoPlayYN isAutoPlay)
+	void ButtonLaneJudgment::processPassedNoteJudgment(const kson::ByPulse<kson::Interval>& lane, kson::Pulse currentPulse, double currentTimeSec, double currentTimeSecForDraw, ButtonLaneStatus& laneStatusRef, JudgmentHandler& judgmentHandlerRef, IsAutoPlayYN isAutoPlay)
 	{
 		using namespace TimingWindow;
 
 		const JudgmentResult result = isAutoPlay ? JudgmentResult::kCritical : JudgmentResult::kError;
-		const double thresholdSec = isAutoPlay ? 0.0 : ChipNote::kWindowSecError;
+		const double thresholdSec = isAutoPlay ? 0.0 : ChipNote::kWindowSecLateErrorBegin;
 
 		for (auto itr = m_passedNoteCursor; itr != lane.end(); ++itr)
 		{
@@ -254,16 +337,22 @@ namespace MusicGame::Judgment
 					m_chipJudgmentArray.at(y) = result;
 					judgmentHandlerRef.onChipJudged(result);
 
+					// 見逃し判定はERRORかオートプレイのCRITICALのみ
+					const ChipAnimType animType = result == JudgmentResult::kCritical ? ChipAnimType::kCritical : ChipAnimType::kError;
 					laneStatusRef.chipAnim.push({
 						.startTimeSec = currentTimeSec,
-						.type = result,
+						.type = animType,
 					});
 
-					// オートプレイの場合はここでCRITICALのキービームを表示
 					if (isAutoPlay)
 					{
-						laneStatusRef.keyBeamTimeSec = passSec;
+						// オートプレイの場合はここでCRITICALのキービームを表示
+						laneStatusRef.keyBeamTimeSec = currentTimeSecForDraw;
 						laneStatusRef.keyBeamType = KeyBeamType::kCritical;
+
+						// FXチップキー音のオートプレイ用にタイミングを記録
+						laneStatusRef.lastChipJudgedTimeSec = currentTimeSec;
+						laneStatusRef.lastJudgedChipPulse = y;
 					}
 				}
 
@@ -288,25 +377,27 @@ namespace MusicGame::Judgment
 		}
 	}
 
-	ButtonLaneJudgment::ButtonLaneJudgment(JudgmentPlayMode judgmentPlayMode, KeyConfig::Button keyConfigButton, const kson::ByPulse<kson::Interval>& lane, const kson::BeatInfo& beatInfo, const kson::TimingCache& timingCache)
+	ButtonLaneJudgment::ButtonLaneJudgment(JudgmentPlayMode judgmentPlayMode, GaugeType gaugeType, FastSlowMode fastSlowMode, KeyConfig::Button keyConfigButton, const kson::ByPulse<kson::Interval>& lane, const kson::BeatInfo& beatInfo, const kson::TimingCache& timingCache)
 		: m_judgmentPlayMode(judgmentPlayMode)
+		, m_gaugeType(gaugeType)
+		, m_fastSlowMode(fastSlowMode)
 		, m_keyConfigButton(keyConfigButton)
 		, m_pulseToSec(CreatePulseToSec(lane, beatInfo, timingCache))
-		, m_chipJudgmentArray(CreateChipNoteJudgmentArray(lane))
-		, m_longJudgmentArray(CreateLongNoteJudgmentArray(lane, beatInfo))
+		, m_chipJudgmentArray(CreateChipNoteJudgmentArray(lane, judgmentPlayMode))
+		, m_longJudgmentArray(CreateLongNoteJudgmentArray(lane, beatInfo, judgmentPlayMode))
 		, m_passedNoteCursor(lane.begin())
 		, m_passedLongJudgmentCursor(m_longJudgmentArray.begin())
 	{
 	}
 
-	void ButtonLaneJudgment::update(const kson::ByPulse<kson::Interval>& lane, kson::Pulse currentPulse, double currentTimeSec, ButtonLaneStatus& laneStatusRef, JudgmentHandler& judgmentHandlerRef)
+	void ButtonLaneJudgment::update(const kson::ChartData& chartData, const kson::ByPulse<kson::Interval>& lane, kson::Pulse currentPulse, double currentTimeSec, double currentTimeSecForDraw, ButtonLaneStatus& laneStatusRef, JudgmentHandler& judgmentHandlerRef)
 	{
 		if (m_judgmentPlayMode == JudgmentPlayMode::kOn)
 		{
 			// チップノーツとロングノーツの始点の判定処理
 			if (!m_isLockedForExit && KeyConfig::Down(m_keyConfigButton))
 			{
-				processKeyDown(lane, currentPulse, currentTimeSec, laneStatusRef, judgmentHandlerRef);
+				processKeyDown(chartData, lane, currentPulse, currentTimeSec, currentTimeSecForDraw, laneStatusRef, judgmentHandlerRef);
 			}
 
 			// ロングノーツ押下中の判定処理
@@ -324,7 +415,7 @@ namespace MusicGame::Judgment
 			}
 
 			// 通り過ぎたノーツをERROR判定にする
-			processPassedNoteJudgment(lane, currentPulse, currentTimeSec, laneStatusRef, judgmentHandlerRef, IsAutoPlayYN::No);
+			processPassedNoteJudgment(lane, currentPulse, currentTimeSec, currentTimeSecForDraw, laneStatusRef, judgmentHandlerRef, IsAutoPlayYN::No);
 
 			if (IsDuringLongNote(lane, currentPulse))
 			{
@@ -338,7 +429,7 @@ namespace MusicGame::Judgment
 		else if (m_judgmentPlayMode == JudgmentPlayMode::kAuto)
 		{
 			// 通り過ぎたノーツをCRITICAL判定にする
-			processPassedNoteJudgment(lane, currentPulse, currentTimeSec, laneStatusRef, judgmentHandlerRef, IsAutoPlayYN::Yes);
+			processPassedNoteJudgment(lane, currentPulse, currentTimeSec, currentTimeSecForDraw, laneStatusRef, judgmentHandlerRef, IsAutoPlayYN::Yes);
 
 			kson::Pulse currentLongNoteY;
 			if (IsDuringLongNote(lane, currentPulse, &currentLongNoteY))
@@ -360,6 +451,27 @@ namespace MusicGame::Judgment
 				laneStatusRef.currentLongNotePulse = none;
 			}
 		}
+		else if (m_judgmentPlayMode == JudgmentPlayMode::kOff)
+		{
+			// Offモード時もボタン入力を受け付けてアニメーションを表示
+			kson::Pulse currentLongNoteY;
+			if (IsDuringLongNote(lane, currentPulse, &currentLongNoteY) && KeyConfig::Pressed(m_keyConfigButton))
+			{
+				// ロングノーツ中でボタンを押している場合
+				laneStatusRef.currentLongNotePulse = currentLongNoteY;
+				laneStatusRef.currentLongNoteAnimOffsetTimeSec = m_pulseToSec.at(currentLongNoteY);
+			}
+			else
+			{
+				// ロングノーツ中でない、またはボタンを押していない場合
+				if (laneStatusRef.currentLongNotePulse.has_value())
+				{
+					// 前フレームでロングノーツが存在し、現在フレームで存在しない場合は離した扱いにする(アニメーション用)
+					laneStatusRef.currentLongNotePulse = none;
+					laneStatusRef.currentLongNoteAnimOffsetTimeSec = currentTimeSec;
+				}
+			}
+		}
 
 		m_prevPulse = currentPulse;
 	}
@@ -374,10 +486,30 @@ namespace MusicGame::Judgment
 		return m_longJudgmentArray.size();
 	}
 
-	void ButtonLaneJudgment::lockForExit()
+	void ButtonLaneJudgment::lockForExit(JudgmentHandler& judgmentHandlerRef)
 	{
 		// ButtonLaneJudgmentではKeyDownの処理のみスキップする
 		// (フェードアウト中に押したキーでCRITICALやNEARの判定ビームが見えると気になるので)
 		m_isLockedForExit = true;
+
+		// チップノーツの未判定をERRORにする
+		for (auto& [pulse, result] : m_chipJudgmentArray)
+		{
+			if (result == JudgmentResult::kUnspecified)
+			{
+				result = JudgmentResult::kError;
+				judgmentHandlerRef.onChipJudged(JudgmentResult::kError);
+			}
+		}
+
+		// ロングノーツの未判定をERRORにする
+		for (auto& [pulse, longJudgment] : m_longJudgmentArray)
+		{
+			if (longJudgment.result == JudgmentResult::kUnspecified)
+			{
+				longJudgment.result = JudgmentResult::kError;
+				judgmentHandlerRef.onLongJudged(JudgmentResult::kError);
+			}
+		}
 	}
 }

@@ -399,10 +399,21 @@ FodyWeavers.xsd
 **/App/*.exe
 **/App/*.lib
 **/App/*.exp
+**/App/*.app/
 **/App/songs/*
 !**/App/songs/K-Shoot MANIA/
 **/App/songs/K-Shoot MANIA/*
 !**/App/songs/K-Shoot MANIA/.gitkeep
 **/App/config.ini
-**/App/score/*
+**/App/score/
+**/App/score_backup/
 **/.DS_Store
+**/build/
+
+*.md
+!README.md
+
+# Temporary tests
+/*.py
+/*.ksh
+/*.kson

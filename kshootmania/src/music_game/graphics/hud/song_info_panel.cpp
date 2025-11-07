@@ -12,6 +12,9 @@ namespace MusicGame::Graphics
 		constexpr StringView kDetailPanelBaseTextureFilename = U"minfo_detail.png";
 		constexpr Size kDetailPanelSize = { 240, 66 };
 
+		constexpr StringView kPositionMarkerTextureFilename = U"minfo_cur.png";
+		constexpr Size kPositionMarkerSize = { 10, 10 };
+
 		constexpr StringView kNumberTextureFontFilename = U"num2.png";
 
 		constexpr StringView kDifficultyTextureFilename = U"result_difficulty.png";
@@ -20,22 +23,44 @@ namespace MusicGame::Graphics
 		constexpr Vec2 kJacketPosition = { -286.5, 45.5 };
 		constexpr Point kTitlePanelBasePosition = { -155, 45 };
 		constexpr Point kDetailPanelBasePosition = { -295, 69 };
+
+		constexpr double kPreStartOffsetSec = 3.4;
+		constexpr double kPreStartOffsetWithMovieSec = 4.4;
+		constexpr Vec2 kMarkerStartOffset = { 8.0 - kPositionMarkerSize.x / 2.0, 56.0 - kPositionMarkerSize.y / 2.0 };
+		constexpr Vec2 kMarkerEndOffset = { 8.0 - kPositionMarkerSize.x / 2.0 + 225.0, 56.0 - kPositionMarkerSize.y / 2.0 };
+
+		FilePath GetJacketPath(FilePathView parentPath, const String& jacketFilename)
+		{
+			// 拡張子なしの場合はimgs/jacket内の画像を使用
+			if (FileSystem::Extension(jacketFilename).isEmpty())
+			{
+				return FileSystem::PathAppend(U"imgs/jacket", jacketFilename + U".jpg");
+			}
+			else
+			{
+				return FileSystem::PathAppend(parentPath, jacketFilename);
+			}
+		}
 	}
 
 	SongInfoPanel::SongInfoPanel(const kson::ChartData& chartData, FilePathView parentPath)
-		: m_jacketTexture(parentPath + Unicode::FromUTF8(chartData.meta.jacketFilename))
+		: m_jacketTexture(GetJacketPath(parentPath, Unicode::FromUTF8(chartData.meta.jacketFilename)))
+		, m_jacketPosition(Scene::Width() / 2 + static_cast<int32>(Scaled(kJacketPosition.x)), static_cast<int32>(Scaled(kJacketPosition.y)))
 		, m_scaledJacketSize(RectSizeInSquare(m_jacketTexture.size(), Scaled(kJacketWidth) ))
 		, m_titlePanelBaseTexture(kTitlePanelSize * 2, kTransparent)
+		, m_titlePanelPosition(Scene::Width() / 2 + Scaled(kTitlePanelBasePosition.x), Scaled(kTitlePanelBasePosition.y))
 		, m_detailPanelBaseTexture(TextureAsset(kDetailPanelBaseTextureFilename))
+		, m_detailPanelPosition(Scene::Width() / 2 + Scaled(kDetailPanelBasePosition.x), Scaled(kDetailPanelBasePosition.y))
+		, m_positionMarkerTexture(TextureAsset(kPositionMarkerTextureFilename))
 		, m_difficultyTexture(kDifficultyTextureFilename,
 			{
 				.row = kNumDifficulties,
 				.sourceScale = SourceScale::k2x,
-				.sourceSize = { 84, 96 / 4 },
+				.sourceSize = { 84, 24 },
 			})
 		, m_difficultyTextureRegion(m_difficultyTexture(chartData.meta.difficulty.idx))
 		, m_level(chartData.meta.level)
-		, m_numberTextureFont(kNumberTextureFontFilename, { 40 / 2, 288 / 16 })
+		, m_numberTextureFont(kNumberTextureFontFilename, { 20, 18 })
 		, m_levelNumberLayout(Scaled(10, 9), TextureFontTextLayout::Align::Left)
 		, m_bpmNumberLayout(Scaled(10, 9), TextureFontTextLayout::Align::Left)
 	{
@@ -56,24 +81,28 @@ namespace MusicGame::Graphics
 		}
 	}
 
-	void SongInfoPanel::draw(double currentBPM, const Scroll::HighwayScrollContext& highwayScrollContext) const
+	void SongInfoPanel::draw(double currentTimeSec, Duration bgmDuration, double currentBPM, const Scroll::HighwayScrollContext& highwayScrollContext, bool hasMovie) const
 	{
-		const Vec2 jacketPosition(Scene::Width() / 2 + static_cast<int32>(Scaled(kJacketPosition.x)), static_cast<int32>(Scaled(kJacketPosition.y)));
-		const Vec2 titlePanelPosition(Scene::Width() / 2 + Scaled(kTitlePanelBasePosition.x), Scaled(kTitlePanelBasePosition.y));
-		const Vec2 detailPanelPosition(Scene::Width() / 2 + Scaled(kDetailPanelBasePosition.x), Scaled(kDetailPanelBasePosition.y));
-		
-		m_jacketTexture.resized(m_scaledJacketSize).drawAt(jacketPosition);
-		m_titlePanelBaseTexture.resized(Scaled(kTitlePanelSize)).drawAt(titlePanelPosition);
-		m_detailPanelBaseTexture.resized(Scaled(kDetailPanelSize)).draw(detailPanelPosition);
-		m_difficultyTextureRegion.draw(detailPanelPosition + Scaled(13, 3));
+		m_jacketTexture.resized(m_scaledJacketSize).drawAt(m_jacketPosition);
+		m_titlePanelBaseTexture.resized(Scaled(kTitlePanelSize)).drawAt(m_titlePanelPosition);
+		m_detailPanelBaseTexture.resized(Scaled(kDetailPanelSize)).draw(m_detailPanelPosition);
+		m_difficultyTextureRegion.draw(m_detailPanelPosition + Scaled(13, 3));
 
 		// Level
-		m_numberTextureFont.draw(m_levelNumberLayout, detailPanelPosition + Scaled(79, 4), m_level, ZeroPaddingYN::No);
+		m_numberTextureFont.draw(m_levelNumberLayout, m_detailPanelPosition + Scaled(79, 4), m_level, ZeroPaddingYN::No);
 
 		// BPM
-		m_numberTextureFont.draw(m_bpmNumberLayout, detailPanelPosition + Scaled(159, 4), static_cast<int32>(round(currentBPM)), ZeroPaddingYN::No);
+		// TODO: BPMの小数部分を表示
+		m_numberTextureFont.draw(m_bpmNumberLayout, m_detailPanelPosition + Scaled(159, 4), static_cast<int32>(currentBPM), ZeroPaddingYN::No);
 
 		// ハイスピード設定
-		m_hispeedSettingPanel.draw(detailPanelPosition + Scaled(159, 27), highwayScrollContext);
+		m_hispeedSettingPanel.draw(m_detailPanelPosition + Scaled(159, 27), highwayScrollContext);
+
+		// 再生位置マーカー
+		const double preStartOffset = hasMovie ? kPreStartOffsetWithMovieSec : kPreStartOffsetSec;
+		const double totalDurationSec = bgmDuration.count() + preStartOffset;
+		const double progress = Clamp(currentTimeSec / totalDurationSec, 0.0, 1.0);
+		const Vec2 markerPos = m_detailPanelPosition + Scaled(kMarkerStartOffset.lerp(kMarkerEndOffset, progress));
+		m_positionMarkerTexture.resized(Scaled(kPositionMarkerSize)).draw(markerPos);
 	}
 }

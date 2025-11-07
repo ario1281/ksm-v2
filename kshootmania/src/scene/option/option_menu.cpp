@@ -73,7 +73,7 @@ void OptionMenu::update()
 		const int32 enumCount = static_cast<int32>(m_fields.size());
 		if (cursorIdx < 0 || enumCount <= cursorIdx)
 		{
-			Print << U"Warning: Menu cursor is out of range! (func=OptionMenu::update(), cursor={}, min=0, max={})"_fmt(cursorIdx, enumCount - 1);
+			Logger << U"[ksm warning] OptionMenu::update(): Menu cursor is out of range! (func=OptionMenu::update(), cursor={}, min=0, max={})"_fmt(cursorIdx, enumCount - 1);
 			return;
 		}
 		m_fields[cursorIdx].update();

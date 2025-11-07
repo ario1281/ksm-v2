@@ -1,6 +1,9 @@
 ﻿#include "game_main.hpp"
 #include "game_defines.hpp"
+#include "turn_util.hpp"
+#include "play_mode_util.hpp"
 #include "kson/kson.hpp"
+#include "input/platform_key.hpp"
 
 namespace MusicGame
 {
@@ -18,6 +21,41 @@ namespace MusicGame
 			const double secSincePlayFinishPrev = gameStatus.currentTimeSec - gameStatus.playFinishStatus->finishTimeSec;
 			return secSincePlayFinishPrev >= kPlayFinishFadeOutStartSec;
 		}
+
+		double GetInitialBPM(const kson::ChartData& chartData)
+		{
+			return chartData.beat.bpm.contains(0) ? chartData.beat.bpm.at(0) : kDefaultBPM;
+		}
+
+		// 譜面データを読み込み、Turn変換とPlayModeフィルタを適用
+		kson::ChartData LoadChartDataWithTurn(const GameCreateInfo& createInfo)
+		{
+			auto chartData = kson::LoadKSHChartData(createInfo.chartFilePath.narrow());
+
+			// Turn変換を適用
+			const TurnTable turnTable = MakeTurnTable(createInfo.playOption.turnMode);
+			ApplyTurnTable(chartData, turnTable);
+
+			// Off/Hideモードフィルタを適用
+			ApplyPlayModeFilter(chartData, createInfo.playOption);
+
+			// レーザーを非カーブのみのグラフへ展開
+			for (auto& lane : chartData.note.laser)
+			{
+				for (auto& [y, section] : lane)
+				{
+					section = kson::ExpandCurveSegments(section, kson::kCurveSubdivisionInterval);
+				}
+			}
+
+			// scroll_speedを非カーブのみのグラフへ展開
+			chartData.beat.scrollSpeed = kson::ExpandCurveSegments(chartData.beat.scrollSpeed, kson::kCurveSubdivisionInterval);
+
+			// stopをscroll_speedへ焼き込む
+			chartData.beat.scrollSpeed = kson::BakeStopIntoScrollSpeed(chartData.beat.scrollSpeed, chartData.beat.stop);
+
+			return chartData;
+		}
 	}
 
 	void GameMain::updateStatus()
@@ -28,12 +66,25 @@ namespace MusicGame
 		// 再生時間と現在のBPMを取得
 		// TODO: SecondsFに統一
 		const double currentTimeSec = m_bgm.posSec().count();
+		const double inputDelaySec = m_playOption.effectiveInputDelayMs() / 1000.0;
+		const double laserInputDelaySec = m_playOption.effectiveLaserInputDelayMs() / 1000.0;
+		const double audioProcDelaySec = m_playOption.effectiveAudioProcDelayMs() / 1000.0;
+		const double currentTimeSecForButtonJudgment = currentTimeSec - inputDelaySec;
+		const double currentTimeSecForLaserJudgment = currentTimeSec - inputDelaySec - laserInputDelaySec;
+		const double currentTimeSecForAudioProc = currentTimeSec - audioProcDelaySec;
 		const kson::Pulse currentPulse = kson::SecToPulse(currentTimeSec, m_chartData.beat, m_timingCache);
 		const double currentPulseDouble = kson::SecToPulseDouble(currentTimeSec, m_chartData.beat, m_timingCache);
+		const kson::Pulse currentPulseForButtonJudgment = kson::SecToPulse(currentTimeSecForButtonJudgment, m_chartData.beat, m_timingCache);
+		const kson::Pulse currentPulseForLaserJudgment = kson::SecToPulse(currentTimeSecForLaserJudgment, m_chartData.beat, m_timingCache);
 		const double currentBPM = kson::TempoAt(currentPulse, m_chartData.beat);
 		m_gameStatus.currentTimeSec = currentTimeSec;
+		m_gameStatus.currentTimeSecForButtonJudgment = currentTimeSecForButtonJudgment;
+		m_gameStatus.currentTimeSecForLaserJudgment = currentTimeSecForLaserJudgment;
+		m_gameStatus.currentTimeSecForAudioProc = currentTimeSecForAudioProc;
 		m_gameStatus.currentPulse = currentPulse;
 		m_gameStatus.currentPulseDouble = currentPulseDouble;
+		m_gameStatus.currentPulseForButtonJudgment = currentPulseForButtonJudgment;
+		m_gameStatus.currentPulseForLaserJudgment = currentPulseForLaserJudgment;
 		m_gameStatus.currentBPM = currentBPM;
 
 		// 視点変更を更新
@@ -47,6 +98,26 @@ namespace MusicGame
 
 		// 判定の更新
 		m_judgmentMain.update(m_chartData, m_gameStatus, m_viewStatus);
+
+		// HARDゲージ落ち判定
+		if (!m_gameStatus.playFinishStatus.has_value() &&
+			m_playOption.gaugeType == GaugeType::kHardGauge &&
+			m_viewStatus.gaugePercentageInt <= kGaugePercentageThresholdHard)
+		{
+			m_gameStatus.playFinishStatus = PlayFinishStatus
+			{
+				.finishTimeSec = currentTimeSec,
+				.achievement = Achievement::kNone,
+				.isHardGaugeFailed = true,
+			};
+
+			// HARD落ち効果音を再生
+			m_hardFailedSound.play();
+
+			// HARD落ち以降の入力は無視
+			m_judgmentMain.lockForExit();
+		}
+
 		if (!m_gameStatus.playFinishStatus.has_value() && m_judgmentMain.isFinished())
 		{
 			m_gameStatus.playFinishStatus = PlayFinishStatus
@@ -59,43 +130,49 @@ namespace MusicGame
 
 	void GameMain::updateHighwayScroll()
 	{
-		// ハイスピード初回更新
-		// HighwayScrollはHispeedSettingMenuの更新に必要だが、事前に一度は更新しておかないとBPMが入らないので、初回は追加で更新
+		// ハイスピードを更新
 		if (m_isFirstUpdate)
 		{
-			// TODO: 消したい
+			// ハイスピードメニュー更新前にHighwayScrollを更新してBPMを設定
 			m_highwayScroll.update(m_hispeedSettingMenu.hispeedSetting(), m_gameStatus.currentBPM);
-			m_isFirstUpdate = false;
 		}
-
-		// ハイスピードを更新
-		m_hispeedSettingMenu.update(m_highwayScroll);
+		m_hispeedSettingMenu.update(m_gameStatus.currentBPM);
 		m_highwayScroll.update(m_hispeedSettingMenu.hispeedSetting(), m_gameStatus.currentBPM);
 	}
 
 	GameMain::GameMain(const GameCreateInfo& createInfo)
 		: m_chartFilePath(createInfo.chartFilePath)
 		, m_parentPath(FileSystem::ParentPath(createInfo.chartFilePath))
-		, m_chartData(kson::LoadKSHChartData(createInfo.chartFilePath.narrow()))
+		, m_chartData(LoadChartDataWithTurn(createInfo))
 		, m_timingCache(kson::CreateTimingCache(m_chartData.beat))
+		, m_playOption(createInfo.playOption)
 		, m_judgmentMain(m_chartData, m_timingCache, createInfo.playOption)
+		, m_camSystem(m_chartData)
 		, m_highwayScroll(m_chartData)
-		, m_bgm(FileSystem::PathAppend(m_parentPath, Unicode::FromUTF8(m_chartData.audio.bgm.filename)), m_chartData.audio.bgm.vol, SecondsF{ static_cast<double>(m_chartData.audio.bgm.offset) / 1000 })
-		, m_assistTick(createInfo.assistTickEnabled)
-		, m_laserSlamSE(m_chartData)
-		, m_audioEffectMain(m_bgm, m_chartData, m_timingCache)
+		, m_bgm(FileSystem::PathAppend(m_parentPath, Unicode::FromUTF8(m_chartData.audio.bgm.filename)), m_chartData.audio.bgm.vol, SecondsF{ static_cast<double>(m_chartData.audio.bgm.offset + createInfo.playOption.effectiveGlobalOffsetMs()) / 1000 }, Audio::DetermineLegacyAudioFPMode(m_chartData, m_parentPath), m_chartData, m_parentPath)
+		, m_assistTick(createInfo.assistTickMode)
+		, m_laserSlamSE(m_chartData, m_timingCache, m_parentPath, createInfo.playOption.isAutoPlaySE)
+		, m_fxChipSE(m_chartData, m_timingCache, m_parentPath, createInfo.playOption.isAutoPlaySE)
+		, m_hardFailedSound("se/play_hardfailed.wav")
+		, m_audioEffectMain(m_bgm, m_chartData, m_timingCache, m_parentPath, createInfo.playOption.effectiveAudioProcDelayMs() / 1000.0)
+		, m_hispeedSettingMenu(createInfo.playOption.availableHispeedTypes, createInfo.playOption.hispeedSetting, kson::GetEffectiveStdBPM(m_chartData), GetInitialBPM(m_chartData))
 		, m_graphicsMain(m_chartData, m_parentPath, createInfo.playOption)
 	{
 	}
 
 	void GameMain::start()
 	{
-		m_bgm.seekPosSec(-TimeSecBeforeStart(false/* TODO: movie */));
+		const double globalOffsetSec = m_playOption.effectiveGlobalOffsetMs() / 1000.0;
+		m_graphicsMain.prepareMovie(globalOffsetSec);
+		m_bgm.seekPosSec(-TimeSecBeforeStart(m_graphicsMain.hasMovie()));
 		m_bgm.play();
 	}
 
 	GameMain::StartFadeOutYN GameMain::update()
 	{
+		// 一時停止・早送りの制御
+		processPlaybackControl();
+
 		// 状態更新
 		updateStatus();
 
@@ -117,16 +194,19 @@ namespace MusicGame
 		m_audioEffectMain.update(m_bgm, m_chartData, m_timingCache, {
 			.longFXPressed = longFXPressed,
 			.laserIsOnOrNone = laserIsOnOrNone,
-		});
+		}, m_gameStatus.currentPulse);
 
 		// 効果音の更新
 		// TODO: SecondsFに統一
 		const double currentTimeSec = m_bgm.posSec().count();
 		m_assistTick.update(m_chartData, m_timingCache, currentTimeSec);
 		m_laserSlamSE.update(m_chartData, m_gameStatus);
+		m_fxChipSE.update(m_chartData, m_gameStatus);
 
 		// グラフィックの更新
-		m_graphicsMain.update(m_viewStatus);
+		m_graphicsMain.update(m_gameStatus, m_viewStatus, m_timingCache);
+
+		m_isFirstUpdate = false;
 
 		return ShouldStartFadeOut(m_gameStatus) ? StartFadeOutYN::Yes : StartFadeOutYN::No;
 	}
@@ -138,7 +218,7 @@ namespace MusicGame
 		const Scroll::HighwayScrollContext highwayScrollContext(&m_highwayScroll, &m_chartData.beat, &m_timingCache, &m_gameStatus);
 
 		// 描画実行
-		m_graphicsMain.draw(m_chartData, m_timingCache, m_gameStatus, m_viewStatus, highwayScrollContext);
+		m_graphicsMain.draw(m_chartData, m_timingCache, m_gameStatus, m_viewStatus, highwayScrollContext, m_bgm.duration());
 	}
 
 	void GameMain::lockForExit()
@@ -169,5 +249,40 @@ namespace MusicGame
 	void GameMain::startBGMFadeOut(Duration duration)
 	{
 		m_bgm.setFadeOut(duration);
+	}
+
+	void GameMain::processPlaybackControl()
+	{
+		const bool isCtrlPressed = PlatformKey::KeyCommandControl.pressed();
+
+		// 一時停止/再開(Ctrl+Enter)
+		if (isCtrlPressed && KeyEnter.down())
+		{
+			if (m_isPaused)
+			{
+				m_bgm.play();
+				m_isPaused = false;
+			}
+			else
+			{
+				m_bgm.pause();
+				m_isPaused = true;
+			}
+		}
+
+		// 早送り(Ctrl+Right)
+		if (!m_isPaused && isCtrlPressed && KeyRight.pressed())
+		{
+			if (m_fastForwardStopwatch.ms() >= 60)
+			{
+				const auto currentPos = m_bgm.posSec();
+				m_bgm.seekPosSec(currentPos + SecondsF(1.0));
+				m_fastForwardStopwatch.restart();
+			}
+		}
+		else
+		{
+			m_fastForwardStopwatch.restart();
+		}
 	}
 }

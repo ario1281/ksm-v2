@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "music_game/game_status.hpp"
 #include "music_game/view_status.hpp"
+#include "music_game/play_option.hpp"
 #include "music_game/scroll/highway_scroll.hpp"
 #include "highway_render_texture.hpp"
 #include "key_beam_graphics.hpp"
@@ -31,8 +32,8 @@ namespace MusicGame::Graphics
 
 		void update(const ViewStatus& viewStatus);
 
-		void draw2D(const kson::ChartData& chartData, const kson::TimingCache& timingCache, const GameStatus& gameStatus, const ViewStatus& viewStatus, const Scroll::HighwayScrollContext& highwayScrollContext) const;
+		void draw2D(const kson::ChartData& chartData, const PlayOption& playOption, const kson::TimingCache& timingCache, const GameStatus& gameStatus, const ViewStatus& viewStatus, const Scroll::HighwayScrollContext& highwayScrollContext) const;
 
-		void draw3D(const GameStatus& gameStatus, const ViewStatus& viewStatus) const;
+		void draw3D(const ViewStatus& viewStatus) const;
 	};
 }

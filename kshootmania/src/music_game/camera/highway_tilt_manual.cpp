@@ -1,12 +1,12 @@
 ﻿#include "highway_tilt_manual.hpp"
 #include "music_game/game_defines.hpp"
-#include "kson/util/graph_utils.hpp"
 
 namespace MusicGame::Camera
 {
-	void HighwayTiltManual::update(const kson::ByPulse<kson::GraphSection>& manual, kson::Pulse currentPulse)
+	void HighwayTiltManual::update(const kson::ByPulse<kson::TiltValue>& tilt, kson::Pulse currentPulse)
 	{
-		const auto value = kson::GraphSectionValueAt(manual, currentPulse);
+		const std::optional<double> value = kson::ManualTiltValueAt(tilt, currentPulse);
+
 		m_lerpRate = Clamp(m_lerpRate + Scene::DeltaTime() / 0.5 * (value.has_value() ? 1 : -1), 0.0, 1.0);
 		if (value.has_value())
 		{

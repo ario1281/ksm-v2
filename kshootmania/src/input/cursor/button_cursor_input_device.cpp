@@ -5,8 +5,8 @@ ButtonCursorInputDevice::ButtonCursorInputDevice(const Array<KeyConfig::Button>&
 	, m_decrementButtons(decrementButtons)
 	, m_intervalSec(intervalSec)
 	, m_intervalSecFirst(intervalSecFirst == 0.0 ? intervalSec : intervalSecFirst)
-	, m_pressedTimeStopwatch(intervalSec == 0.0 ? none : MakeOptional<Stopwatch>(StartImmediately::No))
 	, m_startRequiredForBTFXLaser(startRequiredForBTFXLaser)
+	, m_pressedTimeStopwatch(intervalSec == 0.0 ? none : MakeOptional<Stopwatch>(StartImmediately::No))
 {
 }
 

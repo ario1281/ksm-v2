@@ -9,7 +9,7 @@ namespace MusicGame::Audio
 	class AssistTick
 	{
 	private:
-		bool m_enabled;
+		AssistTickMode m_mode;
 		ksmaudio::Sample m_btTickSound;
 		ksmaudio::Sample m_fxTickSound;
 
@@ -17,7 +17,7 @@ namespace MusicGame::Audio
 		std::array<kson::Pulse, kson::kNumFXLanesSZ> m_fxPlayedPulses = { kPastPulse, kPastPulse };
 
 	public:
-		explicit AssistTick(bool enabled);
+		explicit AssistTick(AssistTickMode mode);
 
 		void update(const kson::ChartData& chartData, const kson::TimingCache& timingCache, double currentTimeSec);
 	};

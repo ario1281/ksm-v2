@@ -13,6 +13,12 @@ private:
 
 	Duration m_fadeOutDuration;
 
+	bool m_backButtonPressedDuringFadeOut = false;
+
+	void updateFadeOut();
+
+	void processBackButtonInput();
+
 public:
 	explicit PlayScene(FilePathView filePath, MusicGame::IsAutoPlayYN isAutoPlay);
 

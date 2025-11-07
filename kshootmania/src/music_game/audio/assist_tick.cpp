@@ -18,8 +18,8 @@ namespace MusicGame::Audio
 		}
 	}
 
-	AssistTick::AssistTick(bool enabled)
-		: m_enabled(enabled)
+	AssistTick::AssistTick(AssistTickMode mode)
+		: m_mode(mode)
 		, m_btTickSound("se/tick.wav")
 		, m_fxTickSound("se/tick2.wav")
 	{
@@ -27,7 +27,7 @@ namespace MusicGame::Audio
 
 	void AssistTick::update(const kson::ChartData& chartData, const kson::TimingCache& timingCache, double currentTimeSec)
 	{
-		if (!m_enabled)
+		if (m_mode == AssistTickMode::kOff)
 		{
 			return;
 		}

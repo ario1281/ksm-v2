@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "kson/chart_data.hpp"
 
 namespace MusicGame::Camera
 {
@@ -11,7 +12,7 @@ namespace MusicGame::Camera
 	public:
 		HighwayTiltManual() = default;
 
-		void update(const kson::ByPulse<kson::GraphSection>& manual, kson::Pulse currentPulse);
+		void update(const kson::ByPulse<kson::TiltValue>& tilt, kson::Pulse currentPulse);
 
 		double radians() const;
 

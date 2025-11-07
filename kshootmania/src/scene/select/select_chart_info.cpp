@@ -1,19 +1,20 @@
 ﻿#include "select_chart_info.hpp"
 #include "high_score/ksc_io.hpp"
+#include "ini/config_ini.hpp"
 #include "kson/io/ksh_io.hpp"
+#include "runtime_config.hpp"
 
 namespace
 {
 	HighScoreInfo LoadHighScoreInfo(FilePathView chartFilePath)
 	{
-		// TODO(alphaまで): 実際の設定を反映
 		const KscKey condition
 		{
-			.gaugeType = GaugeType::kNormalGauge,
-			.turnMode = TurnMode::kNormal,
-			.btPlayMode = JudgmentPlayMode::kOn,
-			.fxPlayMode = JudgmentPlayMode::kOn,
-			.laserPlayMode = JudgmentPlayMode::kOn,
+			.gaugeType = RuntimeConfig::GetGaugeType(),
+			.turnMode = RuntimeConfig::GetTurnMode(),
+			.btPlayMode = RuntimeConfig::GetJudgmentPlayModeBT(),
+			.fxPlayMode = RuntimeConfig::GetJudgmentPlayModeFX(),
+			.laserPlayMode = RuntimeConfig::GetJudgmentPlayModeLaser(),
 		};
 
 		return KscIo::ReadHighScoreInfo(chartFilePath, condition);
@@ -72,6 +73,41 @@ int32 SelectChartInfo::level() const
 	return m_chartData.meta.level;
 }
 
+String SelectChartInfo::dispBPM() const
+{
+	return Unicode::FromUTF8(m_chartData.meta.dispBPM);
+}
+
+double SelectChartInfo::stdBPM() const
+{
+	return m_chartData.meta.stdBPM;
+}
+
+double SelectChartInfo::stdBPMForHispeedTypeChange() const
+{
+	// TODO: kson形式はksh形式とは異なりフルで読み込む前提のため、bpmの先頭要素を採用できる見込み
+
+	const double std = stdBPM();
+	if (std > 0.0)
+	{
+		return std;
+	}
+
+	const String dispBPMStr = dispBPM();
+	if (dispBPMStr.isEmpty())
+	{
+		return kDefaultBPM;
+	}
+
+	const Array<String> parts = dispBPMStr.split(U'-');
+	if (parts.empty())
+	{
+		return kDefaultBPM;
+	}
+
+	return ParseOr<double>(parts.back(), kDefaultBPM);
+}
+
 FilePath SelectChartInfo::previewBGMFilePath() const
 {
 	return toFullPath(m_chartData.audio.bgm.filename);
@@ -105,6 +141,11 @@ String SelectChartInfo::information() const
 const HighScoreInfo& SelectChartInfo::highScoreInfo() const
 {
 	return m_highScoreInfo;
+}
+
+void SelectChartInfo::reloadHighScoreInfo()
+{
+	m_highScoreInfo = LoadHighScoreInfo(m_chartFilePath);
 }
 
 bool SelectChartInfo::hasError() const

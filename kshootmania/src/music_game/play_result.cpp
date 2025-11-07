@@ -25,23 +25,32 @@ namespace MusicGame
 
 	Achievement PlayResult::achievement() const
 	{
-		// TODO(alphaまで): EASY/HARDゲージ
-		if (playOption.gaugeType != GaugeType::kNormalGauge)
-		{
-			throw Error(U"Not implemented");
-		}
-
 		if (isAborted())
 		{
 			// 途中でプレイをやめた場合
 			return Achievement::kNone;
 		}
 
-		if (gaugePercentage < kGaugePercentageThreshold)
+		// クリア判定
+		bool cleared = false;
+		const int32 gaugePercentageInt = static_cast<int32>(gaugePercentage);
+		if (playOption.gaugeType == GaugeType::kHardGauge)
 		{
-			return Achievement::kNone; // ゲージがクリアラインを下回った場合
+			// HARDゲージの場合、1%以上でクリア
+			cleared = gaugePercentageInt > kGaugePercentageThresholdHard;
 		}
-		else if (comboStats.critical == totalCombo)
+		else
+		{
+			// EASY/NORMALゲージの場合、70%以上でクリア
+			cleared = gaugePercentageInt >= kGaugePercentageThreshold;
+		}
+
+		if (!cleared)
+		{
+			return Achievement::kNone;
+		}
+
+		if (comboStats.critical == totalCombo)
 		{
 			return Achievement::kPerfect;
 		}
@@ -65,7 +74,7 @@ namespace MusicGame
 		}
 
 		const int32 scoreFactor = static_cast<int32>(static_cast<int64>(score) * kScoreFactorMax / kScoreMax);
-		const int32 gaugeFactor = kGaugeFactorMax * static_cast<int32>(gaugePercentage) / 100;
+		const int32 gaugeFactor = kGaugeFactorMax * static_cast<int32>(gaugePercentageForGrade) / 100;
 		const int32 gradeScore = scoreFactor + gaugeFactor;
 
 		if (gradeScore >= 9800000)
@@ -103,13 +112,6 @@ namespace MusicGame
 			return 0;
 		}
 
-		if (playOption.gaugeType == GaugeType::kHardGauge)
-		{
-			return static_cast<int32>(gaugePercentageHard);
-		}
-		else
-		{
-			return static_cast<int32>(gaugePercentage);
-		}
+		return static_cast<int32>(gaugePercentage);
 	}
 }

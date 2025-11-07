@@ -5,16 +5,16 @@ namespace MusicGame::Judgment
 	JudgmentMain::JudgmentMain(const kson::ChartData& chartData, const kson::TimingCache& timingCache, const PlayOption& playOption)
 		: m_playOption(playOption)
 		, m_btLaneJudgments{
-			ButtonLaneJudgment(playOption.btJudgmentPlayMode(), kBTButtons[0], chartData.note.bt[0], chartData.beat, timingCache),
-			ButtonLaneJudgment(playOption.btJudgmentPlayMode(), kBTButtons[1], chartData.note.bt[1], chartData.beat, timingCache),
-			ButtonLaneJudgment(playOption.btJudgmentPlayMode(), kBTButtons[2], chartData.note.bt[2], chartData.beat, timingCache),
-			ButtonLaneJudgment(playOption.btJudgmentPlayMode(), kBTButtons[3], chartData.note.bt[3], chartData.beat, timingCache) }
+			ButtonLaneJudgment(playOption.effectiveBtJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kBTButtons[0], chartData.note.bt[0], chartData.beat, timingCache),
+			ButtonLaneJudgment(playOption.effectiveBtJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kBTButtons[1], chartData.note.bt[1], chartData.beat, timingCache),
+			ButtonLaneJudgment(playOption.effectiveBtJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kBTButtons[2], chartData.note.bt[2], chartData.beat, timingCache),
+			ButtonLaneJudgment(playOption.effectiveBtJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kBTButtons[3], chartData.note.bt[3], chartData.beat, timingCache) }
 		, m_fxLaneJudgments{
-			ButtonLaneJudgment(playOption.fxJudgmentPlayMode(), kFXButtons[0], chartData.note.fx[0], chartData.beat, timingCache),
-			ButtonLaneJudgment(playOption.fxJudgmentPlayMode(), kFXButtons[1], chartData.note.fx[1], chartData.beat, timingCache) }
+			ButtonLaneJudgment(playOption.effectiveFxJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kFXButtons[0], chartData.note.fx[0], chartData.beat, timingCache),
+			ButtonLaneJudgment(playOption.effectiveFxJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kFXButtons[1], chartData.note.fx[1], chartData.beat, timingCache) }
 		, m_laserLaneJudgments{
-			LaserLaneJudgment(playOption.laserJudgmentPlayMode(), kLaserButtons[0][0], kLaserButtons[0][1], chartData.note.laser[0], chartData.beat, timingCache),
-			LaserLaneJudgment(playOption.laserJudgmentPlayMode(), kLaserButtons[1][0], kLaserButtons[1][1], chartData.note.laser[1], chartData.beat, timingCache) }
+			LaserLaneJudgment(playOption.effectiveLaserJudgmentPlayMode(), kLaserButtons[0][0], kLaserButtons[0][1], chartData.note.laser[0], chartData.beat, timingCache),
+			LaserLaneJudgment(playOption.effectiveLaserJudgmentPlayMode(), kLaserButtons[1][0], kLaserButtons[1][1], chartData.note.laser[1], chartData.beat, timingCache) }
 		, m_judgmentHandler(chartData, m_btLaneJudgments, m_fxLaneJudgments, m_laserLaneJudgments, playOption)
 	{
 	}
@@ -24,19 +24,19 @@ namespace MusicGame::Judgment
 		// BTレーンの判定
 		for (std::size_t i = 0U; i < kson::kNumBTLanesSZ; ++i)
 		{
-			m_btLaneJudgments[i].update(chartData.note.bt[i], gameStatusRef.currentPulse, gameStatusRef.currentTimeSec, gameStatusRef.btLaneStatus[i], m_judgmentHandler);
+			m_btLaneJudgments[i].update(chartData, chartData.note.bt[i], gameStatusRef.currentPulseForButtonJudgment, gameStatusRef.currentTimeSecForButtonJudgment, gameStatusRef.currentTimeSec, gameStatusRef.btLaneStatus[i], m_judgmentHandler);
 		}
 
 		// FXレーンの判定
 		for (std::size_t i = 0U; i < kson::kNumFXLanesSZ; ++i)
 		{
-			m_fxLaneJudgments[i].update(chartData.note.fx[i], gameStatusRef.currentPulse, gameStatusRef.currentTimeSec, gameStatusRef.fxLaneStatus[i], m_judgmentHandler);
+			m_fxLaneJudgments[i].update(chartData, chartData.note.fx[i], gameStatusRef.currentPulseForButtonJudgment, gameStatusRef.currentTimeSecForButtonJudgment, gameStatusRef.currentTimeSec, gameStatusRef.fxLaneStatus[i], m_judgmentHandler);
 		}
 
 		// LASERレーンの判定
 		for (std::size_t i = 0U; i < kson::kNumLaserLanesSZ; ++i)
 		{
-			m_laserLaneJudgments[i].update(chartData.note.laser[i], gameStatusRef.currentPulse, gameStatusRef.currentTimeSec, gameStatusRef.laserLaneStatus[i], m_judgmentHandler);
+			m_laserLaneJudgments[i].update(chartData.note.laser[i], gameStatusRef.currentPulseForLaserJudgment, gameStatusRef.currentPulse, gameStatusRef.currentTimeSecForLaserJudgment, gameStatusRef.currentTimeSec, gameStatusRef.laserLaneStatus[i], m_judgmentHandler);
 		}
 
 		// 状態をViewStatusに反映
@@ -45,19 +45,22 @@ namespace MusicGame::Judgment
 
 	void JudgmentMain::lockForExit()
 	{
+		// ERROR判定通知時にゲージが変動しないよう先にロック
+		m_judgmentHandler.lockForExit();
+
+		// 残りの未判定ノーツを全てERROR判定にする
 		for (std::size_t i = 0U; i < kson::kNumBTLanesSZ; ++i)
 		{
-			m_btLaneJudgments[i].lockForExit();
+			m_btLaneJudgments[i].lockForExit(m_judgmentHandler);
 		}
 		for (std::size_t i = 0U; i < kson::kNumFXLanesSZ; ++i)
 		{
-			m_fxLaneJudgments[i].lockForExit();
+			m_fxLaneJudgments[i].lockForExit(m_judgmentHandler);
 		}
 		for (std::size_t i = 0U; i < kson::kNumLaserLanesSZ; ++i)
 		{
-			m_laserLaneJudgments[i].lockForExit();
+			m_laserLaneJudgments[i].lockForExit(m_judgmentHandler);
 		}
-		m_judgmentHandler.lockForExit();
 	}
 
 	PlayResult JudgmentMain::playResult() const
