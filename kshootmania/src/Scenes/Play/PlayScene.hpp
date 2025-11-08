@@ -1,0 +1,34 @@
+﻿#pragma once
+#include <CoTaskLib.hpp>
+#include "MusicGame/GameMain.hpp"
+
+class PlayScene : public Co::UpdaterSceneBase
+{
+private:
+	/// @brief ゲームのメインクラス
+	MusicGame::GameMain m_gameMain;
+
+	/// @brief オートプレイかどうか
+	MusicGame::IsAutoPlayYN m_isAutoPlay;
+
+	Duration m_fadeOutDuration;
+
+	bool m_backButtonPressedDuringFadeOut = false;
+
+	void updateFadeOut();
+
+	void processBackButtonInput();
+
+public:
+	explicit PlayScene(FilePathView filePath, MusicGame::IsAutoPlayYN isAutoPlay);
+
+	virtual ~PlayScene();
+
+	virtual void update() override;
+
+	virtual void draw() const override;
+
+	virtual Co::Task<void> fadeIn() override;
+
+	virtual Co::Task<void> fadeOut() override;
+};

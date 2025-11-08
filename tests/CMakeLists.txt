@@ -22,7 +22,7 @@ file(GLOB TEST_SOURCES "*.cpp")
 
 file(GLOB_RECURSE KSHOOTMANIA_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/src/*.cpp")
 list(REMOVE_ITEM KSHOOTMANIA_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/src/stdafx.cpp)
-list(REMOVE_ITEM KSHOOTMANIA_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/src/main.cpp)
+list(REMOVE_ITEM KSHOOTMANIA_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/src/Main.cpp)
 
 add_executable(${TARGET_NAME}
     ${TEST_SOURCES}
@@ -50,7 +50,7 @@ endif()
 
 target_include_directories(${TARGET_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/third_party/CoTaskLib/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/ThirdParty/CoTaskLib/include
 )
 
 find_package(Siv3D REQUIRED)

@@ -99,13 +99,13 @@ if(APPLE)
     
     add_custom_command(TARGET kshootmania POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_SOURCE_DIR}/ksmaudio/third_party_macos/bass/libbass.dylib
+        ${CMAKE_SOURCE_DIR}/ksmaudio/ThirdParty_macOS/bass/libbass.dylib
         ${APP_BUNDLE_PATH}/Contents/Frameworks/libbass.dylib
     )
     
     add_custom_command(TARGET kshootmania POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_SOURCE_DIR}/ksmaudio/third_party_macos/bass_fx/libbass_fx.dylib
+        ${CMAKE_SOURCE_DIR}/ksmaudio/ThirdParty_macOS/bass_fx/libbass_fx.dylib
         ${APP_BUNDLE_PATH}/Contents/Frameworks/libbass_fx.dylib
     )
     
@@ -117,7 +117,7 @@ endif()
 
 target_include_directories(kshootmania PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/CoTaskLib/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/CoTaskLib/include
 )
 
 find_package(Siv3D REQUIRED)
@@ -157,7 +157,7 @@ elseif(UNIX)
 
     # BASSライブラリへのRPATHを設定
     set_target_properties(kshootmania PROPERTIES
-        BUILD_RPATH "${CMAKE_SOURCE_DIR}/ksmaudio/third_party_linux/bass:${CMAKE_SOURCE_DIR}/ksmaudio/third_party_linux/bass_fx"
+        BUILD_RPATH "${CMAKE_SOURCE_DIR}/ksmaudio/ThirdParty_Linux/bass:${CMAKE_SOURCE_DIR}/ksmaudio/ThirdParty_Linux/bass_fx"
         INSTALL_RPATH "$ORIGIN/../lib"
     )
 endif()

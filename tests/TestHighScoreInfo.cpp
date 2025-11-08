@@ -1,5 +1,5 @@
 ﻿#include <catch2/catch.hpp>
-#include "high_score/high_score_info.hpp"
+#include "HighScore/HighScoreInfo.hpp"
 
 TEST_CASE("Medal from achievement for normal gauge", "[HighScoreInfo][Medal]")
 {

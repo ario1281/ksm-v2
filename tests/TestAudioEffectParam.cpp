@@ -1,5 +1,5 @@
 ﻿#include <catch2/catch.hpp>
-#include "ksmaudio/audio_effect/audio_effect_param.hpp"
+#include "ksmaudio/AudioEffect/AudioEffectParam.hpp"
 #include <cmath>
 
 using namespace ksmaudio::AudioEffect;

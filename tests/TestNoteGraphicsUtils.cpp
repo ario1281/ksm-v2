@@ -1,5 +1,5 @@
 ﻿#include <catch2/catch.hpp>
-#include "music_game/graphics/highway/note/note_graphics_utils.hpp"
+#include "MusicGame/Graphics/Highway/Note/NoteGraphicsUtils.hpp"
 
 using namespace MusicGame::Graphics::NoteGraphicsUtils;
 

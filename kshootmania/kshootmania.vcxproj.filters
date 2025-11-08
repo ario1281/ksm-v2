@@ -64,13 +64,13 @@
     <Filter Include="Header Files\scene">
       <UniqueIdentifier>{7561fd7d-07c0-45da-baa0-f2771cce4fba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene\title">
+    <Filter Include="Header Files\Scenes\title">
       <UniqueIdentifier>{06d51002-dabe-4b44-93eb-624f6e54ae0d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\scene">
       <UniqueIdentifier>{dbad57e1-4485-46df-8f1d-e630dda5500c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\scene\title">
+    <Filter Include="Source Files\Scenes\title">
       <UniqueIdentifier>{987a87ef-3722-4f47-983d-5905a3fa05b3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\ui">
@@ -82,10 +82,10 @@
     <Filter Include="Header Files\graphics">
       <UniqueIdentifier>{b215ceba-cfe7-4630-9b24-cab7a842dd1d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene\option">
+    <Filter Include="Header Files\Scenes\option">
       <UniqueIdentifier>{87a39f5a-b4ec-4d0b-8b90-243e2d40aed0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\scene\option">
+    <Filter Include="Source Files\Scenes\option">
       <UniqueIdentifier>{59aa9199-f440-4e0d-ba25-781b1fd6065e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\i18n">
@@ -109,19 +109,19 @@
     <Filter Include="Source Files\ui">
       <UniqueIdentifier>{4acadc9e-0378-4a21-8de5-48077219f27e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene\select">
+    <Filter Include="Header Files\Scenes\select">
       <UniqueIdentifier>{98aef201-8ee4-4515-9f5a-584739884efb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\scene\select">
+    <Filter Include="Source Files\Scenes\select">
       <UniqueIdentifier>{159d7840-d844-4bb0-88f2-ddbaee653f9e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\common">
       <UniqueIdentifier>{0297cf3a-d302-46cd-9caa-159ab033c77c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene\play">
+    <Filter Include="Header Files\Scenes\play">
       <UniqueIdentifier>{30c59926-793f-43f4-abe0-a718a20b2a4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\scene\play">
+    <Filter Include="Source Files\Scenes\play">
       <UniqueIdentifier>{d59f2a32-1a45-4896-8e3e-16ab4fbcb9d6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\music_game">
@@ -130,91 +130,91 @@
     <Filter Include="Source Files\music_game">
       <UniqueIdentifier>{01d7acbb-b815-488e-a952-f11d48b73cf2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\music_game\graphics">
+    <Filter Include="Source Files\MusicGame\graphics">
       <UniqueIdentifier>{433f0012-0dda-40cd-85ae-5402196560f2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\music_game\graphics">
+    <Filter Include="Header Files\MusicGame\graphics">
       <UniqueIdentifier>{59b15c02-5d12-4b17-b5d7-3ef8fbcaacbf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\music_game\judgment">
+    <Filter Include="Header Files\MusicGame\judgment">
       <UniqueIdentifier>{0b50680d-07a7-4203-9d2d-4c2997e9d5b9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\common">
       <UniqueIdentifier>{1bea3048-5f5a-470c-a58f-1ff1d613f3cc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\music_game\audio">
+    <Filter Include="Header Files\MusicGame\audio">
       <UniqueIdentifier>{4f9aa030-4ab6-4edc-9be8-dbc69be815bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\music_game\audio">
+    <Filter Include="Source Files\MusicGame\audio">
       <UniqueIdentifier>{b9eec638-c042-4414-b6be-69da50b0649b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\music_game\graphics\highway">
+    <Filter Include="Header Files\MusicGame\Graphics\highway">
       <UniqueIdentifier>{a8fc3989-f84d-497f-af3b-53f7d6ae983a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\music_game\graphics\highway">
+    <Filter Include="Source Files\MusicGame\Graphics\highway">
       <UniqueIdentifier>{7e5edd43-ecdb-4c8a-9bfc-7694496ff7ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\music_game\graphics\highway\note">
+    <Filter Include="Source Files\MusicGame\Graphics\Highway\note">
       <UniqueIdentifier>{170fd654-1c06-4c04-8dc2-cac09f93b213}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\music_game\graphics\highway\note">
+    <Filter Include="Header Files\MusicGame\Graphics\Highway\note">
       <UniqueIdentifier>{f9bb5a11-090d-4dcf-be3b-822b88687a13}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\music_game\graphics\jdgline">
+    <Filter Include="Header Files\MusicGame\Graphics\jdgline">
       <UniqueIdentifier>{2cacf311-31fe-4a08-9ad6-00689947070b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\music_game\graphics\jdgline">
+    <Filter Include="Source Files\MusicGame\Graphics\jdgline">
       <UniqueIdentifier>{1d9b3ce6-0db4-43ff-9408-4468b5dbdc08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\music_game\graphics\hud">
+    <Filter Include="Source Files\MusicGame\Graphics\hud">
       <UniqueIdentifier>{dc5fa313-df9d-4672-8320-d51ab5561013}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\music_game\graphics\hud">
+    <Filter Include="Header Files\MusicGame\Graphics\hud">
       <UniqueIdentifier>{47fb5e45-1901-4a62-a380-9e5858586af5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\music_game\judgment">
+    <Filter Include="Source Files\MusicGame\judgment">
       <UniqueIdentifier>{42900bc0-ffe3-4d14-85b1-9ce5c2f0b3a6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\input\cursor">
+    <Filter Include="Header Files\Input\cursor">
       <UniqueIdentifier>{3783397c-bfeb-4339-8367-9322a9884aa5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\input\cursor">
+    <Filter Include="Source Files\Input\cursor">
       <UniqueIdentifier>{7fa8dd34-52e9-4e01-a5c2-8caaef7c24af}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\music_game\ui">
+    <Filter Include="Header Files\MusicGame\ui">
       <UniqueIdentifier>{6fa9fe2f-cb93-4db2-b456-ace4a8c2cb95}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\music_game\ui">
+    <Filter Include="Source Files\MusicGame\ui">
       <UniqueIdentifier>{8632cdf7-24db-40e7-921c-2ed542a78238}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\music_game\scroll">
+    <Filter Include="Source Files\MusicGame\scroll">
       <UniqueIdentifier>{60619336-9ffc-4f86-bc83-2b009d308952}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\music_game\scroll">
+    <Filter Include="Header Files\MusicGame\scroll">
       <UniqueIdentifier>{33319c41-ca18-4831-867d-2ae4194f85ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\music_game\camera">
+    <Filter Include="Header Files\MusicGame\camera">
       <UniqueIdentifier>{9fde8af6-d89f-46be-98e8-75f3a09fcd78}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\music_game\camera">
+    <Filter Include="Source Files\MusicGame\camera">
       <UniqueIdentifier>{6538d29c-d191-44d8-97b5-f95ad4703077}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\music_game\camera\cam_pattern">
+    <Filter Include="Header Files\MusicGame\Camera\cam_pattern">
       <UniqueIdentifier>{e5d3e833-fba4-4634-af6b-a0893265879e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\music_game\camera\cam_pattern">
+    <Filter Include="Source Files\MusicGame\Camera\cam_pattern">
       <UniqueIdentifier>{78bee3cc-8012-48a3-abf8-9508a3cec840}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene\select\menu_item">
+    <Filter Include="Header Files\Scenes\Select\menu_item">
       <UniqueIdentifier>{6812799a-0c5d-4132-9f54-6ed625c88584}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\scene\select\menu_item">
+    <Filter Include="Source Files\Scenes\Select\menu_item">
       <UniqueIdentifier>{76ededc0-9b92-4a04-804b-48da597221c2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene\result">
+    <Filter Include="Header Files\Scenes\result">
       <UniqueIdentifier>{6dc819d2-6fe2-4be9-a007-3bc056bffe28}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\scene\result">
+    <Filter Include="Source Files\Scenes\result">
       <UniqueIdentifier>{8ea84dcd-da2b-40fa-a302-d8a83c1befce}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\high_score">
@@ -241,331 +241,331 @@
     <Filter Include="Resource Files\assets\font\tektur-ksm">
       <UniqueIdentifier>{7bb2995f-307d-441b-9f3f-a74b97eb521f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\scene\play_prepare">
+    <Filter Include="Source Files\Scenes\play_prepare">
       <UniqueIdentifier>{3a2de163-6916-4934-90ac-17bcde62755d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene\play_prepare">
+    <Filter Include="Header Files\Scenes\play_prepare">
       <UniqueIdentifier>{dfe743d5-4b37-4969-a717-f71df3e6a088}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\third_party">
+    <Filter Include="Header Files\ThirdParty">
       <UniqueIdentifier>{2d1fe827-f360-4121-907e-1dff71649b32}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\third_party\CoTaskLib">
+    <Filter Include="Header Files\ThirdParty\CoTaskLib">
       <UniqueIdentifier>{35ec8b6e-d771-43fd-881e-570e4f2d352c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\scene\common">
+    <Filter Include="Source Files\Scenes\common">
       <UniqueIdentifier>{8fafb3ff-bed2-4710-973c-3f95281dc0bd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene\common">
+    <Filter Include="Header Files\Scenes\common">
       <UniqueIdentifier>{a681aa53-9c48-413f-9f33-8c2fec87e745}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\scene\title\title_scene.cpp">
-      <Filter>Source Files\scene\title</Filter>
+    <ClCompile Include="src\Scenes\Title\TitleScene.cpp">
+      <Filter>Source Files\Scenes\title</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\title\title_menu.cpp">
-      <Filter>Source Files\scene\title</Filter>
+    <ClCompile Include="src\Scenes\Title\TitleMenu.cpp">
+      <Filter>Source Files\Scenes\title</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\tiled_texture.cpp">
+    <ClCompile Include="src\Graphics\TiledTexture.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\screen_utils.cpp">
+    <ClCompile Include="src\Graphics\ScreenUtils.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\option\option_scene.cpp">
-      <Filter>Source Files\scene\option</Filter>
+    <ClCompile Include="src\Scenes\Option\OptionScene.cpp">
+      <Filter>Source Files\Scenes\option</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\option\option_top_menu.cpp">
-      <Filter>Source Files\scene\option</Filter>
+    <ClCompile Include="src\Scenes\Option\OptionTopMenu.cpp">
+      <Filter>Source Files\Scenes\option</Filter>
     </ClCompile>
-    <ClCompile Include="src\input\fx_button_up_detection.cpp">
+    <ClCompile Include="src\Input\FXButtonUpDetection.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
-    <ClCompile Include="src\input\key_config.cpp">
+    <ClCompile Include="src\Input\KeyConfig.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
-    <ClCompile Include="src\i18n\i18n.cpp">
+    <ClCompile Include="src\I18n\I18n.cpp">
       <Filter>Source Files\i18n</Filter>
     </ClCompile>
-    <ClCompile Include="src\ini\config_ini.cpp">
+    <ClCompile Include="src\Ini\ConfigIni.cpp">
       <Filter>Source Files\ini</Filter>
     </ClCompile>
-    <ClCompile Include="src\ini\ksm_ini_data.cpp">
+    <ClCompile Include="src\Ini\KSMIniData.cpp">
       <Filter>Source Files\ini</Filter>
     </ClCompile>
-    <ClCompile Include="src\ui\linear_menu.cpp">
+    <ClCompile Include="src\UI\LinearMenu.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\option\option_menu_field.cpp">
-      <Filter>Source Files\scene\option</Filter>
+    <ClCompile Include="src\Scenes\Option\OptionMenuField.cpp">
+      <Filter>Source Files\Scenes\option</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\option\option_menu.cpp">
-      <Filter>Source Files\scene\option</Filter>
+    <ClCompile Include="src\Scenes\Option\OptionMenu.cpp">
+      <Filter>Source Files\Scenes\option</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\select\bt_option_panel.cpp">
-      <Filter>Source Files\scene\select</Filter>
+    <ClCompile Include="src\Scenes\Select\BTOptionPanel.cpp">
+      <Filter>Source Files\Scenes\select</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\select\play_stats_panel.cpp">
-      <Filter>Source Files\scene\select</Filter>
+    <ClCompile Include="src\Scenes\Select\PlayStatsPanel.cpp">
+      <Filter>Source Files\Scenes\select</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\select\select_scene.cpp">
-      <Filter>Source Files\scene\select</Filter>
+    <ClCompile Include="src\Scenes\Select\SelectScene.cpp">
+      <Filter>Source Files\Scenes\select</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\select\select_menu.cpp">
-      <Filter>Source Files\scene\select</Filter>
+    <ClCompile Include="src\Scenes\Select\SelectMenu.cpp">
+      <Filter>Source Files\Scenes\select</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\select\select_difficulty_menu.cpp">
-      <Filter>Source Files\scene\select</Filter>
+    <ClCompile Include="src\Scenes\Select\SelectDifficultyMenu.cpp">
+      <Filter>Source Files\Scenes\select</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\play_scene.cpp">
-      <Filter>Source Files\scene\play</Filter>
+    <ClCompile Include="src\Scenes\Play\PlayScene.cpp">
+      <Filter>Source Files\Scenes\play</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\graphics_main.cpp">
-      <Filter>Source Files\music_game\graphics</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\GraphicsMain.cpp">
+      <Filter>Source Files\MusicGame\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\math_utils.cpp">
+    <ClCompile Include="src\Common\MathUtils.cpp">
       <Filter>Source Files\common</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\noco_utils.cpp">
+    <ClCompile Include="src\Common\NocoUtils.cpp">
       <Filter>Source Files\common</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\audio\bgm.cpp">
-      <Filter>Source Files\music_game\audio</Filter>
+    <ClCompile Include="src\MusicGame\Audio\BGM.cpp">
+      <Filter>Source Files\MusicGame\audio</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\game_main.cpp">
+    <ClCompile Include="src\MusicGame\GameMain.cpp">
       <Filter>Source Files\music_game</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\turn_util.cpp">
+    <ClCompile Include="src\MusicGame\TurnUtil.cpp">
       <Filter>Source Files\music_game</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\audio\assist_tick.cpp">
-      <Filter>Source Files\music_game\audio</Filter>
+    <ClCompile Include="src\MusicGame\Audio\AssistTick.cpp">
+      <Filter>Source Files\MusicGame\audio</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\highway\highway_3d_graphics.cpp">
-      <Filter>Source Files\music_game\graphics\highway</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\Highway\Highway3DGraphics.cpp">
+      <Filter>Source Files\MusicGame\Graphics\highway</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\highway\note\note_graphics_utils.cpp">
-      <Filter>Source Files\music_game\graphics\highway\note</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\Highway\Note\NoteGraphicsUtils.cpp">
+      <Filter>Source Files\MusicGame\Graphics\Highway\note</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\highway\note\button_note_graphics.cpp">
-      <Filter>Source Files\music_game\graphics\highway\note</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\Highway\Note\ButtonNoteGraphics.cpp">
+      <Filter>Source Files\MusicGame\Graphics\Highway\note</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\highway\note\laser_note_graphics.cpp">
-      <Filter>Source Files\music_game\graphics\highway\note</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\Highway\Note\LaserNoteGraphics.cpp">
+      <Filter>Source Files\MusicGame\Graphics\Highway\note</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\highway\key_beam_graphics.cpp">
-      <Filter>Source Files\music_game\graphics\highway</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\Highway\KeyBeamGraphics.cpp">
+      <Filter>Source Files\MusicGame\Graphics\highway</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\jdgline\jdgline_3d_graphics.cpp">
-      <Filter>Source Files\music_game\graphics\jdgline</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\Jdgline\Jdgline3DGraphics.cpp">
+      <Filter>Source Files\MusicGame\Graphics\jdgline</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\hud\frame_rate_monitor.cpp">
-      <Filter>Source Files\music_game\graphics\hud</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\HUD\FrameRateMonitor.cpp">
+      <Filter>Source Files\MusicGame\Graphics\hud</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\hud\score_panel.cpp">
-      <Filter>Source Files\music_game\graphics\hud</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\HUD\ScorePanel.cpp">
+      <Filter>Source Files\MusicGame\Graphics\hud</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\hud\gauge_panel.cpp">
-      <Filter>Source Files\music_game\graphics\hud</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\HUD\GaugePanel.cpp">
+      <Filter>Source Files\MusicGame\Graphics\hud</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\hud\movie_panel.cpp">
-      <Filter>Source Files\music_game\graphics\hud</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\HUD\MoviePanel.cpp">
+      <Filter>Source Files\MusicGame\Graphics\hud</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\hud\song_info_panel.cpp">
-      <Filter>Source Files\music_game\graphics\hud</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\HUD\SongInfoPanel.cpp">
+      <Filter>Source Files\MusicGame\Graphics\hud</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\number_texture_font.cpp">
+    <ClCompile Include="src\Graphics\NumberTextureFont.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\judgment\button_lane_judgment.cpp">
-      <Filter>Source Files\music_game\judgment</Filter>
+    <ClCompile Include="src\MusicGame\Judgment\ButtonLaneJudgment.cpp">
+      <Filter>Source Files\MusicGame\judgment</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\asset_management.cpp">
+    <ClCompile Include="src\Common\AssetManagement.cpp">
       <Filter>Source Files\common</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\encoding.cpp">
+    <ClCompile Include="src\Common\Encoding.cpp">
       <Filter>Source Files\common</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\audio\audio_effect_utils.cpp">
-      <Filter>Source Files\music_game\audio</Filter>
+    <ClCompile Include="src\MusicGame\Audio\AudioEffectUtils.cpp">
+      <Filter>Source Files\MusicGame\audio</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\audio\audio_effect_main.cpp">
-      <Filter>Source Files\music_game\audio</Filter>
+    <ClCompile Include="src\MusicGame\Audio\AudioEffectMain.cpp">
+      <Filter>Source Files\MusicGame\audio</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\jdgline\jdgoverlay_3d_graphics.cpp">
-      <Filter>Source Files\music_game\graphics\jdgline</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\Jdgline\Jdgoverlay3DGraphics.cpp">
+      <Filter>Source Files\MusicGame\Graphics\jdgline</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\judgment\laser_lane_judgment.cpp">
-      <Filter>Source Files\music_game\judgment</Filter>
+    <ClCompile Include="src\MusicGame\Judgment\LaserLaneJudgment.cpp">
+      <Filter>Source Files\MusicGame\judgment</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\jdgline\laser_cursor_3d_graphics.cpp">
-      <Filter>Source Files\music_game\graphics\jdgline</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\Jdgline\LaserCursor3DGraphics.cpp">
+      <Filter>Source Files\MusicGame\Graphics\jdgline</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\audio\fx_chip_se.cpp">
-      <Filter>Source Files\music_game\audio</Filter>
+    <ClCompile Include="src\MusicGame\Audio\FXChipSE.cpp">
+      <Filter>Source Files\MusicGame\audio</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\audio\laser_slam_se.cpp">
-      <Filter>Source Files\music_game\audio</Filter>
+    <ClCompile Include="src\MusicGame\Audio\LaserSlamSE.cpp">
+      <Filter>Source Files\MusicGame\audio</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\runtime_config.cpp">
+    <ClCompile Include="src\RuntimeConfig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\highway\highway_render_texture.cpp">
-      <Filter>Source Files\music_game\graphics\highway</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\Highway\HighwayRenderTexture.cpp">
+      <Filter>Source Files\MusicGame\Graphics\highway</Filter>
     </ClCompile>
-    <ClCompile Include="src\input\cursor\button_cursor_input_device.cpp">
-      <Filter>Source Files\input\cursor</Filter>
+    <ClCompile Include="src\Input\Cursor\ButtonCursorInputDevice.cpp">
+      <Filter>Source Files\Input\cursor</Filter>
     </ClCompile>
-    <ClCompile Include="src\input\cursor\cursor_input.cpp">
-      <Filter>Source Files\input\cursor</Filter>
+    <ClCompile Include="src\Input\Cursor\CursorInput.cpp">
+      <Filter>Source Files\Input\cursor</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\hud\hispeed_setting_panel.cpp">
-      <Filter>Source Files\music_game\graphics\hud</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\HUD\HispeedSettingPanel.cpp">
+      <Filter>Source Files\MusicGame\Graphics\hud</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\hispeed_utils.cpp">
+    <ClCompile Include="src\MusicGame\HispeedUtils.cpp">
       <Filter>Source Files\music_game</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\ui\hispeed_setting_menu.cpp">
-      <Filter>Source Files\music_game\ui</Filter>
+    <ClCompile Include="src\MusicGame\UI\HispeedSettingMenu.cpp">
+      <Filter>Source Files\MusicGame\ui</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\scroll\highway_scroll.cpp">
-      <Filter>Source Files\music_game\scroll</Filter>
+    <ClCompile Include="src\MusicGame\Scroll\HighwayScroll.cpp">
+      <Filter>Source Files\MusicGame\scroll</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\camera\highway_tilt.cpp">
-      <Filter>Source Files\music_game\camera</Filter>
+    <ClCompile Include="src\MusicGame\Camera\HighwayTilt.cpp">
+      <Filter>Source Files\MusicGame\camera</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\texture_font_text_layout.cpp">
+    <ClCompile Include="src\Graphics\TextureFontTextLayout.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\hud\combo_overlay.cpp">
-      <Filter>Source Files\music_game\graphics\hud</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\HUD\ComboOverlay.cpp">
+      <Filter>Source Files\MusicGame\Graphics\hud</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\frame_rate_limit.cpp">
+    <ClCompile Include="src\Common\FrameRateLimit.cpp">
       <Filter>Source Files\common</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\camera\cam_system.cpp">
-      <Filter>Source Files\music_game\camera</Filter>
+    <ClCompile Include="src\MusicGame\Camera\CamSystem.cpp">
+      <Filter>Source Files\MusicGame\camera</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\camera\highway_tilt_auto.cpp">
-      <Filter>Source Files\music_game\camera</Filter>
+    <ClCompile Include="src\MusicGame\Camera\HighwayTiltAuto.cpp">
+      <Filter>Source Files\MusicGame\camera</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\camera\highway_tilt_manual.cpp">
-      <Filter>Source Files\music_game\camera</Filter>
+    <ClCompile Include="src\MusicGame\Camera\HighwayTiltManual.cpp">
+      <Filter>Source Files\MusicGame\camera</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\judgment\judgment_main.cpp">
-      <Filter>Source Files\music_game\judgment</Filter>
+    <ClCompile Include="src\MusicGame\Judgment\JudgmentMain.cpp">
+      <Filter>Source Files\MusicGame\judgment</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\judgment\scoring_status.cpp">
-      <Filter>Source Files\music_game\judgment</Filter>
+    <ClCompile Include="src\MusicGame\Judgment\ScoringStatus.cpp">
+      <Filter>Source Files\MusicGame\judgment</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\judgment\combo_status.cpp">
-      <Filter>Source Files\music_game\judgment</Filter>
+    <ClCompile Include="src\MusicGame\Judgment\ComboStatus.cpp">
+      <Filter>Source Files\MusicGame\judgment</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\judgment\laser_slam_shake.cpp">
-      <Filter>Source Files\music_game\judgment</Filter>
+    <ClCompile Include="src\MusicGame\Judgment\LaserSlamShake.cpp">
+      <Filter>Source Files\MusicGame\judgment</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\judgment\judgment_handler.cpp">
-      <Filter>Source Files\music_game\judgment</Filter>
+    <ClCompile Include="src\MusicGame\Judgment\JudgmentHandler.cpp">
+      <Filter>Source Files\MusicGame\judgment</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\camera\cam_pattern\cam_pattern_half_spin.cpp">
-      <Filter>Source Files\music_game\camera\cam_pattern</Filter>
+    <ClCompile Include="src\MusicGame\Camera\CamPattern\CamPatternHalfSpin.cpp">
+      <Filter>Source Files\MusicGame\Camera\cam_pattern</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\camera\cam_pattern\cam_pattern_spin.cpp">
-      <Filter>Source Files\music_game\camera\cam_pattern</Filter>
+    <ClCompile Include="src\MusicGame\Camera\CamPattern\CamPatternSpin.cpp">
+      <Filter>Source Files\MusicGame\Camera\cam_pattern</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\camera\cam_pattern\cam_pattern_main.cpp">
-      <Filter>Source Files\music_game\camera\cam_pattern</Filter>
+    <ClCompile Include="src\MusicGame\Camera\CamPattern\CamPatternMain.cpp">
+      <Filter>Source Files\MusicGame\Camera\cam_pattern</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\camera\cam_pattern\cam_pattern_swing.cpp">
-      <Filter>Source Files\music_game\camera\cam_pattern</Filter>
+    <ClCompile Include="src\MusicGame\Camera\CamPattern\CamPatternSwing.cpp">
+      <Filter>Source Files\MusicGame\Camera\cam_pattern</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\select\select_song_preview.cpp">
-      <Filter>Source Files\scene\select</Filter>
+    <ClCompile Include="src\Scenes\Select\SelectSongPreview.cpp">
+      <Filter>Source Files\Scenes\select</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\ime_utils.cpp">
+    <ClCompile Include="src\Common\IMEUtils.cpp">
       <Filter>Source Files\common</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\select\select_chart_info.cpp">
-      <Filter>Source Files\scene\select</Filter>
+    <ClCompile Include="src\Scenes\Select\SelectChartInfo.cpp">
+      <Filter>Source Files\Scenes\select</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\select\menu_item\select_menu_song_item.cpp">
-      <Filter>Source Files\scene\select\menu_item</Filter>
+    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuSongItem.cpp">
+      <Filter>Source Files\Scenes\Select\menu_item</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\select\menu_item\select_menu_all_folder_item.cpp">
-      <Filter>Source Files\scene\select\menu_item</Filter>
+    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuAllFolderItem.cpp">
+      <Filter>Source Files\Scenes\Select\menu_item</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\select\menu_item\select_menu_dir_folder_item.cpp">
-      <Filter>Source Files\scene\select\menu_item</Filter>
+    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuDirFolderItem.cpp">
+      <Filter>Source Files\Scenes\Select\menu_item</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\select\menu_item\select_menu_fav_folder_item.cpp">
-      <Filter>Source Files\scene\select\menu_item</Filter>
+    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuFavFolderItem.cpp">
+      <Filter>Source Files\Scenes\Select\menu_item</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\select\menu_item\select_menu_sub_dir_section_item.cpp">
-      <Filter>Source Files\scene\select\menu_item</Filter>
+    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuSubDirSectionItem.cpp">
+      <Filter>Source Files\Scenes\Select\menu_item</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\select\menu_item\select_menu_level_section_item.cpp">
-      <Filter>Source Files\scene\select\menu_item</Filter>
+    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuLevelSectionItem.cpp">
+      <Filter>Source Files\Scenes\Select\menu_item</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\select\menu_item\select_menu_song_item_for_level.cpp">
-      <Filter>Source Files\scene\select\menu_item</Filter>
+    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuSongItemForLevel.cpp">
+      <Filter>Source Files\Scenes\Select\menu_item</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\result\result_new_record_panel.cpp">
-      <Filter>Source Files\scene\result</Filter>
+    <ClCompile Include="src\Scenes\Result\ResultNewRecordPanel.cpp">
+      <Filter>Source Files\Scenes\result</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\result\result_scene.cpp">
-      <Filter>Source Files\scene\result</Filter>
+    <ClCompile Include="src\Scenes\Result\ResultScene.cpp">
+      <Filter>Source Files\Scenes\result</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\play_mode_util.cpp">
+    <ClCompile Include="src\MusicGame\PlayModeUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\play_result.cpp">
+    <ClCompile Include="src\MusicGame\PlayResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\high_score\ksc_key.cpp">
+    <ClCompile Include="src\HighScore\KscKey.cpp">
       <Filter>Source Files\high_score</Filter>
     </ClCompile>
-    <ClCompile Include="src\high_score\ksc_value.cpp">
+    <ClCompile Include="src\HighScore\KscValue.cpp">
       <Filter>Source Files\high_score</Filter>
     </ClCompile>
-    <ClCompile Include="src\high_score\ksc_io.cpp">
+    <ClCompile Include="src\HighScore\KscIO.cpp">
       <Filter>Source Files\high_score</Filter>
     </ClCompile>
-    <ClCompile Include="src\high_score\high_score_info.cpp">
+    <ClCompile Include="src\HighScore\HighScoreInfo.cpp">
       <Filter>Source Files\high_score</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\hud\achievement_panel.cpp">
-      <Filter>Source Files\music_game\graphics\hud</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\HUD\AchievementPanel.cpp">
+      <Filter>Source Files\MusicGame\Graphics\hud</Filter>
     </ClCompile>
-    <ClCompile Include="src\music_game\graphics\hud\laser_approach_indicator.cpp">
-      <Filter>Source Files\music_game\graphics\hud</Filter>
+    <ClCompile Include="src\MusicGame\Graphics\HUD\LaserApproachIndicator.cpp">
+      <Filter>Source Files\MusicGame\Graphics\hud</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\option\option_key_config_menu.cpp">
-      <Filter>Source Files\scene\option</Filter>
+    <ClCompile Include="src\Scenes\Option\OptionKeyConfigMenu.cpp">
+      <Filter>Source Files\Scenes\option</Filter>
     </ClCompile>
-    <ClCompile Include="src\addon\auto_mute_addon.cpp">
+    <ClCompile Include="src\Addon\AutoMuteAddon.cpp">
       <Filter>Source Files\addon</Filter>
     </ClCompile>
-    <ClCompile Include="src\addon\disable_ime_addon.cpp">
+    <ClCompile Include="src\Addon\DisableIMEAddon.cpp">
       <Filter>Source Files\addon</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\fs_utils.cpp">
+    <ClCompile Include="src\Common\FsUtils.cpp">
       <Filter>Source Files\common</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\font_utils.cpp">
+    <ClCompile Include="src\Graphics\FontUtils.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play_prepare\play_prepare_scene.cpp">
-      <Filter>Source Files\scene\play_prepare</Filter>
+    <ClCompile Include="src\Scenes\PlayPrepare\PlayPrepareScene.cpp">
+      <Filter>Source Files\Scenes\play_prepare</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\common\show_loading_one_frame.cpp">
-      <Filter>Source Files\scene\common</Filter>
+    <ClCompile Include="src\Scenes\Common\ShowLoadingOneFrame.cpp">
+      <Filter>Source Files\Scenes\common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -835,410 +835,410 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\runtime_config.hpp">
+    <ClInclude Include="src\RuntimeConfig.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\title\title_menu.hpp">
-      <Filter>Header Files\scene\title</Filter>
+    <ClInclude Include="src\Scenes\Title\TitleMenu.hpp">
+      <Filter>Header Files\Scenes\title</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\title\title_assets.hpp">
-      <Filter>Header Files\scene\title</Filter>
+    <ClInclude Include="src\Scenes\Title\TitleAssets.hpp">
+      <Filter>Header Files\Scenes\title</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\tiled_texture.hpp">
+    <ClInclude Include="src\Graphics\TiledTexture.hpp">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\screen_utils.hpp">
+    <ClInclude Include="src\Graphics\ScreenUtils.hpp">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\option\option_top_menu.hpp">
-      <Filter>Header Files\scene\option</Filter>
+    <ClInclude Include="src\Scenes\Option\OptionTopMenu.hpp">
+      <Filter>Header Files\Scenes\option</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\option\option_scene.hpp">
-      <Filter>Header Files\scene\option</Filter>
+    <ClInclude Include="src\Scenes\Option\OptionScene.hpp">
+      <Filter>Header Files\Scenes\option</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\option\option_assets.hpp">
-      <Filter>Header Files\scene\option</Filter>
+    <ClInclude Include="src\Scenes\Option\OptionAssets.hpp">
+      <Filter>Header Files\Scenes\option</Filter>
     </ClInclude>
-    <ClInclude Include="src\ui\linear_menu.hpp">
+    <ClInclude Include="src\UI\LinearMenu.hpp">
       <Filter>Header Files\ui</Filter>
     </ClInclude>
-    <ClInclude Include="src\input\fx_button_up_detection.hpp">
+    <ClInclude Include="src\Input\FXButtonUpDetection.hpp">
       <Filter>Header Files\input</Filter>
     </ClInclude>
-    <ClInclude Include="src\input\key_config.hpp">
+    <ClInclude Include="src\Input\KeyConfig.hpp">
       <Filter>Header Files\input</Filter>
     </ClInclude>
-    <ClInclude Include="src\input\platform_key.hpp">
+    <ClInclude Include="src\Input\PlatformKey.hpp">
       <Filter>Header Files\input</Filter>
     </ClInclude>
-    <ClInclude Include="src\i18n\i18n.hpp">
+    <ClInclude Include="src\I18n\I18n.hpp">
       <Filter>Header Files\i18n</Filter>
     </ClInclude>
-    <ClInclude Include="src\ini\ksm_ini_data.hpp">
+    <ClInclude Include="src\Ini\KSMIniData.hpp">
       <Filter>Header Files\ini</Filter>
     </ClInclude>
-    <ClInclude Include="src\ini\config_ini.hpp">
+    <ClInclude Include="src\Ini\ConfigIni.hpp">
       <Filter>Header Files\ini</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\option\option_menu.hpp">
-      <Filter>Header Files\scene\option</Filter>
+    <ClInclude Include="src\Scenes\Option\OptionMenu.hpp">
+      <Filter>Header Files\Scenes\option</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\option\option_menu_field.hpp">
-      <Filter>Header Files\scene\option</Filter>
+    <ClInclude Include="src\Scenes\Option\OptionMenuField.hpp">
+      <Filter>Header Files\Scenes\option</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\title\title_scene.hpp">
-      <Filter>Header Files\scene\title</Filter>
+    <ClInclude Include="src\Scenes\Title\TitleScene.hpp">
+      <Filter>Header Files\Scenes\title</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\bt_option_panel.hpp">
-      <Filter>Header Files\scene\select</Filter>
+    <ClInclude Include="src\Scenes\Select\BTOptionPanel.hpp">
+      <Filter>Header Files\Scenes\select</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\play_stats_panel.hpp">
-      <Filter>Header Files\scene\select</Filter>
+    <ClInclude Include="src\Scenes\Select\PlayStatsPanel.hpp">
+      <Filter>Header Files\Scenes\select</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\select_scene.hpp">
-      <Filter>Header Files\scene\select</Filter>
+    <ClInclude Include="src\Scenes\Select\SelectScene.hpp">
+      <Filter>Header Files\Scenes\select</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\select_menu.hpp">
-      <Filter>Header Files\scene\select</Filter>
+    <ClInclude Include="src\Scenes\Select\SelectMenu.hpp">
+      <Filter>Header Files\Scenes\select</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\select_folder_state.hpp">
-      <Filter>Header Files\scene\select</Filter>
+    <ClInclude Include="src\Scenes\Select\SelectFolderState.hpp">
+      <Filter>Header Files\Scenes\select</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\common_defines.hpp">
+    <ClInclude Include="src\Common\CommonDefines.hpp">
       <Filter>Header Files\common</Filter>
     </ClInclude>
-    <ClInclude Include="src\ui\array_with_linear_menu.hpp">
+    <ClInclude Include="src\UI\ArrayWithLinearMenu.hpp">
       <Filter>Header Files\ui</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\select_difficulty_menu.hpp">
-      <Filter>Header Files\scene\select</Filter>
+    <ClInclude Include="src\Scenes\Select\SelectDifficultyMenu.hpp">
+      <Filter>Header Files\Scenes\select</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\play_scene.hpp">
-      <Filter>Header Files\scene\play</Filter>
+    <ClInclude Include="src\Scenes\Play\PlayScene.hpp">
+      <Filter>Header Files\Scenes\play</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\play_scene_args.hpp">
-      <Filter>Header Files\scene\play</Filter>
+    <ClInclude Include="src\Scenes\Play\PlaySceneArgs.hpp">
+      <Filter>Header Files\Scenes\play</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\graphics_main.hpp">
-      <Filter>Header Files\music_game\graphics</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\GraphicsMain.hpp">
+      <Filter>Header Files\MusicGame\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\judgment\judgment_defines.hpp">
-      <Filter>Header Files\music_game\judgment</Filter>
+    <ClInclude Include="src\MusicGame\Judgment\JudgmentDefines.hpp">
+      <Filter>Header Files\MusicGame\judgment</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\math_utils.hpp">
+    <ClInclude Include="src\Common\MathUtils.hpp">
       <Filter>Header Files\common</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\noco_utils.hpp">
+    <ClInclude Include="src\Common\NocoUtils.hpp">
       <Filter>Header Files\common</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\game_defines.hpp">
+    <ClInclude Include="src\MusicGame\GameDefines.hpp">
       <Filter>Header Files\music_game</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\audio\bgm.hpp">
-      <Filter>Header Files\music_game\audio</Filter>
+    <ClInclude Include="src\MusicGame\Audio\BGM.hpp">
+      <Filter>Header Files\MusicGame\audio</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\game_main.hpp">
+    <ClInclude Include="src\MusicGame\GameMain.hpp">
       <Filter>Header Files\music_game</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\audio\assist_tick.hpp">
-      <Filter>Header Files\music_game\audio</Filter>
+    <ClInclude Include="src\MusicGame\Audio\AssistTick.hpp">
+      <Filter>Header Files\MusicGame\audio</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\graphics_defines.hpp">
-      <Filter>Header Files\music_game\graphics</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\GraphicsDefines.hpp">
+      <Filter>Header Files\MusicGame\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\highway\highway_3d_graphics.hpp">
-      <Filter>Header Files\music_game\graphics\highway</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\Highway\Highway3DGraphics.hpp">
+      <Filter>Header Files\MusicGame\Graphics\highway</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\highway\note\note_graphics_utils.hpp">
-      <Filter>Header Files\music_game\graphics\highway\note</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\Highway\Note\NoteGraphicsUtils.hpp">
+      <Filter>Header Files\MusicGame\Graphics\Highway\note</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\highway\note\button_note_graphics.hpp">
-      <Filter>Header Files\music_game\graphics\highway\note</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\Highway\Note\ButtonNoteGraphics.hpp">
+      <Filter>Header Files\MusicGame\Graphics\Highway\note</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\highway\note\laser_note_graphics.hpp">
-      <Filter>Header Files\music_game\graphics\highway\note</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\Highway\Note\LaserNoteGraphics.hpp">
+      <Filter>Header Files\MusicGame\Graphics\Highway\note</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\highway\key_beam_graphics.hpp">
-      <Filter>Header Files\music_game\graphics\highway</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\Highway\KeyBeamGraphics.hpp">
+      <Filter>Header Files\MusicGame\Graphics\highway</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\jdgline\jdgline_3d_graphics.hpp">
-      <Filter>Header Files\music_game\graphics\jdgline</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\Jdgline\Jdgline3DGraphics.hpp">
+      <Filter>Header Files\MusicGame\Graphics\jdgline</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\number_texture_font.hpp">
+    <ClInclude Include="src\Graphics\NumberTextureFont.hpp">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\hud\frame_rate_monitor.hpp">
-      <Filter>Header Files\music_game\graphics\hud</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\HUD\FrameRateMonitor.hpp">
+      <Filter>Header Files\MusicGame\Graphics\hud</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\hud\score_panel.hpp">
-      <Filter>Header Files\music_game\graphics\hud</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\HUD\ScorePanel.hpp">
+      <Filter>Header Files\MusicGame\Graphics\hud</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\hud\gauge_panel.hpp">
-      <Filter>Header Files\music_game\graphics\hud</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\HUD\GaugePanel.hpp">
+      <Filter>Header Files\MusicGame\Graphics\hud</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\hud\movie_panel.hpp">
-      <Filter>Header Files\music_game\graphics\hud</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\HUD\MoviePanel.hpp">
+      <Filter>Header Files\MusicGame\Graphics\hud</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\hud\song_info_panel.hpp">
-      <Filter>Header Files\music_game\graphics\hud</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\HUD\SongInfoPanel.hpp">
+      <Filter>Header Files\MusicGame\Graphics\hud</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\judgment\button_lane_judgment.hpp">
-      <Filter>Header Files\music_game\judgment</Filter>
+    <ClInclude Include="src\MusicGame\Judgment\ButtonLaneJudgment.hpp">
+      <Filter>Header Files\MusicGame\judgment</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\asset_management.hpp">
+    <ClInclude Include="src\Common\AssetManagement.hpp">
       <Filter>Header Files\common</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\encoding.hpp">
+    <ClInclude Include="src\Common\Encoding.hpp">
       <Filter>Header Files\common</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\audio\audio_effect_utils.hpp">
-      <Filter>Header Files\music_game\audio</Filter>
+    <ClInclude Include="src\MusicGame\Audio\AudioEffectUtils.hpp">
+      <Filter>Header Files\MusicGame\audio</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\timeline.hpp">
+    <ClInclude Include="src\MusicGame\Timeline.hpp">
       <Filter>Header Files\music_game</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\audio\audio_effect_main.hpp">
-      <Filter>Header Files\music_game\audio</Filter>
+    <ClInclude Include="src\MusicGame\Audio\AudioEffectMain.hpp">
+      <Filter>Header Files\MusicGame\audio</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\game_status.hpp">
+    <ClInclude Include="src\MusicGame\GameStatus.hpp">
       <Filter>Header Files\music_game</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\jdgline\jdgoverlay_3d_graphics.hpp">
-      <Filter>Header Files\music_game\graphics\jdgline</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\Jdgline\Jdgoverlay3DGraphics.hpp">
+      <Filter>Header Files\MusicGame\Graphics\jdgline</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\judgment\laser_lane_judgment.hpp">
-      <Filter>Header Files\music_game\judgment</Filter>
+    <ClInclude Include="src\MusicGame\Judgment\LaserLaneJudgment.hpp">
+      <Filter>Header Files\MusicGame\judgment</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\jdgline\laser_cursor_3d_graphics.hpp">
-      <Filter>Header Files\music_game\graphics\jdgline</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\Jdgline\LaserCursor3DGraphics.hpp">
+      <Filter>Header Files\MusicGame\Graphics\jdgline</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\audio\fx_chip_se.hpp">
-      <Filter>Header Files\music_game\audio</Filter>
+    <ClInclude Include="src\MusicGame\Audio\FXChipSE.hpp">
+      <Filter>Header Files\MusicGame\audio</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\audio\laser_slam_se.hpp">
-      <Filter>Header Files\music_game\audio</Filter>
+    <ClInclude Include="src\MusicGame\Audio\LaserSlamSE.hpp">
+      <Filter>Header Files\MusicGame\audio</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\audio\audio_defines.hpp">
-      <Filter>Header Files\music_game\audio</Filter>
+    <ClInclude Include="src\MusicGame\Audio\AudioDefines.hpp">
+      <Filter>Header Files\MusicGame\audio</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\highway\highway_render_texture.hpp">
-      <Filter>Header Files\music_game\graphics\highway</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\Highway\HighwayRenderTexture.hpp">
+      <Filter>Header Files\MusicGame\Graphics\highway</Filter>
     </ClInclude>
-    <ClInclude Include="src\input\cursor\button_cursor_input_device.hpp">
-      <Filter>Header Files\input\cursor</Filter>
+    <ClInclude Include="src\Input\Cursor\ButtonCursorInputDevice.hpp">
+      <Filter>Header Files\Input\cursor</Filter>
     </ClInclude>
-    <ClInclude Include="src\input\cursor\icursor_input_device.hpp">
-      <Filter>Header Files\input\cursor</Filter>
+    <ClInclude Include="src\Input\Cursor\ICursorInputDevice.hpp">
+      <Filter>Header Files\Input\cursor</Filter>
     </ClInclude>
-    <ClInclude Include="src\input\cursor\cursor_input.hpp">
-      <Filter>Header Files\input\cursor</Filter>
+    <ClInclude Include="src\Input\Cursor\CursorInput.hpp">
+      <Filter>Header Files\Input\cursor</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\hud\hispeed_setting_panel.hpp">
-      <Filter>Header Files\music_game\graphics\hud</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\HUD\HispeedSettingPanel.hpp">
+      <Filter>Header Files\MusicGame\Graphics\hud</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\hispeed_utils.hpp">
+    <ClInclude Include="src\MusicGame\HispeedUtils.hpp">
       <Filter>Header Files\music_game</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\ui\hispeed_setting_menu.hpp">
-      <Filter>Header Files\music_game\ui</Filter>
+    <ClInclude Include="src\MusicGame\UI\HispeedSettingMenu.hpp">
+      <Filter>Header Files\MusicGame\ui</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\scroll\hispeed_setting.hpp">
-      <Filter>Header Files\music_game\scroll</Filter>
+    <ClInclude Include="src\MusicGame\Scroll\HispeedSetting.hpp">
+      <Filter>Header Files\MusicGame\scroll</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\scroll\highway_scroll.hpp">
-      <Filter>Header Files\music_game\scroll</Filter>
+    <ClInclude Include="src\MusicGame\Scroll\HighwayScroll.hpp">
+      <Filter>Header Files\MusicGame\scroll</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\camera\highway_tilt.hpp">
-      <Filter>Header Files\music_game\camera</Filter>
+    <ClInclude Include="src\MusicGame\Camera\HighwayTilt.hpp">
+      <Filter>Header Files\MusicGame\camera</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\view_status.hpp">
+    <ClInclude Include="src\MusicGame\ViewStatus.hpp">
       <Filter>Header Files\music_game</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\texture_font_text_layout.hpp">
+    <ClInclude Include="src\Graphics\TextureFontTextLayout.hpp">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\hud\combo_overlay.hpp">
-      <Filter>Header Files\music_game\graphics\hud</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\HUD\ComboOverlay.hpp">
+      <Filter>Header Files\MusicGame\Graphics\hud</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\frame_rate_limit.hpp">
+    <ClInclude Include="src\Common\FrameRateLimit.hpp">
       <Filter>Header Files\common</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\camera\cam_system.hpp">
-      <Filter>Header Files\music_game\camera</Filter>
+    <ClInclude Include="src\MusicGame\Camera\CamSystem.hpp">
+      <Filter>Header Files\MusicGame\camera</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\camera\highway_tilt_auto.hpp">
-      <Filter>Header Files\music_game\camera</Filter>
+    <ClInclude Include="src\MusicGame\Camera\HighwayTiltAuto.hpp">
+      <Filter>Header Files\MusicGame\camera</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\camera\highway_tilt_manual.hpp">
-      <Filter>Header Files\music_game\camera</Filter>
+    <ClInclude Include="src\MusicGame\Camera\HighwayTiltManual.hpp">
+      <Filter>Header Files\MusicGame\camera</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\camera\camera_math.hpp">
-      <Filter>Header Files\music_game\camera</Filter>
+    <ClInclude Include="src\MusicGame\Camera\CameraMath.hpp">
+      <Filter>Header Files\MusicGame\camera</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\judgment\judgment_main.hpp">
-      <Filter>Header Files\music_game\judgment</Filter>
+    <ClInclude Include="src\MusicGame\Judgment\JudgmentMain.hpp">
+      <Filter>Header Files\MusicGame\judgment</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\judgment\scoring_status.hpp">
-      <Filter>Header Files\music_game\judgment</Filter>
+    <ClInclude Include="src\MusicGame\Judgment\ScoringStatus.hpp">
+      <Filter>Header Files\MusicGame\judgment</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\judgment\combo_status.hpp">
-      <Filter>Header Files\music_game\judgment</Filter>
+    <ClInclude Include="src\MusicGame\Judgment\ComboStatus.hpp">
+      <Filter>Header Files\MusicGame\judgment</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\judgment\laser_slam_shake.hpp">
-      <Filter>Header Files\music_game\judgment</Filter>
+    <ClInclude Include="src\MusicGame\Judgment\LaserSlamShake.hpp">
+      <Filter>Header Files\MusicGame\judgment</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\judgment\judgment_handler.hpp">
-      <Filter>Header Files\music_game\judgment</Filter>
+    <ClInclude Include="src\MusicGame\Judgment\JudgmentHandler.hpp">
+      <Filter>Header Files\MusicGame\judgment</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\camera\cam_pattern\cam_pattern_half_spin.hpp">
-      <Filter>Header Files\music_game\camera\cam_pattern</Filter>
+    <ClInclude Include="src\MusicGame\Camera\CamPattern\CamPatternHalfSpin.hpp">
+      <Filter>Header Files\MusicGame\Camera\cam_pattern</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\camera\cam_pattern\cam_pattern_spin.hpp">
-      <Filter>Header Files\music_game\camera\cam_pattern</Filter>
+    <ClInclude Include="src\MusicGame\Camera\CamPattern\CamPatternSpin.hpp">
+      <Filter>Header Files\MusicGame\Camera\cam_pattern</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\camera\cam_pattern\cam_pattern_main.hpp">
-      <Filter>Header Files\music_game\camera\cam_pattern</Filter>
+    <ClInclude Include="src\MusicGame\Camera\CamPattern\CamPatternMain.hpp">
+      <Filter>Header Files\MusicGame\Camera\cam_pattern</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\camera\cam_pattern\cam_pattern_swing.hpp">
-      <Filter>Header Files\music_game\camera\cam_pattern</Filter>
+    <ClInclude Include="src\MusicGame\Camera\CamPattern\CamPatternSwing.hpp">
+      <Filter>Header Files\MusicGame\Camera\cam_pattern</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\select_song_preview.hpp">
-      <Filter>Header Files\scene\select</Filter>
+    <ClInclude Include="src\Scenes\Select\SelectSongPreview.hpp">
+      <Filter>Header Files\Scenes\select</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\ime_utils.hpp">
+    <ClInclude Include="src\Common\IMEUtils.hpp">
       <Filter>Header Files\common</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\select_chart_info.hpp">
-      <Filter>Header Files\scene\select</Filter>
+    <ClInclude Include="src\Scenes\Select\SelectChartInfo.hpp">
+      <Filter>Header Files\Scenes\select</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\menu_item\iselect_menu_item.hpp">
-      <Filter>Header Files\scene\select\menu_item</Filter>
+    <ClInclude Include="src\Scenes\Select\MenuItem\ISelectMenuItem.hpp">
+      <Filter>Header Files\Scenes\Select\menu_item</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\menu_item\select_menu_song_item.hpp">
-      <Filter>Header Files\scene\select\menu_item</Filter>
+    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuSongItem.hpp">
+      <Filter>Header Files\Scenes\Select\menu_item</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\menu_item\select_menu_all_folder_item.hpp">
-      <Filter>Header Files\scene\select\menu_item</Filter>
+    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuAllFolderItem.hpp">
+      <Filter>Header Files\Scenes\Select\menu_item</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\menu_item\select_menu_dir_folder_item.hpp">
-      <Filter>Header Files\scene\select\menu_item</Filter>
+    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuDirFolderItem.hpp">
+      <Filter>Header Files\Scenes\Select\menu_item</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\menu_item\select_menu_sub_dir_section_item.hpp">
-      <Filter>Header Files\scene\select\menu_item</Filter>
+    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuSubDirSectionItem.hpp">
+      <Filter>Header Files\Scenes\Select\menu_item</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\menu_item\select_menu_level_section_item.hpp">
-      <Filter>Header Files\scene\select\menu_item</Filter>
+    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuLevelSectionItem.hpp">
+      <Filter>Header Files\Scenes\Select\menu_item</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\menu_item\select_menu_song_item_for_level.hpp">
-      <Filter>Header Files\scene\select\menu_item</Filter>
+    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuSongItemForLevel.hpp">
+      <Filter>Header Files\Scenes\Select\menu_item</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\select\menu_item\select_menu_fav_folder_item.hpp">
-      <Filter>Header Files\scene\select\menu_item</Filter>
+    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuFavFolderItem.hpp">
+      <Filter>Header Files\Scenes\Select\menu_item</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\result\result_new_record_panel.hpp">
-      <Filter>Header Files\scene\result</Filter>
+    <ClInclude Include="src\Scenes\Result\ResultNewRecordPanel.hpp">
+      <Filter>Header Files\Scenes\result</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\result\result_scene.hpp">
-      <Filter>Header Files\scene\result</Filter>
+    <ClInclude Include="src\Scenes\Result\ResultScene.hpp">
+      <Filter>Header Files\Scenes\result</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\result\result_scene_args.hpp">
-      <Filter>Header Files\scene\result</Filter>
+    <ClInclude Include="src\Scenes\Result\ResultSceneArgs.hpp">
+      <Filter>Header Files\Scenes\result</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\play_mode_util.hpp">
+    <ClInclude Include="src\MusicGame\PlayModeUtil.hpp">
       <Filter>Header Files\music_game</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\play_result.hpp">
+    <ClInclude Include="src\MusicGame\PlayResult.hpp">
       <Filter>Header Files\music_game</Filter>
     </ClInclude>
-    <ClInclude Include="src\high_score\ksc_value.hpp">
+    <ClInclude Include="src\HighScore\KscValue.hpp">
       <Filter>Header Files\high_score</Filter>
     </ClInclude>
-    <ClInclude Include="src\high_score\ksc_key.hpp">
+    <ClInclude Include="src\HighScore\KscKey.hpp">
       <Filter>Header Files\high_score</Filter>
     </ClInclude>
-    <ClInclude Include="src\high_score\ksc_io.hpp">
+    <ClInclude Include="src\HighScore\KscIO.hpp">
       <Filter>Header Files\high_score</Filter>
     </ClInclude>
-    <ClInclude Include="src\high_score\high_score_info.hpp">
+    <ClInclude Include="src\HighScore\HighScoreInfo.hpp">
       <Filter>Header Files\high_score</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\hud\achievement_panel.hpp">
-      <Filter>Header Files\music_game\graphics\hud</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\HUD\AchievementPanel.hpp">
+      <Filter>Header Files\MusicGame\Graphics\hud</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\graphics\hud\laser_approach_indicator.hpp">
-      <Filter>Header Files\music_game\graphics\hud</Filter>
+    <ClInclude Include="src\MusicGame\Graphics\HUD\LaserApproachIndicator.hpp">
+      <Filter>Header Files\MusicGame\Graphics\hud</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\option\option_key_config_menu.hpp">
-      <Filter>Header Files\scene\option</Filter>
+    <ClInclude Include="src\Scenes\Option\OptionKeyConfigMenu.hpp">
+      <Filter>Header Files\Scenes\option</Filter>
     </ClInclude>
-    <ClInclude Include="src\addon\auto_mute_addon.hpp">
+    <ClInclude Include="src\Addon\AutoMuteAddon.hpp">
       <Filter>Header Files\addon</Filter>
     </ClInclude>
-    <ClInclude Include="src\addon\disable_ime_addon.hpp">
+    <ClInclude Include="src\Addon\DisableIMEAddon.hpp">
       <Filter>Header Files\addon</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\fs_utils.hpp">
+    <ClInclude Include="src\Common\FsUtils.hpp">
       <Filter>Header Files\common</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\play_option.hpp">
+    <ClInclude Include="src\MusicGame\PlayOption.hpp">
       <Filter>Header Files\music_game</Filter>
     </ClInclude>
-    <ClInclude Include="src\music_game\turn_util.hpp">
+    <ClInclude Include="src\MusicGame\TurnUtil.hpp">
       <Filter>Header Files\music_game</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\font_utils.hpp">
+    <ClInclude Include="src\Graphics\FontUtils.hpp">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play_prepare\play_prepare_scene.hpp">
-      <Filter>Header Files\scene\play_prepare</Filter>
+    <ClInclude Include="src\Scenes\PlayPrepare\PlayPrepareScene.hpp">
+      <Filter>Header Files\Scenes\play_prepare</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play_prepare\play_prepare_assets.hpp">
-      <Filter>Header Files\scene\play_prepare</Filter>
+    <ClInclude Include="src\Scenes\PlayPrepare\PlayPrepareAssets.hpp">
+      <Filter>Header Files\Scenes\play_prepare</Filter>
     </ClInclude>
-    <ClInclude Include="third_party\CoTaskLib\include\CoTaskLib.hpp">
-      <Filter>Header Files\third_party</Filter>
+    <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib.hpp">
+      <Filter>Header Files\ThirdParty</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\common\show_loading_one_frame.hpp">
-      <Filter>Header Files\scene\common</Filter>
+    <ClInclude Include="src\Scenes\Common\ShowLoadingOneFrame.hpp">
+      <Filter>Header Files\Scenes\common</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\common\common_assets.hpp">
-      <Filter>Header Files\scene\common</Filter>
+    <ClInclude Include="src\Scenes\Common\CommonAssets.hpp">
+      <Filter>Header Files\Scenes\common</Filter>
     </ClInclude>
-    <ClInclude Include="third_party\CoTaskLib\include\CoTaskLib\Sequence.hpp">
-      <Filter>Header Files\third_party\CoTaskLib</Filter>
+    <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib\Sequence.hpp">
+      <Filter>Header Files\ThirdParty\CoTaskLib</Filter>
     </ClInclude>
-    <ClInclude Include="third_party\CoTaskLib\include\CoTaskLib\SimpleDialog.hpp">
-      <Filter>Header Files\third_party\CoTaskLib</Filter>
+    <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib\SimpleDialog.hpp">
+      <Filter>Header Files\ThirdParty\CoTaskLib</Filter>
     </ClInclude>
-    <ClInclude Include="third_party\CoTaskLib\include\CoTaskLib\Tween.hpp">
-      <Filter>Header Files\third_party\CoTaskLib</Filter>
+    <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib\Tween.hpp">
+      <Filter>Header Files\ThirdParty\CoTaskLib</Filter>
     </ClInclude>
-    <ClInclude Include="third_party\CoTaskLib\include\CoTaskLib\Typewriter.hpp">
-      <Filter>Header Files\third_party\CoTaskLib</Filter>
+    <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib\Typewriter.hpp">
+      <Filter>Header Files\ThirdParty\CoTaskLib</Filter>
     </ClInclude>
-    <ClInclude Include="third_party\CoTaskLib\include\CoTaskLib\Core.hpp">
-      <Filter>Header Files\third_party\CoTaskLib</Filter>
+    <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib\Core.hpp">
+      <Filter>Header Files\ThirdParty\CoTaskLib</Filter>
     </ClInclude>
-    <ClInclude Include="third_party\CoTaskLib\include\CoTaskLib\Ease.hpp">
-      <Filter>Header Files\third_party\CoTaskLib</Filter>
+    <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib\Ease.hpp">
+      <Filter>Header Files\ThirdParty\CoTaskLib</Filter>
     </ClInclude>
-    <ClInclude Include="third_party\CoTaskLib\include\CoTaskLib\LazyDeletionFlatMap.hpp">
-      <Filter>Header Files\third_party\CoTaskLib</Filter>
+    <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib\LazyDeletionFlatMap.hpp">
+      <Filter>Header Files\ThirdParty\CoTaskLib</Filter>
     </ClInclude>
-    <ClInclude Include="third_party\CoTaskLib\include\CoTaskLib\License.hpp">
-      <Filter>Header Files\third_party\CoTaskLib</Filter>
+    <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib\License.hpp">
+      <Filter>Header Files\ThirdParty\CoTaskLib</Filter>
     </ClInclude>
-    <ClInclude Include="third_party\CoTaskLib\include\CoTaskLib\S3dAsyncTask.hpp">
-      <Filter>Header Files\third_party\CoTaskLib</Filter>
+    <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib\S3dAsyncTask.hpp">
+      <Filter>Header Files\ThirdParty\CoTaskLib</Filter>
     </ClInclude>
-    <ClInclude Include="third_party\CoTaskLib\include\CoTaskLib\Scene.hpp">
-      <Filter>Header Files\third_party\CoTaskLib</Filter>
+    <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib\Scene.hpp">
+      <Filter>Header Files\ThirdParty\CoTaskLib</Filter>
     </ClInclude>
-    <ClInclude Include="third_party\CoTaskLib\include\CoTaskLib\ScreenFade.hpp">
-      <Filter>Header Files\third_party\CoTaskLib</Filter>
+    <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib\ScreenFade.hpp">
+      <Filter>Header Files\ThirdParty\CoTaskLib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

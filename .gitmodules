@@ -2,8 +2,8 @@
 	path = kson
 	url = https://github.com/m4saka/libkson.git
 [submodule "kshootmania/third_party/CoTaskLib"]
-	path = kshootmania/third_party/CoTaskLib
+	path = kshootmania/ThirdParty/CoTaskLib
 	url = https://github.com/m4saka/CoTaskLib.git
 [submodule "kshootmania/third_party/NocoUI"]
-	path = kshootmania/third_party/NocoUI
+	path = kshootmania/ThirdParty/NocoUI
 	url = https://github.com/m4saka/NocoUI.git

@@ -396,10 +396,21 @@ FodyWeavers.xsd
 **/App/AS_DEBUG/
 **/App/example/
 **/App/Screenshot/
+
+**/build/
+
+# Windows
 **/App/*.exe
 **/App/*.lib
 **/App/*.exp
+
+# macOS
 **/App/*.app/
+**/.DS_Store
+
+# Linux
+kshootmania/App/kshootmania
+
 **/App/songs/*
 !**/App/songs/K-Shoot MANIA/
 **/App/songs/K-Shoot MANIA/*
@@ -407,8 +418,6 @@ FodyWeavers.xsd
 **/App/config.ini
 **/App/score/
 **/App/score_backup/
-**/.DS_Store
-**/build/
 
 *.md
 !README.md

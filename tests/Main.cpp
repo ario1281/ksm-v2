@@ -1,6 +1,12 @@
 ﻿#define CATCH_CONFIG_RUNNER
-#include <catch2/catch.hpp>
 #include <Siv3D.hpp>
+
+// Siv3Dが依存しているDirectXMathのマクロがGCCで標準ライブラリヘッダと衝突するのを回避
+#ifdef __pre
+#undef __pre
+#endif
+
+#include <catch2/catch.hpp>
 
 // Linux環境でのみヘッドレスモードを使用
 #ifdef __linux__

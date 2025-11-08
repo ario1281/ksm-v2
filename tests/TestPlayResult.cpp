@@ -1,6 +1,6 @@
 ﻿#include <catch2/catch.hpp>
-#include "music_game/play_result.hpp"
-#include "music_game/judgment/combo_status.hpp"
+#include "MusicGame/PlayResult.hpp"
+#include "MusicGame/Judgment/ComboStatus.hpp"
 
 using namespace MusicGame;
 using namespace MusicGame::Judgment;

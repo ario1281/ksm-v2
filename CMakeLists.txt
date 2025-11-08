@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(kshootmania-v2)
+project(kshootmania)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -7,7 +7,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # macOSのみカスタムFindSiv3D.cmakeを使用
 if(APPLE)
-    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/kshootmania/third_party/NocoUI/cmake/macos")
+    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/kshootmania/ThirdParty/NocoUI/cmake/macos")
 endif()
 
 # macOS: x86_64 build for Siv3D 0.6.x compatibility
@@ -30,7 +30,7 @@ endif()
 
 add_subdirectory(kson)
 add_subdirectory(ksmaudio)
-add_subdirectory(kshootmania/third_party/NocoUI)
+add_subdirectory(kshootmania/ThirdParty/NocoUI)
 
 if(APPLE)
 	add_subdirectory(ksmplatform_macos)
