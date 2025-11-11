@@ -12,11 +12,11 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{b4609a06-16a9-42db-b710-a95587a0a5c1}</ProjectGuid>
+    <ProjectGuid>{d9563f2a-1623-42bf-b06d-5d13501c7edc}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>kshootmania_v1_remake</RootNamespace>
+    <RootNamespace>kshooteditor</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>kshootmania</ProjectName>
+    <ProjectName>kshooteditor</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -145,7 +145,7 @@
     <ClCompile Include="src\Input\Cursor\ButtonCursorInputDevice.cpp" />
     <ClCompile Include="src\Input\Cursor\CursorInput.cpp" />
     <ClCompile Include="src\Input\KeyConfig.cpp" />
-    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\EditorMain.cpp" />
     <ClCompile Include="src\RuntimeConfig.cpp" />
     <ClCompile Include="src\MusicGame\Audio\AssistTick.cpp" />
     <ClCompile Include="src\MusicGame\Audio\AudioEffectMain.cpp" />
@@ -194,32 +194,6 @@
     <ClCompile Include="src\MusicGame\PlayResult.cpp" />
     <ClCompile Include="src\MusicGame\Scroll\HighwayScroll.cpp" />
     <ClCompile Include="src\MusicGame\UI\HispeedSettingMenu.cpp" />
-    <ClCompile Include="src\Scenes\Common\ShowLoadingOneFrame.cpp" />
-    <ClCompile Include="src\Scenes\Option\OptionKeyConfigMenu.cpp" />
-    <ClCompile Include="src\Scenes\Option\OptionMenu.cpp" />
-    <ClCompile Include="src\Scenes\Option\OptionMenuField.cpp" />
-    <ClCompile Include="src\Scenes\Option\OptionTopMenu.cpp" />
-    <ClCompile Include="src\Scenes\Option\OptionScene.cpp" />
-    <ClCompile Include="src\Scenes\Play\PlayScene.cpp" />
-    <ClCompile Include="src\Scenes\PlayPrepare\PlayPrepareScene.cpp" />
-    <ClCompile Include="src\Scenes\Result\ResultNewRecordPanel.cpp" />
-    <ClCompile Include="src\Scenes\Result\ResultScene.cpp" />
-    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuAllFolderItem.cpp" />
-    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuDirFolderItem.cpp" />
-    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuFavFolderItem.cpp" />
-    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuLevelSectionItem.cpp" />
-    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuSongItem.cpp" />
-    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuSongItemForLevel.cpp" />
-    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuSubDirSectionItem.cpp" />
-    <ClCompile Include="src\Scenes\Select\BTOptionPanel.cpp" />
-    <ClCompile Include="src\Scenes\Select\PlayStatsPanel.cpp" />
-    <ClCompile Include="src\Scenes\Select\SelectChartInfo.cpp" />
-    <ClCompile Include="src\Scenes\Select\SelectDifficultyMenu.cpp" />
-    <ClCompile Include="src\Scenes\Select\SelectMenu.cpp" />
-    <ClCompile Include="src\Scenes\Select\SelectScene.cpp" />
-    <ClCompile Include="src\Scenes\Select\SelectSongPreview.cpp" />
-    <ClCompile Include="src\Scenes\Title\TitleMenu.cpp" />
-    <ClCompile Include="src\Scenes\Title\TitleScene.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
     <ClCompile Include="src\UI\LinearMenu.cpp" />
   </ItemGroup>
@@ -230,10 +204,10 @@
     <Image Include="App\engine\texture\box-shadow\32.png" />
     <Image Include="App\engine\texture\box-shadow\64.png" />
     <Image Include="App\engine\texture\box-shadow\8.png" />
-    <Image Include="App\icon.ico" />
+    <Image Include="App\icon_editor.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="App\Resource.rc" />
+    <ResourceCompile Include="App\Resource_editor.rc" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="App\dll\soundtouch\COPYING.TXT" />
@@ -405,40 +379,6 @@
     <ClInclude Include="src\MusicGame\UI\HispeedSettingMenu.hpp" />
     <ClInclude Include="src\MusicGame\ViewStatus.hpp" />
     <ClInclude Include="src\RuntimeConfig.hpp" />
-    <ClInclude Include="src\Scenes\Common\CommonAssets.hpp" />
-    <ClInclude Include="src\Scenes\Common\ShowLoadingOneFrame.hpp" />
-    <ClInclude Include="src\Scenes\Option\OptionAssets.hpp" />
-    <ClInclude Include="src\Scenes\Option\OptionKeyConfigMenu.hpp" />
-    <ClInclude Include="src\Scenes\Option\OptionMenu.hpp" />
-    <ClInclude Include="src\Scenes\Option\OptionMenuField.hpp" />
-    <ClInclude Include="src\Scenes\Option\OptionScene.hpp" />
-    <ClInclude Include="src\Scenes\Option\OptionTopMenu.hpp" />
-    <ClInclude Include="src\Scenes\Play\PlayScene.hpp" />
-    <ClInclude Include="src\Scenes\Play\PlaySceneArgs.hpp" />
-    <ClInclude Include="src\Scenes\PlayPrepare\PlayPrepareAssets.hpp" />
-    <ClInclude Include="src\Scenes\PlayPrepare\PlayPrepareScene.hpp" />
-    <ClInclude Include="src\Scenes\Result\ResultNewRecordPanel.hpp" />
-    <ClInclude Include="src\Scenes\Result\ResultScene.hpp" />
-    <ClInclude Include="src\Scenes\Result\ResultSceneArgs.hpp" />
-    <ClInclude Include="src\Scenes\Select\MenuItem\ISelectMenuItem.hpp" />
-    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuAllFolderItem.hpp" />
-    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuDirFolderItem.hpp" />
-    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuFavFolderItem.hpp" />
-    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuLevelSectionItem.hpp" />
-    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuSongItem.hpp" />
-    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuSongItemForLevel.hpp" />
-    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuSubDirSectionItem.hpp" />
-    <ClInclude Include="src\Scenes\Select\BTOptionPanel.hpp" />
-    <ClInclude Include="src\Scenes\Select\PlayStatsPanel.hpp" />
-    <ClInclude Include="src\Scenes\Select\SelectChartInfo.hpp" />
-    <ClInclude Include="src\Scenes\Select\SelectDifficultyMenu.hpp" />
-    <ClInclude Include="src\Scenes\Select\SelectFolderState.hpp" />
-    <ClInclude Include="src\Scenes\Select\SelectMenu.hpp" />
-    <ClInclude Include="src\Scenes\Select\SelectScene.hpp" />
-    <ClInclude Include="src\Scenes\Select\SelectSongPreview.hpp" />
-    <ClInclude Include="src\Scenes\Title\TitleAssets.hpp" />
-    <ClInclude Include="src\Scenes\Title\TitleMenu.hpp" />
-    <ClInclude Include="src\Scenes\Title\TitleScene.hpp" />
     <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\UI\ArrayWithLinearMenu.hpp" />
     <ClInclude Include="src\UI\LinearMenu.hpp" />

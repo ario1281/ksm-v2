@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include <CoTaskLib.hpp>
-#include "ksmaudio/ksmaudio.hpp"
 #include "PlayPrepareAssets.hpp"
 #include "MusicGame/UI/HispeedSettingMenu.hpp"
 #include "MusicGame/Scroll/HighwayScroll.hpp"
@@ -8,8 +7,6 @@
 class PlayPrepareScene : public Co::SceneBase
 {
 private:
-	ksmaudio::Stream m_seStream{ "se/sel_enter.ogg", 1.0, false, false, false };
-
 	const FilePath m_chartFilePath;
 
 	const MusicGame::IsAutoPlayYN m_isAutoPlay;

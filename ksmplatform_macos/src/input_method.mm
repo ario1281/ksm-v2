@@ -94,3 +94,31 @@ void KSMPlatformMacOS_SetIsEditingText(bool isEditing)
 {
 	s_isEditingText = isEditing;
 }
+
+bool KSMPlatformMacOS_CopyDirectory(const char* srcPath, const char* dstPath)
+{
+	if (srcPath == nullptr || dstPath == nullptr)
+	{
+		return false;
+	}
+
+	@autoreleasepool
+	{
+		NSString* source = [NSString stringWithUTF8String:srcPath];
+		NSString* destination = [NSString stringWithUTF8String:dstPath];
+
+		NSFileManager* fileManager = [NSFileManager defaultManager];
+		NSError* error = nil;
+
+		// copyItemAtPathを使って再帰的にコピー
+		BOOL success = [fileManager copyItemAtPath:source toPath:destination error:&error];
+
+		if (!success && error != nil)
+		{
+			NSLog(@"Failed to copy directory: %@", [error localizedDescription]);
+			return false;
+		}
+
+		return success;
+	}
+}

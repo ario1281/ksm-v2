@@ -123,7 +123,16 @@ bool SelectMenu::openDirectory(FilePathView directoryPath, PlaySeYN playSe, Refr
 
 	if (saveToConfigIni)
 	{
-		ConfigIni::SetString(ConfigIni::Key::kSelectDirectory, directoryPath);
+		// songsフォルダからの相対パスとして保存
+		const FilePath songsDir = FsUtils::SongsDirectoryPath();
+		const FilePath fullDirectoryPath = FileSystem::FullPath(directoryPath);
+		FilePath relativeDirectoryPath = FileSystem::RelativePath(fullDirectoryPath, songsDir);
+		// 末尾の/を除去
+		if (relativeDirectoryPath.ends_with(U'/'))
+		{
+			relativeDirectoryPath.pop_back();
+		}
+		ConfigIni::SetString(ConfigIni::Key::kSelectDirectory, relativeDirectoryPath);
 		ConfigIni::SetInt(ConfigIni::Key::kSelectSongIndex, 0);
 	}
 
@@ -402,8 +411,15 @@ SelectMenu::SelectMenu(const std::shared_ptr<noco::Canvas>& selectSceneCanvas, s
 	}
 	else if (!savedDirectory.isEmpty())
 	{
-		// 通常のディレクトリの場合
-		openSuccess = openDirectory(savedDirectory, PlaySeYN::No);
+		// 絶対パスや..を含むパスは受け付けない
+		const bool isInvalidPath = savedDirectory.starts_with(U'/') || savedDirectory.starts_with(U'\\') || savedDirectory.includes(U':') || savedDirectory.includes(U"..");
+
+		if (!isInvalidPath)
+		{
+			// songsフォルダからの相対パスなので結合
+			const FilePath fullPath = FileSystem::PathAppend(FsUtils::SongsDirectoryPath(), savedDirectory);
+			openSuccess = openDirectory(fullPath, PlaySeYN::No);
+		}
 	}
 
 	if (openSuccess)
@@ -1211,7 +1227,7 @@ bool SelectMenu::openAllFolderWithNameSort()
 
 	// 全フォルダの楽曲を収集
 	const Array<FilePath> searchPaths = {
-		U"songs", // TODO: 設定可能にする
+		FsUtils::SongsDirectoryPath(), // TODO: 設定可能にする
 	};
 
 	// 全フォルダを取得
@@ -1340,7 +1356,7 @@ bool SelectMenu::openAllFolderWithLevelSort()
 
 	// 全フォルダの楽曲を収集
 	const Array<FilePath> searchPaths = {
-		U"songs", // TODO: 設定可能にする
+		FsUtils::SongsDirectoryPath(), // TODO: 設定可能にする
 	};
 
 	// 全フォルダを取得
@@ -1423,7 +1439,7 @@ bool SelectMenu::openAllFolderWithLevelSort()
 Array<FilePath> SelectMenu::getSortedTopLevelFolderDirectories() const
 {
 	const Array<FilePath> searchPaths = {
-		U"songs", // TODO: 設定可能にする
+		FsUtils::SongsDirectoryPath(), // TODO: 設定可能にする
 	};
 
 	Array<FilePath> directories;

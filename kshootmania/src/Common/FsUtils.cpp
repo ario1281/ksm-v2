@@ -7,9 +7,61 @@ namespace FsUtils
 		return FileSystem::PathAppend(FileSystem::GetFolderPath(folder), relativePath);
 	}
 
-	FilePath AppDirectoryPath()
+	FilePath AppDataDirectoryPath()
 	{
+#ifdef __APPLE__
+		// ~/Library/Application Support/kshootmania/
+		FilePath homeDir = FileSystem::GetFolderPath(SpecialFolder::UserProfile);
+		FilePath appSupport = FileSystem::PathAppend(homeDir, U"Library/Application Support");
+		return FileSystem::PathAppend(appSupport, U"kshootmania");
+#else
 		return FileSystem::ParentPath(FileSystem::ModulePath());
+#endif
+	}
+
+	FilePath ResourceDirectoryPath()
+	{
+#ifdef __APPLE__
+		FilePath modulePath = FileSystem::ModulePath();
+
+		// バンドルとして起動された場合、ModulePathは.appバンドル自体を返す
+		if (modulePath.ends_with(U".app"))
+		{
+			// /path/to/App.app から
+			// /path/to/App.app/Contents/Resources/ へ
+			return FileSystem::PathAppend(modulePath, U"Contents/Resources");
+		}
+		else
+		{
+			// 直接実行ファイルが起動された場合
+			// /path/to/App.app/Contents/MacOS/App から
+			// /path/to/App.app/Contents/Resources/ へ
+			FilePath contentsPath = FileSystem::ParentPath(modulePath);
+			return FileSystem::PathAppend(contentsPath, U"Resources");
+		}
+#else
+		return AppDataDirectoryPath();
+#endif
+	}
+
+	FilePath ScoreDirectoryPath()
+	{
+		return FileSystem::PathAppend(AppDataDirectoryPath(), U"score");
+	}
+
+	FilePath SongsDirectoryPath()
+	{
+		return FileSystem::PathAppend(AppDataDirectoryPath(), U"songs");
+	}
+
+	FilePath SongsDefaultDirectoryPath()
+	{
+		return FileSystem::PathAppend(ResourceDirectoryPath(), U"songs_default");
+	}
+
+	FilePath GetResourcePath(FilePathView folderName)
+	{
+		return FileSystem::PathAppend(ResourceDirectoryPath(), folderName);
 	}
 
 	String DirectoryNameByDirectoryPath(FilePathView directoryPath)

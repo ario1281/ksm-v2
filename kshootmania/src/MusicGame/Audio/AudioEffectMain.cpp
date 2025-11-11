@@ -91,12 +91,12 @@ namespace MusicGame::Audio
 						// high_pass_filter/low_pass_filterへのqパラメータ適用(ビルトインの場合のみ)
 						if (isHighPassFilterBuiltin)
 						{
-							const double qValueHPF = std::lerp(0.7, 9.3, filterGainValue);
+							const double qValueHPF = std::lerp(2.0, 8.0, filterGainValue);
 							laserParamChangeDict["high_pass_filter"]["q"][pulse] = std::to_string(qValueHPF);
 						}
 						if (isLowPassFilterBuiltin)
 						{
-							const double qValueLPF = std::lerp(0.7, 6.5, filterGainValue);
+							const double qValueLPF = std::lerp(2.0, 5.2, filterGainValue);
 							laserParamChangeDict["low_pass_filter"]["q"][pulse] = std::to_string(qValueLPF);
 						}
 					}

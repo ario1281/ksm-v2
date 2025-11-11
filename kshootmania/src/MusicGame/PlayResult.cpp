@@ -10,7 +10,8 @@ namespace MusicGame
 
 	bool PlayResult::isAborted() const
 	{
-		if (comboStats.critical + comboStats.totalNear() + comboStats.error < totalCombo)
+		const int32 judgedCombo = comboStats.critical + comboStats.totalNear() + comboStats.error;
+		if (judgedCombo < totalCombo)
 		{
 			// 途中でプレイをやめた場合
 			return true;
@@ -18,7 +19,7 @@ namespace MusicGame
 		else
 		{
 			// 途中でプレイをやめていなければ判定内訳の合計がtotalComboになるはず
-			assert(comboStats.critical + comboStats.totalNear() + comboStats.error == totalCombo);
+			assert(judgedCombo == totalCombo);
 			return false;
 		}
 	}

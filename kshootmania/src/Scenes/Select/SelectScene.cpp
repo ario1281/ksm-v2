@@ -11,14 +11,18 @@ namespace
 	constexpr Duration kFadeInDuration = 0.25s;
 	constexpr Duration kFadeOutDuration = 0.4s;
 
-	constexpr FilePathView kSelectSceneUIFilePath = U"ui/scene/select.noco";
+	FilePath GetSelectSceneUIFilePath()
+	{
+		return FsUtils::GetResourcePath(U"ui/scene/select.noco");
+	}
 
 	std::shared_ptr<noco::Canvas> LoadSelectSceneCanvas()
 	{
-		const auto canvas = noco::Canvas::LoadFromFile(kSelectSceneUIFilePath);
+		const FilePath uiFilePath = GetSelectSceneUIFilePath();
+		const auto canvas = noco::Canvas::LoadFromFile(uiFilePath);
 		if (!canvas)
 		{
-			throw Error{ U"Failed to load '{}'"_fmt(kSelectSceneUIFilePath) };
+			throw Error{ U"Failed to load '{}'"_fmt(uiFilePath) };
 		}
 		return canvas;
 	}
@@ -27,7 +31,7 @@ namespace
 	{
 		Array<String> playerNames;
 
-		for (const auto& dirPath : FileSystem::DirectoryContents(U"score/", Recursive::No))
+		for (const auto& dirPath : FileSystem::DirectoryContents(FsUtils::ScoreDirectoryPath(), Recursive::No))
 		{
 			if (FileSystem::IsDirectory(dirPath))
 			{

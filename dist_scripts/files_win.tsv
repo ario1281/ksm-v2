@@ -1,0 +1,378 @@
+# source	dest
+# コピー元 (プロジェクトルートからの相対パス)	コピー先 (zip内kshootmania_v2/からの相対パス)
+dist_scripts/assets_win/readme.txt	readme.txt
+dist_scripts/assets_win/license.txt	license.txt
+dist_scripts/assets_win/config.ini	config.ini
+kshootmania/App/assets/font/KSM-JA-Medium.ttf	assets/font/KSM-JA-Medium.ttf
+kshootmania/App/assets/font/KSM-KR-Medium.ttf	assets/font/KSM-KR-Medium.ttf
+kshootmania/App/assets/font/KSM-SC-Medium.ttf	assets/font/KSM-SC-Medium.ttf
+kshootmania/App/assets/font/KSM-TC-Medium.ttf	assets/font/KSM-TC-Medium.ttf
+kshootmania/App/assets/font/LICENSE-KSM-JA-Medium.txt	assets/font/LICENSE-KSM-JA-Medium.txt
+kshootmania/App/assets/font/LICENSE-KSM-KR-Medium.txt	assets/font/LICENSE-KSM-KR-Medium.txt
+kshootmania/App/assets/font/LICENSE-KSM-SC-Medium.txt	assets/font/LICENSE-KSM-SC-Medium.txt
+kshootmania/App/assets/font/LICENSE-KSM-TC-Medium.txt	assets/font/LICENSE-KSM-TC-Medium.txt
+kshootmania/App/bass.dll	bass.dll
+kshootmania/App/bass_fx.dll	bass_fx.dll
+kshootmania/App/dll/soundtouch/COPYING.TXT	dll/soundtouch/COPYING.TXT
+kshootmania/App/dll/soundtouch/SoundTouch_x64.dll	dll/soundtouch/SoundTouch_x64.dll
+kshootmania/App/engine/font/min/LICENSE	engine/font/min/LICENSE
+kshootmania/App/engine/font/min/siv3d-min.woff	engine/font/min/siv3d-min.woff
+kshootmania/App/engine/shader/d3d11/apply_srgb_curve.ps	engine/shader/d3d11/apply_srgb_curve.ps
+kshootmania/App/engine/shader/d3d11/bitmapfont.ps	engine/shader/d3d11/bitmapfont.ps
+kshootmania/App/engine/shader/d3d11/copy.ps	engine/shader/d3d11/copy.ps
+kshootmania/App/engine/shader/d3d11/forward3d.ps	engine/shader/d3d11/forward3d.ps
+kshootmania/App/engine/shader/d3d11/forward3d.vs	engine/shader/d3d11/forward3d.vs
+kshootmania/App/engine/shader/d3d11/fullscreen_triangle.ps	engine/shader/d3d11/fullscreen_triangle.ps
+kshootmania/App/engine/shader/d3d11/fullscreen_triangle.vs	engine/shader/d3d11/fullscreen_triangle.vs
+kshootmania/App/engine/shader/d3d11/gaussian_blur_13.ps	engine/shader/d3d11/gaussian_blur_13.ps
+kshootmania/App/engine/shader/d3d11/gaussian_blur_5.ps	engine/shader/d3d11/gaussian_blur_5.ps
+kshootmania/App/engine/shader/d3d11/gaussian_blur_9.ps	engine/shader/d3d11/gaussian_blur_9.ps
+kshootmania/App/engine/shader/d3d11/line3d.ps	engine/shader/d3d11/line3d.ps
+kshootmania/App/engine/shader/d3d11/line3d.vs	engine/shader/d3d11/line3d.vs
+kshootmania/App/engine/shader/d3d11/msdffont.ps	engine/shader/d3d11/msdffont.ps
+kshootmania/App/engine/shader/d3d11/msdffont_outline.ps	engine/shader/d3d11/msdffont_outline.ps
+kshootmania/App/engine/shader/d3d11/msdffont_outlineshadow.ps	engine/shader/d3d11/msdffont_outlineshadow.ps
+kshootmania/App/engine/shader/d3d11/msdffont_shadow.ps	engine/shader/d3d11/msdffont_shadow.ps
+kshootmania/App/engine/shader/d3d11/msdfprint.ps	engine/shader/d3d11/msdfprint.ps
+kshootmania/App/engine/shader/d3d11/quad_warp.ps	engine/shader/d3d11/quad_warp.ps
+kshootmania/App/engine/shader/d3d11/quad_warp.vs	engine/shader/d3d11/quad_warp.vs
+kshootmania/App/engine/shader/d3d11/round_dot.ps	engine/shader/d3d11/round_dot.ps
+kshootmania/App/engine/shader/d3d11/sdffont.ps	engine/shader/d3d11/sdffont.ps
+kshootmania/App/engine/shader/d3d11/sdffont_outline.ps	engine/shader/d3d11/sdffont_outline.ps
+kshootmania/App/engine/shader/d3d11/sdffont_outlineshadow.ps	engine/shader/d3d11/sdffont_outlineshadow.ps
+kshootmania/App/engine/shader/d3d11/sdffont_shadow.ps	engine/shader/d3d11/sdffont_shadow.ps
+kshootmania/App/engine/shader/d3d11/shape.ps	engine/shader/d3d11/shape.ps
+kshootmania/App/engine/shader/d3d11/sky.ps	engine/shader/d3d11/sky.ps
+kshootmania/App/engine/shader/d3d11/sprite.vs	engine/shader/d3d11/sprite.vs
+kshootmania/App/engine/shader/d3d11/square_dot.ps	engine/shader/d3d11/square_dot.ps
+kshootmania/App/engine/shader/d3d11/texture.ps	engine/shader/d3d11/texture.ps
+kshootmania/App/engine/shader/glsl/apply_srgb_curve.frag	engine/shader/glsl/apply_srgb_curve.frag
+kshootmania/App/engine/shader/glsl/bitmapfont.frag	engine/shader/glsl/bitmapfont.frag
+kshootmania/App/engine/shader/glsl/copy.frag	engine/shader/glsl/copy.frag
+kshootmania/App/engine/shader/glsl/forward3d.frag	engine/shader/glsl/forward3d.frag
+kshootmania/App/engine/shader/glsl/forward3d.vert	engine/shader/glsl/forward3d.vert
+kshootmania/App/engine/shader/glsl/fullscreen_triangle.frag	engine/shader/glsl/fullscreen_triangle.frag
+kshootmania/App/engine/shader/glsl/fullscreen_triangle.vert	engine/shader/glsl/fullscreen_triangle.vert
+kshootmania/App/engine/shader/glsl/gaussian_blur_13.frag	engine/shader/glsl/gaussian_blur_13.frag
+kshootmania/App/engine/shader/glsl/gaussian_blur_5.frag	engine/shader/glsl/gaussian_blur_5.frag
+kshootmania/App/engine/shader/glsl/gaussian_blur_9.frag	engine/shader/glsl/gaussian_blur_9.frag
+kshootmania/App/engine/shader/glsl/line3d.frag	engine/shader/glsl/line3d.frag
+kshootmania/App/engine/shader/glsl/line3d.vert	engine/shader/glsl/line3d.vert
+kshootmania/App/engine/shader/glsl/msdffont.frag	engine/shader/glsl/msdffont.frag
+kshootmania/App/engine/shader/glsl/msdffont_outline.frag	engine/shader/glsl/msdffont_outline.frag
+kshootmania/App/engine/shader/glsl/msdffont_outlineshadow.frag	engine/shader/glsl/msdffont_outlineshadow.frag
+kshootmania/App/engine/shader/glsl/msdffont_shadow.frag	engine/shader/glsl/msdffont_shadow.frag
+kshootmania/App/engine/shader/glsl/msdfprint.frag	engine/shader/glsl/msdfprint.frag
+kshootmania/App/engine/shader/glsl/quad_warp.frag	engine/shader/glsl/quad_warp.frag
+kshootmania/App/engine/shader/glsl/quad_warp.vert	engine/shader/glsl/quad_warp.vert
+kshootmania/App/engine/shader/glsl/round_dot.frag	engine/shader/glsl/round_dot.frag
+kshootmania/App/engine/shader/glsl/sdffont.frag	engine/shader/glsl/sdffont.frag
+kshootmania/App/engine/shader/glsl/sdffont_outline.frag	engine/shader/glsl/sdffont_outline.frag
+kshootmania/App/engine/shader/glsl/sdffont_outlineshadow.frag	engine/shader/glsl/sdffont_outlineshadow.frag
+kshootmania/App/engine/shader/glsl/sdffont_shadow.frag	engine/shader/glsl/sdffont_shadow.frag
+kshootmania/App/engine/shader/glsl/shape.frag	engine/shader/glsl/shape.frag
+kshootmania/App/engine/shader/glsl/sky.frag	engine/shader/glsl/sky.frag
+kshootmania/App/engine/shader/glsl/sprite.vert	engine/shader/glsl/sprite.vert
+kshootmania/App/engine/shader/glsl/square_dot.frag	engine/shader/glsl/square_dot.frag
+kshootmania/App/engine/shader/glsl/texture.frag	engine/shader/glsl/texture.frag
+kshootmania/App/engine/texture/box-shadow/128.png	engine/texture/box-shadow/128.png
+kshootmania/App/engine/texture/box-shadow/16.png	engine/texture/box-shadow/16.png
+kshootmania/App/engine/texture/box-shadow/256.png	engine/texture/box-shadow/256.png
+kshootmania/App/engine/texture/box-shadow/32.png	engine/texture/box-shadow/32.png
+kshootmania/App/engine/texture/box-shadow/64.png	engine/texture/box-shadow/64.png
+kshootmania/App/engine/texture/box-shadow/8.png	engine/texture/box-shadow/8.png
+kshootmania/App/imgs/base.gif	imgs/base.gif
+kshootmania/App/imgs/bg/arrow.gif	imgs/bg/arrow.gif
+kshootmania/App/imgs/bg/cloudy0.jpg	imgs/bg/cloudy0.jpg
+kshootmania/App/imgs/bg/cloudy1.jpg	imgs/bg/cloudy1.jpg
+kshootmania/App/imgs/bg/cyber0.jpg	imgs/bg/cyber0.jpg
+kshootmania/App/imgs/bg/cyber1.jpg	imgs/bg/cyber1.jpg
+kshootmania/App/imgs/bg/deepsea0.jpg	imgs/bg/deepsea0.jpg
+kshootmania/App/imgs/bg/deepsea1.jpg	imgs/bg/deepsea1.jpg
+kshootmania/App/imgs/bg/desert0.jpg	imgs/bg/desert0.jpg
+kshootmania/App/imgs/bg/desert1.jpg	imgs/bg/desert1.jpg
+kshootmania/App/imgs/bg/fantasy0.jpg	imgs/bg/fantasy0.jpg
+kshootmania/App/imgs/bg/fantasy1.jpg	imgs/bg/fantasy1.jpg
+kshootmania/App/imgs/bg/flame0.jpg	imgs/bg/flame0.jpg
+kshootmania/App/imgs/bg/flame1.jpg	imgs/bg/flame1.jpg
+kshootmania/App/imgs/bg/grass0.jpg	imgs/bg/grass0.jpg
+kshootmania/App/imgs/bg/grass1.jpg	imgs/bg/grass1.jpg
+kshootmania/App/imgs/bg/hidden.gif	imgs/bg/hidden.gif
+kshootmania/App/imgs/bg/mars0.jpg	imgs/bg/mars0.jpg
+kshootmania/App/imgs/bg/mars1.jpg	imgs/bg/mars1.jpg
+kshootmania/App/imgs/bg/night0.jpg	imgs/bg/night0.jpg
+kshootmania/App/imgs/bg/night1.jpg	imgs/bg/night1.jpg
+kshootmania/App/imgs/bg/ocean0.jpg	imgs/bg/ocean0.jpg
+kshootmania/App/imgs/bg/ocean1.jpg	imgs/bg/ocean1.jpg
+kshootmania/App/imgs/bg/sakura.gif	imgs/bg/sakura.gif
+kshootmania/App/imgs/bg/sky0.jpg	imgs/bg/sky0.jpg
+kshootmania/App/imgs/bg/sky1.jpg	imgs/bg/sky1.jpg
+kshootmania/App/imgs/bg/smoke.gif	imgs/bg/smoke.gif
+kshootmania/App/imgs/bg/snow.gif	imgs/bg/snow.gif
+kshootmania/App/imgs/bg/space0.jpg	imgs/bg/space0.jpg
+kshootmania/App/imgs/bg/space1.jpg	imgs/bg/space1.jpg
+kshootmania/App/imgs/bg/sunset0.jpg	imgs/bg/sunset0.jpg
+kshootmania/App/imgs/bg/sunset1.jpg	imgs/bg/sunset1.jpg
+kshootmania/App/imgs/bg/techno.gif	imgs/bg/techno.gif
+kshootmania/App/imgs/bg/wave.gif	imgs/bg/wave.gif
+kshootmania/App/imgs/bg.jpg	imgs/bg.jpg
+kshootmania/App/imgs/bg2.jpg	imgs/bg2.jpg
+kshootmania/App/imgs/bg3.jpg	imgs/bg3.jpg
+kshootmania/App/imgs/bline.gif	imgs/bline.gif
+kshootmania/App/imgs/bt_chip.gif	imgs/bt_chip.gif
+kshootmania/App/imgs/bt_long.gif	imgs/bt_long.gif
+kshootmania/App/imgs/cg.gif	imgs/cg.gif
+kshootmania/App/imgs/cg_header.png	imgs/cg_header.png
+kshootmania/App/imgs/cline.png	imgs/cline.png
+kshootmania/App/imgs/combonum.gif	imgs/combonum.gif
+kshootmania/App/imgs/config_fx.gif	imgs/config_fx.gif
+kshootmania/App/imgs/config_item.gif	imgs/config_item.gif
+kshootmania/App/imgs/config_item2.gif	imgs/config_item2.gif
+kshootmania/App/imgs/config_item_0.gif	imgs/config_item_0.gif
+kshootmania/App/imgs/config_item_1.gif	imgs/config_item_1.gif
+kshootmania/App/imgs/config_item_2.gif	imgs/config_item_2.gif
+kshootmania/App/imgs/config_item_cur.gif	imgs/config_item_cur.gif
+kshootmania/App/imgs/config_top.png	imgs/config_top.png
+kshootmania/App/imgs/courseresult_arrow.png	imgs/courseresult_arrow.png
+kshootmania/App/imgs/courseresult_gauge.png	imgs/courseresult_gauge.png
+kshootmania/App/imgs/courseresult_info.png	imgs/courseresult_info.png
+kshootmania/App/imgs/courseresult_item.png	imgs/courseresult_item.png
+kshootmania/App/imgs/courseresult_newrecord.png	imgs/courseresult_newrecord.png
+kshootmania/App/imgs/editor/chokkakusamples.gif	imgs/editor/chokkakusamples.gif
+kshootmania/App/imgs/editor/keyinfo.gif	imgs/editor/keyinfo.gif
+kshootmania/App/imgs/editor/keyinfo_en.gif	imgs/editor/keyinfo_en.gif
+kshootmania/App/imgs/editor/keyinfo_kr.gif	imgs/editor/keyinfo_kr.gif
+kshootmania/App/imgs/editor/laser.gif	imgs/editor/laser.gif
+kshootmania/App/imgs/editor/lnote.gif	imgs/editor/lnote.gif
+kshootmania/App/imgs/editor/lnote2.gif	imgs/editor/lnote2.gif
+kshootmania/App/imgs/editor/lnote2_se.gif	imgs/editor/lnote2_se.gif
+kshootmania/App/imgs/editor/note.gif	imgs/editor/note.gif
+kshootmania/App/imgs/editor/note2.gif	imgs/editor/note2.gif
+kshootmania/App/imgs/editor/quantize.gif	imgs/editor/quantize.gif
+kshootmania/App/imgs/editor/rotate.gif	imgs/editor/rotate.gif
+kshootmania/App/imgs/editor/spin.gif	imgs/editor/spin.gif
+kshootmania/App/imgs/editor/st.gif	imgs/editor/st.gif
+kshootmania/App/imgs/editor/stop.gif	imgs/editor/stop.gif
+kshootmania/App/imgs/editor/targets.gif	imgs/editor/targets.gif
+kshootmania/App/imgs/editor/toolbar.gif	imgs/editor/toolbar.gif
+kshootmania/App/imgs/editor/tools.gif	imgs/editor/tools.gif
+kshootmania/App/imgs/er.png	imgs/er.png
+kshootmania/App/imgs/er_g.gif	imgs/er_g.gif
+kshootmania/App/imgs/er_g_pattern.gif	imgs/er_g_pattern.gif
+kshootmania/App/imgs/er_p.png	imgs/er_p.png
+kshootmania/App/imgs/fps.png	imgs/fps.png
+kshootmania/App/imgs/fx_chip.gif	imgs/fx_chip.gif
+kshootmania/App/imgs/fx_chip_se.gif	imgs/fx_chip_se.gif
+kshootmania/App/imgs/fx_long.gif	imgs/fx_long.gif
+kshootmania/App/imgs/gate/gate_bg.jpg	imgs/gate/gate_bg.jpg
+kshootmania/App/imgs/gate/gate_bg_mask.gif	imgs/gate/gate_bg_mask.gif
+kshootmania/App/imgs/gate/gate_checkbox.png	imgs/gate/gate_checkbox.png
+kshootmania/App/imgs/gate/gate_downloading.png	imgs/gate/gate_downloading.png
+kshootmania/App/imgs/gate/gate_info.png	imgs/gate/gate_info.png
+kshootmania/App/imgs/gate/gate_item.png	imgs/gate/gate_item.png
+kshootmania/App/imgs/gate/gate_item_cur.png	imgs/gate/gate_item_cur.png
+kshootmania/App/imgs/gate/gate_item_dark.png	imgs/gate/gate_item_dark.png
+kshootmania/App/imgs/gate/gate_item_empty.png	imgs/gate/gate_item_empty.png
+kshootmania/App/imgs/gate/gate_item_installed.png	imgs/gate/gate_item_installed.png
+kshootmania/App/imgs/gate/gate_item_installed_en.png	imgs/gate/gate_item_installed_en.png
+kshootmania/App/imgs/gate/gate_item_installed_kr.png	imgs/gate/gate_item_installed_kr.png
+kshootmania/App/imgs/gate/gate_item_locked.png	imgs/gate/gate_item_locked.png
+kshootmania/App/imgs/gate/gate_item_locked_en.png	imgs/gate/gate_item_locked_en.png
+kshootmania/App/imgs/gate/gate_item_locked_kr.png	imgs/gate/gate_item_locked_kr.png
+kshootmania/App/imgs/gate/gate_item_new.png	imgs/gate/gate_item_new.png
+kshootmania/App/imgs/gate/gate_item_updated.png	imgs/gate/gate_item_updated.png
+kshootmania/App/imgs/gate/gate_keyinfo.png	imgs/gate/gate_keyinfo.png
+kshootmania/App/imgs/gate/gate_settings.png	imgs/gate/gate_settings.png
+kshootmania/App/imgs/gate/gate_sort.png	imgs/gate/gate_sort.png
+kshootmania/App/imgs/gate/gate_top.gif	imgs/gate/gate_top.gif
+kshootmania/App/imgs/icon/happypophardcore_react.png	imgs/icon/happypophardcore_react.png
+kshootmania/App/imgs/icon/happypophardcore_reborn.png	imgs/icon/happypophardcore_reborn.png
+kshootmania/App/imgs/icon/slimatsushi.png	imgs/icon/slimatsushi.png
+kshootmania/App/imgs/icon/slimatsushi_disc1.png	imgs/icon/slimatsushi_disc1.png
+kshootmania/App/imgs/icon/slimatsushi_disc2.png	imgs/icon/slimatsushi_disc2.png
+kshootmania/App/imgs/icon/slimatsushi_disc3.png	imgs/icon/slimatsushi_disc3.png
+kshootmania/App/imgs/icon/slimatsushi_disc4.png	imgs/icon/slimatsushi_disc4.png
+kshootmania/App/imgs/ir_popup.png	imgs/ir_popup.png
+kshootmania/App/imgs/ir_signin.png	imgs/ir_signin.png
+kshootmania/App/imgs/ir_signin_cursor.png	imgs/ir_signin_cursor.png
+kshootmania/App/imgs/jacket/nowprinting1.jpg	imgs/jacket/nowprinting1.jpg
+kshootmania/App/imgs/jacket/nowprinting2.jpg	imgs/jacket/nowprinting2.jpg
+kshootmania/App/imgs/jacket/nowprinting3.jpg	imgs/jacket/nowprinting3.jpg
+kshootmania/App/imgs/judge.gif	imgs/judge.gif
+kshootmania/App/imgs/judge1.gif	imgs/judge1.gif
+kshootmania/App/imgs/judge2.gif	imgs/judge2.gif
+kshootmania/App/imgs/judge3.gif	imgs/judge3.gif
+kshootmania/App/imgs/judgelaser.gif	imgs/judgelaser.gif
+kshootmania/App/imgs/judgelaser_d.gif	imgs/judgelaser_d.gif
+kshootmania/App/imgs/judgelong.gif	imgs/judgelong.gif
+kshootmania/App/imgs/lanelight.gif	imgs/lanelight.gif
+kshootmania/App/imgs/laser.gif	imgs/laser.gif
+kshootmania/App/imgs/laser_cur.png	imgs/laser_cur.png
+kshootmania/App/imgs/laser_mask.gif	imgs/laser_mask.gif
+kshootmania/App/imgs/laser_p.png	imgs/laser_p.png
+kshootmania/App/imgs/laserl_0.gif	imgs/laserl_0.gif
+kshootmania/App/imgs/laserr_0.gif	imgs/laserr_0.gif
+kshootmania/App/imgs/loading.png	imgs/loading.png
+kshootmania/App/imgs/minfo_cur.png	imgs/minfo_cur.png
+kshootmania/App/imgs/minfo_detail.png	imgs/minfo_detail.png
+kshootmania/App/imgs/minfo_label.png	imgs/minfo_label.png
+kshootmania/App/imgs/msel_0.png	imgs/msel_0.png
+kshootmania/App/imgs/msel_0_bpmnum.png	imgs/msel_0_bpmnum.png
+kshootmania/App/imgs/msel_0_cur.gif	imgs/msel_0_cur.gif
+kshootmania/App/imgs/msel_0_difficulty.png	imgs/msel_0_difficulty.png
+kshootmania/App/imgs/msel_1.png	imgs/msel_1.png
+kshootmania/App/imgs/msel_2.png	imgs/msel_2.png
+kshootmania/App/imgs/msel_bar.png	imgs/msel_bar.png
+kshootmania/App/imgs/msel_barcur.png	imgs/msel_barcur.png
+kshootmania/App/imgs/msel_bgani1.gif	imgs/msel_bgani1.gif
+kshootmania/App/imgs/msel_course0.png	imgs/msel_course0.png
+kshootmania/App/imgs/msel_course0_item.png	imgs/msel_course0_item.png
+kshootmania/App/imgs/msel_course1.png	imgs/msel_course1.png
+kshootmania/App/imgs/msel_course2.png	imgs/msel_course2.png
+kshootmania/App/imgs/msel_dir0.png	imgs/msel_dir0.png
+kshootmania/App/imgs/msel_dir1.png	imgs/msel_dir1.png
+kshootmania/App/imgs/msel_dir2.png	imgs/msel_dir2.png
+kshootmania/App/imgs/msel_fav_add.png	imgs/msel_fav_add.png
+kshootmania/App/imgs/msel_fav_add_num.png	imgs/msel_fav_add_num.png
+kshootmania/App/imgs/msel_fav_del.png	imgs/msel_fav_del.png
+kshootmania/App/imgs/msel_grade.png	imgs/msel_grade.png
+kshootmania/App/imgs/msel_info.gif	imgs/msel_info.gif
+kshootmania/App/imgs/msel_lev0.png	imgs/msel_lev0.png
+kshootmania/App/imgs/msel_lev1.png	imgs/msel_lev1.png
+kshootmania/App/imgs/msel_lev2.png	imgs/msel_lev2.png
+kshootmania/App/imgs/msel_level.png	imgs/msel_level.png
+kshootmania/App/imgs/msel_medal.png	imgs/msel_medal.png
+kshootmania/App/imgs/msel_optionbg.png	imgs/msel_optionbg.png
+kshootmania/App/imgs/msel_sub0.png	imgs/msel_sub0.png
+kshootmania/App/imgs/msel_sub1.png	imgs/msel_sub1.png
+kshootmania/App/imgs/msel_sub2.png	imgs/msel_sub2.png
+kshootmania/App/imgs/num0.png	imgs/num0.png
+kshootmania/App/imgs/num1.png	imgs/num1.png
+kshootmania/App/imgs/num2.png	imgs/num2.png
+kshootmania/App/imgs/num2_large.png	imgs/num2_large.png
+kshootmania/App/imgs/pl_difficulty.png	imgs/pl_difficulty.png
+kshootmania/App/imgs/pl_hispeed.png	imgs/pl_hispeed.png
+kshootmania/App/imgs/pl_minfo.png	imgs/pl_minfo.png
+kshootmania/App/imgs/playresult.png	imgs/playresult.png
+kshootmania/App/imgs/result.png	imgs/result.png
+kshootmania/App/imgs/result_difficulty.png	imgs/result_difficulty.png
+kshootmania/App/imgs/result_grade.png	imgs/result_grade.png
+kshootmania/App/imgs/result_newrecord.png	imgs/result_newrecord.png
+kshootmania/App/imgs/result_scorenum.png	imgs/result_scorenum.png
+kshootmania/App/imgs/result_top.png	imgs/result_top.png
+kshootmania/App/imgs/result_tweetbtn.png	imgs/result_tweetbtn.png
+kshootmania/App/imgs/result_unlocked.png	imgs/result_unlocked.png
+kshootmania/App/imgs/score_header.png	imgs/score_header.png
+kshootmania/App/imgs/standby.jpg	imgs/standby.jpg
+kshootmania/App/imgs/standby_cur.gif	imgs/standby_cur.gif
+kshootmania/App/imgs/standby_item.gif	imgs/standby_item.gif
+kshootmania/App/imgs/timingadjust.png	imgs/timingadjust.png
+kshootmania/App/imgs/timingadjust_ms.png	imgs/timingadjust_ms.png
+kshootmania/App/imgs/timingadjust_sign.png	imgs/timingadjust_sign.png
+kshootmania/App/kshootmania.exe	kshootmania.exe
+kshootmania/App/lang/English.txt	lang/English.txt
+kshootmania/App/lang/Japanese.txt	lang/Japanese.txt
+kshootmania/App/lang/Korean.txt	lang/Korean.txt
+kshootmania/App/lang/Simplified Chinese.txt	lang/Simplified Chinese.txt
+kshootmania/App/lang/Traditional Chinese.txt	lang/Traditional Chinese.txt
+kshootmania/App/se/chokkaku.wav	se/chokkaku.wav
+kshootmania/App/se/chokkaku_down.wav	se/chokkaku_down.wav
+kshootmania/App/se/chokkaku_mute.wav	se/chokkaku_mute.wav
+kshootmania/App/se/chokkaku_swing.wav	se/chokkaku_swing.wav
+kshootmania/App/se/chokkaku_up.wav	se/chokkaku_up.wav
+kshootmania/App/se/courseresult_bgm.ogg	se/courseresult_bgm.ogg
+kshootmania/App/se/gate_bgm.ogg	se/gate_bgm.ogg
+kshootmania/App/se/gate_check.wav	se/gate_check.wav
+kshootmania/App/se/gate_sel.wav	se/gate_sel.wav
+kshootmania/App/se/note/clap.wav	se/note/clap.wav
+kshootmania/App/se/note/clap_impact.wav	se/note/clap_impact.wav
+kshootmania/App/se/note/clap_punchy.wav	se/note/clap_punchy.wav
+kshootmania/App/se/note/snare.wav	se/note/snare.wav
+kshootmania/App/se/note/snare_lo.wav	se/note/snare_lo.wav
+kshootmania/App/se/option_bgm.ogg	se/option_bgm.ogg
+kshootmania/App/se/play_hardfailed.wav	se/play_hardfailed.wav
+kshootmania/App/se/result_bgm.ogg	se/result_bgm.ogg
+kshootmania/App/se/sel_bgm.ogg	se/sel_bgm.ogg
+kshootmania/App/se/sel_dir.wav	se/sel_dir.wav
+kshootmania/App/se/sel_enter.ogg	se/sel_enter.ogg
+kshootmania/App/se/sel_l.wav	se/sel_l.wav
+kshootmania/App/se/sel_m.wav	se/sel_m.wav
+kshootmania/App/se/tick.wav	se/tick.wav
+kshootmania/App/se/tick2.wav	se/tick2.wav
+kshootmania/App/se/title_bgm.ogg	se/title_bgm.ogg
+kshootmania/App/se/title_bgm_re16.ogg	se/title_bgm_re16.ogg
+kshootmania/App/se/title_bgm_re8.ogg	se/title_bgm_re8.ogg
+kshootmania/App/se/title_enter.wav	se/title_enter.wav
+kshootmania/App/se/title_sel.wav	se/title_sel.wav
+kshootmania/App/shaders/multi_texture_mask.frag	shaders/multi_texture_mask.frag
+kshootmania/App/shaders/multi_texture_mask.hlsl	shaders/multi_texture_mask.hlsl
+kshootmania/App/songs/K-Shoot MANIA/azdrei/azdrei.jpg	songs/K-Shoot MANIA/azdrei/azdrei.jpg
+kshootmania/App/songs/K-Shoot MANIA/azdrei/azdrei.ogg	songs/K-Shoot MANIA/azdrei/azdrei.ogg
+kshootmania/App/songs/K-Shoot MANIA/azdrei/azdrei_ch.ksh	songs/K-Shoot MANIA/azdrei/azdrei_ch.ksh
+kshootmania/App/songs/K-Shoot MANIA/azdrei/azdrei_ex.ksh	songs/K-Shoot MANIA/azdrei/azdrei_ex.ksh
+kshootmania/App/songs/K-Shoot MANIA/azdrei/azdrei_lt.ksh	songs/K-Shoot MANIA/azdrei/azdrei_lt.ksh
+kshootmania/App/songs/K-Shoot MANIA/azdrei/gate.lst	songs/K-Shoot MANIA/azdrei/gate.lst
+kshootmania/App/songs/K-Shoot MANIA/esistenza/esistenza.jpg	songs/K-Shoot MANIA/esistenza/esistenza.jpg
+kshootmania/App/songs/K-Shoot MANIA/esistenza/esistenza.ogg	songs/K-Shoot MANIA/esistenza/esistenza.ogg
+kshootmania/App/songs/K-Shoot MANIA/esistenza/esistenza_ch.ksh	songs/K-Shoot MANIA/esistenza/esistenza_ch.ksh
+kshootmania/App/songs/K-Shoot MANIA/esistenza/esistenza_ex.ksh	songs/K-Shoot MANIA/esistenza/esistenza_ex.ksh
+kshootmania/App/songs/K-Shoot MANIA/esistenza/esistenza_lt.ksh	songs/K-Shoot MANIA/esistenza/esistenza_lt.ksh
+kshootmania/App/songs/K-Shoot MANIA/esistenza/gate.lst	songs/K-Shoot MANIA/esistenza/gate.lst
+kshootmania/App/songs/K-Shoot MANIA/flavorofyouth/flavorofyouth.jpg	songs/K-Shoot MANIA/flavorofyouth/flavorofyouth.jpg
+kshootmania/App/songs/K-Shoot MANIA/flavorofyouth/flavorofyouth.ogg	songs/K-Shoot MANIA/flavorofyouth/flavorofyouth.ogg
+kshootmania/App/songs/K-Shoot MANIA/flavorofyouth/flavorofyouth_ch.ksh	songs/K-Shoot MANIA/flavorofyouth/flavorofyouth_ch.ksh
+kshootmania/App/songs/K-Shoot MANIA/flavorofyouth/flavorofyouth_ex.ksh	songs/K-Shoot MANIA/flavorofyouth/flavorofyouth_ex.ksh
+kshootmania/App/songs/K-Shoot MANIA/flavorofyouth/flavorofyouth_in.ksh	songs/K-Shoot MANIA/flavorofyouth/flavorofyouth_in.ksh
+kshootmania/App/songs/K-Shoot MANIA/flavorofyouth/flavorofyouth_lt.ksh	songs/K-Shoot MANIA/flavorofyouth/flavorofyouth_lt.ksh
+kshootmania/App/songs/K-Shoot MANIA/flavorofyouth/gate.lst	songs/K-Shoot MANIA/flavorofyouth/gate.lst
+kshootmania/App/songs/K-Shoot MANIA/jurer/gate.lst	songs/K-Shoot MANIA/jurer/gate.lst
+kshootmania/App/songs/K-Shoot MANIA/jurer/jurer.jpg	songs/K-Shoot MANIA/jurer/jurer.jpg
+kshootmania/App/songs/K-Shoot MANIA/jurer/jurer.ogg	songs/K-Shoot MANIA/jurer/jurer.ogg
+kshootmania/App/songs/K-Shoot MANIA/jurer/jurer_ch.ksh	songs/K-Shoot MANIA/jurer/jurer_ch.ksh
+kshootmania/App/songs/K-Shoot MANIA/jurer/jurer_ex.ksh	songs/K-Shoot MANIA/jurer/jurer_ex.ksh
+kshootmania/App/songs/K-Shoot MANIA/jurer/jurer_in.ksh	songs/K-Shoot MANIA/jurer/jurer_in.ksh
+kshootmania/App/songs/K-Shoot MANIA/jurer/jurer_lt.ksh	songs/K-Shoot MANIA/jurer/jurer_lt.ksh
+kshootmania/App/songs/K-Shoot MANIA/magicalkittens/gate.lst	songs/K-Shoot MANIA/magicalkittens/gate.lst
+kshootmania/App/songs/K-Shoot MANIA/magicalkittens/magicalkittens.jpg	songs/K-Shoot MANIA/magicalkittens/magicalkittens.jpg
+kshootmania/App/songs/K-Shoot MANIA/magicalkittens/magicalkittens.ogg	songs/K-Shoot MANIA/magicalkittens/magicalkittens.ogg
+kshootmania/App/songs/K-Shoot MANIA/magicalkittens/magicalkittens_ch.ksh	songs/K-Shoot MANIA/magicalkittens/magicalkittens_ch.ksh
+kshootmania/App/songs/K-Shoot MANIA/magicalkittens/magicalkittens_ex.ksh	songs/K-Shoot MANIA/magicalkittens/magicalkittens_ex.ksh
+kshootmania/App/songs/K-Shoot MANIA/magicalkittens/magicalkittens_lt.ksh	songs/K-Shoot MANIA/magicalkittens/magicalkittens_lt.ksh
+kshootmania/App/songs/K-Shoot MANIA/mercury/gate.lst	songs/K-Shoot MANIA/mercury/gate.lst
+kshootmania/App/songs/K-Shoot MANIA/mercury/mercury.jpg	songs/K-Shoot MANIA/mercury/mercury.jpg
+kshootmania/App/songs/K-Shoot MANIA/mercury/mercury.ogg	songs/K-Shoot MANIA/mercury/mercury.ogg
+kshootmania/App/songs/K-Shoot MANIA/mercury/mercury_ch.ksh	songs/K-Shoot MANIA/mercury/mercury_ch.ksh
+kshootmania/App/songs/K-Shoot MANIA/mercury/mercury_ex.ksh	songs/K-Shoot MANIA/mercury/mercury_ex.ksh
+kshootmania/App/songs/K-Shoot MANIA/mercury/mercury_in.ksh	songs/K-Shoot MANIA/mercury/mercury_in.ksh
+kshootmania/App/songs/K-Shoot MANIA/mercury/mercury_lt.ksh	songs/K-Shoot MANIA/mercury/mercury_lt.ksh
+kshootmania/App/songs/K-Shoot MANIA/peekaboo_morirhythmrmx/gate.lst	songs/K-Shoot MANIA/peekaboo_morirhythmrmx/gate.lst
+kshootmania/App/songs/K-Shoot MANIA/peekaboo_morirhythmrmx/peekaboo_morirhythmrmx.jpg	songs/K-Shoot MANIA/peekaboo_morirhythmrmx/peekaboo_morirhythmrmx.jpg
+kshootmania/App/songs/K-Shoot MANIA/peekaboo_morirhythmrmx/peekaboo_morirhythmrmx.ogg	songs/K-Shoot MANIA/peekaboo_morirhythmrmx/peekaboo_morirhythmrmx.ogg
+kshootmania/App/songs/K-Shoot MANIA/peekaboo_morirhythmrmx/peekaboo_morirhythmrmx_ch.ksh	songs/K-Shoot MANIA/peekaboo_morirhythmrmx/peekaboo_morirhythmrmx_ch.ksh
+kshootmania/App/songs/K-Shoot MANIA/peekaboo_morirhythmrmx/peekaboo_morirhythmrmx_ex.ksh	songs/K-Shoot MANIA/peekaboo_morirhythmrmx/peekaboo_morirhythmrmx_ex.ksh
+kshootmania/App/songs/K-Shoot MANIA/peekaboo_morirhythmrmx/peekaboo_morirhythmrmx_in.ksh	songs/K-Shoot MANIA/peekaboo_morirhythmrmx/peekaboo_morirhythmrmx_in.ksh
+kshootmania/App/songs/K-Shoot MANIA/peekaboo_morirhythmrmx/peekaboo_morirhythmrmx_lt.ksh	songs/K-Shoot MANIA/peekaboo_morirhythmrmx/peekaboo_morirhythmrmx_lt.ksh
+kshootmania/App/songs/K-Shoot MANIA/reharpoon/gate.lst	songs/K-Shoot MANIA/reharpoon/gate.lst
+kshootmania/App/songs/K-Shoot MANIA/reharpoon/reharpoon.jpg	songs/K-Shoot MANIA/reharpoon/reharpoon.jpg
+kshootmania/App/songs/K-Shoot MANIA/reharpoon/reharpoon.ogg	songs/K-Shoot MANIA/reharpoon/reharpoon.ogg
+kshootmania/App/songs/K-Shoot MANIA/reharpoon/reharpoon_ch.ksh	songs/K-Shoot MANIA/reharpoon/reharpoon_ch.ksh
+kshootmania/App/songs/K-Shoot MANIA/reharpoon/reharpoon_ex.ksh	songs/K-Shoot MANIA/reharpoon/reharpoon_ex.ksh
+kshootmania/App/songs/K-Shoot MANIA/reharpoon/reharpoon_in.ksh	songs/K-Shoot MANIA/reharpoon/reharpoon_in.ksh
+kshootmania/App/songs/K-Shoot MANIA/reharpoon/reharpoon_lt.ksh	songs/K-Shoot MANIA/reharpoon/reharpoon_lt.ksh
+kshootmania/App/songs/K-Shoot MANIA/resakuramemory/aozoline.jpg	songs/K-Shoot MANIA/resakuramemory/aozoline.jpg
+kshootmania/App/songs/K-Shoot MANIA/resakuramemory/gate.lst	songs/K-Shoot MANIA/resakuramemory/gate.lst
+kshootmania/App/songs/K-Shoot MANIA/resakuramemory/resakuramemory.ogg	songs/K-Shoot MANIA/resakuramemory/resakuramemory.ogg
+kshootmania/App/songs/K-Shoot MANIA/resakuramemory/resakuramemory_ch.ksh	songs/K-Shoot MANIA/resakuramemory/resakuramemory_ch.ksh
+kshootmania/App/songs/K-Shoot MANIA/resakuramemory/resakuramemory_ex.ksh	songs/K-Shoot MANIA/resakuramemory/resakuramemory_ex.ksh
+kshootmania/App/songs/K-Shoot MANIA/resakuramemory/resakuramemory_in.ksh	songs/K-Shoot MANIA/resakuramemory/resakuramemory_in.ksh
+kshootmania/App/songs/K-Shoot MANIA/resakuramemory/resakuramemory_lt.ksh	songs/K-Shoot MANIA/resakuramemory/resakuramemory_lt.ksh
+kshootmania/App/songs/K-Shoot MANIA/time4dance/gate.lst	songs/K-Shoot MANIA/time4dance/gate.lst
+kshootmania/App/songs/K-Shoot MANIA/time4dance/time4dance.jpg	songs/K-Shoot MANIA/time4dance/time4dance.jpg
+kshootmania/App/songs/K-Shoot MANIA/time4dance/time4dance.ogg	songs/K-Shoot MANIA/time4dance/time4dance.ogg
+kshootmania/App/songs/K-Shoot MANIA/time4dance/time4dance_ch.ksh	songs/K-Shoot MANIA/time4dance/time4dance_ch.ksh
+kshootmania/App/songs/K-Shoot MANIA/time4dance/time4dance_ex.ksh	songs/K-Shoot MANIA/time4dance/time4dance_ex.ksh
+kshootmania/App/songs/K-Shoot MANIA/time4dance/time4dance_lt.ksh	songs/K-Shoot MANIA/time4dance/time4dance_lt.ksh
+kshootmania/App/ui/scene/play_prepare.noco	ui/scene/play_prepare.noco
+kshootmania/App/ui/scene/result.noco	ui/scene/result.noco
+kshootmania/App/ui/scene/select.noco	ui/scene/select.noco
+kshootmania/App/ui/scene/title.noco	ui/scene/title.noco

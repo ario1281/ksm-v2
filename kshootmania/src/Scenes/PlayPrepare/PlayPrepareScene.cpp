@@ -16,14 +16,18 @@ namespace
 
 	constexpr Duration kAutoEndTime = 3.0s;
 
-	constexpr FilePathView kPlayPrepareSceneUIFilePath = U"ui/scene/play_prepare.noco";
+	FilePath GetPlayPrepareSceneUIFilePath()
+	{
+		return FsUtils::GetResourcePath(U"ui/scene/play_prepare.noco");
+	}
 
 	std::shared_ptr<noco::Canvas> LoadPlayPrepareSceneCanvas()
 	{
-		const auto canvas = noco::Canvas::LoadFromFile(kPlayPrepareSceneUIFilePath);
+		const FilePath uiFilePath = GetPlayPrepareSceneUIFilePath();
+		const auto canvas = noco::Canvas::LoadFromFile(uiFilePath);
 		if (!canvas)
 		{
-			throw Error{ U"Failed to load '{}'"_fmt(kPlayPrepareSceneUIFilePath) };
+			throw Error{ U"Failed to load '{}'"_fmt(uiFilePath) };
 		}
 		return canvas;
 	}
@@ -96,7 +100,7 @@ Co::Task<void> PlayPrepareScene::start()
 {
 	const auto updateRunner = Co::UpdaterTask([this] { update(); }).runScoped();
 
-	m_seStream.play();
+	CommonSEAddon::Play(CommonSEType::kSelEnter);
 
 	// ハイスピード変更から一定時間経過、またはBackキーで終了
 	while (true)

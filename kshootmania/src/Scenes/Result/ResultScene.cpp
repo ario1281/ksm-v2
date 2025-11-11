@@ -8,16 +8,20 @@ namespace
 {
 	constexpr Duration kFadeDuration = 0.6s;
 
-	constexpr FilePathView kResultSceneUIFilePath = U"ui/scene/result.noco";
-
 	constexpr double kGaugeBarMaxHeight = 434.0;
+
+	FilePath GetResultSceneUIFilePath()
+	{
+		return FsUtils::GetResourcePath(U"ui/scene/result.noco");
+	}
 
 	std::shared_ptr<noco::Canvas> LoadResultSceneCanvas()
 	{
-		const auto canvas = noco::Canvas::LoadFromFile(kResultSceneUIFilePath);
+		const FilePath uiFilePath = GetResultSceneUIFilePath();
+		const auto canvas = noco::Canvas::LoadFromFile(uiFilePath);
 		if (!canvas)
 		{
-			throw Error{ U"Failed to load '{}'"_fmt(kResultSceneUIFilePath) };
+			throw Error{ U"Failed to load '{}'"_fmt(uiFilePath) };
 		}
 		return canvas;
 	}
@@ -285,6 +289,11 @@ void ResultScene::updateCanvasParams()
 	const int32 gaugePercentageInt = static_cast<int32>(m_playResult.gaugePercentage);
 	const int32 gaugeTextureIndex = static_cast<int32>(m_playResult.playOption.gaugeType) * 2 + (gaugePercentageInt < percentThreshold ? 0 : 1);
 
+	// 未判定分を含めたERROR数を計算
+	const int32 judgedCombo = m_playResult.comboStats.critical + m_playResult.comboStats.totalNear() + m_playResult.comboStats.error;
+	const int32 unjudgedCombo = m_playResult.totalCombo - judgedCombo;
+	const int32 errorCountWithUnjudged = m_playResult.comboStats.error + unjudgedCombo;
+
 	m_canvas->setParamValues({
 		{ U"songTitle", Unicode::FromUTF8(m_chartData.meta.title) },
 		{ U"artistName", Unicode::FromUTF8(m_chartData.meta.artist) },
@@ -296,7 +305,7 @@ void ResultScene::updateCanvasParams()
 		{ U"maxComboNumber", U"{:04d}"_fmt(m_playResult.maxCombo) },
 		{ U"criticalCount", U"{:04d}"_fmt(m_playResult.comboStats.critical) },
 		{ U"nearCount", U"{:04d}"_fmt(m_playResult.comboStats.totalNear()) },
-		{ U"errorCount", U"{:04d}"_fmt(m_playResult.comboStats.error) },
+		{ U"errorCount", U"{:04d}"_fmt(errorCountWithUnjudged) },
 		{ U"gaugePercentageNumber", U"{}"_fmt(static_cast<int32>(m_playResult.gaugePercentage)) },
 		{ U"gaugeTextureIndex", static_cast<double>(gaugeTextureIndex) },
 	});

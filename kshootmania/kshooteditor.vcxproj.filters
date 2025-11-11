@@ -64,14 +64,8 @@
     <Filter Include="Header Files\Scenes">
       <UniqueIdentifier>{7561fd7d-07c0-45da-baa0-f2771cce4fba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Scenes\Title">
-      <UniqueIdentifier>{06d51002-dabe-4b44-93eb-624f6e54ae0d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Scenes">
       <UniqueIdentifier>{dbad57e1-4485-46df-8f1d-e630dda5500c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scenes\Title">
-      <UniqueIdentifier>{987a87ef-3722-4f47-983d-5905a3fa05b3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\UI">
       <UniqueIdentifier>{c63c36d9-9448-45ea-8e1d-40978dc6d13d}</UniqueIdentifier>
@@ -81,12 +75,6 @@
     </Filter>
     <Filter Include="Header Files\Graphics">
       <UniqueIdentifier>{b215ceba-cfe7-4630-9b24-cab7a842dd1d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scenes\Option">
-      <UniqueIdentifier>{87a39f5a-b4ec-4d0b-8b90-243e2d40aed0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scenes\Option">
-      <UniqueIdentifier>{59aa9199-f440-4e0d-ba25-781b1fd6065e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\I18n">
       <UniqueIdentifier>{7dba25b3-c476-49d4-9050-88925f11d4c6}</UniqueIdentifier>
@@ -109,20 +97,8 @@
     <Filter Include="Source Files\UI">
       <UniqueIdentifier>{4acadc9e-0378-4a21-8de5-48077219f27e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Scenes\Select">
-      <UniqueIdentifier>{98aef201-8ee4-4515-9f5a-584739884efb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scenes\Select">
-      <UniqueIdentifier>{159d7840-d844-4bb0-88f2-ddbaee653f9e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Common">
       <UniqueIdentifier>{0297cf3a-d302-46cd-9caa-159ab033c77c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scenes\Play">
-      <UniqueIdentifier>{30c59926-793f-43f4-abe0-a718a20b2a4f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scenes\Play">
-      <UniqueIdentifier>{d59f2a32-1a45-4896-8e3e-16ab4fbcb9d6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\MusicGame">
       <UniqueIdentifier>{dbb4f7bb-8d47-488a-ba11-63b055dd32cf}</UniqueIdentifier>
@@ -205,18 +181,6 @@
     <Filter Include="Source Files\MusicGame\Camera\CamPattern">
       <UniqueIdentifier>{78bee3cc-8012-48a3-abf8-9508a3cec840}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Scenes\Select\MenuItem">
-      <UniqueIdentifier>{6812799a-0c5d-4132-9f54-6ed625c88584}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scenes\Select\MenuItem">
-      <UniqueIdentifier>{76ededc0-9b92-4a04-804b-48da597221c2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scenes\Result">
-      <UniqueIdentifier>{6dc819d2-6fe2-4be9-a007-3bc056bffe28}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scenes\Result">
-      <UniqueIdentifier>{8ea84dcd-da2b-40fa-a302-d8a83c1befce}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\HighScore">
       <UniqueIdentifier>{77e8f166-a9ca-41f8-b54d-7e1f2aea4d15}</UniqueIdentifier>
     </Filter>
@@ -241,43 +205,19 @@
     <Filter Include="Resource Files\assets\font\tektur-ksm">
       <UniqueIdentifier>{7bb2995f-307d-441b-9f3f-a74b97eb521f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Scenes\PlayPrepare">
-      <UniqueIdentifier>{3a2de163-6916-4934-90ac-17bcde62755d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scenes\PlayPrepare">
-      <UniqueIdentifier>{dfe743d5-4b37-4969-a717-f71df3e6a088}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\ThirdParty">
       <UniqueIdentifier>{2d1fe827-f360-4121-907e-1dff71649b32}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\ThirdParty\CoTaskLib">
       <UniqueIdentifier>{35ec8b6e-d771-43fd-881e-570e4f2d352c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Scenes\Common">
-      <UniqueIdentifier>{8fafb3ff-bed2-4710-973c-3f95281dc0bd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scenes\Common">
-      <UniqueIdentifier>{a681aa53-9c48-413f-9f33-8c2fec87e745}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Scenes\Title\TitleScene.cpp">
-      <Filter>Source Files\Scenes\Title</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Title\TitleMenu.cpp">
-      <Filter>Source Files\Scenes\Title</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics\TiledTexture.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\ScreenUtils.cpp">
       <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Option\OptionScene.cpp">
-      <Filter>Source Files\Scenes\Option</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Option\OptionTopMenu.cpp">
-      <Filter>Source Files\Scenes\Option</Filter>
     </ClCompile>
     <ClCompile Include="src\Input\FXButtonUpDetection.cpp">
       <Filter>Source Files\Input</Filter>
@@ -296,30 +236,6 @@
     </ClCompile>
     <ClCompile Include="src\UI\LinearMenu.cpp">
       <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Option\OptionMenuField.cpp">
-      <Filter>Source Files\Scenes\Option</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Option\OptionMenu.cpp">
-      <Filter>Source Files\Scenes\Option</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Select\BTOptionPanel.cpp">
-      <Filter>Source Files\Scenes\Select</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Select\PlayStatsPanel.cpp">
-      <Filter>Source Files\Scenes\Select</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Select\SelectScene.cpp">
-      <Filter>Source Files\Scenes\Select</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Select\SelectMenu.cpp">
-      <Filter>Source Files\Scenes\Select</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Select\SelectDifficultyMenu.cpp">
-      <Filter>Source Files\Scenes\Select</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Play\PlayScene.cpp">
-      <Filter>Source Files\Scenes\Play</Filter>
     </ClCompile>
     <ClCompile Include="src\MusicGame\Graphics\GraphicsMain.cpp">
       <Filter>Source Files\MusicGame\Graphics</Filter>
@@ -408,7 +324,7 @@
     <ClCompile Include="src\MusicGame\Audio\LaserSlamSE.cpp">
       <Filter>Source Files\MusicGame\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="src\Main.cpp">
+    <ClCompile Include="src\EditorMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\RuntimeConfig.cpp">
@@ -486,41 +402,8 @@
     <ClCompile Include="src\MusicGame\Camera\CamPattern\CamPatternSwing.cpp">
       <Filter>Source Files\MusicGame\Camera\CamPattern</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scenes\Select\SelectSongPreview.cpp">
-      <Filter>Source Files\Scenes\Select</Filter>
-    </ClCompile>
     <ClCompile Include="src\Common\IMEUtils.cpp">
       <Filter>Source Files\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Select\SelectChartInfo.cpp">
-      <Filter>Source Files\Scenes\Select</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuSongItem.cpp">
-      <Filter>Source Files\Scenes\Select\MenuItem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuAllFolderItem.cpp">
-      <Filter>Source Files\Scenes\Select\MenuItem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuDirFolderItem.cpp">
-      <Filter>Source Files\Scenes\Select\MenuItem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuFavFolderItem.cpp">
-      <Filter>Source Files\Scenes\Select\MenuItem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuSubDirSectionItem.cpp">
-      <Filter>Source Files\Scenes\Select\MenuItem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuLevelSectionItem.cpp">
-      <Filter>Source Files\Scenes\Select\MenuItem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuSongItemForLevel.cpp">
-      <Filter>Source Files\Scenes\Select\MenuItem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Result\ResultNewRecordPanel.cpp">
-      <Filter>Source Files\Scenes\Result</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Result\ResultScene.cpp">
-      <Filter>Source Files\Scenes\Result</Filter>
     </ClCompile>
     <ClCompile Include="src\HighScore\KscKey.cpp">
       <Filter>Source Files\HighScore</Filter>
@@ -540,9 +423,6 @@
     <ClCompile Include="src\MusicGame\Graphics\HUD\LaserApproachIndicator.cpp">
       <Filter>Source Files\MusicGame\Graphics\HUD</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scenes\Option\OptionKeyConfigMenu.cpp">
-      <Filter>Source Files\Scenes\Option</Filter>
-    </ClCompile>
     <ClCompile Include="src\Addon\AutoMuteAddon.cpp">
       <Filter>Source Files\Addon</Filter>
     </ClCompile>
@@ -558,12 +438,6 @@
     <ClCompile Include="src\Graphics\FontUtils.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scenes\PlayPrepare\PlayPrepareScene.cpp">
-      <Filter>Source Files\Scenes\PlayPrepare</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Common\ShowLoadingOneFrame.cpp">
-      <Filter>Source Files\Scenes\Common</Filter>
-    </ClCompile>
     <ClCompile Include="src\MusicGame\PlayResult.cpp">
       <Filter>Source Files\MusicGame</Filter>
     </ClCompile>
@@ -572,9 +446,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="App\icon.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="App\engine\texture\box-shadow\8.png">
       <Filter>Resource Files\engine\texture\box-shadow</Filter>
     </Image>
@@ -593,9 +464,12 @@
     <Image Include="App\engine\texture\box-shadow\256.png">
       <Filter>Resource Files\engine\texture\box-shadow</Filter>
     </Image>
+    <Image Include="App\icon_editor.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="App\Resource.rc">
+    <ResourceCompile Include="App\Resource_editor.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
@@ -844,26 +718,11 @@
     <ClInclude Include="src\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scenes\Title\TitleMenu.hpp">
-      <Filter>Header Files\Scenes\Title</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Title\TitleAssets.hpp">
-      <Filter>Header Files\Scenes\Title</Filter>
-    </ClInclude>
     <ClInclude Include="src\Graphics\TiledTexture.hpp">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\ScreenUtils.hpp">
       <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Option\OptionTopMenu.hpp">
-      <Filter>Header Files\Scenes\Option</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Option\OptionScene.hpp">
-      <Filter>Header Files\Scenes\Option</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Option\OptionAssets.hpp">
-      <Filter>Header Files\Scenes\Option</Filter>
     </ClInclude>
     <ClInclude Include="src\UI\LinearMenu.hpp">
       <Filter>Header Files\UI</Filter>
@@ -886,44 +745,11 @@
     <ClInclude Include="src\Ini\ConfigIni.hpp">
       <Filter>Header Files\Ini</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scenes\Option\OptionMenu.hpp">
-      <Filter>Header Files\Scenes\Option</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Option\OptionMenuField.hpp">
-      <Filter>Header Files\Scenes\Option</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Title\TitleScene.hpp">
-      <Filter>Header Files\Scenes\Title</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\BTOptionPanel.hpp">
-      <Filter>Header Files\Scenes\Select</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\PlayStatsPanel.hpp">
-      <Filter>Header Files\Scenes\Select</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\SelectScene.hpp">
-      <Filter>Header Files\Scenes\Select</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\SelectMenu.hpp">
-      <Filter>Header Files\Scenes\Select</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\SelectFolderState.hpp">
-      <Filter>Header Files\Scenes\Select</Filter>
-    </ClInclude>
     <ClInclude Include="src\Common\CommonDefines.hpp">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
     <ClInclude Include="src\UI\ArrayWithLinearMenu.hpp">
       <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\SelectDifficultyMenu.hpp">
-      <Filter>Header Files\Scenes\Select</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Play\PlayScene.hpp">
-      <Filter>Header Files\Scenes\Play</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Play\PlaySceneArgs.hpp">
-      <Filter>Header Files\Scenes\Play</Filter>
     </ClInclude>
     <ClInclude Include="src\MusicGame\Graphics\GraphicsMain.hpp">
       <Filter>Header Files\MusicGame\Graphics</Filter>
@@ -1108,47 +934,8 @@
     <ClInclude Include="src\MusicGame\Camera\CamPattern\CamPatternSwing.hpp">
       <Filter>Header Files\MusicGame\Camera\CamPattern</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scenes\Select\SelectSongPreview.hpp">
-      <Filter>Header Files\Scenes\Select</Filter>
-    </ClInclude>
     <ClInclude Include="src\Common\IMEUtils.hpp">
       <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\SelectChartInfo.hpp">
-      <Filter>Header Files\Scenes\Select</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\MenuItem\ISelectMenuItem.hpp">
-      <Filter>Header Files\Scenes\Select\MenuItem</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuSongItem.hpp">
-      <Filter>Header Files\Scenes\Select\MenuItem</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuAllFolderItem.hpp">
-      <Filter>Header Files\Scenes\Select\MenuItem</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuDirFolderItem.hpp">
-      <Filter>Header Files\Scenes\Select\MenuItem</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuSubDirSectionItem.hpp">
-      <Filter>Header Files\Scenes\Select\MenuItem</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuLevelSectionItem.hpp">
-      <Filter>Header Files\Scenes\Select\MenuItem</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuSongItemForLevel.hpp">
-      <Filter>Header Files\Scenes\Select\MenuItem</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuFavFolderItem.hpp">
-      <Filter>Header Files\Scenes\Select\MenuItem</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Result\ResultNewRecordPanel.hpp">
-      <Filter>Header Files\Scenes\Result</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Result\ResultScene.hpp">
-      <Filter>Header Files\Scenes\Result</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Result\ResultSceneArgs.hpp">
-      <Filter>Header Files\Scenes\Result</Filter>
     </ClInclude>
     <ClInclude Include="src\MusicGame\PlayModeUtil.hpp">
       <Filter>Header Files\MusicGame</Filter>
@@ -1174,9 +961,6 @@
     <ClInclude Include="src\MusicGame\Graphics\HUD\LaserApproachIndicator.hpp">
       <Filter>Header Files\MusicGame\Graphics\HUD</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scenes\Option\OptionKeyConfigMenu.hpp">
-      <Filter>Header Files\Scenes\Option</Filter>
-    </ClInclude>
     <ClInclude Include="src\Addon\AutoMuteAddon.hpp">
       <Filter>Header Files\Addon</Filter>
     </ClInclude>
@@ -1198,20 +982,8 @@
     <ClInclude Include="src\Graphics\FontUtils.hpp">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scenes\PlayPrepare\PlayPrepareScene.hpp">
-      <Filter>Header Files\Scenes\PlayPrepare</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\PlayPrepare\PlayPrepareAssets.hpp">
-      <Filter>Header Files\Scenes\PlayPrepare</Filter>
-    </ClInclude>
     <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib.hpp">
       <Filter>Header Files\ThirdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Common\ShowLoadingOneFrame.hpp">
-      <Filter>Header Files\Scenes\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Common\CommonAssets.hpp">
-      <Filter>Header Files\Scenes\Common</Filter>
     </ClInclude>
     <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib\Sequence.hpp">
       <Filter>Header Files\ThirdParty\CoTaskLib</Filter>

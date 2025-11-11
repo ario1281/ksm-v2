@@ -8,14 +8,18 @@ namespace
 	constexpr Duration kFadeDuration = 0.5s;
 	constexpr Duration kFadeDurationExit = 0.8s;
 
-	constexpr FilePathView kTitleSceneUIFilePath = U"ui/scene/title.noco";
+	FilePath GetTitleSceneUIFilePath()
+	{
+		return FsUtils::GetResourcePath(U"ui/scene/title.noco");
+	}
 
 	std::shared_ptr<noco::Canvas> LoadTitleSceneCanvas()
 	{
-		const auto canvas = noco::Canvas::LoadFromFile(kTitleSceneUIFilePath);
+		const FilePath uiFilePath = GetTitleSceneUIFilePath();
+		const auto canvas = noco::Canvas::LoadFromFile(uiFilePath);
 		if (!canvas)
 		{
-			throw Error{ U"Failed to load '{}'"_fmt(kTitleSceneUIFilePath) };
+			throw Error{ U"Failed to load '{}'"_fmt(uiFilePath) };
 		}
 		return canvas;
 	}
@@ -39,7 +43,7 @@ Co::Task<void> TitleScene::start()
 
 	// 効果音を鳴らす
 	m_bgmStream.setVolume(0.0);
-	m_enterSe.play(); // TODO: シーン遷移時に消えるのを修正
+	CommonSEAddon::Play(CommonSEType::kTitleEnter);
 }
 
 void TitleScene::update()

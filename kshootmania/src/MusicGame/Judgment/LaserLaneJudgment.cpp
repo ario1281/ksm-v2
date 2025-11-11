@@ -400,6 +400,13 @@ namespace MusicGame::Judgment
 
 		// 移動量を現在判定対象になっている直角LASERへ反映
 		auto& [laserSlamPulse, laserSlamJudgmentRef] = *m_slamJudgmentArrayCursor;
+
+		// 既に判定済みの場合は何もしない
+		if (laserSlamJudgmentRef.result() != JudgmentResult::kUnspecified)
+		{
+			return;
+		}
+
 		laserSlamJudgmentRef.addDeltaCursorX(deltaCursorX, currentTimeSec);
 
 		// 判定が決まった場合
@@ -950,8 +957,12 @@ namespace MusicGame::Judgment
 		// 直角LASERの未判定をERRORにする
 		for (auto it = m_slamJudgmentArrayCursor; it != m_slamJudgmentArray.end(); ++it)
 		{
-			const auto& [pulse, slamJudgment] = *it;
-			judgmentHandlerRef.onLaserSlamJudged(JudgmentResult::kError, pulse, m_prevTimeSec, m_prevPulse, slamJudgment.direction());
+			auto& [pulse, slamJudgment] = *it;
+			if (slamJudgment.result() == JudgmentResult::kUnspecified)
+			{
+				slamJudgment.setResult(JudgmentResult::kError);
+				judgmentHandlerRef.onLaserSlamJudged(JudgmentResult::kError, pulse, m_prevTimeSec, m_prevPulse, slamJudgment.direction());
+			}
 		}
 	}
 

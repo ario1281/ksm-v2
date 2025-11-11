@@ -9,9 +9,33 @@ namespace FsUtils
 	/// @return フルパス
 	FilePath GetFullPathInFolder(SpecialFolder folder, FilePathView relativePath);
 
-	/// @brief 実行ファイルがあるディレクトリのフルパスを取得
+	/// @brief 書き込み可能なデータディレクトリのフルパスを取得
+	/// @details macOSの場合は~/Library/Application Support/kshootmania/、それ以外は実行ファイルがあるディレクトリ
 	/// @return フルパス
-	FilePath AppDirectoryPath();
+	FilePath AppDataDirectoryPath();
+
+	/// @brief リソースディレクトリのフルパスを取得
+	/// @details macOSの場合は.app/Contents/Resources/、それ以外はAppDataDirectoryPath()と同じ
+	/// @return フルパス
+	FilePath ResourceDirectoryPath();
+
+	/// @brief scoreフォルダのフルパスを取得
+	/// @return フルパス
+	FilePath ScoreDirectoryPath();
+
+	/// @brief songsフォルダのフルパスを取得
+	/// @return フルパス
+	FilePath SongsDirectoryPath();
+
+	/// @brief デフォルトsongsフォルダ(songs_default)のフルパスを取得
+	/// @details リソースディレクトリ配下のsongs_default
+	/// @return フルパス
+	FilePath SongsDefaultDirectoryPath();
+
+	/// @brief 指定されたリソースフォルダのフルパスを取得
+	/// @param folderName リソースフォルダ名 (例: U"imgs", U"lang", U"se", U"shaders", U"ui")
+	/// @return フルパス
+	FilePath GetResourcePath(FilePathView folderName);
 
 	/// @brief ディレクトリパスからディレクトリ名を取得
 	/// @param directoryPath ディレクトリパス(ファイルパスは不可)

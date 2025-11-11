@@ -1,6 +1,7 @@
 ﻿#include "SelectMenuSongItem.hpp"
 #include "Graphics/FontUtils.hpp"
 #include "Scenes/Select/SelectDifficultyMenu.hpp"
+#include "RuntimeConfig.hpp"
 
 namespace
 {
@@ -134,8 +135,7 @@ void SelectMenuSongItem::setCanvasParamsCenter(const SelectMenuEventContext& con
 		const SelectChartInfo* pChartInfo = m_chartInfos[difficultyIdx].get();
 		const HighScoreInfo& highScoreInfo = pChartInfo->highScoreInfo();
 
-		// TODO: 一旦NORMALゲージ固定
-		const GaugeType gaugeType = GaugeType::kNormalGauge;
+		const GaugeType gaugeType = RuntimeConfig::GetGaugeType();
 
 		canvas.setParamValues({
 			{ U"center_title", pChartInfo->title() },
@@ -201,10 +201,11 @@ void SelectMenuSongItem::setCanvasParamsCenter(const SelectMenuEventContext& con
 
 void SelectMenuSongItem::setCanvasParamsTopBottom(const SelectMenuEventContext& context, noco::Canvas& canvas, int32 difficultyIdx, StringView paramNamePrefix, [[maybe_unused]] StringView nodeName) const
 {
-	// 難易度が存在しない場合は代替カーソル値を使用して譜面情報を取得
-	// (曲名・アーティスト名・ジャケット画像はカーソル難易度が存在しない場合でも常に描画する必要があるため。
-	//  なお、difficultyIdxには既にCenterの項目の代替カーソル値が適用済みである、つまりCenterの項目における存在しない難易度を選択中の場合は存在する難易度の値に置換済みである点に注意。
-	//  つまり、Centerの代替カーソル値をもとにさらに代替カーソル値を求めている)
+	// 中央で選択中の難易度がこの曲に存在するかチェック
+	// (difficultyIdxには中央の項目の代替カーソル値が適用済み)
+	const SelectChartInfo* pChartInfo = chartInfoPtr(difficultyIdx);
+
+	// 曲名・アーティスト名・ジャケット画像は常に描画するため、代替カーソル値を使用して取得
 	const int32 altDifficultyIdx = SelectDifficultyMenu::GetAlternativeCursor(difficultyIdx,
 		[this](int32 idx)
 		{
@@ -217,8 +218,18 @@ void SelectMenuSongItem::setCanvasParamsTopBottom(const SelectMenuEventContext& 
 		return;
 	}
 
-	const HighScoreInfo& highScoreInfo = pAltChartInfo->highScoreInfo();
-	const GaugeType gaugeType = GaugeType::kNormalGauge; // TODO: ゲージタイプの取得方法を確認
+	// レベルとメダルは、中央で選択中の難易度がこの曲に存在する場合のみ表示
+	int32 levelIndex = -1; // -1は非表示
+	int32 medalIndex = -1; // -1は非表示
+	int32 highScoreGradeIndex = 0; // グレードは「-」表示にするため0
+	if (pChartInfo != nullptr)
+	{
+		const HighScoreInfo& highScoreInfo = pChartInfo->highScoreInfo();
+		const GaugeType gaugeType = RuntimeConfig::GetGaugeType();
+		levelIndex = pChartInfo->level();
+		medalIndex = static_cast<int32>(highScoreInfo.medal());
+		highScoreGradeIndex = static_cast<int32>(highScoreInfo.grade(gaugeType));
+	}
 
 	canvas.setParamValues({
 		{ paramNamePrefix + U"isSong", true },
@@ -226,9 +237,9 @@ void SelectMenuSongItem::setCanvasParamsTopBottom(const SelectMenuEventContext& 
 		{ paramNamePrefix + U"isSubDirectory", false },
 		{ paramNamePrefix + U"title", pAltChartInfo->title() },
 		{ paramNamePrefix + U"artist", pAltChartInfo->artist() },
-		{ paramNamePrefix + U"levelIndex", pAltChartInfo->level() },
-		{ paramNamePrefix + U"medalIndex", static_cast<int32>(highScoreInfo.medal()) },
-		{ paramNamePrefix + U"highScoreGradeIndex", static_cast<int32>(highScoreInfo.grade(gaugeType)) },
+		{ paramNamePrefix + U"levelIndex", levelIndex },
+		{ paramNamePrefix + U"medalIndex", medalIndex },
+		{ paramNamePrefix + U"highScoreGradeIndex", highScoreGradeIndex },
 	});
 
 	// ジャケット画像を設定

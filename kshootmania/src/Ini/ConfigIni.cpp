@@ -2,27 +2,27 @@
 #include "KSMIniData.hpp"
 #include "Input/KeyConfig.hpp"
 #include "MusicGame/Scroll/HispeedSetting.hpp"
+#include "Common/FsUtils.hpp"
 
 namespace
 {
-	constexpr FilePathView kConfigIniFilePath = U"config.ini";
-
+#ifdef __APPLE__
 	constexpr StringView kDefaultConfigIni = UR"([config]
 ; キーコンフィグ
-key=83,68,75,76,29,28,81,87,79,80,32,13,27,122
+key=83,68,75,76,102,104,81,87,79,80,32,13,27,122
 key2=72,74,70,71,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 joy=-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 joy2=-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 
 ; ハイスピード設定
-hispeed=x10
+hispeed=450
 
 ; フルスクリーンの有効/無効 (1:有効 0:無効)
 fullscr=0
 ; ウィンドウのサイズ(px,px)
 windowsize=800,600
 ; フルスクリーン時の解像度(px,px)
-fullscrsize=1280,720
+fullscrsize=1920,1080
 
 ; フレームのスキップ数(0～9)
 frameskip=0
@@ -72,9 +72,9 @@ mouse_sensitivity=4
 switchlaser=0
 
 currentlang=Japanese
-currentdir=
-currentitem=0
-currentlevel=0
+currentdir=K-Shoot MANIA
+currentitem=1
+currentlevel=2
 
 showalldir=1
 closekey=0
@@ -103,25 +103,134 @@ twitter_token_secret2=
 twitter_token_secret3=
 hideitem_all=0
 ir_sign_in_cursor=0
-hispeedtype_o=1
 hispeedtype_c=0
+hispeedtype_o=1
 hispeedtype_x=0
 )";
+#else
+	constexpr StringView kDefaultConfigIni = UR"([config]
+; キーコンフィグ
+key=83,68,75,76,29,28,81,87,79,80,32,13,27,122
+key2=72,74,70,71,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+joy=-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+joy2=-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+
+; ハイスピード設定
+hispeed=450
+
+; フルスクリーンの有効/無効 (1:有効 0:無効)
+fullscr=0
+; ウィンドウのサイズ(px,px)
+windowsize=800,600
+; フルスクリーン時の解像度(px,px)
+fullscrsize=1920,1080
+
+; フレームのスキップ数(0～9)
+frameskip=0
+
+; ASSIST TICK機能の有効/無効 (1:有効 0:無効)
+assisttick=0
+
+playtype=2
+
+highquality=0
+lowquality=1
+
+globaloffset=0
+
+judgedifficulty=5
+
+bt_mode=0
+fx_mode=0
+laser_mode=0
+
+laserinput=0
+
+background=2
+backgroundmovie=1
+
+noteskin=default
+
+viewtiming=0
+
+currentplayer=PLAYER
+
+; outputの値を1にするとoutput_pathで指定したディレクトリに連番PNGが30fpsで書き出されます
+; output_pathで指定するパスの終端には\を入れ忘れないよう注意してください
+output=0
+output_path=c:\output\
+output_downscale=1
+
+disableime=3
+hidemousecursor=0
+
+mastervol=100
+
+mouse_directionx=1
+mouse_directiony=1
+mouse_sensitivity=4
+
+switchlaser=0
+
+currentlang=Japanese
+currentdir=K-Shoot MANIA
+currentitem=1
+currentlevel=2
+
+showalldir=1
+closekey=0
+
+currentver=170
+
+mselview=directory
+editor_disabledd=0
+editor_assisttick=0
+editor_reducespacing=0
+editor_zoomlanex=0
+editor_increasewinsize=1
+editor_measurepercolumn=4
+laserdelay=0
+usenumpad=0
+hispeedtype=x,C
+editor_linebrightness=0
+inputdelay=0
+editor_loopplayback=1
+
+vsync=0
+esckey_bt3=1
+twitter_token=
+twitter_token_secret1=
+twitter_token_secret2=
+twitter_token_secret3=
+hideitem_all=0
+ir_sign_in_cursor=0
+hispeedtype_c=0
+hispeedtype_o=1
+hispeedtype_x=0
+)";
+#endif
 
 	KSMIniData s_configIniData;
+
+	FilePath GetConfigIniFilePath()
+	{
+		return FileSystem::PathAppend(FsUtils::AppDataDirectoryPath(), U"config.ini");
+	}
 }
 
 void ConfigIni::Load()
 {
+	const FilePath configIniPath = GetConfigIniFilePath();
+
 	// config.iniが存在しない場合はデフォルトの内容でファイル作成
-	if (!FileSystem::IsFile(kConfigIniFilePath))
+	if (!FileSystem::IsFile(configIniPath))
 	{
-		TextWriter textWriter(kConfigIniFilePath, TextEncoding::UTF8_NO_BOM);
+		TextWriter textWriter(configIniPath, TextEncoding::UTF8_NO_BOM);
 		textWriter.write(kDefaultConfigIni);
 	}
 
 	// ファイルを読み込む
-	s_configIniData.load(kConfigIniFilePath);
+	s_configIniData.load(configIniPath);
 
 	// 旧バージョンの"hispeedtype"の値を読み込む
 	if (s_configIniData.hasValue(Key::kHispeedShownModsLegacy))
@@ -159,7 +268,7 @@ void ConfigIni::Load()
 
 void ConfigIni::Save()
 {
-	s_configIniData.save(kConfigIniFilePath);
+	s_configIniData.save(GetConfigIniFilePath());
 }
 
 bool ConfigIni::HasValue(StringView key)

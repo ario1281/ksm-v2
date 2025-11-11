@@ -12,6 +12,8 @@ namespace MusicGame::Graphics
 	constexpr Size kHighwayTextureSize = { 256, 1024 };
 	constexpr Float2 kHighwayPlaneSize = { 304.0f * 2 / 13, 936.0f * 13 / 20 };
 
+	constexpr float kJdglineYFromBottom = 14.0f;
+
 	constexpr Size kHighwayTextureSizeWide = { kHighwayTextureSize.x * kLaserXScaleWide, kHighwayTextureSize.y };
 	constexpr Float2 kHighwayPlaneSizeWide = { kHighwayPlaneSize.x * kLaserXScaleWide, kHighwayPlaneSize.y };
 

@@ -36,6 +36,12 @@ namespace MusicGame::Scroll
 		/// @return Y座標
 		int32 getPositionY(kson::Pulse pulse) const;
 
+		/// @brief 相対Pulse値をピクセル高さに変換する
+		/// @param basePulse 基準となるPulse位置(scroll_speed計算に使用)
+		/// @param relPulse 相対Pulse値
+		/// @return ピクセル高さ
+		int32 relPulseToPixelHeight(kson::Pulse basePulse, kson::RelPulse relPulse) const;
+
 		/// @brief HighwayScrollへの参照を返す
 		/// @return HighwayScrollへの参照
 		const HighwayScroll& highwayScroll() const;
@@ -109,6 +115,13 @@ namespace MusicGame::Scroll
 		/// @param hispeedSetting ハイスピード設定
 		/// @return Y座標
 		int32 getPositionY(kson::Pulse pulse, const kson::BeatInfo& beatInfo, const kson::TimingCache& timingCache, const GameStatus& gameStatus) const;
+
+		/// @brief 相対Pulse値をピクセル高さに変換する
+		/// @param basePulse 基準となるPulse位置(scroll_speed計算に使用)
+		/// @param relPulse 相対Pulse値
+		/// @param beatInfo kson.beat
+		/// @return ピクセル高さ
+		int32 relPulseToPixelHeight(kson::Pulse basePulse, kson::RelPulse relPulse, const kson::BeatInfo& beatInfo) const;
 
 		/// @brief ハイスピード設定を返す
 		/// @return ハイスピード設定

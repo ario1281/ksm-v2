@@ -1,5 +1,6 @@
 ﻿#include "SelectMenuSongItemForLevel.hpp"
 #include "Graphics/FontUtils.hpp"
+#include "RuntimeConfig.hpp"
 
 namespace
 {
@@ -101,7 +102,7 @@ void SelectMenuSongItemForLevel::setCanvasParamsCenter(const SelectMenuEventCont
 	}
 
 	const HighScoreInfo& highScoreInfo = m_chartInfo->highScoreInfo();
-	const GaugeType gaugeType = GaugeType::kNormalGauge;
+	const GaugeType gaugeType = RuntimeConfig::GetGaugeType();
 
 	canvas.setParamValues({
 		{ U"center_difficultyCursorState", U"difficulty{}"_fmt(m_difficultyIdx) },
@@ -154,7 +155,7 @@ void SelectMenuSongItemForLevel::setCanvasParamsTopBottom(const SelectMenuEventC
 	}
 
 	const HighScoreInfo& highScoreInfo = m_chartInfo->highScoreInfo();
-	const GaugeType gaugeType = GaugeType::kNormalGauge;
+	const GaugeType gaugeType = RuntimeConfig::GetGaugeType();
 
 	canvas.setParamValues({
 		{ paramNamePrefix + U"isSong", true },

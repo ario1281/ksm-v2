@@ -150,10 +150,15 @@ namespace MusicGame::Scroll
 
 					kson::Pulse segmentStartPulse;
 					double startSpeed;
-					if (itr != scrollSpeed.end() && itr->first > notePulse)
+					if (itr == scrollSpeed.begin() && itr->first > notePulse)
+					{
+						// scroll_speedの最初の変更点より前の区間
+						segmentStartPulse = notePulse;
+						startSpeed = itr->second.v.v;
+					}
+					else if (itr != scrollSpeed.end() && itr->first > notePulse)
 					{
 						segmentStartPulse = itr->first;
-						// 区間の開始点での速度はv.vfではなくv.v
 						startSpeed = itr->second.v.v;
 					}
 					else
@@ -206,6 +211,11 @@ namespace MusicGame::Scroll
 	int32 HighwayScrollContext::getPositionY(kson::Pulse pulse) const
 	{
 		return m_pHighwayScroll->getPositionY(pulse, *m_pBeatInfo, *m_pTimingCache, *m_pGameStatus);
+	}
+
+	int32 HighwayScrollContext::relPulseToPixelHeight(kson::Pulse basePulse, kson::RelPulse relPulse) const
+	{
+		return m_pHighwayScroll->relPulseToPixelHeight(basePulse, relPulse, *m_pBeatInfo);
 	}
 
 	const HighwayScroll& HighwayScrollContext::highwayScroll() const
@@ -285,9 +295,17 @@ namespace MusicGame::Scroll
 		assert(m_hispeedFactor != 0.0 && "HighwayScroll::update() must be called at least once before HighwayScroll::getPositionY()");
 
 		const double relPulseEquivalent = getRelPulseEquvalent(pulse, beatInfo, timingCache, gameStatus);
-		return Graphics::kHighwayTextureSize.y - static_cast<int32>(relPulseEquivalent * kBasePixels * m_hispeedFactor / kson::kResolution4);
+		return static_cast<int32>(Graphics::kHighwayTextureSize.y - Graphics::kJdglineYFromBottom) - static_cast<int32>(relPulseEquivalent * kBasePixels * m_hispeedFactor / kson::kResolution4);
 	}
-	
+
+	int32 HighwayScroll::relPulseToPixelHeight(kson::Pulse basePulse, kson::RelPulse relPulse, const kson::BeatInfo& beatInfo) const
+	{
+		assert(m_hispeedFactor != 0.0 && "HighwayScroll::update() must be called at least once before HighwayScroll::relPulseToPixelHeight()");
+
+		const double relPulseEquivalent = CalcScrollSpeedAdjustedRelPulse(basePulse + relPulse, static_cast<double>(basePulse), beatInfo.scrollSpeed);
+		return static_cast<int32>(relPulseEquivalent * kBasePixels * m_hispeedFactor / kson::kResolution4);
+	}
+
 	const HispeedSetting& HighwayScroll::hispeedSetting() const
 	{
 		return m_hispeedSetting;

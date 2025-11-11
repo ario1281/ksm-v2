@@ -30,8 +30,7 @@ namespace AssetManagement
 		void RegisterTextureAssets()
 		{
 			// "imgs"ディレクトリ以下の全ファイルを登録
-			constexpr FilePathView kImgPath = U"imgs";
-			const FilePath imgFullPath = FileSystem::FullPath(kImgPath);
+			const FilePath imgFullPath = FsUtils::GetResourcePath(U"imgs");
 			for (const FilePath& path : FileSystem::DirectoryContents(imgFullPath, Recursive::Yes))
 			{
 				TextureAsset::Register(FileSystem::RelativePath(path, imgFullPath), path);
@@ -41,8 +40,7 @@ namespace AssetManagement
 		void RegisterAudioAssets()
 		{
 			// "se"ディレクトリ以下の全ファイルを登録
-			constexpr FilePathView kSePath = U"se";
-			const FilePath seFullPath = FileSystem::FullPath(kSePath);
+			const FilePath seFullPath = FsUtils::GetResourcePath(U"se");
 			for (const FilePath& path : FileSystem::DirectoryContents(seFullPath, Recursive::Yes))
 			{
 				AudioAsset::Register(FileSystem::RelativePath(path, seFullPath), path);

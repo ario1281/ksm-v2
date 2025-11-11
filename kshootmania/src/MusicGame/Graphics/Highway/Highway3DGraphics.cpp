@@ -14,8 +14,6 @@ namespace MusicGame::Graphics
 		// (値の根拠は不明だが、KSMv1でこの値が使用されていたためそのまま持ってきている)
 		constexpr float kCameraToJdglineRadians = -0.6125f;
 
-		constexpr float kJdglineYFromBottom = 14.0f;
-
 		constexpr float kPlaneHeight = kHighwayPlaneSize.y;
 		constexpr float kPlaneHeightBelowJdgline = kPlaneHeight * kJdglineYFromBottom / kHighwayTextureSize.y;
 		constexpr float kPlaneHeightAboveJdgline = kPlaneHeight - kPlaneHeightBelowJdgline;
@@ -29,13 +27,25 @@ namespace MusicGame::Graphics
 		constexpr Vec2 kShineEffectPositionDiff = { 0.0, 300.0 };
 		constexpr double kShineEffectLoopSec = 0.2;
 
-		constexpr int32 kMaxNumBarLines = 2;
+		constexpr int32 kMaxNumBarLines = 50;
 		constexpr Size kBarLineTextureSize = { 192, 16 };
 		constexpr Size kBarLineTextureHalfSize = { kBarLineTextureSize.x / 2, kBarLineTextureSize.y };
 		constexpr Vec2 kBarLinePositionOffset = { kHighwayTextureWideCenterX - kBarLineTextureHalfSize.x, -14 };
 		constexpr ColorF kBarLineColor = Color{ 110 };
 
-		constexpr double kHighwayRotationXByCamera = ToRadians(60.0);
+		// レーンが平置きからどれだけ起き上がっているかの角度
+		constexpr int32 kHighwayRotationXByCameraDeg = 60;
+
+		// レーン反転判定の角度しきい値
+		constexpr int32 kFlipAngleLowerBound = 180 - kHighwayRotationXByCameraDeg;
+		constexpr int32 kFlipAngleUpperBound = 360 - kHighwayRotationXByCameraDeg;
+
+		// 角度を0〜360度に正規化
+		[[nodiscard]]
+		double NormalizeDegrees(double degrees)
+		{
+			return MathUtils::WrappedFmod(degrees, 360.0);
+		}
 	}
 
 	Highway3DGraphics::Highway3DGraphics()
@@ -90,8 +100,10 @@ namespace MusicGame::Graphics
 			m_meshData.vertices[2].pos.z = -kPlaneHeightAboveJdgline / 2 - kPlaneHeightBelowJdgline / 2 * cosRotationX - scaledZoomBottom * 100 * Cos(kCameraToJdglineRadians) * kPlaneHeight / kPlaneHeightAboveJdgline; // 手前の辺 手前方向(v1とZ軸の向きが逆なので符号を反転)
 			m_meshData.vertices[3].pos.z = m_meshData.vertices[2].pos.z;
 
-			const float rotationXMod = MathUtils::WrappedFmod(rotationX, Math::TwoPiF);
-			const bool shouldFlipTriangles = Math::Pi - kHighwayRotationXByCamera <= rotationXMod && rotationXMod < Math::TwoPiF - kHighwayRotationXByCamera;
+			// 背面カリングを使用しているため、反転時は頂点の順序を入れ替える
+			// v1と同様に整数角度で判定(zoom_top=-400の境界条件を変えないため浮動小数点数で判定しない)
+			const int32 rotationXDeg = static_cast<int32>(NormalizeDegrees(ToDegrees(rotationX)));
+			const bool shouldFlipTriangles = kFlipAngleLowerBound <= rotationXDeg && rotationXDeg < kFlipAngleUpperBound;
 			if (shouldFlipTriangles != m_trianglesFlipped)
 			{
 				m_meshData.flipTriangles();
@@ -146,11 +158,12 @@ namespace MusicGame::Graphics
 				{
 					const kson::Pulse pulse = kson::MeasureIdxToPulse(measureIndex, chartData.beat, timingCache);
 					const int32 pulsePositionY = highwayScrollContext.getPositionY(pulse);
-					if (pulsePositionY >= kHighwayTextureSize.y)
+					const int32 actualPositionY = static_cast<int32>(kBarLinePositionOffset.y) + pulsePositionY;
+					if (actualPositionY >= kHighwayTextureSize.y)
 					{
 						continue;
 					}
-					if (pulsePositionY < 0)
+					if (actualPositionY + kBarLineTextureSize.y < 0)
 					{
 						break;
 					}

@@ -394,15 +394,15 @@ namespace MusicGame::Audio
 
 	void BGM::updateAudioEffectLaser(bool bypass, const ksmaudio::AudioEffect::Status& status, const std::optional<std::size_t>& activeAudioEffectIdx)
 	{
+		// メイン音源へのLASERエフェクト適用
 		m_pAudioEffectBusLaser->setBypass(bypass);
 		m_pAudioEffectBusLaser->updateByLaser(
 			status,
 			activeAudioEffectIdx);
 
-		// アクティブなSwitchAudioストリームにも同じLASERエフェクトを適用
-		if (m_activeSwitchAudioIdxFX.has_value())
+		// FX用SwitchAudio音源へのLASERエフェクト適用
+		for (auto& switchAudio : m_switchAudioStreamsFX)
 		{
-			auto& switchAudio = m_switchAudioStreamsFX[m_activeSwitchAudioIdxFX.value()];
 			switchAudio->pAudioEffectBusLaser->setBypass(bypass);
 
 			// SwitchAudioストリームには標準LASERエフェクト(peak,hpf,lpf,bitc)のみ登録されているので、インデックスを変換
@@ -416,7 +416,7 @@ namespace MusicGame::Audio
 				convertedIdx);
 		}
 
-		// f音源にもLASERエフェクトを適用
+		// レガシーf音源へのLASERエフェクト適用
 		m_legacyAudioFPStream.updateAudioEffectLaser(bypass, status, activeAudioEffectIdx, *m_pAudioEffectBusLaser);
 	}
 

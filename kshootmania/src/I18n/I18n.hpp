@@ -3,7 +3,7 @@
 // Multi-language support
 namespace I18n
 {
-	constexpr FilePathView kDirectoryPath = U"lang";
+	FilePath GetDirectoryPath();
 
 	Array<String> GetAvailableLanguageList();
 

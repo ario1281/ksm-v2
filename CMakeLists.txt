@@ -1,4 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
+
+# macOS: x86_64 build for Siv3D 0.6.x compatibility
+if(APPLE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version" FORCE)
+    set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE INTERNAL "" FORCE)
+endif()
+
 project(kshootmania)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -8,14 +15,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # macOSのみカスタムFindSiv3D.cmakeを使用
 if(APPLE)
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/kshootmania/ThirdParty/NocoUI/cmake/macos")
-endif()
-
-# macOS: x86_64 build for Siv3D 0.6.x compatibility
-if(APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
     set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++2a")
     set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
-    set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE INTERNAL "" FORCE)
     
     if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.19.2")
         set(CMAKE_APPLE_SILICON_PROCESSOR "x86_64")

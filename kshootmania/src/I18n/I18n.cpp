@@ -49,10 +49,16 @@ namespace
 	}
 }
 
+FilePath I18n::GetDirectoryPath()
+{
+	return FsUtils::GetResourcePath(U"lang");
+}
+
 Array<String> I18n::GetAvailableLanguageList()
 {
+	const FilePath directoryPath = GetDirectoryPath();
 	Array<String> langList;
-	for (const auto& path : FileSystem::DirectoryContents(kDirectoryPath, Recursive::No))
+	for (const auto& path : FileSystem::DirectoryContents(directoryPath, Recursive::No))
 	{
 		if (FileSystem::Extension(path) == U"txt")
 		{
@@ -69,12 +75,13 @@ I18n::StandardLanguage I18n::CurrentLanguage()
 
 void I18n::LoadLanguage(StringView name, StringView fallback)
 {
-	String path = U"{}/{}.txt"_fmt(kDirectoryPath, name);
+	const FilePath directoryPath = GetDirectoryPath();
+	String path = U"{}/{}.txt"_fmt(directoryPath, name);
 	s_currentLanguage = ::ConvertLanguageNameToStandardLanguage(name);
 	if (!FileSystem::Exists(path))
 	{
 		Print << U"Warning: Could not find language file '{}'!"_fmt(path);
-		path = U"{}/{}.txt"_fmt(kDirectoryPath, fallback);
+		path = U"{}/{}.txt"_fmt(directoryPath, fallback);
 		s_currentLanguage = ::ConvertLanguageNameToStandardLanguage(fallback);
 		if (!FileSystem::Exists(path))
 		{

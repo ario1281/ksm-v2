@@ -20,6 +20,9 @@ void KSMPlatformMacOS_StopBlockingIMEKeys();
 // テキスト編集中かどうかを設定(テキスト編集中はIMEキーをブロックしない)
 void KSMPlatformMacOS_SetIsEditingText(bool isEditing);
 
+// ディレクトリを再帰的にコピー(成功時true, 失敗時false)
+bool KSMPlatformMacOS_CopyDirectory(const char* srcPath, const char* dstPath);
+
 #ifdef __cplusplus
 }
 #endif

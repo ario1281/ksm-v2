@@ -10,6 +10,7 @@
 #include "Common/MathUtils.hpp"
 #include "Common/FsUtils.hpp"
 #include "Addon/AutoMuteAddon.hpp"
+#include "Addon/CommonSEAddon.hpp"
 #include "Graphics/ScreenUtils.hpp"
 #include "Graphics/TiledTexture.hpp"
 #include "UI/LinearMenu.hpp"
