@@ -1239,7 +1239,7 @@ bool SelectMenu::openDirectoryWithLevelSort(FilePathView directoryPath)
 				// サブディレクトリ内の.kshファイルを走査
 				const Array<FilePath> chartFiles = FileSystem::DirectoryContents(subDir, Recursive::No).filter([](FilePathView p)
 				{
-					return FileSystem::Extension(p) == kKSHExtension || FileSystem::Extension(p) == kKSONExtension;
+					return (FileSystem::Extension(p) == kKSHExtension || FileSystem::Extension(p) == kKSONExtension);
 				});
 
 				fnProcessChartFiles(subDir, chartFiles);
@@ -1248,7 +1248,7 @@ bool SelectMenu::openDirectoryWithLevelSort(FilePathView directoryPath)
 			// songDirectory直下の.kshファイルも走査
 			const Array<FilePath> chartFiles = FileSystem::DirectoryContents(songDirectory, Recursive::No).filter([](FilePathView p)
 			{
-				return FileSystem::Extension(p) == kKSHExtension || FileSystem::Extension(p) == kKSONExtension;
+				return (FileSystem::Extension(p) == kKSHExtension || FileSystem::Extension(p) == kKSONExtension);
 			});
 
 			fnProcessChartFiles(songDirectory, chartFiles);
@@ -1532,7 +1532,7 @@ bool SelectMenu::openAllFolderWithLevelSort()
 				// サブディレクトリ内の.kshファイルを走査
 				const Array<FilePath> chartFiles = FileSystem::DirectoryContents(subDir, Recursive::No).filter([](FilePathView p)
 				{
-					return FileSystem::Extension(p) == kKSHExtension || FileSystem::Extension(p) == kKSONExtension;
+					return (FileSystem::Extension(p) == kKSHExtension || FileSystem::Extension(p) == kKSONExtension);
 				});
 
 				fnProcessChartFiles(subDir, chartFiles);
@@ -1541,7 +1541,7 @@ bool SelectMenu::openAllFolderWithLevelSort()
 			// songDirectory直下の.kshファイルも走査
 			const Array<FilePath> chartFiles = FileSystem::DirectoryContents(songDirectory, Recursive::No).filter([](FilePathView p)
 			{
-				return FileSystem::Extension(p) == kKSHExtension || FileSystem::Extension(p) == kKSONExtension;
+				return (FileSystem::Extension(p) == kKSHExtension || FileSystem::Extension(p) == kKSONExtension);
 			});
 
 			fnProcessChartFiles(songDirectory, chartFiles);
