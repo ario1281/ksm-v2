@@ -3,13 +3,17 @@
 #include "Scenes/Title/TitleScene.hpp"
 #include "Ini/ConfigIni.hpp"
 #include "Common/FsUtils.hpp"
+#include "Common/Encoding.hpp"
 #include "RuntimeConfig.hpp"
 #include "Input/PlatformKey.hpp"
+#include "MenuItem/ISelectMenuItem.hpp"
+#include "SelectChartInfo.hpp"
 
 namespace
 {
 	constexpr Duration kFadeInDuration = 0.25s;
 	constexpr Duration kFadeOutDuration = 0.4s;
+	constexpr Duration kStartKeyLongPressDuration = 0.75s;
 
 	FilePath GetSelectSceneUIFilePath()
 	{
@@ -50,6 +54,80 @@ namespace
 		});
 
 		return playerNames;
+	}
+
+	FilePath GetFavoriteFilePath(int32 favoriteNumber)
+	{
+		const FilePath songsDir = FsUtils::SongsDirectoryPath();
+		return FileSystem::PathAppend(songsDir, U"Favorite{}.fav"_fmt(favoriteNumber));
+	}
+
+	bool RemoveFromFavorite(StringView favoriteName, StringView songPath)
+	{
+		const FilePath songsDir = FsUtils::SongsDirectoryPath();
+		const FilePath favPath = FileSystem::PathAppend(songsDir, favoriteName + U".fav");
+
+		if (!FileSystem::Exists(favPath))
+		{
+			return false;
+		}
+
+		// 既存の内容を読み込み
+		Array<String> lines = Encoding::ReadTextFileLinesShiftJISOrUTF8BasedOnBOM(favPath);
+
+		// 削除するパスを正規化
+		FilePath songFullPath = FileSystem::PathAppend(songsDir, songPath);
+		songFullPath.replace(U"\\", U"/");
+		if (songFullPath.ends_with(U'/'))
+		{
+			songFullPath.pop_back();
+		}
+
+		// 該当行を削除
+		bool removed = false;
+		for (auto it = lines.begin(); it != lines.end(); )
+		{
+			// .fav内にあるパスを正規化
+			FilePath lineFullPath = FileSystem::PathAppend(songsDir, *it);
+			lineFullPath.replace(U"\\", U"/");
+			if (lineFullPath.ends_with(U'/'))
+			{
+				lineFullPath.pop_back();
+			}
+
+			// 一致する行が見つかれば削除
+			if (lineFullPath == songFullPath)
+			{
+				it = lines.erase(it);
+				removed = true;
+				break;
+			}
+			else
+			{
+				++it;
+			}
+		}
+
+		if (!removed)
+		{
+			return false;
+		}
+
+		if (lines.isEmpty())
+		{
+			// 空になった場合は.favファイルごと削除
+			FileSystem::Remove(favPath);
+			return true;
+		}
+
+		// UTF-8 BOM付きで保存
+		TextWriter writer(favPath, TextEncoding::UTF8_WITH_BOM);
+		for (const auto& line : lines)
+		{
+			writer.writeln(line);
+		}
+
+		return true;
 	}
 }
 
@@ -151,6 +229,8 @@ SelectScene::SelectScene()
 	, m_fxButtonUpDetection({ KeyShift })
 	, m_btOptionPanel(m_canvas)
 	, m_playStatsPanel(m_canvas)
+	, m_favoriteAddDialog(m_canvas)
+	, m_favoriteRemoveDialog(m_canvas)
 {
 	AutoMuteAddon::SetEnabled(true);
 
@@ -163,6 +243,12 @@ SelectScene::SelectScene()
 
 	refreshCanvasPlayerName();
 
+	// 最初からStartボタンが押されている場合は離した時の入力を無視
+	if (KeyConfig::Pressed(KeyConfig::kStart))
+	{
+		m_ignoreNextStartUp = true;
+	}
+
 	if (m_menu.empty())
 	{
 		System::MessageBoxOK(U"譜面データが見つかりませんでした。", MessageBoxStyle::Warning);
@@ -173,6 +259,14 @@ SelectScene::SelectScene()
 
 void SelectScene::update()
 {
+	// ダイアログ表示中はダイアログ更新のみ実行
+	if (anyDialogVisible())
+	{
+		updateDialogs();
+		m_canvas->update();
+		return;
+	}
+
 	// BTオプションパネル更新
 	const bool needsHighScoreReload = m_btOptionPanel.update(m_menu.getCurrentChartStdBPM());
 	if (needsHighScoreReload)
@@ -184,9 +278,8 @@ void SelectScene::update()
 	// プレイ統計パネル更新
 	m_playStatsPanel.update(m_menu.getCurrentHighScoreInfo(), RuntimeConfig::GetGaugeType());
 
-	// いずれかのパネルが表示中の場合、オーバーレイを表示
+	// いずれかのパネルが表示中かチェック
 	const bool anyPanelVisible = m_btOptionPanel.isVisible() || m_playStatsPanel.isVisible();
-	m_canvas->setParamValue(U"overlay_visible", anyPanelVisible);
 
 	// Backキー処理(パネル表示中でも有効にする)
 	const bool closeFolder = m_menu.isFolderOpen() && KeyConfig::Down(m_folderCloseButton/* ← kBackspace・kBackのいずれかが入っている */);
@@ -227,23 +320,34 @@ void SelectScene::update()
 
 	updatePlayerSwitching();
 
+	// Enter長押し検出
+	updateStartKeyLongPress();
+
 	// 各種操作と干渉しないようCtrl・Shiftキー押下中は無視
 	if (!PlatformKey::KeyCommandControl.pressed() && !KeyShift.pressed())
 	{
 		m_menu.update();
 	}
 
-	// スタートボタンを押した場合、フォルダを開く または プレイ開始
+	// スタートボタンを離した場合、フォルダを開く または プレイ開始
 	// Shift+スタートボタンの場合はオートプレイ開始
-	if (KeyConfig::Down(KeyConfig::kStart))
+	if (KeyConfig::Up(KeyConfig::kStart))
 	{
-		if (KeyShift.pressed())
+		if (m_ignoreNextStartUp)
 		{
-			m_menu.decideAutoPlay();
+			// ダイアログ決定用に押下したStartボタンが多重反応しないよう無視
+			m_ignoreNextStartUp = false;
 		}
 		else
 		{
-			m_menu.decide();
+			if (KeyShift.pressed())
+			{
+				m_menu.decideAutoPlay();
+			}
+			else
+			{
+				m_menu.decide();
+			}
 		}
 	}
 
@@ -287,6 +391,149 @@ void SelectScene::update()
 	updateAlphabetJump();
 
 	m_canvas->update();
+}
+
+void SelectScene::updateStartKeyLongPress()
+{
+	const bool startKeyPressed = KeyConfig::Pressed(KeyConfig::kStart);
+	const bool startKeyDown = KeyConfig::Down(KeyConfig::kStart);
+
+	if (startKeyDown)
+	{
+		m_startKeyPressStopwatch.restart();
+	}
+
+	if (m_startKeyPressStopwatch.isRunning() && startKeyPressed)
+	{
+		if (m_startKeyPressStopwatch.elapsed() >= kStartKeyLongPressDuration)
+		{
+			// お気に入り登録可能な項目が選択されているかチェック
+			if (m_menu.empty() || m_menu.cursorMenuItem().isFolder())
+			{
+				m_startKeyPressStopwatch.reset();
+				return;
+			}
+
+			if (m_menu.folderState().folderType == SelectFolderState::kFavorite)
+			{
+				// 削除ダイアログ(お気に入り内の場合)
+				m_favoriteRemoveDialog.show();
+			}
+			else
+			{
+				// 追加ダイアログ
+				m_favoriteAddDialog.show();
+			}
+
+			m_startKeyPressStopwatch.reset();
+		}
+	}
+	else if (!startKeyPressed)
+	{
+		m_startKeyPressStopwatch.reset();
+	}
+}
+
+void SelectScene::updateDialogs()
+{
+	if (m_favoriteAddDialog.isVisible())
+	{
+		m_favoriteAddDialog.update();
+
+		// Startボタンで決定
+		if (KeyConfig::Down(KeyConfig::kStart))
+		{
+			// 楽曲の相対パス
+			const FilePath songFullPath{ m_menu.cursorMenuItem().fullPath() };
+			const FilePath songsDir = FsUtils::SongsDirectoryPath();
+
+			// ゲーム上では楽曲単位での登録のみ対応するため、単一譜面の場合は親フォルダを取得
+			FilePath songFolderFullPath = songFullPath;
+			if (!FileSystem::IsDirectory(songFullPath))
+			{
+				songFolderFullPath = FileSystem::ParentPath(songFullPath);
+			}
+
+			const String songRelativePath = FileSystem::RelativePath(songFolderFullPath, songsDir);
+
+			// .favファイルが新規作成される場合、他フォルダ表示の更新が必要
+			// (ファイル存在判定するため、お気に入り追加実行より前で判定する必要があるので注意)
+			const bool needsReloadAfterAdd =
+				ConfigIni::GetBool(ConfigIni::Key::kAlwaysShowOtherFolders) &&
+				!FileSystem::Exists(GetFavoriteFilePath(m_favoriteAddDialog.selectedNumber()));
+
+			// お気に入り追加実行
+			const bool added = m_favoriteAddDialog.addToFavorite(songRelativePath);
+
+			if (added && needsReloadAfterAdd)
+			{
+				m_menu.reloadCurrentDirectory();
+			}
+
+			m_favoriteAddDialog.hide();
+			m_ignoreNextStartUp = true;
+		}
+		// Backボタンでキャンセル
+		else if (KeyConfig::Down(KeyConfig::kBack))
+		{
+			m_favoriteAddDialog.hide();
+		}
+	}
+	else if (m_favoriteRemoveDialog.isVisible())
+	{
+		m_favoriteRemoveDialog.update();
+
+		// Startボタンで決定
+		if (KeyConfig::Down(KeyConfig::kStart))
+		{
+			if (m_favoriteRemoveDialog.selectedChoice() == FavoriteRemoveChoice::Yes)
+			{
+				// お気に入り名を取得
+				// (例: "?Favorite1" → "Favorite1")
+				String favoriteName = m_menu.folderState().fullPath;
+				if (favoriteName.starts_with(U'?'))
+				{
+					favoriteName = favoriteName.substr(1);
+				}
+
+				// 楽曲の相対パスを取得
+				const FilePath songFullPath{ m_menu.cursorMenuItem().fullPath() };
+				const FilePath songsDir = FsUtils::SongsDirectoryPath();
+				const String songRelativePath = FileSystem::RelativePath(songFullPath, songsDir);
+
+				// お気に入り削除実行
+				const bool fileRemoved = RemoveFromFavorite(favoriteName, songRelativePath);
+
+				if (fileRemoved)
+				{
+					// .favファイルが削除された場合はフォルダを閉じる
+					const FilePath favPath = FileSystem::PathAppend(songsDir, favoriteName + U".fav");
+					if (!FileSystem::Exists(favPath))
+					{
+						m_menu.closeFolder(PlaySeYN::No);
+					}
+					else
+					{
+						// リロード
+						m_menu.reloadCurrentDirectory(RefreshSongPreviewYN::Yes);
+					}
+				}
+			}
+
+			m_favoriteRemoveDialog.hide();
+			m_ignoreNextStartUp = true;
+		}
+		// Backボタンでキャンセル
+		else if (KeyConfig::Down(KeyConfig::kBack))
+		{
+			m_favoriteRemoveDialog.hide();
+		}
+	}
+}
+
+bool SelectScene::anyDialogVisible() const
+{
+	return m_favoriteAddDialog.isVisible() || m_favoriteRemoveDialog.isVisible();
 }
 
 void SelectScene::draw() const

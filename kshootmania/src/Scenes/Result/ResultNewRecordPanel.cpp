@@ -34,14 +34,14 @@ bool ResultNewRecordPanel::isVisible() const
 
 void ResultNewRecordPanel::startDisplay()
 {
-	m_canvas->setParamValue(U"overlay_visible", true);
+	m_canvas->setParamValue(U"overlay_newRecordPanelVisible", true);
 	m_canvas->setTweenActiveByTag(U"out_newRecord", false);
 	m_canvas->setTweenActiveByTag(U"in_newRecord", true);
 }
 
 void ResultNewRecordPanel::startRedisplay()
 {
-	m_canvas->setParamValue(U"overlay_visible", true);
+	m_canvas->setParamValue(U"overlay_newRecordPanelVisible", true);
 	m_canvas->setTweenActiveByTag(U"out_newRecord", false);
 	m_canvas->setTweenActiveByTag(U"inAgain_newRecord", true);
 }
@@ -63,6 +63,6 @@ Co::Task<void> ResultNewRecordPanel::waitForFadeOut()
 {
 	co_await NocoUtils::WaitForTweenByTag(m_canvas, U"out_newRecord");
 
-	m_canvas->setParamValue(U"overlay_visible", false);
+	m_canvas->setParamValue(U"overlay_newRecordPanelVisible", false);
 	m_isVisible = false;
 }

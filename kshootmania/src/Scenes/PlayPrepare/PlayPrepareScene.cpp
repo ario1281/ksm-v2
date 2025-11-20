@@ -46,12 +46,27 @@ namespace
 	{
 		ConfigIni::SetString(ConfigIni::Key::kHispeed, MusicGame::HispeedUtils::ToConfigStringValue(hispeedSetting));
 	}
+
+	kson::ChartData LoadChartData(const FilePathView filePath)
+	{
+		const auto extension = FileSystem::Extension(filePath);
+		if (extension == kKSHExtension)
+		{
+			return kson::LoadKSHChartData(filePath.narrow());
+		}
+		else if (extension == kKSONExtension)
+		{
+			return kson::LoadKSONChartData(filePath.narrow());
+		}
+
+		return kson::ChartData();
+	}
 }
 
 PlayPrepareScene::PlayPrepareScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay)
 	: m_chartFilePath(chartFilePath)
 	, m_isAutoPlay(isAutoPlay)
-	, m_chartData(kson::LoadKSHChartData(chartFilePath.narrow()))
+	, m_chartData(LoadChartData(chartFilePath))
 	, m_canvas(LoadPlayPrepareSceneCanvas())
 	, m_hispeedMenu(ConfigIni::LoadAvailableHispeedTypes(), LoadHispeedSettingFromConfigIni(), kson::GetEffectiveStdBPM(m_chartData), GetInitialBPM(m_chartData))
 	, m_highwayScroll(m_chartData)

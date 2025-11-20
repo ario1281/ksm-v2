@@ -91,11 +91,11 @@ namespace I18n
 	enum class Play : int32
 	{
 		kErrorFirstMeasureNotFound = 1,
-		kErrorUnspecified = 2,
-		kDummyTitleChartNotFoundInCourse = 3,
-		kErrorSomeChartMissingInCourse = 4,
-		kErrorLatestVersionRequiredForCourse = 5,
-		kErrorChartInCourseLoadFailed = 6,
+		kErrorUnspecified = 5,
+		kDummyTitleChartNotFoundInCourse = 10,
+		kErrorChartFileNotFound = 11,
+		kErrorLatestVersionRequiredForCourse = 12,
+		kErrorSomeChartMissingInCourse = 13,
 		kAutoSyncSaveConfirm1 = 50,
 		kAutoSyncSaveConfirm2 = 51,
 		kAutoSyncSaveConfirmYes = 52,

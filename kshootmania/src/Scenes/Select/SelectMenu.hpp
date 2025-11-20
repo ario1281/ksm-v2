@@ -28,6 +28,7 @@ struct SelectMenuEventContext
 	std::function<void(FilePath, MusicGame::IsAutoPlayYN)> fnMoveToPlayScene;
 	std::function<void(FilePath)> fnOpenDirectory;
 	std::function<void()> fnOpenAllFolder;
+	std::function<void(FilePath)> fnOpenFavoriteFolder;
 	std::function<void()> fnCloseFolder;
 	std::function<const Texture&(FilePathView)> fnGetJacketTexture;
 	std::function<const Texture&(FilePathView)> fnGetIconTexture;
@@ -76,6 +77,12 @@ private:
 
 	bool openAllFolderWithLevelSort();
 
+	bool openFavoriteFolder(FilePathView specialPath, PlaySeYN playSe, RefreshSongPreviewYN refreshSongPreview = RefreshSongPreviewYN::Yes, SaveToConfigIniYN saveToConfigIni = SaveToConfigIniYN::Yes);
+
+	bool openFavoriteFolderWithNameSort(FilePathView specialPath);
+
+	bool openFavoriteFolderWithLevelSort(FilePathView specialPath);
+
 	void setCursorAndSave(int32 cursor);
 
 	void setCursorToItemByFullPath(FilePathView fullPath);
@@ -92,7 +99,9 @@ private:
 
 	void moveToPrevSubDirSection();
 
-	Array<FilePath> getSortedTopLevelFolderDirectories() const;
+	Array<FilePath> getSortedFolderPaths() const;
+
+	Optional<std::size_t> findFolderIndex(const Array<FilePath>& folderPaths, FilePathView targetFullPath) const;
 
 	void addOtherFolderItemsRotated(FilePathView currentFolderPath);
 
@@ -123,7 +132,7 @@ public:
 
 	const Texture& getIconTexture(FilePathView filePath);
 
-	void reloadCurrentDirectory();
+	void reloadCurrentDirectory(RefreshSongPreviewYN refreshSongPreview = RefreshSongPreviewYN::No);
 
 	void jumpToAlphabetItem(char32 letter);
 
@@ -140,4 +149,7 @@ public:
 	const HighScoreInfo& getCurrentHighScoreInfo() const;
 
 	void showCurrentItemInFileManager();
+
+	[[nodiscard]]
+	const SelectFolderState& folderState() const;
 };

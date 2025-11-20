@@ -5,6 +5,7 @@
 struct SelectMenuItemGraphicAssets;
 
 using IsCurrentFolderYN = YesNo<struct IsCurrentFolderYN_tag>;
+using FallbackForSingleChartYN = YesNo<struct FallbackForSingleChartYN_tag>;
 
 class ISelectMenuItem
 {
@@ -46,7 +47,11 @@ public:
 
 	virtual FilePathView fullPath() const = 0;
 
-	virtual const SelectChartInfo* chartInfoPtr([[maybe_unused]] int difficultyIdx) const
+	/// @brief 譜面情報を取得
+	/// @param difficultyIdx 難易度のインデックス(0～3)
+	/// @param fallbackForSingleChart 単一譜面アイテムの場合、difficultyIdxに関係なく譜面情報を返すかどうか
+	/// @return 譜面情報のポインタ(存在しない場合はnullptr)
+	virtual const SelectChartInfo* chartInfoPtr([[maybe_unused]] int difficultyIdx, [[maybe_unused]] FallbackForSingleChartYN fallbackForSingleChart = FallbackForSingleChartYN::Yes) const
 	{
 		return nullptr;
 	}

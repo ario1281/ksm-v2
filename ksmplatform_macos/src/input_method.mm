@@ -4,25 +4,135 @@
 #include <IOKit/hidsystem/ev_keymap.h>
 #include <CoreGraphics/CoreGraphics.h>
 
+namespace
+{
+	// 指定されたIDの入力ソースを検索
+	TISInputSourceRef FindInputSourceByID(CFStringRef sourceID)
+	{
+		if (sourceID == nullptr)
+		{
+			return nullptr;
+		}
+
+		CFStringRef keys[] = { kTISPropertyInputSourceID };
+		CFStringRef values[] = { sourceID };
+		CFDictionaryRef dict = CFDictionaryCreate(
+			kCFAllocatorDefault,
+			reinterpret_cast<const void**>(keys),
+			reinterpret_cast<const void**>(values),
+			1,
+			&kCFTypeDictionaryKeyCallBacks,
+			&kCFTypeDictionaryValueCallBacks
+		);
+
+		CFArrayRef sources = TISCreateInputSourceList(dict, false);
+		CFRelease(dict);
+
+		if (sources == nullptr || CFArrayGetCount(sources) == 0)
+		{
+			if (sources)
+			{
+				CFRelease(sources);
+			}
+			return nullptr;
+		}
+
+		TISInputSourceRef result = static_cast<TISInputSourceRef>(
+			const_cast<void*>(CFArrayGetValueAtIndex(sources, 0))
+		);
+
+		// 結果を保持してから配列を解放
+		if (result)
+		{
+			CFRetain(result);
+		}
+		CFRelease(sources);
+
+		return result;
+	}
+
+	// 現在の入力ソースのASCII/Romanモードを探す
+	TISInputSourceRef FindASCIIModeOfCurrentSource(CFStringRef currentSourceID)
+	{
+		if (currentSourceID == nullptr)
+		{
+			return nullptr;
+		}
+
+		@autoreleasepool
+		{
+			NSString* sourceIDStr = (__bridge NSString*)currentSourceID;
+
+			// ATOK ("com.justsystems.inputmethod.atok*.Japanese"の場合は".Japanese"から".Roman"へ変更)
+			if ([sourceIDStr containsString:@"atok"] && [sourceIDStr hasSuffix:@".Japanese"])
+			{
+				NSString* romanID = [sourceIDStr stringByReplacingOccurrencesOfString:@".Japanese"
+					withString:@".Roman"];
+				TISInputSourceRef romanSource = FindInputSourceByID((__bridge CFStringRef)romanID);
+				if (romanSource)
+				{
+					return romanSource;
+				}
+			}
+
+			return nullptr;
+		}
+	}
+}
+
 void KSMPlatformMacOS_DisableIME()
 {
-	// ASCII入力ソースのリストを取得
-	CFArrayRef asciiSources = TISCreateASCIICapableInputSourceList();
-	if (asciiSources == NULL)
+	// 現在の入力ソースを取得
+	TISInputSourceRef currentSource = TISCopyCurrentKeyboardInputSource();
+	if (currentSource == nullptr)
 	{
 		return;
 	}
 
-	if (CFArrayGetCount(asciiSources) > 0)
+	// 現在の入力ソースが既にASCII対応か確認
+	CFBooleanRef isASCIICapable = static_cast<CFBooleanRef>(
+		TISGetInputSourceProperty(currentSource, kTISPropertyInputSourceIsASCIICapable)
+	);
+
+	if (isASCIICapable && CFBooleanGetValue(isASCIICapable))
 	{
-		// 最初のASCII入力ソースを選択(通常は英語キーボード)
-		TISInputSourceRef asciiSource = static_cast<TISInputSourceRef>(
-			const_cast<void*>(CFArrayGetValueAtIndex(asciiSources, 0))
-		);
-		TISSelectInputSource(asciiSource);
+		// 既にASCII対応の入力ソースなので何もしない
+		CFRelease(currentSource);
+		return;
 	}
 
-	CFRelease(asciiSources);
+	// 現在の入力ソースIDを取得
+	CFStringRef currentSourceID = static_cast<CFStringRef>(
+		TISGetInputSourceProperty(currentSource, kTISPropertyInputSourceID)
+	);
+
+	// 同じ入力メソッド内のASCII/Romanモードを探す
+	TISInputSourceRef asciiModeSource = FindASCIIModeOfCurrentSource(currentSourceID);
+
+	if (asciiModeSource)
+	{
+		// 見つかった場合はそのモードに切り替え
+		TISSelectInputSource(asciiModeSource);
+		CFRelease(asciiModeSource);
+		CFRelease(currentSource);
+		return;
+	}
+
+	// ASCII/Romanモードが見つからない場合は最初のASCII入力ソースを選択(通常は英語キーボード)
+	CFArrayRef asciiSources = TISCreateASCIICapableInputSourceList();
+	if (asciiSources != nullptr)
+	{
+		if (CFArrayGetCount(asciiSources) > 0)
+		{
+			TISInputSourceRef asciiSource = static_cast<TISInputSourceRef>(
+				const_cast<void*>(CFArrayGetValueAtIndex(asciiSources, 0))
+			);
+			TISSelectInputSource(asciiSource);
+		}
+		CFRelease(asciiSources);
+	}
+
+	CFRelease(currentSource);
 }
 
 bool KSMPlatformMacOS_IsKeyPressed(int keyCode)

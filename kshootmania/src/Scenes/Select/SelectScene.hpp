@@ -5,6 +5,8 @@
 #include "Input/FXButtonUpDetection.hpp"
 #include "BTOptionPanel.hpp"
 #include "PlayStatsPanel.hpp"
+#include "FavoriteAddDialog.hpp"
+#include "FavoriteRemoveDialog.hpp"
 
 class SelectScene : public Co::UpdaterSceneBase
 {
@@ -27,6 +29,16 @@ private:
 
 	PlayStatsPanel m_playStatsPanel;
 
+	FavoriteAddDialog m_favoriteAddDialog;
+
+	FavoriteRemoveDialog m_favoriteRemoveDialog;
+
+	// Startボタン長押し検出
+	Stopwatch m_startKeyPressStopwatch;
+
+	// 次回のStartボタンの離した判定を無視するか
+	bool m_ignoreNextStartUp = false;
+
 	void moveToPlayScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay);
 
 	void refreshCanvasPlayerName();
@@ -34,6 +46,13 @@ private:
 	void updatePlayerSwitching();
 
 	void updateAlphabetJump();
+
+	void updateStartKeyLongPress();
+
+	void updateDialogs();
+
+	[[nodiscard]]
+	bool anyDialogVisible() const;
 
 public:
 	SelectScene();

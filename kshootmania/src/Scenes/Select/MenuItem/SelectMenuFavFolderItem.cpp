@@ -1,15 +1,23 @@
 ﻿#include "SelectMenuFavFolderItem.hpp"
+#include "Common/FsUtils.hpp"
 
-SelectMenuFavFolderItem::SelectMenuFavFolderItem(IsCurrentFolderYN isCurrentFolder, FilePathView fullPath)
+SelectMenuFavFolderItem::SelectMenuFavFolderItem(IsCurrentFolderYN isCurrentFolder, FilePathView specialPath)
 	: m_isCurrentFolder(isCurrentFolder)
-	, m_fullPath(fullPath)
-	, m_displayName(FileSystem::FileName(m_fullPath))
+	, m_fullPath(specialPath)
+	, m_displayName(specialPath.substr(1))
 {
 }
 
-void SelectMenuFavFolderItem::decide([[maybe_unused]] const SelectMenuEventContext& context, [[maybe_unused]] int32 difficultyIdx)
+void SelectMenuFavFolderItem::decide(const SelectMenuEventContext& context, [[maybe_unused]] int32 difficultyIdx)
 {
-	//Print << U"Not Implemented (SelectMenuFavFolderItem::decide)";
+	if (m_isCurrentFolder)
+	{
+		context.fnCloseFolder();
+	}
+	else
+	{
+		context.fnOpenFavoriteFolder(m_fullPath);
+	}
 }
 
 void SelectMenuFavFolderItem::setCanvasParamsCenter([[maybe_unused]] const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx) const
@@ -30,4 +38,14 @@ void SelectMenuFavFolderItem::setCanvasParamsTopBottom([[maybe_unused]] const Se
 		{ paramNamePrefix + U"isSong", false },
 		{ paramNamePrefix + U"title", FolderDisplayNameTopBottom(m_displayName, m_isCurrentFolder) },
 	});
+}
+
+void SelectMenuFavFolderItem::showInFileManager([[maybe_unused]] int32 difficultyIdx) const
+{
+	// .favファイルがあるディレクトリをエクスプローラで開く
+	const FilePath favFilePath = FileSystem::PathAppend(FsUtils::SongsDirectoryPath(), m_displayName + U".fav");
+	if (FileSystem::IsFile(favFilePath))
+	{
+		System::ShowInFileManager(favFilePath);
+	}
 }

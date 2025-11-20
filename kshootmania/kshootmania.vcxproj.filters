@@ -306,6 +306,12 @@
     <ClCompile Include="src\Scenes\Select\BTOptionPanel.cpp">
       <Filter>Source Files\Scenes\Select</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scenes\Select\FavoriteAddDialog.cpp">
+      <Filter>Source Files\Scenes\Select</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenes\Select\FavoriteRemoveDialog.cpp">
+      <Filter>Source Files\Scenes\Select</Filter>
+    </ClCompile>
     <ClCompile Include="src\Scenes\Select\PlayStatsPanel.cpp">
       <Filter>Source Files\Scenes\Select</Filter>
     </ClCompile>
@@ -511,9 +517,6 @@
       <Filter>Source Files\Scenes\Select\MenuItem</Filter>
     </ClCompile>
     <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuLevelSectionItem.cpp">
-      <Filter>Source Files\Scenes\Select\MenuItem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuSongItemForLevel.cpp">
       <Filter>Source Files\Scenes\Select\MenuItem</Filter>
     </ClCompile>
     <ClCompile Include="src\Scenes\Result\ResultNewRecordPanel.cpp">
@@ -898,6 +901,12 @@
     <ClInclude Include="src\Scenes\Select\BTOptionPanel.hpp">
       <Filter>Header Files\Scenes\Select</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scenes\Select\FavoriteAddDialog.hpp">
+      <Filter>Header Files\Scenes\Select</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\Select\FavoriteRemoveDialog.hpp">
+      <Filter>Header Files\Scenes\Select</Filter>
+    </ClInclude>
     <ClInclude Include="src\Scenes\Select\PlayStatsPanel.hpp">
       <Filter>Header Files\Scenes\Select</Filter>
     </ClInclude>
@@ -1133,9 +1142,6 @@
       <Filter>Header Files\Scenes\Select\MenuItem</Filter>
     </ClInclude>
     <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuLevelSectionItem.hpp">
-      <Filter>Header Files\Scenes\Select\MenuItem</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuSongItemForLevel.hpp">
       <Filter>Header Files\Scenes\Select\MenuItem</Filter>
     </ClInclude>
     <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuFavFolderItem.hpp">

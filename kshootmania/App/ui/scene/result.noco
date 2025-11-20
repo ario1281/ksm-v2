@@ -2499,14 +2499,154 @@
     },
     {
       "activeSelf": true,
-      "activeSelf_paramRef": "overlay_visible",
       "children": [
         {
-          "activeSelf": true,
+          "activeSelf": false,
+          "activeSelf_paramRef": "overlay_newRecordPanelVisible",
           "children": [
             {
               "activeSelf": true,
-              "children": [],
+              "children": [
+                {
+                  "activeSelf": true,
+                  "children": [],
+                  "childrenLayout": {
+                    "horizontalAlign": "Left",
+                    "padding": [
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    "spacing": [
+                      0.0,
+                      0.0
+                    ],
+                    "type": "FlowLayout",
+                    "verticalAlign": "Top"
+                  },
+                  "clippingEnabled": false,
+                  "components": [
+                    {
+                      "addColor": [
+                        0,
+                        0,
+                        0,
+                        0
+                      ],
+                      "blendMode": "Normal",
+                      "characterSet": "0123456789",
+                      "characterSize": [
+                        30.0,
+                        30.0
+                      ],
+                      "characterSpacing": [
+                        8.0,
+                        0.0
+                      ],
+                      "color": [
+                        255,
+                        255,
+                        255,
+                        255
+                      ],
+                      "horizontalAlign": "Right",
+                      "horizontalOverflow": "Wrap",
+                      "padding": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                      ],
+                      "preserveAspect": false,
+                      "sizingMode": "Fixed",
+                      "text": "09876543",
+                      "text_paramRef": "overlay_newRecordNumber",
+                      "textureAddressMode": "Default",
+                      "textureAssetName": "",
+                      "textureCellSize": [
+                        136.0,
+                        120.0
+                      ],
+                      "textureFilePath": "imgs/num0.png",
+                      "textureFilter": "Nearest",
+                      "textureGridColumns": 1,
+                      "textureGridRows": 10,
+                      "textureOffset": [
+                        0.0,
+                        0.0
+                      ],
+                      "type": "TextureFontLabel",
+                      "verticalAlign": "Top",
+                      "verticalOverflow": "Overflow"
+                    }
+                  ],
+                  "decelerationRate": 0.2,
+                  "dragScrollEnabled": true,
+                  "hitPadding": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "horizontalScrollable": false,
+                  "inheritChildrenHover": false,
+                  "inheritChildrenPress": false,
+                  "interactable": true,
+                  "isHitTarget": false,
+                  "name": "NewRecordScoreDelta",
+                  "region": {
+                    "anchorMax": [
+                      0.5,
+                      0.5
+                    ],
+                    "anchorMin": [
+                      0.5,
+                      0.5
+                    ],
+                    "posDelta": [
+                      18.0,
+                      8.0
+                    ],
+                    "sizeDelta": [
+                      304.0,
+                      30.0
+                    ],
+                    "sizeDeltaPivot": [
+                      0.5,
+                      0.5
+                    ],
+                    "type": "AnchorRegion"
+                  },
+                  "rubberBandScrollEnabled": true,
+                  "styleState": "",
+                  "transform": {
+                    "color": [
+                      255,
+                      255,
+                      255,
+                      255
+                    ],
+                    "hitTestAffected": true,
+                    "pivot": [
+                      0.5,
+                      0.5
+                    ],
+                    "rotation": 0.0,
+                    "scale": [
+                      1.0,
+                      1.0
+                    ],
+                    "translate": [
+                      0.0,
+                      0.0
+                    ]
+                  },
+                  "verticalScrollable": false,
+                  "wheelScrollEnabled": true,
+                  "zOrderInSiblings": 0
+                }
+              ],
               "childrenLayout": {
                 "horizontalAlign": "Left",
                 "padding": [
@@ -2532,50 +2672,204 @@
                     0
                   ],
                   "blendMode": "Normal",
-                  "characterSet": "0123456789",
-                  "characterSize": [
-                    30.0,
-                    30.0
-                  ],
-                  "characterSpacing": [
-                    8.0,
-                    0.0
-                  ],
                   "color": [
                     255,
                     255,
                     255,
                     255
                   ],
-                  "horizontalAlign": "Right",
-                  "horizontalOverflow": "Wrap",
-                  "padding": [
+                  "gridAnimationEndIndex": 0,
+                  "gridAnimationFPS": 10.0,
+                  "gridAnimationStartIndex": 0,
+                  "gridAnimationType": "None",
+                  "nineSliceBottomTiled": false,
+                  "nineSliceCenterTiled": false,
+                  "nineSliceEnabled": false,
+                  "nineSliceFallback": true,
+                  "nineSliceLeftTiled": false,
+                  "nineSliceMargin": [
                     0.0,
                     0.0,
                     0.0,
                     0.0
                   ],
+                  "nineSliceRightTiled": false,
+                  "nineSliceScale": [
+                    1.0,
+                    1.0
+                  ],
+                  "nineSliceTopTiled": false,
+                  "offsetAnimationSpeed": [
+                    0.0,
+                    0.0
+                  ],
+                  "offsetAnimationType": "None",
                   "preserveAspect": false,
-                  "sizingMode": "Fixed",
-                  "text": "09876543",
-                  "text_paramRef": "overlay_newRecordNumber",
                   "textureAddressMode": "Default",
                   "textureAssetName": "",
-                  "textureCellSize": [
-                    136.0,
-                    120.0
+                  "textureFilePath": "imgs/result_newrecord.png",
+                  "textureFilter": "Default",
+                  "textureGridCellSize": [
+                    32.0,
+                    32.0
                   ],
-                  "textureFilePath": "imgs/num0.png",
-                  "textureFilter": "Nearest",
                   "textureGridColumns": 1,
-                  "textureGridRows": 10,
+                  "textureGridIndex": 0,
+                  "textureGridRows": 1,
                   "textureOffset": [
                     0.0,
                     0.0
                   ],
-                  "type": "TextureFontLabel",
-                  "verticalAlign": "Top",
-                  "verticalOverflow": "Overflow"
+                  "textureRegionMode": "Full",
+                  "textureSize": [
+                    100.0,
+                    100.0
+                  ],
+                  "type": "Sprite"
+                },
+                {
+                  "active": false,
+                  "applyDuringDelay": true,
+                  "colorEnabled": true,
+                  "colorFrom": [
+                    255,
+                    255,
+                    255,
+                    0
+                  ],
+                  "colorTo": [
+                    255,
+                    255,
+                    255,
+                    255
+                  ],
+                  "delay": 0.35,
+                  "duration": 0.15,
+                  "easing": "Linear",
+                  "loopDuration": 0.0,
+                  "loopType": "None",
+                  "manualMode": false,
+                  "manualTime": 0.0,
+                  "restartOnActive": true,
+                  "rotationEnabled": false,
+                  "rotationFrom": 0.0,
+                  "rotationTo": 0.0,
+                  "scaleEnabled": false,
+                  "scaleFrom": [
+                    1.0,
+                    1.0
+                  ],
+                  "scaleTo": [
+                    1.0,
+                    1.0
+                  ],
+                  "tag": "in_newRecord",
+                  "translateEnabled": false,
+                  "translateFrom": [
+                    0.0,
+                    0.0
+                  ],
+                  "translateTo": [
+                    0.0,
+                    0.0
+                  ],
+                  "type": "Tween"
+                },
+                {
+                  "active": false,
+                  "applyDuringDelay": false,
+                  "colorEnabled": true,
+                  "colorFrom": [
+                    255,
+                    255,
+                    255,
+                    255
+                  ],
+                  "colorTo": [
+                    255,
+                    255,
+                    255,
+                    0
+                  ],
+                  "delay": 0.0,
+                  "duration": 0.15,
+                  "easing": "Linear",
+                  "loopDuration": 0.0,
+                  "loopType": "None",
+                  "manualMode": false,
+                  "manualTime": 0.0,
+                  "restartOnActive": true,
+                  "rotationEnabled": false,
+                  "rotationFrom": 0.0,
+                  "rotationTo": 0.0,
+                  "scaleEnabled": false,
+                  "scaleFrom": [
+                    1.0,
+                    1.0
+                  ],
+                  "scaleTo": [
+                    1.0,
+                    1.0
+                  ],
+                  "tag": "out_newRecord",
+                  "translateEnabled": false,
+                  "translateFrom": [
+                    0.0,
+                    0.0
+                  ],
+                  "translateTo": [
+                    0.0,
+                    0.0
+                  ],
+                  "type": "Tween"
+                },
+                {
+                  "active": false,
+                  "applyDuringDelay": false,
+                  "colorEnabled": true,
+                  "colorFrom": [
+                    255,
+                    255,
+                    255,
+                    0
+                  ],
+                  "colorTo": [
+                    255,
+                    255,
+                    255,
+                    255
+                  ],
+                  "delay": 0.0,
+                  "duration": 0.15,
+                  "easing": "Linear",
+                  "loopDuration": 0.0,
+                  "loopType": "None",
+                  "manualMode": false,
+                  "manualTime": 0.0,
+                  "restartOnActive": true,
+                  "rotationEnabled": false,
+                  "rotationFrom": 0.0,
+                  "rotationTo": 0.0,
+                  "scaleEnabled": false,
+                  "scaleFrom": [
+                    1.0,
+                    1.0
+                  ],
+                  "scaleTo": [
+                    1.0,
+                    1.0
+                  ],
+                  "tag": "inAgain_newRecord",
+                  "translateEnabled": false,
+                  "translateFrom": [
+                    0.0,
+                    0.0
+                  ],
+                  "translateTo": [
+                    0.0,
+                    0.0
+                  ],
+                  "type": "Tween"
                 }
               ],
               "decelerationRate": 0.2,
@@ -2591,7 +2885,7 @@
               "inheritChildrenPress": false,
               "interactable": true,
               "isHitTarget": false,
-              "name": "NewRecordScoreDelta",
+              "name": "Body",
               "region": {
                 "anchorMax": [
                   0.5,
@@ -2602,12 +2896,12 @@
                   0.5
                 ],
                 "posDelta": [
-                  18.0,
-                  8.0
+                  0.0,
+                  0.0
                 ],
                 "sizeDelta": [
-                  304.0,
-                  30.0
+                  420.0,
+                  90.0
                 ],
                 "sizeDeltaPivot": [
                   0.5,
@@ -2631,8 +2925,8 @@
                 ],
                 "rotation": 0.0,
                 "scale": [
-                  1.0,
-                  1.0
+                  0.5874,
+                  0.5874
                 ],
                 "translate": [
                   0.0,
@@ -2660,215 +2954,7 @@
             "verticalAlign": "Top"
           },
           "clippingEnabled": false,
-          "components": [
-            {
-              "addColor": [
-                0,
-                0,
-                0,
-                0
-              ],
-              "blendMode": "Normal",
-              "color": [
-                255,
-                255,
-                255,
-                255
-              ],
-              "gridAnimationEndIndex": 0,
-              "gridAnimationFPS": 10.0,
-              "gridAnimationStartIndex": 0,
-              "gridAnimationType": "None",
-              "nineSliceBottomTiled": false,
-              "nineSliceCenterTiled": false,
-              "nineSliceEnabled": false,
-              "nineSliceFallback": true,
-              "nineSliceLeftTiled": false,
-              "nineSliceMargin": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "nineSliceRightTiled": false,
-              "nineSliceScale": [
-                1.0,
-                1.0
-              ],
-              "nineSliceTopTiled": false,
-              "offsetAnimationSpeed": [
-                0.0,
-                0.0
-              ],
-              "offsetAnimationType": "None",
-              "preserveAspect": false,
-              "textureAddressMode": "Default",
-              "textureAssetName": "",
-              "textureFilePath": "imgs/result_newrecord.png",
-              "textureFilter": "Default",
-              "textureGridCellSize": [
-                32.0,
-                32.0
-              ],
-              "textureGridColumns": 1,
-              "textureGridIndex": 0,
-              "textureGridRows": 1,
-              "textureOffset": [
-                0.0,
-                0.0
-              ],
-              "textureRegionMode": "Full",
-              "textureSize": [
-                100.0,
-                100.0
-              ],
-              "type": "Sprite"
-            },
-            {
-              "active": false,
-              "applyDuringDelay": true,
-              "colorEnabled": true,
-              "colorFrom": [
-                255,
-                255,
-                255,
-                0
-              ],
-              "colorTo": [
-                255,
-                255,
-                255,
-                255
-              ],
-              "delay": 0.35,
-              "duration": 0.15,
-              "easing": "Linear",
-              "loopDuration": 0.0,
-              "loopType": "None",
-              "manualMode": false,
-              "manualTime": 0.0,
-              "restartOnActive": true,
-              "rotationEnabled": false,
-              "rotationFrom": 0.0,
-              "rotationTo": 0.0,
-              "scaleEnabled": false,
-              "scaleFrom": [
-                1.0,
-                1.0
-              ],
-              "scaleTo": [
-                1.0,
-                1.0
-              ],
-              "tag": "in_newRecord",
-              "translateEnabled": false,
-              "translateFrom": [
-                0.0,
-                0.0
-              ],
-              "translateTo": [
-                0.0,
-                0.0
-              ],
-              "type": "Tween"
-            },
-            {
-              "active": false,
-              "applyDuringDelay": false,
-              "colorEnabled": true,
-              "colorFrom": [
-                255,
-                255,
-                255,
-                255
-              ],
-              "colorTo": [
-                255,
-                255,
-                255,
-                0
-              ],
-              "delay": 0.0,
-              "duration": 0.15,
-              "easing": "Linear",
-              "loopDuration": 0.0,
-              "loopType": "None",
-              "manualMode": false,
-              "manualTime": 0.0,
-              "restartOnActive": true,
-              "rotationEnabled": false,
-              "rotationFrom": 0.0,
-              "rotationTo": 0.0,
-              "scaleEnabled": false,
-              "scaleFrom": [
-                1.0,
-                1.0
-              ],
-              "scaleTo": [
-                1.0,
-                1.0
-              ],
-              "tag": "out_newRecord",
-              "translateEnabled": false,
-              "translateFrom": [
-                0.0,
-                0.0
-              ],
-              "translateTo": [
-                0.0,
-                0.0
-              ],
-              "type": "Tween"
-            },
-            {
-              "active": false,
-              "applyDuringDelay": false,
-              "colorEnabled": true,
-              "colorFrom": [
-                255,
-                255,
-                255,
-                0
-              ],
-              "colorTo": [
-                255,
-                255,
-                255,
-                255
-              ],
-              "delay": 0.0,
-              "duration": 0.15,
-              "easing": "Linear",
-              "loopDuration": 0.0,
-              "loopType": "None",
-              "manualMode": false,
-              "manualTime": 0.0,
-              "restartOnActive": true,
-              "rotationEnabled": false,
-              "rotationFrom": 0.0,
-              "rotationTo": 0.0,
-              "scaleEnabled": false,
-              "scaleFrom": [
-                1.0,
-                1.0
-              ],
-              "scaleTo": [
-                1.0,
-                1.0
-              ],
-              "tag": "inAgain_newRecord",
-              "translateEnabled": false,
-              "translateFrom": [
-                0.0,
-                0.0
-              ],
-              "translateTo": [
-                0.0,
-                0.0
-              ],
-              "type": "Tween"
-            }
-          ],
+          "components": [],
           "decelerationRate": 0.2,
           "dragScrollEnabled": true,
           "hitPadding": [
@@ -2881,7 +2967,7 @@
           "inheritChildrenHover": false,
           "inheritChildrenPress": false,
           "interactable": true,
-          "isHitTarget": false,
+          "isHitTarget": true,
           "name": "NewRecordPanel",
           "region": {
             "anchorMax": [
@@ -2922,8 +3008,8 @@
             ],
             "rotation": 0.0,
             "scale": [
-              0.5874,
-              0.5874
+              1.0,
+              1.0
             ],
             "translate": [
               0.0,
@@ -2964,7 +3050,7 @@
       "inheritChildrenHover": false,
       "inheritChildrenPress": false,
       "interactable": true,
-      "isHitTarget": true,
+      "isHitTarget": false,
       "name": "Overlay",
       "region": {
         "anchorMax": [
@@ -3079,7 +3165,7 @@
       "type": "String",
       "value": "09876543"
     },
-    "overlay_visible": {
+    "overlay_newRecordPanelVisible": {
       "type": "Bool",
       "value": false
     },
