@@ -19,6 +19,21 @@ namespace
 
 		return KscIO::ReadHighScoreInfo(chartFilePath, condition);
 	}
+
+	kson::MetaChartData LoadMetaChartData(const FilePathView filePath)
+	{
+		const auto extension = FileSystem::Extension(filePath);
+		if (extension == kKSHExtension)
+		{
+			return kson::LoadKSHMetaChartData(filePath.narrow());
+		}
+		else if (extension == kKSONExtension)
+		{
+			return kson::LoadKSONMetaChartData(filePath.narrow());
+		}
+
+		return kson::MetaChartData();
+	}
 }
 
 FilePath SelectChartInfo::toFullPath(const std::string& u8Filename) const
@@ -28,7 +43,7 @@ FilePath SelectChartInfo::toFullPath(const std::string& u8Filename) const
 
 SelectChartInfo::SelectChartInfo(FilePathView chartFilePath)
 	: m_chartFilePath(chartFilePath)
-	, m_chartData(kson::LoadKSHMetaChartData(chartFilePath.narrow()))
+	, m_chartData(LoadMetaChartData(chartFilePath))
 	, m_highScoreInfo(LoadHighScoreInfo(chartFilePath))
 {
 }

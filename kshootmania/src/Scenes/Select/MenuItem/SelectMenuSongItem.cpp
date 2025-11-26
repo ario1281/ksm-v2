@@ -12,7 +12,7 @@ SelectMenuSongItem::SelectMenuSongItem(FilePathView fullPath)
 	if (FileSystem::IsFile(fullPath))
 	{
 		// 個別の譜面ファイルの場合
-		if (FileSystem::Extension(fullPath) == kKSHExtension)
+		if (FileSystem::Extension(fullPath) == kKSHExtension || FileSystem::Extension(fullPath) == kKSONExtension)
 		{
 			chartFilePaths.emplace_back(fullPath);
 			m_isSingleChartItem = true;
@@ -30,7 +30,7 @@ SelectMenuSongItem::SelectMenuSongItem(FilePathView fullPath)
 
 	for (const auto& chartFilePath : chartFilePaths)
 	{
-		if (FileSystem::Extension(chartFilePath) != kKSHExtension) // Note: FileSystem::Extension()は常に小文字を返すので大文字は考慮不要
+		if (FileSystem::Extension(chartFilePath) != kKSHExtension && FileSystem::Extension(chartFilePath) != kKSONExtension) // Note: FileSystem::Extension()は常に小文字を返すので大文字は考慮不要
 		{
 			continue;
 		}

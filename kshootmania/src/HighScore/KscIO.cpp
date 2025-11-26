@@ -17,7 +17,7 @@ namespace KscIO
 			}
 
 			const auto extension = FileSystem::Extension(chartFilePath);
-			if (extension != U"ksh")
+			if (extension != kKSHExtension || extension != kKSONExtension)
 			{
 				return false;
 			}
