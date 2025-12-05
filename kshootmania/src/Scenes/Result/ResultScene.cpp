@@ -361,8 +361,8 @@ Co::Task<void> ResultScene::start()
 	if (!userPressedStartOrBack)
 	{
 		co_await Co::Any(
-			KeyConfig::WaitUntilDown(KeyConfig::kStart),
-			KeyConfig::WaitUntilDown(KeyConfig::kBack));
+			KeyConfig::WaitUntilDown(kButtonStart),
+			KeyConfig::WaitUntilDown(kButtonBack));
 	}
 
 	// コースモードの場合は次の曲またはコースリザルトへ
@@ -407,7 +407,7 @@ Co::Task<bool> ResultScene::waitForNewRecordPanelClose()
 		co_await Co::NextFrame();
 
 		// FX-L+R同時押しで表示時間を3秒延長
-		const bool fxLRPressed = KeyConfig::Pressed(KeyConfig::kFX_L) && KeyConfig::Pressed(KeyConfig::kFX_R);
+		const bool fxLRPressed = KeyConfig::Pressed(kButtonFX_L) && KeyConfig::Pressed(kButtonFX_R);
 		if (fxLRPressed && !fxLRPressedPrev)
 		{
 			displayStopwatch.restart();
@@ -416,8 +416,8 @@ Co::Task<bool> ResultScene::waitForNewRecordPanelClose()
 
 		// 3秒経過またはSTART/Backで終了
 		if (displayStopwatch.sF() >= 3.0 ||
-			KeyConfig::Down(KeyConfig::kStart) ||
-			KeyConfig::Down(KeyConfig::kBack))
+			KeyConfig::Down(kButtonStart) ||
+			KeyConfig::Down(kButtonBack))
 		{
 			break;
 		}
@@ -431,14 +431,14 @@ Co::Task<bool> ResultScene::waitForNewRecordPanelClose()
 	{
 		co_await Co::NextFrame();
 
-		const bool fxLRPressed = KeyConfig::Pressed(KeyConfig::kFX_L) && KeyConfig::Pressed(KeyConfig::kFX_R);
+		const bool fxLRPressed = KeyConfig::Pressed(kButtonFX_L) && KeyConfig::Pressed(kButtonFX_R);
 		if (fxLRPressed && !fxLRPressedPrev)
 		{
 			co_return false;
 		}
 		fxLRPressedPrev = fxLRPressed;
 
-		if (KeyConfig::Down(KeyConfig::kStart) || KeyConfig::Down(KeyConfig::kBack))
+		if (KeyConfig::Down(kButtonStart) || KeyConfig::Down(kButtonBack))
 		{
 			co_return true;
 		}

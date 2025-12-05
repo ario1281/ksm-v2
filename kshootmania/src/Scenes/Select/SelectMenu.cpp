@@ -421,7 +421,7 @@ bool SelectMenu::openDirectoryWithNameSort(FilePathView directoryPath)
 	// (フォルダを開いていない場合、または現在開いていないフォルダを表示する設定の場合のみ)
 	if (directoryPath.empty() || ConfigIni::GetBool(ConfigIni::Key::kAlwaysShowOtherFolders))
 	{
-		addOtherFolderItemsRotated(directoryPath);
+		addOtherFolderItemsRotated();
 	}
 
 	return true;
@@ -457,6 +457,7 @@ void SelectMenu::refreshContentCanvasParams()
 	const int32 difficultyIdx = difficultyCursor >= 0 ? difficultyCursor : m_difficultyMenu.rawCursor();
 	m_selectSceneCanvas->setParamValues({
 		{ U"difficultyCursorState", U"difficulty{}"_fmt(difficultyIdx) },
+		{ U"scrollBarCursorRate", m_menu.cursorRate() },
 	});
 
 	// 中央の項目のパラメータを反映
@@ -523,10 +524,10 @@ void SelectMenu::playShakeDownTween()
 	m_selectSceneCanvas->setTweenActiveByTag(U"shakeDown", true);
 }
 
-SelectMenu::SelectMenu(const std::shared_ptr<noco::Canvas>& selectSceneCanvas, std::function<void(FilePathView, MusicGame::IsAutoPlayYN, Optional<CoursePlayState>)> fnMoveToPlayScene)
+SelectMenu::SelectMenu(const std::shared_ptr<noco::Canvas>& selectSceneCanvas, std::function<void(FilePathView, MusicGame::IsAutoPlayYN, const Optional<CoursePlayState>&)> fnMoveToPlayScene)
 	: m_eventContext
 		{
-			.fnMoveToPlayScene = [fnMoveToPlayScene](FilePath path, MusicGame::IsAutoPlayYN isAutoPlay, Optional<CoursePlayState> courseState) { fnMoveToPlayScene(path, isAutoPlay, courseState); },
+			.fnMoveToPlayScene = [fnMoveToPlayScene](FilePath path, MusicGame::IsAutoPlayYN isAutoPlay, const Optional<CoursePlayState>& courseState) { fnMoveToPlayScene(path, isAutoPlay, courseState); },
 			.fnOpenDirectory = [this](FilePath path) { openDirectory(path, PlaySeYN::Yes); },
 			.fnOpenAllFolder = [this]() { openAllFolder(PlaySeYN::Yes); },
 			.fnOpenFavoriteFolder = [this](FilePath specialPath) { openFavoriteFolder(specialPath, PlaySeYN::Yes); },
@@ -654,7 +655,7 @@ void SelectMenu::update(SongPreviewOnlyYN songPreviewOnly)
 
 	// FX-L + FX-R同時押しでソートモード切り替え
 	static bool fxLRPressed = false;
-	const bool fxLRPressedNow = KeyConfig::Pressed(KeyConfig::kFX_L) && KeyConfig::Pressed(KeyConfig::kFX_R);
+	const bool fxLRPressedNow = KeyConfig::Pressed(kButtonFX_L) && KeyConfig::Pressed(kButtonFX_R);
 	if (fxLRPressedNow && !fxLRPressed && isFolderOpen())
 	{
 		// ソートモードを切り替え
@@ -675,7 +676,7 @@ void SelectMenu::update(SongPreviewOnlyYN songPreviewOnly)
 	fxLRPressed = fxLRPressedNow;
 
 	// 各種操作と干渉しないようCtrl・Shift・BT-B+C押下時は無視
-	const bool btBCPressed = KeyConfig::Pressed(KeyConfig::kBT_B) && KeyConfig::Pressed(KeyConfig::kBT_C);
+	const bool btBCPressed = KeyConfig::Pressed(kButtonBT_B) && KeyConfig::Pressed(kButtonBT_C);
 	if (!PlatformKey::KeyCommandControl.pressed() && !KeyShift.pressed() && !btBCPressed)
 	{
 		m_difficultyMenu.update();
@@ -1382,7 +1383,7 @@ bool SelectMenu::openDirectoryWithLevelSort(FilePathView directoryPath)
 	// (フォルダを開いていない場合、または現在開いていないフォルダを表示する設定の場合のみ)
 	if (directoryPath.empty() || ConfigIni::GetBool(ConfigIni::Key::kAlwaysShowOtherFolders))
 	{
-		addOtherFolderItemsRotated(directoryPath);
+		addOtherFolderItemsRotated();
 	}
 
 	return true;
@@ -1784,7 +1785,7 @@ bool SelectMenu::openFavoriteFolderWithNameSort(FilePathView specialPath)
 	// フォルダ項目を追加
 	if (ConfigIni::GetBool(ConfigIni::Key::kAlwaysShowOtherFolders))
 	{
-		addOtherFolderItemsRotated(specialPath);
+		addOtherFolderItemsRotated();
 	}
 
 	return true;
@@ -1902,7 +1903,7 @@ bool SelectMenu::openFavoriteFolderWithLevelSort(FilePathView specialPath)
 	// フォルダ項目を追加
 	if (ConfigIni::GetBool(ConfigIni::Key::kAlwaysShowOtherFolders))
 	{
-		addOtherFolderItemsRotated(specialPath);
+		addOtherFolderItemsRotated();
 	}
 
 	return true;
@@ -1980,7 +1981,7 @@ bool SelectMenu::openCoursesFolderWithNameSort()
 	// フォルダ項目を追加
 	if (ConfigIni::GetBool(ConfigIni::Key::kAlwaysShowOtherFolders))
 	{
-		addOtherFolderItemsRotated(SelectMenuCoursesFolderItem::kCoursesFolderSpecialPath);
+		addOtherFolderItemsRotated();
 	}
 
 	return true;
@@ -2019,7 +2020,7 @@ bool SelectMenu::openCoursesFolderWithLevelSort()
 	// フォルダ項目を追加
 	if (ConfigIni::GetBool(ConfigIni::Key::kAlwaysShowOtherFolders))
 	{
-		addOtherFolderItemsRotated(SelectMenuCoursesFolderItem::kCoursesFolderSpecialPath);
+		addOtherFolderItemsRotated();
 	}
 
 	return true;
@@ -2088,13 +2089,13 @@ Optional<std::size_t> SelectMenu::findFolderIndex(const Array<FilePath>& folderP
 	return none;
 }
 
-void SelectMenu::addOtherFolderItemsRotated(FilePathView currentFolderPath)
+void SelectMenu::addOtherFolderItemsRotated()
 {
 	const Array<FilePath> folderPaths = getSortedFolderPaths();
 
 	// 現在開いているフォルダのインデックスを調べる
 	// (フォルダを開いている場合は、そのフォルダが先頭になるような順番で項目を追加する)
-	const Optional<std::size_t> currentFolderIdxOpt = findFolderIndex(folderPaths, currentFolderPath.empty() ? m_folderState.fullPath : currentFolderPath);
+	const Optional<std::size_t> currentFolderIdxOpt = findFolderIndex(folderPaths, m_folderState.fullPath);
 	const std::size_t currentFolderIdx = currentFolderIdxOpt.value_or(0);
 
 	// 項目を追加

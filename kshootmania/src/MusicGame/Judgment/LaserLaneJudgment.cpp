@@ -1,9 +1,31 @@
 ﻿#include "LaserLaneJudgment.hpp"
 #include "kson/Util/TimingUtils.hpp"
 #include "kson/Util/GraphUtils.hpp"
+#include "Input/KeyConfig.hpp"
 
 namespace MusicGame::Judgment
 {
+	void LaserInputAccumulator::addDeltaCursorX(double deltaCursorX)
+	{
+		m_accumulatedDeltaCursorX += deltaCursorX;
+	}
+
+	bool LaserInputAccumulator::shouldApplyAmplification(double currentTimeSec) const
+	{
+		return currentTimeSec - m_lastCheckTimeSec >= kLaserInputAmplificationCheckIntervalSec;
+	}
+
+	double LaserInputAccumulator::getAccumulatedDeltaCursorX() const
+	{
+		return m_accumulatedDeltaCursorX;
+	}
+
+	void LaserInputAccumulator::resetAccumulation(double currentTimeSec)
+	{
+		m_lastCheckTimeSec = currentTimeSec;
+		m_accumulatedDeltaCursorX = 0.0;
+	}
+
 	namespace
 	{
 		constexpr kson::RelPulse kLaserLineJudgmentEraseAroundSlamDistance = kson::kResolution4 / 16;
@@ -226,10 +248,10 @@ namespace MusicGame::Judgment
 			const auto itr = kson::FirstInRange(lane, currentPulse, currentPulse + kson::kResolution4);
 			if (itr != lane.end())
 			{
-				const auto& [_, section] = *itr;
+				const auto& [sectionPulse, section] = *itr;
 				if (!section.v.empty())
 				{
-					const auto& [_, point] = *section.v.begin();
+					const auto& [relPulse, point] = *section.v.begin();
 					return std::pair<double, bool>{ point.v.v, section.wide() };
 				}
 			}
@@ -345,42 +367,65 @@ namespace MusicGame::Judgment
 			return;
 		}
 
-		const int32 direction = Sign(deltaCursorX);
-		if (direction == 0)
-		{
-			// 移動方向がない場合は何もしない
-			return;
-		}
+		// 入力を蓄積
+		m_inputAccumulator.addDeltaCursorX(deltaCursorX);
+
 		const int32 noteDirection = kson::ValueItrAt(m_laserLineDirectionMap, currentPulse)->second;
 		const double noteCursorX = laneStatusRef.noteCursorX.value();
 		const double cursorX = laneStatusRef.cursorX.value();
-		double nextCursorX;
-		if (direction == noteDirection || noteDirection == 0)
+		double nextCursorX = cursorX;
+
+		// 通常のカーソル移動(毎フレーム適用)
+		const int32 direction = Sign(deltaCursorX);
+		if (direction != 0)
 		{
-			// LASERノーツと同方向にカーソル移動している、または、LASERノーツが横移動なしの場合
-			const double overshootCursorX = cursorX + deltaCursorX * kLaserCursorInputOvershootScale; // 増幅移動量で計算したカーソル移動先
-			if (Min(cursorX, overshootCursorX) - kLaserAutoFitMaxDeltaCursorX < noteCursorX && noteCursorX < Max(cursorX, overshootCursorX) + kLaserAutoFitMaxDeltaCursorX)
+			if (Abs(cursorX - noteCursorX) < kLaserAutoFitMaxDeltaCursorX && (noteDirection == 0 || direction != noteDirection))
 			{
-				// 増幅移動量で計算したカーソル移動の範囲内に理想位置があれば、カーソルを理想位置へ吸い付かせる
-				nextCursorX = noteCursorX;
-				m_lastCorrectMovementSec = currentTimeSec;
+				// LASERカーソルが理想位置に近い場合はカーソルを逆方向に動かさない
+				nextCursorX = cursorX;
 			}
 			else
 			{
-				// 増幅移動量で理想位置に届かなければ、カーソルを単純に動かす
-				nextCursorX = cursorX + deltaCursorX;
+				// 移動後のカーソル位置(追い越し判定考慮前)
+				const double movedCursorX = cursorX + deltaCursorX;
+
+				// 理想位置に近づく方向に移動している場合のみ追い越し判定
+				const bool isMovingTowardIdeal = (noteCursorX - cursorX) * direction > 0;
+				if (isMovingTowardIdeal && Min(cursorX, movedCursorX) <= noteCursorX && noteCursorX <= Max(cursorX, movedCursorX))
+				{
+					nextCursorX = noteCursorX;
+					m_lastCorrectMovementSec = currentTimeSec;
+				}
+				else
+				{
+					nextCursorX = movedCursorX;
+				}
 			}
 		}
-		else if (Abs(cursorX - noteCursorX) < kLaserAutoFitMaxDeltaCursorX)
+
+		// 1/60秒ごとにカーソル移動量を増幅して吸着させる
+		if (m_inputAccumulator.shouldApplyAmplification(currentTimeSec))
 		{
-			// LASERカーソルが理想位置に近い場合はカーソルを逆方向に動かさない
-			nextCursorX = cursorX;
+			const double accumulatedDeltaCursorX = m_inputAccumulator.getAccumulatedDeltaCursorX();
+			const int32 amplifiedDirection = Sign(accumulatedDeltaCursorX);
+
+			if (amplifiedDirection != 0)
+			{
+				// 増幅移動量での移動後のカーソル位置(追い越し判定考慮前)
+				const double amplifiedCursorX = cursorX + accumulatedDeltaCursorX * kLaserCursorInputOvershootScale;
+
+				// 理想位置に近づく方向に移動している場合のみ追い越し判定
+				const bool isMovingTowardIdeal = (noteCursorX - cursorX) * amplifiedDirection > 0;
+				if (isMovingTowardIdeal && Min(cursorX, amplifiedCursorX) - kLaserAutoFitMaxDeltaCursorX <= noteCursorX && noteCursorX <= Max(cursorX, amplifiedCursorX) + kLaserAutoFitMaxDeltaCursorX)
+				{
+					nextCursorX = noteCursorX;
+					m_lastCorrectMovementSec = currentTimeSec;
+				}
+			}
+
+			m_inputAccumulator.resetAccumulation(currentTimeSec);
 		}
-		else
-		{
-			// LASERノーツと逆方向にカーソル移動している場合、カーソルを単純に動かす
-			nextCursorX = cursorX + deltaCursorX;
-		}
+
 		laneStatusRef.cursorX = Clamp(nextCursorX, 0.0, 1.0);
 	}
 
@@ -746,8 +791,9 @@ namespace MusicGame::Judgment
 		}
 	}
 
-	LaserLaneJudgment::LaserLaneJudgment(JudgmentPlayMode judgmentPlayMode, KeyConfig::Button keyConfigButtonL, KeyConfig::Button keyConfigButtonR, const kson::ByPulse<kson::LaserSection>& lane, const kson::BeatInfo& beatInfo, const kson::TimingCache& timingCache)
+	LaserLaneJudgment::LaserLaneJudgment(JudgmentPlayMode judgmentPlayMode, int32 laneIdx, Button keyConfigButtonL, Button keyConfigButtonR, const kson::ByPulse<kson::LaserSection>& lane, const kson::BeatInfo& beatInfo, const kson::TimingCache& timingCache)
 		: m_judgmentPlayMode(judgmentPlayMode)
+		, m_laneIdx(laneIdx)
 		, m_keyConfigButtonL(keyConfigButtonL)
 		, m_keyConfigButtonR(keyConfigButtonR)
 		, m_laserLineDirectionMap(CreateLaserLineDirectionMap(lane))
@@ -852,19 +898,8 @@ namespace MusicGame::Judgment
 
 		if (m_judgmentPlayMode == JudgmentPlayMode::kOn)
 		{
-			// キー押下中の判定処理
-			// (左向きキーと右向きキーを同時に押している場合、最後に押した方を優先する)
-			const Optional<KeyConfig::Button> lastPressedButton = KeyConfig::LastPressedLaserButton(m_keyConfigButtonL, m_keyConfigButtonR);
-			double deltaCursorX;
-			if (lastPressedButton.has_value())
-			{
-				const int32 direction = lastPressedButton == m_keyConfigButtonL ? -1 : 1;
-				deltaCursorX = kLaserKeyboardCursorXPerSec * Scene::DeltaTime() * direction; // TODO: Scene::DeltaTime()を使わずcurrentTimeSecの差分を使う
-			}
-			else
-			{
-				deltaCursorX = 0.0;
-			}
+			// 入力からカーソルの移動量を取得
+			const double deltaCursorX = KeyConfig::LaserDeltaCursorX(m_laneIdx, Scene::DeltaTime());
 			processCursorMovement(deltaCursorX, currentPulse, currentTimeSec, laneStatusRef);
 			processSlamJudgment(lane, deltaCursorX, currentTimeSec, laneStatusRef, judgmentHandlerRef, IsAutoPlayYN::No);
 

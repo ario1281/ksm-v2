@@ -64,7 +64,7 @@ namespace
 	}
 }
 
-PlayPrepareScene::PlayPrepareScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay, Optional<CoursePlayState> courseState)
+PlayPrepareScene::PlayPrepareScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay, const Optional<CoursePlayState>& courseState)
 	: m_chartFilePath(chartFilePath)
 	, m_isAutoPlay(isAutoPlay)
 	, m_chartData(LoadChartData(chartFilePath))
@@ -131,7 +131,7 @@ Co::Task<void> PlayPrepareScene::start()
 			break;
 		}
 
-		if (KeyConfig::Down(KeyConfig::kBack))
+		if (KeyConfig::Down(kButtonBack))
 		{
 			SaveHispeedSettingToConfigIni(m_hispeedMenu.hispeedSetting());
 
@@ -148,7 +148,7 @@ Co::Task<void> PlayPrepareScene::start()
 			break;
 		}
 
-		if (elapsed >= kMinDisplayTime && KeyConfig::Down(KeyConfig::kStart))
+		if (elapsed >= kMinDisplayTime && KeyConfig::Down(kButtonStart))
 		{
 			// 一定時間経過後はStartボタンでスキップ可能
 			SaveHispeedSettingToConfigIni(m_hispeedMenu.hispeedSetting());

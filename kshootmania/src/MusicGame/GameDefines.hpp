@@ -88,23 +88,6 @@ namespace MusicGame
 		return movie ? kTimeSecBeforeStartMovie : kTimeSecBeforeStart;
 	}
 
-	const std::array<KeyConfig::Button, kson::kNumBTLanesSZ> kBTButtons = {
-		KeyConfig::kBT_A,
-		KeyConfig::kBT_B,
-		KeyConfig::kBT_C,
-		KeyConfig::kBT_D,
-	};
-
-	const std::array<KeyConfig::Button, kson::kNumFXLanesSZ> kFXButtons = {
-		KeyConfig::kFX_L,
-		KeyConfig::kFX_R,
-	};
-
-	const std::array<std::array<KeyConfig::Button, 2U>, kson::kNumFXLanesSZ> kLaserButtons = { {
-		{ KeyConfig::kLeftLaserL, KeyConfig::kLeftLaserR },
-		{ KeyConfig::kRightLaserL, KeyConfig::kRightLaserR },
-	} };
-
 	constexpr kson::Pulse kPastPulse = -100000000;
 
 	constexpr int32 kScoreMax = 10000000;

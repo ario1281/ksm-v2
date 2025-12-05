@@ -231,6 +231,15 @@
     <ClCompile Include="src\Input\KeyConfig.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
+    <ClCompile Include="src\Input\LaserInput\AnalogStickXYLaserInput.cpp">
+      <Filter>Source Files\Input\LaserInput</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input\LaserInput\KeyboardLaserInput.cpp">
+      <Filter>Source Files\Input\LaserInput</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input\LaserInput\SliderLaserInput.cpp">
+      <Filter>Source Files\Input\LaserInput</Filter>
+    </ClCompile>
     <ClCompile Include="src\I18n\I18n.cpp">
       <Filter>Source Files\I18n</Filter>
     </ClCompile>
@@ -343,6 +352,9 @@
       <Filter>Source Files\Input\Cursor</Filter>
     </ClCompile>
     <ClCompile Include="src\Input\Cursor\CursorInput.cpp">
+      <Filter>Source Files\Input\Cursor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input\Cursor\LaserCursorInputDevice.cpp">
       <Filter>Source Files\Input\Cursor</Filter>
     </ClCompile>
     <ClCompile Include="src\MusicGame\Graphics\HUD\HispeedSettingPanel.cpp">
@@ -751,6 +763,18 @@
     <ClInclude Include="src\Input\KeyConfig.hpp">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
+    <ClInclude Include="src\Input\LaserInput\AnalogStickXYLaserInput.hpp">
+      <Filter>Header Files\Input\LaserInput</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\LaserInput\ILaserInputMethod.hpp">
+      <Filter>Header Files\Input\LaserInput</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\LaserInput\KeyboardLaserInput.hpp">
+      <Filter>Header Files\Input\LaserInput</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\LaserInput\SliderLaserInput.hpp">
+      <Filter>Header Files\Input\LaserInput</Filter>
+    </ClInclude>
     <ClInclude Include="src\Input\PlatformKey.hpp">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
@@ -878,6 +902,9 @@
       <Filter>Header Files\Input\Cursor</Filter>
     </ClInclude>
     <ClInclude Include="src\Input\Cursor\CursorInput.hpp">
+      <Filter>Header Files\Input\Cursor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\Cursor\LaserCursorInputDevice.hpp">
       <Filter>Header Files\Input\Cursor</Filter>
     </ClInclude>
     <ClInclude Include="src\MusicGame\Graphics\HUD\HispeedSettingPanel.hpp">

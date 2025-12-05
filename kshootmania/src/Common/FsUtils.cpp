@@ -2,6 +2,19 @@
 
 namespace FsUtils
 {
+#if defined(__linux__)
+	namespace
+	{
+		// OpenSiv3D 0.6.16 Linux版でModulePathが相対パスになる現象の回避用
+		FilePath g_moduleAbsolutePath;
+	}
+
+	void InitModulePathForLinux()
+	{
+		g_moduleAbsolutePath = FileSystem::FullPath(FileSystem::ModulePath());
+	}
+#endif
+
 	FilePath GetFullPathInFolder(SpecialFolder folder, FilePathView relativePath)
 	{
 		return FileSystem::PathAppend(FileSystem::GetFolderPath(folder), relativePath);
@@ -14,6 +27,8 @@ namespace FsUtils
 		FilePath homeDir = FileSystem::GetFolderPath(SpecialFolder::UserProfile);
 		FilePath appSupport = FileSystem::PathAppend(homeDir, U"Library/Application Support");
 		return FileSystem::PathAppend(appSupport, U"kshootmania");
+#elif defined(__linux__)
+		return FileSystem::ParentPath(g_moduleAbsolutePath);
 #else
 		return FileSystem::ParentPath(FileSystem::ModulePath());
 #endif

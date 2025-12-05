@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Graphics/TiledTexture.hpp"
+#include "UI/LinearMenu.hpp"
 
 class OptionTopMenu
 {

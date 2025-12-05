@@ -8,9 +8,11 @@
 #include "Addon/CommonSEAddon.hpp"
 #include "Addon/DisableIMEAddon.hpp"
 #include "ksmaudio/ksmaudio.hpp"
+#include <ksmaxis/ksmaxis.hpp>
 #include "RuntimeConfig.hpp"
 #include "Scenes/Title/TitleScene.hpp"
 #include "Input/KeyConfig.hpp"
+#include "Input/InputUtils.hpp"
 
 #ifdef __APPLE__
 #include <ksmplatform_macos/input_method.h>
@@ -149,6 +151,29 @@ void OutputLicenseTxt()
 		U"SOFTWARE.";
 	licenses.push_back(ksonLicense);
 
+	// ksmaxisのライセンス情報を追加
+	LicenseInfo ksmaxisLicense;
+	ksmaxisLicense.title = U"ksmaxis";
+	ksmaxisLicense.copyright = U"Copyright (c) 2025 masaka";
+	ksmaxisLicense.text = U"Permission is hereby granted, free of charge, to any person obtaining a copy\n"
+		U"of this software and associated documentation files (the \"Software\"), to deal\n"
+		U"in the Software without restriction, including without limitation the rights\n"
+		U"to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n"
+		U"copies of the Software, and to permit persons to whom the Software is\n"
+		U"furnished to do so, subject to the following conditions:\n"
+		U"\n"
+		U"The above copyright notice and this permission notice shall be included in all\n"
+		U"copies or substantial portions of the Software.\n"
+		U"\n"
+		U"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n"
+		U"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n"
+		U"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n"
+		U"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n"
+		U"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n"
+		U"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n"
+		U"SOFTWARE.";
+	licenses.push_back(ksmaxisLicense);
+
 	// KSMフォントのライセンス情報を追加
 	LicenseInfo ksmFontLicense;
 	ksmFontLicense.title = U"KSM Fonts (KSM-JA/KR/SC/TC-Medium)";
@@ -203,6 +228,10 @@ void OutputLicenseTxt()
 
 void KSMMain()
 {
+#if defined(__linux__)
+	FsUtils::InitModulePathForLinux();
+#endif
+
 	// Escキーによるプログラム終了を無効化
 	System::SetTerminationTriggers(UserAction::CloseButtonClicked);
 
@@ -210,7 +239,7 @@ void KSMMain()
 	LicenseManager::DisableDefaultTrigger();
 
 	// ウィンドウタイトル
-	Window::SetTitle(U"K-Shoot MANIA v2.0.0-alpha3");
+	Window::SetTitle(U"K-Shoot MANIA v2.0.0-alpha4");
 
 	// カレントディレクトリを設定
 	// (ChangeCurrentDirectoryはここ以外は基本的に使用禁止。どうしても使う必要がある場合は必ずResourceDirectoryPathに戻すこと)
@@ -296,6 +325,9 @@ void KSMMain()
 	Co::Init();
 	noco::Init();
 
+	// レーザー入力方式がキーボード以外なら、ksmaxisを初期化
+	InputUtils::InitKsmaxisForCurrentLaserInput();
+
 	// NocoUIのグローバルデフォルトフォントを設定
 	noco::SetGlobalDefaultFont(AssetManagement::SystemFont());
 
@@ -308,6 +340,11 @@ void KSMMain()
 	
 	while (System::Update())
 	{
+		if (ksmaxis::IsInitialized())
+		{
+			ksmaxis::Update();
+		}
+
 #ifdef __APPLE__
 		// macOSプラットフォーム特有のキーボード状態を更新
 		KeyConfig::UpdatePlatformKeyboard();
@@ -330,7 +367,11 @@ void KSMMain()
 	KSMPlatformMacOS_StopBlockingIMEKeys();
 #endif
 
-	// 音声のバックエンドを終了
+	// ライブラリ終了
+	if (ksmaxis::IsInitialized())
+	{
+		ksmaxis::Terminate();
+	}
 	ksmaudio::Terminate();
 }
 

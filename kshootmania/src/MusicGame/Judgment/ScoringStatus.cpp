@@ -21,7 +21,7 @@ namespace MusicGame::Judgment
 
 		case GaugeCalcType::kNormalHard:
 			adjustedAdd = static_cast<int32>(add * kGaugeIncreaseRateHard);
-			m_gaugeValue = Min(m_gaugeValue + adjustedAdd, m_gaugeValueMax);
+			m_gaugeValue = Min(m_gaugeValue + adjustedAdd, kGaugeValueMaxHard);
 			break;
 
 		case GaugeCalcType::kCourseNormal:

@@ -3,6 +3,12 @@
 /// @brief ファイルシステム関連の関数群
 namespace FsUtils
 {
+#if defined(__linux__)
+	/// @brief FsUtils用のModulePathを初期化(Linux用)
+	/// @remark プログラム起動直後のカレントディレクトリが未変更のタイミングで一度だけ呼び出す
+	void InitModulePathForLinux();
+#endif
+
 	/// @brief 特殊フォルダ内の相対パスからフルパスを取得
 	/// @param folder 特殊フォルダの種類
 	/// @param relativePath 特殊フォルダ内の相対パス

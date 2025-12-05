@@ -9,7 +9,7 @@ PlayStatsPanel::PlayStatsPanel(std::shared_ptr<noco::Canvas> canvas)
 bool PlayStatsPanel::isThreeBTButtonsPressed() const
 {
 	int32 btPressedCount = 0;
-	for (KeyConfig::Button btButton = KeyConfig::kBT_A; btButton <= KeyConfig::kBT_D; ++btButton)
+	for (Button btButton = kButtonBT_A; btButton <= kButtonBT_D; ++btButton)
 	{
 		if (KeyConfig::Pressed(btButton))
 		{

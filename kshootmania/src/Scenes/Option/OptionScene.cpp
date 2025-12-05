@@ -3,6 +3,7 @@
 #include "Common/IMEUtils.hpp"
 #include "RuntimeConfig.hpp"
 #include "Scenes/Title/TitleScene.hpp"
+#include "Input/InputUtils.hpp"
 
 // TODO: TextureIdxまわりどうにかする
 
@@ -136,12 +137,16 @@ namespace
 				}).setOnChangeCallback([]() {
 					RuntimeConfig::SetJudgmentPlayModeLaser(static_cast<JudgmentPlayMode>(ConfigIni::GetInt(ConfigIni::Key::kJudgmentModeLaser)));
 				}),
-				/*CreateInfo::Enum(ConfigIni::Key::kLaserInputType, Array<IntStrPair>{
+				CreateInfo::Enum(ConfigIni::Key::kLaserInputType, Array<IntStrPair>{
 					IntStrPair{ ConfigIni::Value::LaserInputType::kKeyboard, I18n::Get(I18n::Option::kLaserInputTypeKeyboard) },
 					IntStrPair{ ConfigIni::Value::LaserInputType::kSlider, I18n::Get(I18n::Option::kLaserInputTypeSlider) },
+#if !defined(__APPLE__) // macOSではマウスデバイスの取得に入力監視の許可が必要で、配布アプリケーション用に正式なコード署名が必要になる(要Apple Developer Program加入)とみられるため実装済みだが一旦除外
 					IntStrPair{ ConfigIni::Value::LaserInputType::kMouseXY, I18n::Get(I18n::Option::kLaserInputTypeMouseXY) },
+#endif
 					IntStrPair{ ConfigIni::Value::LaserInputType::kAnalogStickXY, I18n::Get(I18n::Option::kLaserInputTypeAnalogStickXY) },
-				}),*/
+				}).setOnChangeCallback([]() {
+					InputUtils::InitKsmaxisForCurrentLaserInput();
+				}),
 				CreateInfo::Enum(ConfigIni::Key::kAssistTick, Array<StringView>{
 					I18n::Get(I18n::Option::kAssistTickOff),
 					I18n::Get(I18n::Option::kAssistTickOn),
@@ -164,7 +169,7 @@ namespace
 					I18n::Get(I18n::Option::kLaserTimingAdjustLater),
 					I18n::Get(I18n::Option::kLaserTimingAdjustEarlier))
 				.setKeyTextureIdx(7),
-				/*CreateInfo::Enum(ConfigIni::Key::kLaserMouseDirectionX, Array<StringView>{
+				CreateInfo::Enum(ConfigIni::Key::kLaserMouseDirectionX, Array<StringView>{
 					I18n::Get(I18n::Option::kLaserMouseDirectionLeftThenRight),
 					I18n::Get(I18n::Option::kLaserMouseDirectionRightThenRight),
 				}).setKeyTextureIdx(8),
@@ -172,7 +177,7 @@ namespace
 					I18n::Get(I18n::Option::kLaserMouseDirectionUpThenRight),
 					I18n::Get(I18n::Option::kLaserMouseDirectionDownThenRight),
 				}).setKeyTextureIdx(9),
-				CreateInfo::Int(ConfigIni::Key::kLaserSignalSensitivity, kLaserSignalSensitivityMin, kLaserSignalSensitivityMax, kLaserSignalSensitivityDefault).setKeyTextureIdx(10), // TODO: additional suffix for zero value*/
+				CreateInfo::Int(ConfigIni::Key::kLaserSignalSensitivity, kLaserSignalSensitivityMin, kLaserSignalSensitivityMax, kLaserSignalSensitivityDefault).setKeyTextureIdx(10), // TODO: additional suffix for zero value
 				CreateInfo::Enum(ConfigIni::Key::kSwapLaserLR, Array<StringView>{
 					I18n::Get(I18n::Option::kDisabled),
 					I18n::Get(I18n::Option::kEnabled),
@@ -242,20 +247,28 @@ void OptionScene::update()
 			m_optionMenus[*m_currentOptionMenuIdx].update();
 		}
 
-		if (KeyConfig::Down(KeyConfig::kBack))
+		if (KeyConfig::Down(kButtonBack))
 		{
-			m_currentOptionMenuIdx = none;
+			// ボタン編集中の場合は戻らない
+			if (m_currentOptionMenuIdx == OptionMenuType::kKeyConfig && m_keyConfigMenu.isButtonEditingState())
+			{
+				// 何もしない
+			}
+			else
+			{
+				m_currentOptionMenuIdx = none;
+			}
 		}
 	}
 	else
 	{
 		m_topMenu.update();
 
-		if (KeyConfig::Down(KeyConfig::kStart))
+		if (KeyConfig::Down(kButtonStart))
 		{
 			m_currentOptionMenuIdx = m_topMenu.cursorAs<OptionMenuType>();
 		}
-		else if (KeyConfig::Down(KeyConfig::kBack))
+		else if (KeyConfig::Down(kButtonBack))
 		{
 			exitScene();
 		}

@@ -33,7 +33,7 @@ OptionMenu::OptionMenu(StringView fieldKeyTextureAssetKey, const Array<OptionMen
 		LinearMenu::CreateInfoWithEnumCount{
 			.cursorInputCreateInfo = {
 				.type = CursorInput::Type::Vertical,
-				.buttonFlags = CursorButtonFlags::kArrowOrBTOrLaser,
+				.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 				.buttonIntervalSec = 0.1,
 				.buttonIntervalSecFirst = 0.5,
 			},

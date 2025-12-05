@@ -61,6 +61,7 @@ target_link_libraries(${TARGET_NAME} PRIVATE
     Siv3D::Siv3D
     kson
     ksmaudio
+    ksmaxis
     NocoUI
     Catch2::Catch2
 )

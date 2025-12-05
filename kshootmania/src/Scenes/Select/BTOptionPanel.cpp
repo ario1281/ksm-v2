@@ -342,7 +342,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 	loadFromConfigIni();
 }
 
-Optional<KeyConfig::Button> BTOptionPanel::getCurrentSingleBTButton() const
+Optional<Button> BTOptionPanel::getCurrentSingleBTButton() const
 {
 	// Shift押下中はBTメニューを開かない(アルファベットジャンプを優先)
 	if (KeyShift.pressed())
@@ -351,9 +351,9 @@ Optional<KeyConfig::Button> BTOptionPanel::getCurrentSingleBTButton() const
 	}
 
 	int32 pressedCount = 0;
-	Optional<KeyConfig::Button> pressedButton;
+	Optional<Button> pressedButton;
 
-	for (KeyConfig::Button button = KeyConfig::kBT_A; button <= KeyConfig::kBT_D; ++button)
+	for (Button button = kButtonBT_A; button <= kButtonBT_D; ++button)
 	{
 		if (KeyConfig::Pressed(button))
 		{
@@ -462,13 +462,13 @@ bool BTOptionPanel::update(double currentChartStdBPM)
 		m_isVisible = true;
 
 		// 対応するパネルを表示
-		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_A", currentButton == KeyConfig::kBT_A);
-		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_B", currentButton == KeyConfig::kBT_B);
-		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_C", currentButton == KeyConfig::kBT_C);
-		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_D", currentButton == KeyConfig::kBT_D);
+		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_A", currentButton == kButtonBT_A);
+		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_B", currentButton == kButtonBT_B);
+		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_C", currentButton == kButtonBT_C);
+		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_D", currentButton == kButtonBT_D);
 
 		// 各メニューの更新
-		if (currentButton == KeyConfig::kBT_A)
+		if (currentButton == kButtonBT_A)
 		{
 			m_btAMenu.update();
 
@@ -500,7 +500,7 @@ bool BTOptionPanel::update(double currentChartStdBPM)
 
 			m_canvas->setParamValue(U"overlay_btOptionPanelText_A", generateBTAMenuText());
 		}
-		else if (currentButton == KeyConfig::kBT_B)
+		else if (currentButton == kButtonBT_B)
 		{
 			m_btBMenu.update();
 
@@ -535,7 +535,7 @@ bool BTOptionPanel::update(double currentChartStdBPM)
 
 			m_canvas->setParamValue(U"overlay_btOptionPanelText_B", generateBTBMenuText());
 		}
-		else if (currentButton == KeyConfig::kBT_C)
+		else if (currentButton == kButtonBT_C)
 		{
 			m_btCMenu.update();
 
@@ -576,7 +576,7 @@ bool BTOptionPanel::update(double currentChartStdBPM)
 
 			m_canvas->setParamValue(U"overlay_btOptionPanelText_C", generateBTCMenuText());
 		}
-		else if (currentButton == KeyConfig::kBT_D)
+		else if (currentButton == kButtonBT_D)
 		{
 			m_hispeedTypeMenu.update();
 			m_hispeedValueMenu.update();
@@ -700,15 +700,7 @@ void BTOptionPanel::loadFromConfigIni()
 	loadedType = hispeedSetting.type;
 	loadedValue = hispeedSetting.value;
 
-	// ハイスピード種類の配列から該当するインデックスを探して設定
-	for (int32 i = 0; i < static_cast<int32>(m_hispeedTypeMenu.size()); ++i)
-	{
-		if (m_hispeedTypeMenu[i] == loadedType)
-		{
-			m_hispeedTypeMenu.setCursor(i);
-			break;
-		}
-	}
+	m_hispeedTypeMenu.setCursorToValue(loadedType);
 
 	refreshHispeedValueMenuConstraints();
 	m_hispeedValueMenu.setCursor(loadedValue);

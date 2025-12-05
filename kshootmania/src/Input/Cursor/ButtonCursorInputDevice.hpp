@@ -1,14 +1,15 @@
 ﻿#pragma once
 #include "ICursorInputDevice.hpp"
+#include "Input/KeyConfig.hpp"
 
 class ButtonCursorInputDevice : public ICursorInputDevice
 {
 private:
-	const Array<KeyConfig::Button> m_incrementButtons;
-	const Array<KeyConfig::Button> m_decrementButtons;
+	const Array<Button> m_incrementButtons;
+	const Array<Button> m_decrementButtons;
 	const double m_intervalSec;
 	const double m_intervalSecFirst;
-	const StartRequiredForBTFXLaserYN m_startRequiredForBTFXLaser;
+	const NeedStartButtonHoldForNonArrowKeyYN m_needStartButtonHoldForNonArrowKey;
 	int32 m_deltaCursor = 0;
 	Optional<Stopwatch> m_pressedTimeStopwatch;
 	double m_pressedTimeSecPrev = 0.0;
@@ -20,11 +21,11 @@ public:
 	/// @param intervalSec カーソル移動の所要押下時間(0の場合、押下し続けても連続でカーソル移動しない)
 	/// @param intervalSecFirst 1回目のカーソル移動までの所要押下時間(0の場合、intervalSecと同じ値に設定される)
 	explicit ButtonCursorInputDevice(
-		const Array<KeyConfig::Button>& incrementButtons,
-		const Array<KeyConfig::Button>& decrementButtons,
+		const Array<Button>& incrementButtons,
+		const Array<Button>& decrementButtons,
 		double intervalSec,
 		double intervalSecFirst,
-		StartRequiredForBTFXLaserYN startRequiredForBTFXLaser);
+		NeedStartButtonHoldForNonArrowKeyYN needStartButtonHoldForNonArrowKey);
 
 	virtual ~ButtonCursorInputDevice();
 

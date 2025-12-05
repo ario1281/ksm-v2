@@ -47,7 +47,7 @@ if(APPLE)
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_BUNDLE_NAME "K-Shoot MANIA"
         MACOSX_BUNDLE_BUNDLE_VERSION "2.0.0"
-        MACOSX_BUNDLE_SHORT_VERSION_STRING "2.0.0-alpha3"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "2.0.0-alpha4"
         MACOSX_BUNDLE_ICON_FILE icon.icns
     )
     
@@ -137,6 +137,7 @@ target_link_libraries(kshootmania PRIVATE
     Siv3D::Siv3D
     kson
     ksmaudio
+    ksmaxis
     NocoUI
 )
 
@@ -176,6 +177,30 @@ elseif(UNIX)
         BUILD_RPATH "${CMAKE_SOURCE_DIR}/ksmaudio/ThirdParty_Linux/bass:${CMAKE_SOURCE_DIR}/ksmaudio/ThirdParty_Linux/bass_fx"
         INSTALL_RPATH "$ORIGIN/../lib"
     )
+
+    # resourcesフォルダがない場合は作成
+    add_custom_command(TARGET kshootmania POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources
+    )
+
+    # engineディレクトリをコピー
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/App/engine")
+        add_custom_command(TARGET kshootmania POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_CURRENT_SOURCE_DIR}/App/engine
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/engine
+        )
+    endif()
+
+    # assetsディレクトリをコピー
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/App/assets")
+        add_custom_command(TARGET kshootmania POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_CURRENT_SOURCE_DIR}/App/assets
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/assets
+        )
+    endif()
 endif()
 
 # エディタ用の設定
@@ -184,7 +209,7 @@ if(APPLE)
 		MACOSX_BUNDLE TRUE
 		MACOSX_BUNDLE_BUNDLE_NAME "K-Shoot MANIA Editor"
 		MACOSX_BUNDLE_BUNDLE_VERSION "2.0.0"
-		MACOSX_BUNDLE_SHORT_VERSION_STRING "2.0.0-alpha3"
+		MACOSX_BUNDLE_SHORT_VERSION_STRING "2.0.0-alpha4"
 		MACOSX_BUNDLE_ICON_FILE icon_editor.icns
 	)
 
@@ -269,6 +294,7 @@ target_link_libraries(kshooteditor PRIVATE
 	Siv3D::Siv3D
 	kson
 	ksmaudio
+	ksmaxis
 	NocoUI
 )
 
@@ -301,4 +327,28 @@ elseif(UNIX)
 		BUILD_RPATH "${CMAKE_SOURCE_DIR}/ksmaudio/ThirdParty_Linux/bass:${CMAKE_SOURCE_DIR}/ksmaudio/ThirdParty_Linux/bass_fx"
 		INSTALL_RPATH "$ORIGIN/../lib"
 	)
+
+	# resourcesフォルダがない場合は作成
+	add_custom_command(TARGET kshooteditor POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E make_directory
+		${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources
+	)
+
+	# engineディレクトリをコピー
+	if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/App/engine")
+		add_custom_command(TARGET kshooteditor POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_directory
+			${CMAKE_CURRENT_SOURCE_DIR}/App/engine
+			${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/engine
+		)
+	endif()
+
+	# assetsディレクトリをコピー
+	if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/App/assets")
+		add_custom_command(TARGET kshooteditor POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_directory
+			${CMAKE_CURRENT_SOURCE_DIR}/App/assets
+			${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/assets
+		)
+	endif()
 endif()

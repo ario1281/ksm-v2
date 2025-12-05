@@ -26,7 +26,7 @@ struct SelectMenuEventContext
 {
 	// Note: FilePathViewやconst FilePath&ではなくFilePathにしているのは意図的
 	//       (メニュー項目の再構築が発生すると呼び出し元のFilePathが無効になるので、事前にコピーしておく必要がある)
-	std::function<void(FilePath, MusicGame::IsAutoPlayYN, Optional<CoursePlayState>)> fnMoveToPlayScene;
+	std::function<void(FilePath, MusicGame::IsAutoPlayYN, const Optional<CoursePlayState>&)> fnMoveToPlayScene;
 	std::function<void(FilePath)> fnOpenDirectory;
 	std::function<void()> fnOpenAllFolder;
 	std::function<void(FilePath)> fnOpenFavoriteFolder;
@@ -111,12 +111,12 @@ private:
 
 	Optional<std::size_t> findFolderIndex(const Array<FilePath>& folderPaths, FilePathView targetFullPath) const;
 
-	void addOtherFolderItemsRotated(FilePathView currentFolderPath);
+	void addOtherFolderItemsRotated();
 
 	void addOtherFolderItemsSimple();
 
 public:
-	explicit SelectMenu(const std::shared_ptr<noco::Canvas>& selectSceneCanvas, std::function<void(FilePathView, MusicGame::IsAutoPlayYN, Optional<CoursePlayState>)> fnMoveToPlayScene);
+	explicit SelectMenu(const std::shared_ptr<noco::Canvas>& selectSceneCanvas, std::function<void(FilePathView, MusicGame::IsAutoPlayYN, const Optional<CoursePlayState>&)> fnMoveToPlayScene);
 
 	~SelectMenu(); // ヘッダではISelectMenuItemが不完全型なのでソースファイル側で定義
 

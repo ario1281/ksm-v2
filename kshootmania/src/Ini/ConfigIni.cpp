@@ -67,7 +67,7 @@ mastervol=100
 
 mouse_directionx=1
 mouse_directiony=1
-mouse_sensitivity=4
+mouse_sensitivity=40
 
 switchlaser=0
 
@@ -168,7 +168,7 @@ mastervol=100
 
 mouse_directionx=1
 mouse_directiony=1
-mouse_sensitivity=4
+mouse_sensitivity=40
 
 switchlaser=0
 

@@ -1,5 +1,11 @@
 ﻿#include "TitleMenu.hpp"
 
+namespace
+{
+	// STARTボタンを無視する時間の長さ
+	constexpr Duration kStartIgnoreDuration = 0.1s;
+}
+
 void TitleMenu::refreshCanvasMenuCursor()
 {
 	m_titleSceneCanvas->setParamValue(U"menuCursor", ToString(m_menu.cursor()));
@@ -28,12 +34,12 @@ void TitleMenu::update()
 	// (LinearMenu::deltaCursor() != 0 だとsetCursorでの直接指定による変化を検出できないため、cursor値の比較を利用している)
 	const auto beforeCursor = m_menu.cursor();
 
-	const bool backPressed = !m_isAlreadySelected && KeyConfig::Down(KeyConfig::kBack);
+	const bool backPressed = !m_isAlreadySelected && KeyConfig::Down(kButtonBack);
 	if (!m_isAlreadySelected && !backPressed)
 	{
 		m_menu.update();
 
-		if (KeyConfig::Down(KeyConfig::kStart))
+		if (m_stopwatch.elapsed() >= kStartIgnoreDuration && KeyConfig::Down(kButtonStart))
 		{
 			const auto selectedItem = m_menu.cursorAs<TitleMenuItem>();
 			m_selectedMenuItemSource.requestFinish(selectedItem);
@@ -42,7 +48,7 @@ void TitleMenu::update()
 	}
 
 	// BackボタンでEXITへフォーカス
-	if (backPressed)
+	if (!m_isAlreadySelected && backPressed)
 	{
 		m_menu.setCursor(kExit);
 	}

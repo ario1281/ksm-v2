@@ -36,7 +36,7 @@ namespace
 		return LinearMenu::CreateInfoWithCursorMinMax{
 			.cursorInputCreateInfo = {
 				.type = CursorInput::Type::Horizontal,
-				.buttonFlags = CursorButtonFlags::kArrowOrBTOrFXOrLaser,
+				.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 				.buttonIntervalSec = 0.1,
 				.buttonIntervalSecFirst = 0.5,
 			},
@@ -52,7 +52,7 @@ namespace
 		return LinearMenu::CreateInfoWithCursorMinMax{
 			.cursorInputCreateInfo = {
 				.type = CursorInput::Type::Horizontal,
-				.buttonFlags = CursorButtonFlags::kArrowOrBTOrFXOrLaser,
+				.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 				.buttonIntervalSec = 0.1,
 				.buttonIntervalSecFirst = 0.5,
 			},

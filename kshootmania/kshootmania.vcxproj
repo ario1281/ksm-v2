@@ -141,9 +141,15 @@
     <ClCompile Include="src\Ini\ConfigIni.cpp" />
     <ClCompile Include="src\Ini\KSMIniData.cpp" />
     <ClCompile Include="src\Input\FXButtonUpDetection.cpp" />
+    <ClCompile Include="src\Input\InputUtils.cpp" />
     <ClCompile Include="src\Input\Cursor\ButtonCursorInputDevice.cpp" />
     <ClCompile Include="src\Input\Cursor\CursorInput.cpp" />
+    <ClCompile Include="src\Input\Cursor\LaserCursorInputDevice.cpp" />
     <ClCompile Include="src\Input\KeyConfig.cpp" />
+    <ClCompile Include="src\Input\LaserInput\AnalogStickXYLaserInput.cpp" />
+    <ClCompile Include="src\Input\LaserInput\KeyboardLaserInput.cpp" />
+    <ClCompile Include="src\Input\LaserInput\MouseXYLaserInput.cpp" />
+    <ClCompile Include="src\Input\LaserInput\SliderLaserInput.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\RuntimeConfig.cpp" />
     <ClCompile Include="src\MusicGame\Audio\AssistTick.cpp" />
@@ -351,10 +357,17 @@
     <ClInclude Include="src\Ini\ConfigIni.hpp" />
     <ClInclude Include="src\Ini\KSMIniData.hpp" />
     <ClInclude Include="src\Input\FXButtonUpDetection.hpp" />
+    <ClInclude Include="src\Input\InputUtils.hpp" />
     <ClInclude Include="src\Input\Cursor\ButtonCursorInputDevice.hpp" />
     <ClInclude Include="src\Input\Cursor\CursorInput.hpp" />
     <ClInclude Include="src\Input\Cursor\ICursorInputDevice.hpp" />
+    <ClInclude Include="src\Input\Cursor\LaserCursorInputDevice.hpp" />
     <ClInclude Include="src\Input\KeyConfig.hpp" />
+    <ClInclude Include="src\Input\LaserInput\AnalogStickXYLaserInput.hpp" />
+    <ClInclude Include="src\Input\LaserInput\ILaserInputMethod.hpp" />
+    <ClInclude Include="src\Input\LaserInput\MouseXYLaserInput.hpp" />
+    <ClInclude Include="src\Input\LaserInput\SliderLaserInput.hpp" />
+    <ClInclude Include="src\Input\LaserInput\KeyboardLaserInput.hpp" />
     <ClInclude Include="src\Input\PlatformKey.hpp" />
     <ClInclude Include="src\MusicGame\Audio\AssistTick.hpp" />
     <ClInclude Include="src\MusicGame\Audio\AudioDefines.hpp" />
@@ -485,6 +498,9 @@
     </ProjectReference>
     <ProjectReference Include="ThirdParty\NocoUI\NocoUI.vcxproj">
       <Project>{557d3fbd-c267-4eb1-8ad6-2c19af884151}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ksmaxis\ksmaxis.vcxproj">
+      <Project>{e367b8ef-8306-4266-8577-77ae178fe5d0}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

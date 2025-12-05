@@ -7,3 +7,6 @@
 [submodule "kshootmania/third_party/NocoUI"]
 	path = kshootmania/ThirdParty/NocoUI
 	url = https://github.com/m4saka/NocoUI.git
+[submodule "ksmaxis"]
+	path = ksmaxis
+	url = https://github.com/kshootmania/ksmaxis.git

@@ -88,7 +88,7 @@ namespace
 	}
 }
 
-PlayScene::PlayScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay, Optional<CoursePlayState> courseState)
+PlayScene::PlayScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay, const Optional<CoursePlayState>& courseState)
 	: m_gameMain(MakeGameCreateInfo(chartFilePath, isAutoPlay, courseState))
 	, m_isAutoPlay(isAutoPlay)
 	, m_courseState(courseState)
@@ -154,7 +154,7 @@ void PlayScene::update()
 
 void PlayScene::processBackButtonInput()
 {
-	if (!KeyConfig::Down(KeyConfig::kBack))
+	if (!KeyConfig::Down(kButtonBack))
 	{
 		return;
 	}
@@ -166,7 +166,7 @@ void PlayScene::processBackButtonInput()
 	m_gameMain.lockForExit();
 
 	// 次のシーンで多重に反応しないよう、Backボタンの入力をクリア
-	KeyConfig::ClearInput(KeyConfig::kBack);
+	KeyConfig::ClearInput(kButtonBack);
 
 	if (m_isAutoPlay)
 	{

@@ -100,6 +100,10 @@ public:
 	/// @brief 前回のupdate時のカーソル値の変化量(update後にsetCursorによる変更があった場合は0になる)
 	/// @return 変化量
 	int32 deltaCursor() const;
+
+	/// @brief カーソル位置の割合を返す
+	/// @return カーソル位置の割合(0.0〜1.0)
+	double cursorRate() const;
 };
 
 template<typename T>

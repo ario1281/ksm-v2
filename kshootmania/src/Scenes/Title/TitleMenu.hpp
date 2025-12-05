@@ -2,7 +2,7 @@
 #include <CoTaskLib.hpp>
 #include "TitleAssets.hpp"
 #include "Graphics/TiledTexture.hpp"
-#include "ksmaudio/ksmaudio.hpp"
+#include "UI/LinearMenu.hpp"
 
 enum TitleMenuItem : int32
 {

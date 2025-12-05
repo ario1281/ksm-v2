@@ -13,8 +13,6 @@
 #include "Addon/CommonSEAddon.hpp"
 #include "Graphics/ScreenUtils.hpp"
 #include "Graphics/TiledTexture.hpp"
-#include "UI/LinearMenu.hpp"
-#include "UI/ArrayWithLinearMenu.hpp"
 #include "I18n/I18n.hpp"
 #include "Ini/ConfigIni.hpp"
 #include "MusicGame/GameDefines.hpp"

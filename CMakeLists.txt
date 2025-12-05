@@ -31,6 +31,8 @@ endif()
 
 add_subdirectory(kson)
 add_subdirectory(ksmaudio)
+set(KSMAXIS_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
+add_subdirectory(ksmaxis)
 add_subdirectory(kshootmania/ThirdParty/NocoUI)
 
 if(APPLE)

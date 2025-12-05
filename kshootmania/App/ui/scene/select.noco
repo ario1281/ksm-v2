@@ -129,6 +129,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -476,6 +477,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -823,6 +825,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -984,6 +987,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -1138,6 +1142,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -1293,6 +1298,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -1449,6 +1455,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -1605,6 +1612,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -1761,6 +1769,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -1916,6 +1925,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -2069,6 +2079,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -2227,6 +2238,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -2380,6 +2392,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -2538,6 +2551,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -2691,6 +2705,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -2849,6 +2864,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -3005,6 +3021,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -3151,6 +3168,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -3306,6 +3324,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -3459,6 +3478,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -3542,6 +3562,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -3703,6 +3724,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -3857,6 +3879,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -4012,6 +4035,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -4168,6 +4192,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -4324,6 +4349,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -4480,6 +4506,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -4635,6 +4662,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -4788,6 +4816,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -4946,6 +4975,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -5099,6 +5129,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -5257,6 +5288,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -5410,6 +5442,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -5568,6 +5601,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -5724,6 +5758,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -5870,6 +5905,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -6025,6 +6061,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -6178,6 +6215,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -6261,6 +6299,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -6422,6 +6461,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -6576,6 +6616,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -6731,6 +6772,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -6887,6 +6929,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -7043,6 +7086,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -7199,6 +7243,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -7354,6 +7399,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -7507,6 +7553,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -7665,6 +7712,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -7818,6 +7866,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -7976,6 +8025,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -8129,6 +8179,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -8287,6 +8338,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -8443,6 +8495,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -8589,6 +8642,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -8744,6 +8798,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -8897,6 +8952,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -8980,6 +9036,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -9141,6 +9198,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -9295,6 +9353,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -9450,6 +9509,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -9606,6 +9666,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -9762,6 +9823,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -9918,6 +9980,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -10073,6 +10136,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -10226,6 +10290,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -10384,6 +10449,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -10537,6 +10603,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -10695,6 +10762,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -10848,6 +10916,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -11006,6 +11075,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -11162,6 +11232,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -11308,6 +11379,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -11463,6 +11535,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -11616,6 +11689,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -11699,6 +11773,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -11860,6 +11935,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -12014,6 +12090,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -12169,6 +12246,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -12325,6 +12403,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -12481,6 +12560,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -12637,6 +12717,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -12792,6 +12873,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -12945,6 +13027,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -13103,6 +13186,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -13256,6 +13340,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -13414,6 +13499,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -13567,6 +13653,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -13725,6 +13812,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -13881,6 +13969,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -14027,6 +14116,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -14182,6 +14272,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -14335,6 +14426,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -14418,6 +14510,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -14579,6 +14672,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -14733,6 +14827,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -14888,6 +14983,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -15044,6 +15140,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -15200,6 +15297,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -15356,6 +15454,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -15511,6 +15610,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -15664,6 +15764,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -15822,6 +15923,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -15975,6 +16077,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -16133,6 +16236,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -16286,6 +16390,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -16444,6 +16549,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -16600,6 +16706,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -16746,6 +16853,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -16901,6 +17009,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -17054,6 +17163,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -17137,6 +17247,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -17298,6 +17409,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -17452,6 +17564,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -17607,6 +17720,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -17763,6 +17877,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -17919,6 +18034,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -18075,6 +18191,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -18230,6 +18347,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -18383,6 +18501,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -18541,6 +18660,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -18694,6 +18814,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -18852,6 +18973,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -19005,6 +19127,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -19163,6 +19286,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -19319,6 +19443,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -19465,6 +19590,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -19620,6 +19746,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -19773,6 +19900,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -19856,6 +19984,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -20017,6 +20146,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -20171,6 +20301,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -20317,6 +20448,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -20472,6 +20604,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -20626,6 +20759,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -20789,6 +20923,7 @@
                         "type": "AnchorRegion"
                       },
                       "rubberBandScrollEnabled": true,
+                      "scrollBarType": "Overlay",
                       "styleState": "",
                       "transform": {
                         "color": [
@@ -20941,6 +21076,7 @@
                     "type": "InlineRegion"
                   },
                   "rubberBandScrollEnabled": true,
+                  "scrollBarType": "Overlay",
                   "styleState": "",
                   "transform": {
                     "color": [
@@ -21101,6 +21237,7 @@
                         "type": "AnchorRegion"
                       },
                       "rubberBandScrollEnabled": true,
+                      "scrollBarType": "Overlay",
                       "styleState": "",
                       "transform": {
                         "color": [
@@ -21253,6 +21390,7 @@
                     "type": "InlineRegion"
                   },
                   "rubberBandScrollEnabled": true,
+                  "scrollBarType": "Overlay",
                   "styleState": "",
                   "transform": {
                     "color": [
@@ -21413,6 +21551,7 @@
                         "type": "AnchorRegion"
                       },
                       "rubberBandScrollEnabled": true,
+                      "scrollBarType": "Overlay",
                       "styleState": "",
                       "transform": {
                         "color": [
@@ -21565,6 +21704,7 @@
                     "type": "InlineRegion"
                   },
                   "rubberBandScrollEnabled": true,
+                  "scrollBarType": "Overlay",
                   "styleState": "",
                   "transform": {
                     "color": [
@@ -21725,6 +21865,7 @@
                         "type": "AnchorRegion"
                       },
                       "rubberBandScrollEnabled": true,
+                      "scrollBarType": "Overlay",
                       "styleState": "",
                       "transform": {
                         "color": [
@@ -21877,6 +22018,7 @@
                     "type": "InlineRegion"
                   },
                   "rubberBandScrollEnabled": true,
+                  "scrollBarType": "Overlay",
                   "styleState": "",
                   "transform": {
                     "color": [
@@ -21960,6 +22102,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -22115,6 +22258,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "styleState_paramRef": "center_difficultyCursorState",
               "transform": {
@@ -22290,6 +22434,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -22446,6 +22591,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -22602,6 +22748,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -22748,6 +22895,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -22894,6 +23042,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -23048,6 +23197,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -23203,6 +23353,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -23356,6 +23507,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -23514,6 +23666,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -23667,6 +23820,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -23825,6 +23979,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -23978,6 +24133,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -24136,6 +24292,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -24292,6 +24449,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -24438,6 +24596,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -24592,6 +24751,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -24747,6 +24907,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -24832,6 +24993,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -24985,6 +25147,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -25261,6 +25424,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -25379,6 +25543,55 @@
                 100.0
               ],
               "type": "Sprite"
+            },
+            {
+              "active": true,
+              "applyDuringDelay": false,
+              "colorEnabled": false,
+              "colorFrom": [
+                255,
+                255,
+                255,
+                255
+              ],
+              "colorTo": [
+                255,
+                255,
+                255,
+                255
+              ],
+              "delay": 0.0,
+              "duration": 1.0,
+              "easing": "Linear",
+              "loopDuration": 0.0,
+              "loopType": "None",
+              "manualMode": true,
+              "manualTime": 0.0,
+              "manualTime_paramRef": "scrollBarCursorRate",
+              "restartOnActive": true,
+              "rotationEnabled": false,
+              "rotationFrom": 0.0,
+              "rotationTo": 0.0,
+              "scaleEnabled": false,
+              "scaleFrom": [
+                1.0,
+                1.0
+              ],
+              "scaleTo": [
+                1.0,
+                1.0
+              ],
+              "tag": "",
+              "translateEnabled": true,
+              "translateFrom": [
+                0.0,
+                0.0
+              ],
+              "translateTo": [
+                0.0,
+                480.0
+              ],
+              "type": "Tween"
             }
           ],
           "decelerationRate": 0.2,
@@ -25419,6 +25632,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -25572,6 +25786,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -25730,6 +25945,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -25885,6 +26101,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -25968,6 +26185,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -26122,6 +26340,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -26286,6 +26505,7 @@
                     "type": "AnchorRegion"
                   },
                   "rubberBandScrollEnabled": true,
+                  "scrollBarType": "Overlay",
                   "styleState": "",
                   "transform": {
                     "color": [
@@ -26439,6 +26659,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -26522,6 +26743,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -26683,6 +26905,7 @@
                     "type": "AnchorRegion"
                   },
                   "rubberBandScrollEnabled": true,
+                  "scrollBarType": "Overlay",
                   "styleState": "",
                   "transform": {
                     "color": [
@@ -26836,6 +27059,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -26919,6 +27143,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -27080,6 +27305,7 @@
                     "type": "AnchorRegion"
                   },
                   "rubberBandScrollEnabled": true,
+                  "scrollBarType": "Overlay",
                   "styleState": "",
                   "transform": {
                     "color": [
@@ -27233,6 +27459,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -27316,6 +27543,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -27477,6 +27705,7 @@
                     "type": "AnchorRegion"
                   },
                   "rubberBandScrollEnabled": true,
+                  "scrollBarType": "Overlay",
                   "styleState": "",
                   "transform": {
                     "color": [
@@ -27630,6 +27859,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -27713,6 +27943,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -27874,6 +28105,7 @@
                     "type": "AnchorRegion"
                   },
                   "rubberBandScrollEnabled": true,
+                  "scrollBarType": "Overlay",
                   "styleState": "",
                   "transform": {
                     "color": [
@@ -28027,6 +28259,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -28110,6 +28343,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -28193,6 +28427,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -28355,6 +28590,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -28511,6 +28747,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -28639,6 +28876,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -28799,6 +29037,7 @@
                 "type": "AnchorRegion"
               },
               "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
               "styleState": "",
               "transform": {
                 "color": [
@@ -28927,6 +29166,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -29010,6 +29250,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -29326,6 +29567,10 @@
     "playerName": {
       "type": "String",
       "value": "playerName"
+    },
+    "scrollBarCursorRate": {
+      "type": "Number",
+      "value": 0.0
     },
     "top1_artist": {
       "type": "String",

@@ -1,5 +1,6 @@
 ﻿#include "HispeedSettingMenu.hpp"
 #include "Input/PlatformKey.hpp"
+#include "Input/KeyConfig.hpp"
 
 namespace MusicGame
 {
@@ -201,7 +202,7 @@ namespace MusicGame
 
 	void HispeedSettingMenu::setHispeedSetting(const HispeedSetting& hispeedSetting)
 	{
-		m_typeMenu.setCursor(hispeedSetting.type);
+		m_typeMenu.setCursorToValue(hispeedSetting.type);
 		refreshValueMenuConstraints();
 		m_valueMenu.setCursor(hispeedSetting.value);
 	}
@@ -214,7 +215,7 @@ namespace MusicGame
 					.type = CursorInput::Type::Horizontal,
 					.buttonFlags = CursorButtonFlags::kArrowOrFX,
 					.buttonIntervalSec = 0.12,
-					.startRequiredForBTFXLaser = StartRequiredForBTFXLaserYN::Yes,
+					.needStartButtonHoldForNonArrowKey = NeedStartButtonHoldForNonArrowKeyYN::Yes,
 				},
 				.cyclic = IsCyclicMenuYN::Yes,
 			})
@@ -225,7 +226,7 @@ namespace MusicGame
 					.buttonFlags = CursorButtonFlags::kArrowOrLaserAll,
 					.flipArrowKeyDirection = FlipArrowKeyDirectionYN::Yes, // 上向きで増加、下向きで減少なので、上下逆にする
 					.buttonIntervalSec = 0.06,
-					.startRequiredForBTFXLaser = StartRequiredForBTFXLaserYN::Yes,
+					.needStartButtonHoldForNonArrowKey = NeedStartButtonHoldForNonArrowKeyYN::Yes,
 				},
 				.cursorMin = 0, // このあとすぐrefreshValueMenuConstraintsで値が入るのでここでは両方0でOK
 				.cursorMax = 0,

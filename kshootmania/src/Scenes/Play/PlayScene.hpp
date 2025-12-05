@@ -24,7 +24,7 @@ private:
 	void processBackButtonInput();
 
 public:
-	explicit PlayScene(FilePathView filePath, MusicGame::IsAutoPlayYN isAutoPlay, Optional<CoursePlayState> courseState = none);
+	explicit PlayScene(FilePathView filePath, MusicGame::IsAutoPlayYN isAutoPlay, const Optional<CoursePlayState>& courseState = none);
 
 	virtual ~PlayScene();
 

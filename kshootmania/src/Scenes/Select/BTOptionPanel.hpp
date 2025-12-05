@@ -43,7 +43,7 @@ private:
 	bool m_isVisible = false;
 
 	// 現在押されているBTボタンを取得(単独押しの場合のみ)
-	Optional<KeyConfig::Button> getCurrentSingleBTButton() const;
+	Optional<Button> getCurrentSingleBTButton() const;
 
 	// BT-Aメニューの表示テキスト生成
 	String generateBTAMenuText() const;

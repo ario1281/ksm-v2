@@ -25,7 +25,7 @@ private:
 	Stopwatch m_stopwatchSinceHispeedChange{ StartImmediately::Yes };
 
 public:
-	explicit PlayPrepareScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay, Optional<CoursePlayState> courseState = none);
+	explicit PlayPrepareScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay, const Optional<CoursePlayState>& courseState = none);
 
 	virtual ~PlayPrepareScene() = default;
 

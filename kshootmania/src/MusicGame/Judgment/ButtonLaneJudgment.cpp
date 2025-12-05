@@ -1,5 +1,6 @@
 ﻿#include "ButtonLaneJudgment.hpp"
 #include "MusicGame/Graphics/GraphicsDefines.hpp"
+#include "Input/KeyConfig.hpp"
 
 namespace MusicGame::Judgment
 {
@@ -114,15 +115,15 @@ namespace MusicGame::Judgment
 			return false;
 		}
 
-		bool HasFXChipKeySound(const kson::ChartData& chartData, KeyConfig::Button button, kson::Pulse pulse)
+		bool HasFXChipKeySound(const kson::ChartData& chartData, Button button, kson::Pulse pulse)
 		{
-			if (button != KeyConfig::kFX_L && button != KeyConfig::kFX_R)
+			if (button != kButtonFX_L && button != kButtonFX_R)
 			{
 				// FXレーンでない場合は対象外
 				return false;
 			}
 
-			const std::size_t laneIdx = button - KeyConfig::kFX_L;
+			const std::size_t laneIdx = button - kButtonFX_L;
 			const auto& chipEvent = chartData.audio.keySound.fx.chipEvent;
 
 			for (const auto& [filename, lanes] : chipEvent)
@@ -377,7 +378,7 @@ namespace MusicGame::Judgment
 		}
 	}
 
-	ButtonLaneJudgment::ButtonLaneJudgment(JudgmentPlayMode judgmentPlayMode, GaugeType gaugeType, FastSlowMode fastSlowMode, KeyConfig::Button keyConfigButton, const kson::ByPulse<kson::Interval>& lane, const kson::BeatInfo& beatInfo, const kson::TimingCache& timingCache)
+	ButtonLaneJudgment::ButtonLaneJudgment(JudgmentPlayMode judgmentPlayMode, GaugeType gaugeType, FastSlowMode fastSlowMode, Button keyConfigButton, const kson::ByPulse<kson::Interval>& lane, const kson::BeatInfo& beatInfo, const kson::TimingCache& timingCache)
 		: m_judgmentPlayMode(judgmentPlayMode)
 		, m_gaugeType(gaugeType)
 		, m_fastSlowMode(fastSlowMode)

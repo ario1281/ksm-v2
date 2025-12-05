@@ -102,7 +102,6 @@ enum class AutoSyncMode : int32
 	kCount,
 };
 
-// TODO: プレイ側で実装
 enum class FastSlowMode : int32
 {
 	kHide = 0,
@@ -111,7 +110,6 @@ enum class FastSlowMode : int32
 	kCount,
 };
 
-// TODO: プレイ側で実装
 enum class NoteSkinType : int32
 {
 	kDefault = 0,
@@ -120,7 +118,6 @@ enum class NoteSkinType : int32
 	kCount,
 };
 
-// TODO: プレイ側で実装
 enum class MovieMode : int32
 {
 	kOff = 0,
@@ -128,6 +125,79 @@ enum class MovieMode : int32
 
 	kCount,
 };
+
+using Button = int32;
+
+constexpr Button kUnspecifiedButton = -1;
+
+// 注意: config.iniの値と対応しているので順番を変更してはいけない
+enum ConfigurableButton : Button
+{
+	kButtonBT_A = 0,
+	kButtonBT_B,
+	kButtonBT_C,
+	kButtonBT_D,
+	kButtonFX_L,
+	kButtonFX_R,
+	kButtonLeftLaserL,
+	kButtonLeftLaserR,
+	kButtonRightLaserL,
+	kButtonRightLaserR,
+	kButtonFX_LR,
+	kButtonStart,
+	kButtonBack,
+	kButtonAutoPlay,
+
+	kConfigurableButtonEnumCount,
+};
+
+enum UnconfigurableButton : Button
+{
+	kButtonUp = kConfigurableButtonEnumCount,
+	kButtonDown,
+	kButtonLeft,
+	kButtonRight,
+
+	kButtonBackspace,
+
+	kButtonEnumCount,
+};
+
+constexpr bool IsButtonBTFXLaser(Button button)
+{
+	switch (button)
+	{
+	case kButtonBT_A:
+	case kButtonBT_B:
+	case kButtonBT_C:
+	case kButtonBT_D:
+	case kButtonFX_L:
+	case kButtonFX_R:
+	case kButtonLeftLaserL:
+	case kButtonLeftLaserR:
+	case kButtonRightLaserL:
+	case kButtonRightLaserR:
+		return true;
+
+	default:
+		return false;
+	}
+}
+
+constexpr bool IsButtonArrowKey(Button button)
+{
+	switch (button)
+	{
+	case kButtonUp:
+	case kButtonDown:
+	case kButtonLeft:
+	case kButtonRight:
+		return true;
+
+	default:
+		return false;
+	}
+}
 
 #ifdef __APPLE__
 // macOSプラットフォーム特有のキー定義
