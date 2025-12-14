@@ -25,6 +25,10 @@ namespace RuntimeConfig
 
 	void SetJudgmentPlayModeLaser(JudgmentPlayMode mode);
 
+	double GetPlaybackSpeed();
+
+	void SetPlaybackSpeed(double speed);
+
 	// config.iniから判定モードを復元
 	void RestoreJudgmentModesFromConfigIni();
 }

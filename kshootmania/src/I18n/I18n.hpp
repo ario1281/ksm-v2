@@ -64,6 +64,7 @@ namespace I18n
 		kTurnNormal = 16,
 		kTurnMirror = 17,
 		kTurnRandom = 18,
+		kPlaybackSpeed = 21,
 		kAssistTick = 30,
 		kAssistTickOn = 31,
 		kAssistTickOff = 32,

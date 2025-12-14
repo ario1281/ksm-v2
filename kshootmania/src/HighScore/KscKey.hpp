@@ -7,6 +7,8 @@ struct KscKey
 
 	TurnMode turnMode = TurnMode::kNormal;
 
+	double playbackSpeed = 1.0;
+
 	JudgmentPlayMode btPlayMode = JudgmentPlayMode::kOn;
 
 	JudgmentPlayMode fxPlayMode = JudgmentPlayMode::kOn;

@@ -13,6 +13,8 @@ namespace MusicGame
 
 		TurnMode turnMode = TurnMode::kNormal;
 
+		double playbackSpeed = 1.0;
+
 		JudgmentPlayMode btJudgmentPlayMode = JudgmentPlayMode::kOn;
 
 		JudgmentPlayMode fxJudgmentPlayMode = JudgmentPlayMode::kOn;
@@ -99,6 +101,12 @@ namespace MusicGame
 			return btJudgmentPlayMode != JudgmentPlayMode::kOn ||
 				fxJudgmentPlayMode != JudgmentPlayMode::kOn ||
 				laserJudgmentPlayMode != JudgmentPlayMode::kOn;
+		}
+
+		// スコアを保存すべきかどうか
+		bool shouldSaveScore() const
+		{
+			return !isAutoPlay;
 		}
 	};
 }

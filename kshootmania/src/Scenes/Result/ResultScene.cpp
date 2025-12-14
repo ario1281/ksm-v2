@@ -228,12 +228,13 @@ ResultScene::ResultScene(const ResultSceneArgs& args)
 
 	// 前回までのハイスコアを読み込んでNewRecordパネルを設定
 	int32 oldScore = 0;
-	if (!m_playResult.playOption.isAutoPlay) // オートプレイの場合はスコアを保存しない
+	if (m_playResult.playOption.shouldSaveScore())
 	{
 		const KscKey condition
 		{
 			.gaugeType = m_playResult.playOption.gaugeType,
 			.turnMode = m_playResult.playOption.turnMode,
+			.playbackSpeed = m_playResult.playOption.playbackSpeed,
 			.btPlayMode = m_playResult.playOption.effectiveBtJudgmentPlayMode(),
 			.fxPlayMode = m_playResult.playOption.effectiveFxJudgmentPlayMode(),
 			.laserPlayMode = m_playResult.playOption.effectiveLaserJudgmentPlayMode(),

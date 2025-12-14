@@ -373,6 +373,9 @@ kshootmania/App/songs/K-Shoot MANIA/time4dance/time4dance_ex.ksh	kshootmania.app
 kshootmania/App/songs/K-Shoot MANIA/time4dance/time4dance_lt.ksh	kshootmania.app/Contents/Resources/songs_default/K-Shoot MANIA/time4dance/time4dance_lt.ksh
 kshootmania/App/kshootmania.app/Contents/Resources/ui/parts/course_result_chart_item.noco	kshootmania.app/Contents/Resources/ui/parts/course_result_chart_item.noco
 kshootmania/App/kshootmania.app/Contents/Resources/ui/parts/select_course_chart_item.noco	kshootmania.app/Contents/Resources/ui/parts/select_course_chart_item.noco
+kshootmania/App/kshootmania.app/Contents/Resources/ui/parts/select_item_bottom.noco	kshootmania.app/Contents/Resources/ui/parts/select_item_bottom.noco
+kshootmania/App/kshootmania.app/Contents/Resources/ui/parts/select_item_center.noco	kshootmania.app/Contents/Resources/ui/parts/select_item_center.noco
+kshootmania/App/kshootmania.app/Contents/Resources/ui/parts/select_item_top.noco	kshootmania.app/Contents/Resources/ui/parts/select_item_top.noco
 kshootmania/App/kshootmania.app/Contents/Resources/ui/scene/course_result.noco	kshootmania.app/Contents/Resources/ui/scene/course_result.noco
 kshootmania/App/kshootmania.app/Contents/Resources/ui/scene/play_prepare.noco	kshootmania.app/Contents/Resources/ui/scene/play_prepare.noco
 kshootmania/App/kshootmania.app/Contents/Resources/ui/scene/result.noco	kshootmania.app/Contents/Resources/ui/scene/result.noco

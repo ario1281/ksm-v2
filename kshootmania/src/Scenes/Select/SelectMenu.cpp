@@ -472,7 +472,7 @@ void SelectMenu::refreshContentCanvasParams()
 		if (const auto pItem = m_menu.atCyclic(m_menu.cursor() - kNumTopItems + i).get())
 		{
 			const int32 topIdx = kNumTopItems - i;
-			pItem->setCanvasParamsTopBottom(m_eventContext, *m_selectSceneCanvas, difficultyIdx, U"top{}_"_fmt(topIdx), U"TopItem{}"_fmt(topIdx));
+			pItem->setCanvasParamsTopBottom(m_eventContext, *m_selectSceneCanvas, difficultyIdx, U"top{}"_fmt(topIdx));
 		}
 	}
 
@@ -482,7 +482,7 @@ void SelectMenu::refreshContentCanvasParams()
 		if (const auto pItem = m_menu.atCyclic(m_menu.cursor() + 1 + i).get())
 		{
 			const int32 bottomIdx = i + 1;
-			pItem->setCanvasParamsTopBottom(m_eventContext, *m_selectSceneCanvas, difficultyIdx, U"bottom{}_"_fmt(bottomIdx), U"BottomItem{}"_fmt(bottomIdx));
+			pItem->setCanvasParamsTopBottom(m_eventContext, *m_selectSceneCanvas, difficultyIdx, U"bottom{}"_fmt(bottomIdx));
 		}
 	}
 }

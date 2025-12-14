@@ -53,4 +53,29 @@ namespace NocoUtils
 	{
 		return GetComponentByPath<TComponent>(pCanvas.get(), path);
 	}
+
+	/// @brief SubCanvas内のノードを名前で取得
+	/// @param pCanvas キャンバスのポインタ
+	/// @param tag SubCanvasのタグ
+	/// @param nodeName ノード名
+	/// @return ノード(見つからない場合はnullptr)
+	[[nodiscard]]
+	std::shared_ptr<noco::Node> GetSubCanvasNodeByName(noco::Canvas* pCanvas, StringView tag, StringView nodeName);
+
+	/// @brief SubCanvas内のコンポーネントを名前で取得
+	/// @tparam TComponent 取得するコンポーネントの型
+	/// @param pCanvas キャンバスのポインタ
+	/// @param tag SubCanvasのタグ
+	/// @param nodeName ノード名
+	/// @return コンポーネント(見つからない場合はnullptr)
+	template <class TComponent>
+	[[nodiscard]]
+	std::shared_ptr<TComponent> GetSubCanvasComponentByName(noco::Canvas* pCanvas, StringView tag, StringView nodeName)
+	{
+		if (const auto node = GetSubCanvasNodeByName(pCanvas, tag, nodeName))
+		{
+			return node->getComponent<TComponent>();
+		}
+		return nullptr;
+	}
 }

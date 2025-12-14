@@ -21,7 +21,7 @@ namespace MusicGame::Audio
 		LegacyAudioFPMode mode = LegacyAudioFPMode::kNone;
 		ksmaudio::AudioEffect::AudioEffectBus* pAudioEffectBusLaserForF = nullptr;
 
-		void load(const kson::ChartData& chartData, const FilePath& parentPath, double volume, SecondsF offset);
+		void load(const kson::ChartData& chartData, const FilePath& parentPath, double volume, SecondsF offset, double playbackSpeed);
 
 		void update(ksmaudio::StreamWithEffects& mainStream);
 
@@ -56,9 +56,9 @@ namespace MusicGame::Audio
 		ksmaudio::StreamWithEffects stream;
 		ksmaudio::AudioEffect::AudioEffectBus* pAudioEffectBusLaser;
 
-		SwitchAudioStream(const std::string& name, const std::string& filePath, double volume, bool enableCompressor, bool preload)
+		SwitchAudioStream(const std::string& name, const std::string& filePath, double volume, bool enableCompressor, bool preload, double playbackSpeed)
 			: name(name)
-			, stream(filePath, volume, enableCompressor, preload)
+			, stream(filePath, volume, enableCompressor, preload, playbackSpeed)
 			, pAudioEffectBusLaser(stream.emplaceAudioEffectBusLaser())
 		{
 		}
@@ -73,6 +73,7 @@ namespace MusicGame::Audio
 	{
 	private:
 		ksmaudio::StreamWithEffects m_stream;
+		const double m_playbackSpeed;
 		const Duration m_duration;
 		const SecondsF m_offset;
 		SecondsF m_timeSec = 0s;
@@ -99,7 +100,7 @@ namespace MusicGame::Audio
 			const std::set<float>& updateTriggerTiming);
 
 	public:
-		BGM(FilePathView filePath, double volume, SecondsF offset, LegacyAudioFPMode legacyMode, const kson::ChartData& chartData, const FilePath& parentPath);
+		BGM(FilePathView filePath, double volume, SecondsF offset, LegacyAudioFPMode legacyMode, const kson::ChartData& chartData, const FilePath& parentPath, double playbackSpeed = 1.0);
 
 		void update();
 

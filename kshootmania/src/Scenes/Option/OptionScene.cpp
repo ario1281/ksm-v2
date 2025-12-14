@@ -1,5 +1,6 @@
 ﻿#include "OptionScene.hpp"
 #include "OptionAssets.hpp"
+#include "Common/FrameRateLimit.hpp"
 #include "Common/IMEUtils.hpp"
 #include "RuntimeConfig.hpp"
 #include "Scenes/Title/TitleScene.hpp"
@@ -107,10 +108,12 @@ namespace
 							const int32 volume = ConfigIni::GetInt(ConfigIni::Key::kMasterVolume, kMasterVolumeDefault);
 							ksmaudio::SetMasterVolume(volume / 100.0);
 						}),
-				/*CreateInfo::Enum(ConfigIni::Key::kVsync, Array<StringView>{
-					I18n::Get(I18n::Option::kVsyncOff),
-					I18n::Get(I18n::Option::kVsyncOn),
-				}),*/
+				CreateInfo::Enum(ConfigIni::Key::kVsync, Array<StrPair>{
+					StrPair{ U"0;120", U"{}(120fps)"_fmt(I18n::Get(I18n::Option::kVsyncOff)) },
+					StrPair{ U"0;144", U"{}(144fps)"_fmt(I18n::Get(I18n::Option::kVsyncOff)) },
+					StrPair{ U"0;300", U"{}(300fps)"_fmt(I18n::Get(I18n::Option::kVsyncOff)) },
+					StrPair{ U"1", I18n::Get(I18n::Option::kVsyncOn) },
+				}).setKeyTextureIdx(9),
 			}),
 			OptionMenu(OptionTexture::kMenuKeyValueInputJudgment, {
 				CreateInfo::Enum(ConfigIni::Key::kJudgmentModeBT, Array<StringView>{
@@ -325,6 +328,16 @@ Co::Task<void> OptionScene::fadeOut()
 void OptionScene::exitScene()
 {
 	ConfigIni::Save();
+
+	// Vsync設定を反映("0;120"または"1"の形式)
+	const Array<String> vsyncParts = String{ ConfigIni::GetString(ConfigIni::Key::kVsync, U"0;300") }.split(U';');
+	const bool vsyncEnabled = vsyncParts[0] == U"1";
+	Graphics::SetVSyncEnabled(vsyncEnabled);
+
+	// フレームレート制限(Vsync有効時は無効化)
+	const int32 fpsLimitValue = vsyncParts.size() >= 2 ? ParseOr<int32>(vsyncParts[1], 300) : 300;
+	const Optional<int32> frameRateLimit = vsyncEnabled ? none : Optional<int32>(fpsLimitValue);
+	Addon::GetAddon<FrameRateLimit>(FrameRateLimit::kAddonName)->setTargetFPS(frameRateLimit);
 
 	// 画面サイズ反映
 	ApplyScreenSizeConfig();

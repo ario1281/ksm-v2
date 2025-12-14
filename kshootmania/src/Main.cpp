@@ -239,7 +239,7 @@ void KSMMain()
 	LicenseManager::DisableDefaultTrigger();
 
 	// ウィンドウタイトル
-	Window::SetTitle(U"K-Shoot MANIA v2.0.0-alpha4");
+	Window::SetTitle(U"K-Shoot MANIA v2.0.0-alpha5");
 
 	// カレントディレクトリを設定
 	// (ChangeCurrentDirectoryはここ以外は基本的に使用禁止。どうしても使う必要がある場合は必ずResourceDirectoryPathに戻すこと)
@@ -289,9 +289,15 @@ void KSMMain()
 	// アセット一覧を登録
 	AssetManagement::RegisterAssets();
 
-	// フレームレート制限
-	Graphics::SetVSyncEnabled(false);
-	Addon::Register(U"FrameRateLimit", std::make_unique<FrameRateLimit>(300), -100);
+	// Vsync設定を反映("0;120"または"1"の形式)
+	const Array<String> vsyncParts = String{ ConfigIni::GetString(ConfigIni::Key::kVsync, U"0;300") }.split(U';');
+	const bool vsyncEnabled = vsyncParts[0] == U"1";
+	Graphics::SetVSyncEnabled(vsyncEnabled);
+
+	// フレームレート制限(Vsync有効時は無効化)
+	const int32 fpsLimitValue = vsyncParts.size() >= 2 ? ParseOr<int32>(vsyncParts[1], 300) : 300;
+	const Optional<int32> frameRateLimit = vsyncEnabled ? none : Optional<int32>(fpsLimitValue);
+	Addon::Register(FrameRateLimit::kAddonName, std::make_unique<FrameRateLimit>(frameRateLimit), -100);
 
 	Addon::Register(AutoMuteAddon::kAddonName, std::make_unique<AutoMuteAddon>(), 1);
 

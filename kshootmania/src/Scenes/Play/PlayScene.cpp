@@ -53,6 +53,7 @@ namespace
 				.isAutoPlay = isAutoPlay,
 				.gaugeType = RuntimeConfig::GetGaugeType(),
 				.turnMode = RuntimeConfig::GetTurnMode(),
+				.playbackSpeed = RuntimeConfig::GetPlaybackSpeed(),
 				.btJudgmentPlayMode = RuntimeConfig::GetJudgmentPlayModeBT(),
 				.fxJudgmentPlayMode = RuntimeConfig::GetJudgmentPlayModeFX(),
 				.laserJudgmentPlayMode = RuntimeConfig::GetJudgmentPlayModeLaser(),

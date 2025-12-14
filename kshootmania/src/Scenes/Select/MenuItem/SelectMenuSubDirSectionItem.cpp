@@ -19,23 +19,23 @@ void SelectMenuSubDirSectionItem::decideAutoPlay(const SelectMenuEventContext& c
 
 void SelectMenuSubDirSectionItem::setCanvasParamsCenter([[maybe_unused]] const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx) const
 {
-	canvas.setParamValues({
-		{ U"center_isSong", false },
-		{ U"center_isDirectory", false },
-		{ U"center_isSubDirectory", true },
-		{ U"center_isCourse", false },
-		{ U"center_title", m_displayName },
+	canvas.setSubCanvasParamValuesByTag(U"center", {
+		{ U"isSong", false },
+		{ U"isDirectory", false },
+		{ U"isSubDirectory", true },
+		{ U"isCourse", false },
+		{ U"title", m_displayName },
 	});
 }
 
-void SelectMenuSubDirSectionItem::setCanvasParamsTopBottom([[maybe_unused]] const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx, StringView paramNamePrefix, [[maybe_unused]] StringView nodeName) const
+void SelectMenuSubDirSectionItem::setCanvasParamsTopBottom([[maybe_unused]] const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx, StringView tag) const
 {
-	canvas.setParamValues({
-		{ paramNamePrefix + U"isSong", false },
-		{ paramNamePrefix + U"isDirectory", false },
-		{ paramNamePrefix + U"isSubDirectory", true },
-		{ paramNamePrefix + U"isCourse", false },
-		{ paramNamePrefix + U"title", m_displayName },
+	canvas.setSubCanvasParamValuesByTag(tag, {
+		{ U"isSong", false },
+		{ U"isDirectory", false },
+		{ U"isSubDirectory", true },
+		{ U"isCourse", false },
+		{ U"title", m_displayName },
 	});
 }
 

@@ -101,7 +101,7 @@ namespace MusicGame::Audio
 		}
 	}
 
-	void LegacyAudioFPStream::load(const kson::ChartData& chartData, const FilePath& parentPath, double volume, [[maybe_unused]] SecondsF offset)
+	void LegacyAudioFPStream::load(const kson::ChartData& chartData, const FilePath& parentPath, double volume, [[maybe_unused]] SecondsF offset, double playbackSpeed)
 	{
 		if (mode == LegacyAudioFPMode::kNone)
 		{
@@ -116,9 +116,9 @@ namespace MusicGame::Audio
 
 		if (mode == LegacyAudioFPMode::kFP)
 		{
-			streamF = std::make_unique<ksmaudio::StreamWithEffects>(pathF.narrow(), volume, true, true);
-			streamP = std::make_unique<ksmaudio::StreamWithEffects>(pathP.narrow(), volume, true, true);
-			streamFP = std::make_unique<ksmaudio::StreamWithEffects>(pathFP.narrow(), volume, true, true);
+			streamF = std::make_unique<ksmaudio::StreamWithEffects>(pathF.narrow(), volume, true, true, playbackSpeed);
+			streamP = std::make_unique<ksmaudio::StreamWithEffects>(pathP.narrow(), volume, true, true, playbackSpeed);
+			streamFP = std::make_unique<ksmaudio::StreamWithEffects>(pathFP.narrow(), volume, true, true, playbackSpeed);
 
 			streamF->setMuted(true);
 			streamP->setMuted(true);
@@ -126,7 +126,7 @@ namespace MusicGame::Audio
 		}
 		else if (mode == LegacyAudioFPMode::kF)
 		{
-			streamF = std::make_unique<ksmaudio::StreamWithEffects>(pathF.narrow(), volume, true, true);
+			streamF = std::make_unique<ksmaudio::StreamWithEffects>(pathF.narrow(), volume, true, true, playbackSpeed);
 			pAudioEffectBusLaserForF = streamF->emplaceAudioEffectBusLaser();
 
 			streamF->setMuted(true);
@@ -315,8 +315,9 @@ namespace MusicGame::Audio
 		EmplaceAudioEffectToBus(pAudioEffectBus, name, def, paramChanges, updateTriggerTiming);
 	}
 
-	BGM::BGM(FilePathView filePath, double volume, SecondsF offset, LegacyAudioFPMode legacyMode, const kson::ChartData& chartData, const FilePath& parentPath)
-		: m_stream(filePath.narrow(), volume, true, true)
+	BGM::BGM(FilePathView filePath, double volume, SecondsF offset, LegacyAudioFPMode legacyMode, const kson::ChartData& chartData, const FilePath& parentPath, double playbackSpeed)
+		: m_stream(filePath.narrow(), volume, true, true, playbackSpeed)
+		, m_playbackSpeed(playbackSpeed)
 		, m_duration(m_stream.duration())
 		, m_offset(offset)
 		, m_pAudioEffectBusFX(m_stream.emplaceAudioEffectBusFX())
@@ -325,7 +326,7 @@ namespace MusicGame::Audio
 		, m_manualUpdateStopwatch(StartImmediately::Yes)
 		, m_legacyAudioFPStream{ .mode = legacyMode }
 	{
-		m_legacyAudioFPStream.load(chartData, parentPath, volume, offset);
+		m_legacyAudioFPStream.load(chartData, parentPath, volume, offset, playbackSpeed);
 	}
 
 	void BGM::update()
@@ -561,8 +562,8 @@ namespace MusicGame::Audio
 			fullPath.narrow(),
 			volume,
 			true,  // コンプレッサー有効
-			true   // プリロード
-		));
+			true,  // プリロード
+			m_playbackSpeed));
 
 		// 初期状態はミュートにする
 		targetStreams.back()->stream.setMuted(true);

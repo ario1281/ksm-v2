@@ -26,23 +26,23 @@ void SelectMenuCoursesFolderItem::decide(const SelectMenuEventContext& context, 
 
 void SelectMenuCoursesFolderItem::setCanvasParamsCenter([[maybe_unused]] const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx) const
 {
-	canvas.setParamValues({
-		{ U"center_isSong", false },
-		{ U"center_isDirectory", true },
-		{ U"center_isSubDirectory", false },
-		{ U"center_isCourse", false },
-		{ U"center_title", FolderDisplayNameCenter(kDisplayName, m_isCurrentFolder) },
+	canvas.setSubCanvasParamValuesByTag(U"center", {
+		{ U"isSong", false },
+		{ U"isDirectory", true },
+		{ U"isSubDirectory", false },
+		{ U"isCourse", false },
+		{ U"title", FolderDisplayNameCenter(kDisplayName, m_isCurrentFolder) },
 	});
 }
 
-void SelectMenuCoursesFolderItem::setCanvasParamsTopBottom([[maybe_unused]] const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx, StringView paramNamePrefix, [[maybe_unused]] StringView nodeName) const
+void SelectMenuCoursesFolderItem::setCanvasParamsTopBottom([[maybe_unused]] const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx, StringView tag) const
 {
-	canvas.setParamValues({
-		{ paramNamePrefix + U"isSong", false },
-		{ paramNamePrefix + U"isDirectory", true },
-		{ paramNamePrefix + U"isSubDirectory", false },
-		{ paramNamePrefix + U"isCourse", false },
-		{ paramNamePrefix + U"title", FolderDisplayNameTopBottom(kDisplayName, m_isCurrentFolder) },
+	canvas.setSubCanvasParamValuesByTag(tag, {
+		{ U"isSong", false },
+		{ U"isDirectory", true },
+		{ U"isSubDirectory", false },
+		{ U"isCourse", false },
+		{ U"title", FolderDisplayNameTopBottom(kDisplayName, m_isCurrentFolder) },
 	});
 }
 

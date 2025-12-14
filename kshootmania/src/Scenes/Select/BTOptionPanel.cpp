@@ -26,6 +26,7 @@ namespace
 	{
 		kEffRate = 0,
 		kTurn,
+		kPlaybackSpeed,
 
 		kCount,
 	};
@@ -42,15 +43,17 @@ namespace
 		kCount,
 	};
 
-
-
-
 	// ハイスピード値の範囲
 	constexpr int32 kHispeedXModMin = 1; // x-modの最小値(x0.1)
 	constexpr int32 kHispeedXModMax = 99; // x-modの最大値(x9.9)
 	constexpr int32 kHispeedOCModMin = 25; // o/c-modの最小値
 	constexpr int32 kHispeedOCModMax = 2000; // o/c-modの最大値
 	constexpr int32 kHispeedOCModStep = 25; // o/c-modの刻み幅
+
+	// 再生速度の範囲(カーソル値は10倍した整数値)
+	constexpr int32 kPlaybackSpeedMin = 1; // 0.1倍速
+	constexpr int32 kPlaybackSpeedMax = 30; // 3.0倍速
+	constexpr int32 kPlaybackSpeedDefault = 10; // 1.0倍速
 
 	int32 CursorMin(HispeedType hispeedType)
 	{
@@ -180,6 +183,11 @@ namespace
 		}
 	}
 
+	// 再生速度カーソル値(1〜30)から表示文字列を取得
+	String PlaybackSpeedToString(int32 cursor)
+	{
+		return U" x{:.1f} "_fmt(cursor / 10.0);
+	}
 
 	String FormatMenuLine(StringView label, StringView value, bool isSelected, int32 currentCursor, int32 minCursor, int32 maxCursor)
 	{
@@ -269,6 +277,17 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 			.buttonFlags = CursorButtonFlags::kArrow,
 		},
 		.enumCount = static_cast<int32>(3),
+		.cyclic = IsCyclicMenuYN::No,
+	})
+	, m_playbackSpeed(LinearMenu::CreateInfoWithCursorMinMax{
+		.cursorInputCreateInfo = {
+			.type = CursorInput::Type::Horizontal,
+			.buttonFlags = CursorButtonFlags::kArrow,
+			.buttonIntervalSec = 0.06,
+			.buttonIntervalSecFirst = 0.12,
+		},
+		.cursorMin = kPlaybackSpeedMin,
+		.cursorMax = kPlaybackSpeedMax,
 		.cyclic = IsCyclicMenuYN::No,
 	})
 
@@ -401,6 +420,7 @@ String BTOptionPanel::generateBTBMenuText() const
 {
 	const auto gaugeType = m_gaugeType.cursorAs<GaugeType>();
 	const auto turnMode = m_turnMode.cursorAs<TurnMode>();
+	const int32 playbackSpeedCursor = m_playbackSpeed.cursor();
 
 	const auto currentItem = m_btBMenu.cursorAs<BTBMenuItem>();
 
@@ -408,6 +428,8 @@ String BTOptionPanel::generateBTBMenuText() const
 	text += FormatMenuLine(I18n::Get(I18n::Select::kEffRate), GaugeTypeToI18nKey(gaugeType), currentItem == BTBMenuItem::kEffRate, m_gaugeType.cursor(), static_cast<int32>(GaugeType::kEasyGauge), static_cast<int32>(GaugeType::kHardGauge));
 	text += U"\n";
 	text += FormatMenuLine(I18n::Get(I18n::Select::kTurn), TurnModeToI18nKey(turnMode), currentItem == BTBMenuItem::kTurn, m_turnMode.cursor(), 0, 2);
+	text += U"\n";
+	text += FormatMenuLine(I18n::Get(I18n::Select::kPlaybackSpeed), PlaybackSpeedToString(playbackSpeedCursor), currentItem == BTBMenuItem::kPlaybackSpeed, playbackSpeedCursor, kPlaybackSpeedMin, kPlaybackSpeedMax);
 
 	return text;
 }
@@ -524,6 +546,15 @@ bool BTOptionPanel::update(double currentChartStdBPM)
 				if (valueChanged)
 				{
 					RuntimeConfig::SetTurnMode(m_turnMode.cursorAs<TurnMode>());
+				}
+			}
+			else if (currentItem == BTBMenuItem::kPlaybackSpeed)
+			{
+				m_playbackSpeed.update();
+				valueChanged = m_playbackSpeed.deltaCursor() != 0;
+				if (valueChanged)
+				{
+					RuntimeConfig::SetPlaybackSpeed(m_playbackSpeed.cursor() / 10.0);
 				}
 			}
 
@@ -671,6 +702,7 @@ void BTOptionPanel::loadFromConfigIni()
 	// BT-Bメニューの設定(config.iniには保存しない)
 	m_gaugeType.setCursor(static_cast<int32>(RuntimeConfig::GetGaugeType()));
 	m_turnMode.setCursor(static_cast<int32>(RuntimeConfig::GetTurnMode()));
+	m_playbackSpeed.setCursor(static_cast<int32>(Round(RuntimeConfig::GetPlaybackSpeed() * 10.0)));
 
 	// BT-Cメニューの設定
 	m_assistTick.setCursor(ConfigIni::GetInt(ConfigIni::Key::kAssistTick, static_cast<int32>(AssistTickMode::kOff)));
@@ -717,6 +749,7 @@ void BTOptionPanel::saveToConfigIni()
 	// BT-Bメニューの設定(config.iniには保存しない)
 	RuntimeConfig::SetGaugeType(m_gaugeType.cursorAs<GaugeType>());
 	RuntimeConfig::SetTurnMode(m_turnMode.cursorAs<TurnMode>());
+	RuntimeConfig::SetPlaybackSpeed(m_playbackSpeed.cursor() / 10.0);
 
 	// BT-Cメニューの設定
 	ConfigIni::SetInt(ConfigIni::Key::kAssistTick, m_assistTick.cursor());

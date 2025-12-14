@@ -10,6 +10,7 @@ namespace
 		JudgmentPlayMode judgmentModeBT = JudgmentPlayMode::kOn;
 		JudgmentPlayMode judgmentModeFX = JudgmentPlayMode::kOn;
 		JudgmentPlayMode judgmentModeLaser = JudgmentPlayMode::kOn;
+		double playbackSpeed = 1.0;
 	};
 
 	Config g_config;
@@ -65,6 +66,16 @@ namespace RuntimeConfig
 	void SetJudgmentPlayModeLaser(JudgmentPlayMode mode)
 	{
 		g_config.judgmentModeLaser = mode;
+	}
+
+	double GetPlaybackSpeed()
+	{
+		return g_config.playbackSpeed;
+	}
+
+	void SetPlaybackSpeed(double speed)
+	{
+		g_config.playbackSpeed = speed;
 	}
 
 	void RestoreJudgmentModesFromConfigIni()

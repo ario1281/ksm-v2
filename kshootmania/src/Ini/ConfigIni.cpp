@@ -95,7 +95,7 @@ editor_linebrightness=0
 inputdelay=0
 editor_loopplayback=1
 
-vsync=0
+vsync=0;300
 esckey_bt3=1
 twitter_token=
 twitter_token_secret1=
@@ -196,7 +196,7 @@ editor_linebrightness=0
 inputdelay=0
 editor_loopplayback=1
 
-vsync=0
+vsync=0;300
 esckey_bt3=1
 twitter_token=
 twitter_token_secret1=
@@ -249,6 +249,12 @@ void ConfigIni::Load()
 				s_configIniData.setBool(key, commaSeparatedMods.includes(modComma));
 			}
 		}
+	}
+
+	// OPTION画面のデフォルト選択用に旧バージョンの"vsync"の値を新しい形式に変換("0"→"0;300")
+	if (s_configIniData.getString(Key::kVsync, U"") == U"0")
+	{
+		s_configIniData.setString(Key::kVsync, U"0;300");
 	}
 
 	// キーコンフィグの読み込み

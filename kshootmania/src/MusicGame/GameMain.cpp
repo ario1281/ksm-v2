@@ -63,6 +63,16 @@ namespace MusicGame
 			// stopをscroll_speedへ焼き込む
 			chartData.beat.scrollSpeed = kson::BakeStopIntoScrollSpeed(chartData.beat.scrollSpeed, chartData.beat.stop);
 
+			// 再生速度に応じてBPMをスケーリング
+			const double playbackSpeed = createInfo.playOption.playbackSpeed;
+			if (playbackSpeed != 1.0)
+			{
+				for (auto& [pulse, bpm] : chartData.beat.bpm)
+				{
+					bpm *= playbackSpeed;
+				}
+			}
+
 			return chartData;
 		}
 	}
@@ -163,7 +173,7 @@ namespace MusicGame
 			createInfo.playOption.gameMode)
 		, m_camSystem(m_chartData)
 		, m_highwayScroll(m_chartData)
-		, m_bgm(FileSystem::PathAppend(m_parentPath, Unicode::FromUTF8(m_chartData.audio.bgm.filename)), m_chartData.audio.bgm.vol, SecondsF{ static_cast<double>(m_chartData.audio.bgm.offset + createInfo.playOption.effectiveGlobalOffsetMs()) / 1000 }, Audio::DetermineLegacyAudioFPMode(m_chartData, m_parentPath), m_chartData, m_parentPath)
+		, m_bgm(FileSystem::PathAppend(m_parentPath, Unicode::FromUTF8(m_chartData.audio.bgm.filename)), m_chartData.audio.bgm.vol, SecondsF{ static_cast<double>(m_chartData.audio.bgm.offset + createInfo.playOption.effectiveGlobalOffsetMs()) / 1000 }, Audio::DetermineLegacyAudioFPMode(m_chartData, m_parentPath), m_chartData, m_parentPath, createInfo.playOption.playbackSpeed)
 		, m_assistTick(createInfo.assistTickMode)
 		, m_laserSlamSE(m_chartData, m_timingCache, m_parentPath, createInfo.playOption.isAutoPlaySE)
 		, m_fxChipSE(m_chartData, m_timingCache, m_parentPath, createInfo.playOption.isAutoPlaySE)

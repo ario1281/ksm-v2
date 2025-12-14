@@ -16,6 +16,7 @@ namespace
 		{
 			.gaugeType = RuntimeConfig::GetGaugeType(),
 			.turnMode = RuntimeConfig::GetTurnMode(),
+			.playbackSpeed = RuntimeConfig::GetPlaybackSpeed(),
 			.btPlayMode = RuntimeConfig::GetJudgmentPlayModeBT(),
 			.fxPlayMode = RuntimeConfig::GetJudgmentPlayModeFX(),
 			.laserPlayMode = RuntimeConfig::GetJudgmentPlayModeLaser(),
@@ -77,19 +78,19 @@ void SelectMenuCourseItem::decideAutoPlay(const SelectMenuEventContext& context,
 
 void SelectMenuCourseItem::setCanvasParamsCenter(const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx) const
 {
-	canvas.setParamValues({
-		{ U"center_isSong", false },
-		{ U"center_isDirectory", false },
-		{ U"center_isSubDirectory", false },
-		{ U"center_isCourse", true },
+	canvas.setSubCanvasParamValuesByTag(U"center", {
+		{ U"isSong", false },
+		{ U"isDirectory", false },
+		{ U"isSubDirectory", false },
+		{ U"isCourse", true },
 	});
 
 	// 難易度は非表示
 	for (int32 i = 0; i < kNumDifficulties; ++i)
 	{
-		canvas.setParamValues({
-			{ U"center_difficulty{}Enabled"_fmt(i), false },
-			{ U"center_difficulty{}LevelIndex"_fmt(i), -1 },
+		canvas.setSubCanvasParamValuesByTag(U"center", {
+			{ U"difficulty{}Enabled"_fmt(i), false },
+			{ U"difficulty{}LevelIndex"_fmt(i), -1 },
 		});
 	}
 
@@ -99,101 +100,108 @@ void SelectMenuCourseItem::setCanvasParamsCenter(const SelectMenuEventContext& c
 	const int32 achievementRate = m_highScoreInfo.percent(kscKey.gaugeType);
 
 	// コース情報を設定
-	canvas.setParamValues({
-		{ U"center_title", m_courseInfo.title },
-		{ U"center_artist", U"COURSE ({} charts)"_fmt(m_courseInfo.chartCount()) },
-		{ U"center_bpm", U"" },
-		{ U"center_jacketAuthor", U"" },
-		{ U"center_information", m_courseInfo.information },
-		{ U"center_chartAuthor", U"" },
-		{ U"center_difficultyCursorState", U"difficulty0" },
-		{ U"center_medalIndex", medalIndex },
-		{ U"center_highScoreGradeIndex", -1 },
-		{ U"center_highScore", U"" },
-		{ U"center_gaugePercentage", ToString(achievementRate) },
+	canvas.setSubCanvasParamValuesByTag(U"center", {
+		{ U"title", m_courseInfo.title },
+		{ U"artist", U"COURSE ({} charts)"_fmt(m_courseInfo.chartCount()) },
+		{ U"bpm", U"" },
+		{ U"jacketAuthor", U"" },
+		{ U"information", m_courseInfo.information },
+		{ U"chartAuthor", U"" },
+		{ U"difficultyCursorState", U"difficulty0" },
+		{ U"medalIndex", medalIndex },
+		{ U"highScoreGradeIndex", -1 },
+		{ U"highScore", U"" },
+		{ U"gaugePercentage", ToString(achievementRate) },
 	});
 
-	// アイコン画像を設定
-	// TODO: タグ等で取得可能にする
-	if (const auto iconNode = NocoUtils::GetNodeByPath(&canvas, { U"CenterItem", U"Course", U"Icon" }))
+	// Course用のノードを取得
+	if (const auto courseNode = NocoUtils::GetSubCanvasNodeByName(&canvas, U"center", U"Course"))
 	{
-		if (m_courseInfo.iconPath.isEmpty())
+		// アイコン画像を設定
+		if (const auto iconNode = courseNode->findByName(U"Icon"))
 		{
-			// アイコンが指定されていない場合は非表示
-			iconNode->setActive(false);
-		}
-		else
-		{
-			// アイコンが指定されている場合はテクスチャロードして表示
-			const Texture iconTexture = context.fnGetIconTexture(m_courseInfo.iconPath);
-			iconNode->setActive(!iconTexture.isEmpty());
-			if (const auto sprite = NocoUtils::GetComponentByPath<noco::Sprite>(&canvas, { U"CenterItem", U"Course", U"Icon" }))
+			if (m_courseInfo.iconPath.isEmpty())
 			{
-				sprite->setTexture(iconTexture);
+				// アイコンが指定されていない場合は非表示
+				iconNode->setActive(false);
 			}
-		}
-	}
-
-	// コースの各曲をSubCanvasノードとして追加
-	if (const auto chartItemRoot = NocoUtils::GetNodeByPath(&canvas, { U"CenterItem", U"Course", U"ChartItemRoot" }))
-	{
-		chartItemRoot->removeChildrenAll();
-		chartItemRoot->removeComponentsAll<noco::VerticalMarquee>(noco::RecursiveYN::No);
-
-		// 各曲のSubCanvasノードを追加
-		for (size_t i = 0; i < m_courseInfo.charts.size(); ++i)
-		{
-			const auto& chart = m_courseInfo.charts[i];
-
-			String songTitle = U"---";
-			String artistName = U"---";
-			int32 chartDifficultyIdx = 0;
-			int32 levelIdx = 0;
-
-			if (FileSystem::Exists(chart.absolutePath))
+			else
 			{
-				const kson::MetaChartData chartData = kson::LoadKSHMetaChartData(chart.absolutePath.narrow());
-				if (chartData.error == kson::ErrorType::None)
+				// アイコンが指定されている場合はテクスチャロードして表示
+				const Texture iconTexture = context.fnGetIconTexture(m_courseInfo.iconPath);
+				iconNode->setActive(!iconTexture.isEmpty());
+				if (const auto sprite = iconNode->getComponent<noco::Sprite>())
 				{
-					songTitle = Unicode::FromUTF8(chartData.meta.title);
-					artistName = Unicode::FromUTF8(chartData.meta.artist);
-					chartDifficultyIdx = chartData.meta.difficulty.idx;
-					levelIdx = chartData.meta.level - 1;
+					sprite->setTexture(iconTexture);
 				}
 			}
+		}
 
-			const auto& node = chartItemRoot->addSubCanvasNodeAsChild(
-				U"ui/parts/select_course_chart_item.noco",
-				{
-					{ U"songTitle", songTitle },
-					{ U"artistName", artistName },
-					{ U"difficultyIndex", chartDifficultyIdx },
-					{ U"levelIndex", levelIdx },
-				});
+		// コースの各曲をSubCanvasノードとして追加
+		if (const auto chartItemRoot = courseNode->findByName(U"ChartItemRoot"))
+		{
+			chartItemRoot->removeChildrenAll();
+			chartItemRoot->removeComponents<VerticalMarquee>(noco::RecursiveYN::No);
 
-			if (const auto subCanvas = node->getComponent<noco::SubCanvas>())
+			// 各曲のSubCanvasノードを追加
+			for (size_t i = 0; i < m_courseInfo.charts.size(); ++i)
 			{
-				if (auto itemCanvas = subCanvas->canvas())
+				const auto& chart = m_courseInfo.charts[i];
+
+				String songTitle = U"---";
+				String artistName = U"---";
+				int32 chartDifficultyIdx = 0;
+				int32 levelIdx = 0;
+
+				if (FileSystem::Exists(chart.absolutePath))
 				{
-					if (const auto jacketSprite = NocoUtils::GetComponentByPath<noco::Sprite>(itemCanvas.get(), { U"SelectCourseChartItem", U"Jacket" }))
+					const kson::MetaChartData chartData = kson::LoadKSHMetaChartData(chart.absolutePath.narrow());
+					if (chartData.error == kson::ErrorType::None)
 					{
-						if (FileSystem::Exists(chart.absolutePath))
+						songTitle = Unicode::FromUTF8(chartData.meta.title);
+						artistName = Unicode::FromUTF8(chartData.meta.artist);
+						chartDifficultyIdx = chartData.meta.difficulty.idx;
+						levelIdx = chartData.meta.level - 1;
+					}
+				}
+
+				const auto& node = chartItemRoot->addSubCanvasNodeAsChild(
+					U"ui/parts/select_course_chart_item.noco",
+					{
+						{ U"songTitle", songTitle },
+						{ U"artistName", artistName },
+						{ U"difficultyIndex", chartDifficultyIdx },
+						{ U"levelIndex", levelIdx },
+					});
+
+				if (const auto subCanvas = node->getComponent<noco::SubCanvas>())
+				{
+					if (auto itemCanvas = subCanvas->canvas())
+					{
+						if (const auto jacketSprite = NocoUtils::GetComponentByPath<noco::Sprite>(itemCanvas.get(), { U"SelectCourseChartItem", U"Jacket" }))
 						{
-							const kson::MetaChartData chartData = kson::LoadKSHMetaChartData(chart.absolutePath.narrow());
-							if (chartData.error == kson::ErrorType::None && !chartData.meta.jacketFilename.empty())
+							if (FileSystem::Exists(chart.absolutePath))
 							{
-								const FilePath jacketPath = FileSystem::PathAppend(
-									FileSystem::ParentPath(chart.absolutePath),
-									Unicode::FromUTF8(chartData.meta.jacketFilename));
-								const Texture jacketTexture = context.fnGetJacketTexture(jacketPath);
-								jacketSprite->setTexture(jacketTexture);
-								if (jacketTexture.isEmpty())
+								const kson::MetaChartData chartData = kson::LoadKSHMetaChartData(chart.absolutePath.narrow());
+								if (chartData.error == kson::ErrorType::None && !chartData.meta.jacketFilename.empty())
 								{
-									jacketSprite->setColor(ColorF{ 0.0, 0.0 });
+									const FilePath jacketPath = FileSystem::PathAppend(
+										FileSystem::ParentPath(chart.absolutePath),
+										Unicode::FromUTF8(chartData.meta.jacketFilename));
+									const Texture jacketTexture = context.fnGetJacketTexture(jacketPath);
+									jacketSprite->setTexture(jacketTexture);
+									if (jacketTexture.isEmpty())
+									{
+										jacketSprite->setColor(ColorF{ 0.0, 0.0 });
+									}
+									else
+									{
+										jacketSprite->setColor(Palette::White);
+									}
 								}
 								else
 								{
-									jacketSprite->setColor(Palette::White);
+									jacketSprite->setColor(ColorF{ 0.0, 0.0 });
 								}
 							}
 							else
@@ -201,58 +209,56 @@ void SelectMenuCourseItem::setCanvasParamsCenter(const SelectMenuEventContext& c
 								jacketSprite->setColor(ColorF{ 0.0, 0.0 });
 							}
 						}
-						else
-						{
-							jacketSprite->setColor(ColorF{ 0.0, 0.0 });
-						}
 					}
 				}
 			}
-		}
 
-		chartItemRoot->setVerticalScrollable(true);
-		chartItemRoot->setScrollBarType(noco::ScrollBarType::Hidden);
-		chartItemRoot->emplaceComponent<noco::VerticalMarquee>(0.75s, 0.75s, 64.0);
+			chartItemRoot->setVerticalScrollable(true);
+			chartItemRoot->setScrollBarType(noco::ScrollBarType::Hidden);
+			chartItemRoot->emplaceComponent<VerticalMarquee>(0.75s, 0.75s, 64.0);
+		}
 	}
 }
 
-void SelectMenuCourseItem::setCanvasParamsTopBottom([[maybe_unused]] const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx, StringView paramNamePrefix, StringView nodeName) const
+void SelectMenuCourseItem::setCanvasParamsTopBottom([[maybe_unused]] const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx, StringView tag) const
 {
 	// コースのハイスコア情報を取得
 	const KscKey kscKey = CreateKscKeyFromConfig();
 	const int32 medalIndex = static_cast<int32>(m_highScoreInfo.medal());
 	const int32 achievementRate = m_highScoreInfo.percent(kscKey.gaugeType);
 
-	canvas.setParamValues({
-		{ paramNamePrefix + U"isSong", false },
-		{ paramNamePrefix + U"isDirectory", false },
-		{ paramNamePrefix + U"isSubDirectory", false },
-		{ paramNamePrefix + U"isCourse", true },
-		{ paramNamePrefix + U"title", m_courseInfo.title },
-		{ paramNamePrefix + U"artist", U"" },
-		{ paramNamePrefix + U"levelIndex", -1 },
-		{ paramNamePrefix + U"medalIndex", medalIndex },
-		{ paramNamePrefix + U"highScoreGradeIndex", -1 },
-		{ paramNamePrefix + U"gaugePercentage", ToString(achievementRate) },
+	canvas.setSubCanvasParamValuesByTag(tag, {
+		{ U"isSong", false },
+		{ U"isDirectory", false },
+		{ U"isSubDirectory", false },
+		{ U"isCourse", true },
+		{ U"title", m_courseInfo.title },
+		{ U"artist", U"" },
+		{ U"levelIndex", -1 },
+		{ U"medalIndex", medalIndex },
+		{ U"highScoreGradeIndex", -1 },
+		{ U"gaugePercentage", ToString(achievementRate) },
 	});
 
-	// アイコン画像を設定
-	// TODO: タグ等で取得可能にする
-	if (const auto iconNode = NocoUtils::GetNodeByPath(&canvas, { nodeName.data(), U"Course", U"Icon" }))
+	// Course用のノードを取得してアイコン画像を設定
+	if (const auto courseNode = NocoUtils::GetSubCanvasNodeByName(&canvas, tag, U"Course"))
 	{
-		if (m_courseInfo.iconPath.isEmpty())
+		if (const auto iconNode = courseNode->findByName(U"Icon"))
 		{
-			// アイコンが指定されていない場合は非表示
-			iconNode->setActive(false);
-		}
-		else
-		{
-			// アイコンが指定されている場合はテクスチャロードして表示
-			const Texture iconTexture = context.fnGetIconTexture(m_courseInfo.iconPath);
-			iconNode->setActive(!iconTexture.isEmpty());
-			if (const auto sprite = NocoUtils::GetComponentByPath<noco::Sprite>(&canvas, { nodeName.data(), U"Course", U"Icon" }))
+			if (m_courseInfo.iconPath.isEmpty())
 			{
-				sprite->setTexture(iconTexture);
+				// アイコンが指定されていない場合は非表示
+				iconNode->setActive(false);
+			}
+			else
+			{
+				// アイコンが指定されている場合はテクスチャロードして表示
+				const Texture iconTexture = context.fnGetIconTexture(m_courseInfo.iconPath);
+				iconNode->setActive(!iconTexture.isEmpty());
+				if (const auto sprite = iconNode->getComponent<noco::Sprite>())
+				{
+					sprite->setTexture(iconTexture);
+				}
 			}
 		}
 	}

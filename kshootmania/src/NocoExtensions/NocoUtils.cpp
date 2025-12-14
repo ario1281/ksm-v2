@@ -42,4 +42,22 @@ namespace NocoUtils
 	{
 		return GetNodeByPath(pCanvas.get(), path);
 	}
+
+	std::shared_ptr<noco::Node> GetSubCanvasNodeByName(noco::Canvas* pCanvas, StringView tag, StringView nodeName)
+	{
+		if (pCanvas == nullptr)
+		{
+			assert(false && "canvas must not be nullptr");
+			return nullptr;
+		}
+
+		if (const auto subCanvas = pCanvas->getSubCanvasByTag(tag))
+		{
+			if (const auto subCanvasCanvas = subCanvas->canvas())
+			{
+				return subCanvasCanvas->findByName(nodeName);
+			}
+		}
+		return nullptr;
+	}
 }

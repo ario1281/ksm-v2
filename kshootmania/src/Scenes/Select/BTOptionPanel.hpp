@@ -25,6 +25,7 @@ private:
 	// BT-Bメニューの各項目の値変更用LinearMenu
 	LinearMenu m_gaugeType;
 	LinearMenu m_turnMode;
+	LinearMenu m_playbackSpeed;
 
 	// BT-Cメニューの各項目の値変更用LinearMenu
 	LinearMenu m_assistTick;

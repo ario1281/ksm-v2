@@ -64,9 +64,8 @@ public:
 	/// @param context イベントコンテキスト
 	/// @param canvas 設定対象のCanvas
 	/// @param difficultyIdx 現在選択中の難易度のインデックス(0～3)
-	/// @param paramNamePrefix パラメータ名のプレフィックス(例:"top0_")
-	/// @param nodeName ノード名
-	virtual void setCanvasParamsTopBottom(const SelectMenuEventContext& context, noco::Canvas& canvas, int32 difficultyIdx, StringView paramNamePrefix, StringView nodeName) const override;
+	/// @param tag SubCanvasのタグ(例:"top1", "bottom2")
+	virtual void setCanvasParamsTopBottom(const SelectMenuEventContext& context, noco::Canvas& canvas, int32 difficultyIdx, StringView tag) const override;
 
 	/// @brief この項目をエクスプローラで表示
 	/// @param difficultyIdx 現在選択中の難易度のインデックス(0～3)

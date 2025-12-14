@@ -51,14 +51,24 @@ namespace
 			return U"?";
 		}
 	}
+
+	String PlaybackSpeedStr(double playbackSpeed)
+	{
+		if (playbackSpeed == 1.0)
+		{
+			return U"normal";
+		}
+		const int32 speedInt = static_cast<int32>(Round(playbackSpeed * 10.0));
+		return U"x{:02}"_fmt(speedInt);
+	}
 }
 
 String KscKey::toString() const
 {
-	// 3番目は元々ノーツ増減オプション用に予約されていたが不使用なので"normal"固定
-	return U"{},{},normal,{},{},{}"_fmt(
+	return U"{},{},{},{},{},{}"_fmt(
 		GaugeTypeStr(gaugeType),
 		TurnModeStr(turnMode),
+		PlaybackSpeedStr(playbackSpeed),
 		JudgmentPlayModeStr(btPlayMode),
 		JudgmentPlayModeStr(fxPlayMode),
 		JudgmentPlayModeStr(laserPlayMode));
