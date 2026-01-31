@@ -33,15 +33,18 @@ public:
 		/// @brief グリッドの始点(左端)から数えたインデックスで長方形を取得
 		/// @param index 文字インデックス(負の値やm_numLettersAfterPadding以上の値でも問題ない)
 		/// @return 長方形
+		[[nodiscard]]
 		RectF fromFront(int32 index) const;
 
 		/// @brief グリッドの末尾(右端)から数えたインデックスで長方形を取得
 		/// @param index 文字インデックス(負の値やm_numLettersAfterPadding以上の値でも問題ない)
 		/// @return 長方形
+		[[nodiscard]]
 		RectF fromBack(int32 index) const;
 
 		/// @brief パディング後の文字数を取得
 		/// @return 文字数
+		[[nodiscard]]
 		int32 numLettersAfterPadding() const;
 	};
 
@@ -69,5 +72,6 @@ public:
 	/// @param position 配置先の座標
 	/// @param numLetters 文字数
 	/// @return グリッド
+	[[nodiscard]]
 	Grid grid(const Vec2& position, int32 numLetters) const;
 };

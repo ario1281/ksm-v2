@@ -9,7 +9,8 @@ private:
 
 	kson::MetaChartData m_chartData;
 
-	HighScoreInfo m_highScoreInfo;
+	// 全条件のハイスコア情報(キー:gaugeType部分を除いたKscKey文字列)
+	HashTable<String, HighScoreInfo> m_highScoreInfoMap;
 
 	FilePath toFullPath(const std::string& u8Filename) const;
 
@@ -50,10 +51,8 @@ public:
 
 	String information() const;
 
-	const HighScoreInfo& highScoreInfo() const;
-
-	// 現在のプレイ設定でハイスコア情報を再読み込み
-	void reloadHighScoreInfo();
+	// 現在のプレイ設定に対応するハイスコア情報を取得
+	HighScoreInfo highScoreInfo() const;
 
 	bool hasError() const;
 

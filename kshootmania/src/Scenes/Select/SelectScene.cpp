@@ -268,11 +268,11 @@ void SelectScene::update()
 	}
 
 	// BTオプションパネル更新
-	const bool needsHighScoreReload = m_btOptionPanel.update(m_menu.getCurrentChartStdBPM());
-	if (needsHighScoreReload)
+	const bool needsDisplayRefresh = m_btOptionPanel.update(m_menu.getCurrentChartStdBPM());
+	if (needsDisplayRefresh)
 	{
-		// ハイスコア情報再読み込み
-		m_menu.reloadCurrentDirectory();
+		// ハイスコア表示を更新
+		m_menu.refreshHighScoreDisplay();
 	}
 
 	// プレイ統計パネル更新

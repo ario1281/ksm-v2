@@ -1,14 +1,15 @@
 ﻿#include "SelectChartInfo.hpp"
 #include "HighScore/KscIO.hpp"
+#include "HighScore/KscKey.hpp"
 #include "Ini/ConfigIni.hpp"
 #include "kson/IO/KshIO.hpp"
 #include "RuntimeConfig.hpp"
 
 namespace
 {
-	HighScoreInfo LoadHighScoreInfo(FilePathView chartFilePath)
+	KscKey CreateKscKeyFromConfig()
 	{
-		const KscKey condition
+		return KscKey
 		{
 			.gaugeType = RuntimeConfig::GetGaugeType(),
 			.turnMode = RuntimeConfig::GetTurnMode(),
@@ -17,8 +18,6 @@ namespace
 			.fxPlayMode = RuntimeConfig::GetJudgmentPlayModeFX(),
 			.laserPlayMode = RuntimeConfig::GetJudgmentPlayModeLaser(),
 		};
-
-		return KscIO::ReadHighScoreInfo(chartFilePath, condition);
 	}
 
 	kson::MetaChartData LoadMetaChartData(const FilePathView filePath)
@@ -44,9 +43,14 @@ FilePath SelectChartInfo::toFullPath(const std::string& u8Filename) const
 
 SelectChartInfo::SelectChartInfo(FilePathView chartFilePath)
 	: m_chartFilePath(chartFilePath)
+<<<<<<< HEAD
 	, m_chartData(LoadMetaChartData(chartFilePath))
 	, m_highScoreInfo(LoadHighScoreInfo(chartFilePath))
+=======
+	, m_chartData(kson::LoadKSHMetaChartData(chartFilePath.narrow()))
+>>>>>>> upstream/master
 {
+	KscIO::ReadAllHighScoreInfo(chartFilePath, &m_highScoreInfoMap);
 }
 
 String SelectChartInfo::title() const
@@ -154,14 +158,14 @@ String SelectChartInfo::information() const
 	return Unicode::FromUTF8(m_chartData.meta.information);
 }
 
-const HighScoreInfo& SelectChartInfo::highScoreInfo() const
+HighScoreInfo SelectChartInfo::highScoreInfo() const
 {
-	return m_highScoreInfo;
-}
-
-void SelectChartInfo::reloadHighScoreInfo()
-{
-	m_highScoreInfo = LoadHighScoreInfo(m_chartFilePath);
+	const String key = CreateKscKeyFromConfig().toStringWithoutGaugeType();
+	if (auto it = m_highScoreInfoMap.find(key); it != m_highScoreInfoMap.end())
+	{
+		return it->second;
+	}
+	return HighScoreInfo{};
 }
 
 bool SelectChartInfo::hasError() const

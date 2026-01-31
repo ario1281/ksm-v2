@@ -87,6 +87,7 @@ public:
 		m_editorCanvas->draw();
 	}
 
+	[[nodiscard]]
 	bool isExitRequested() const
 	{
 		return m_exitRequested;

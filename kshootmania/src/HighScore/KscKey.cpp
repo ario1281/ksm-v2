@@ -58,15 +58,26 @@ namespace
 		{
 			return U"normal";
 		}
-		const int32 speedInt = static_cast<int32>(Round(playbackSpeed * 10.0));
-		return U"x{:02}"_fmt(speedInt);
+
+		const int32 speedPercent = static_cast<int32>(Round(playbackSpeed * 100.0));
+		// 10%刻みは「x09」など2桁(v2.0.0-alpha5との互換性のため)
+		if (speedPercent % 10 == 0)
+		{
+			return U"x{:02}"_fmt(speedPercent / 10);
+		}
+		// それ以外は「x095」など3桁
+		return U"x{:03}"_fmt(speedPercent);
 	}
 }
 
 String KscKey::toString() const
 {
-	return U"{},{},{},{},{},{}"_fmt(
-		GaugeTypeStr(gaugeType),
+	return U"{},{}"_fmt(GaugeTypeStr(gaugeType), toStringWithoutGaugeType());
+}
+
+String KscKey::toStringWithoutGaugeType() const
+{
+	return U"{},{},{},{},{}"_fmt(
 		TurnModeStr(turnMode),
 		PlaybackSpeedStr(playbackSpeed),
 		JudgmentPlayModeStr(btPlayMode),

@@ -108,5 +108,11 @@ namespace MusicGame
 		{
 			return !isAutoPlay;
 		}
+
+		// playbackSpeed取得(ゼロ除算対策用に0の場合は1を返す)
+		double nonZeroPlaybackSpeed() const
+		{
+			return playbackSpeed != 0.0 ? playbackSpeed : 1.0;
+		}
 	};
 }

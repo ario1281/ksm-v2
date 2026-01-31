@@ -5,6 +5,7 @@ template <typename T>
 class ArrayWithLinearMenu
 {
 private:
+	[[nodiscard]]
 	static LinearMenu::CreateInfoWithCursorMinMax FixLinearMenuCreateInfo(const Array<T>& array, LinearMenu::CreateInfoWithCursorMinMax createInfo);
 
 	Array<T> m_array;
@@ -19,9 +20,11 @@ public:
 
 	explicit ArrayWithLinearMenu(Array<T>&& array, const LinearMenu::CreateInfoWithCursorMinMax& createInfo);
 
+	[[nodiscard]]
 	int32 cursor() const;
 
 	template <typename U>
+	[[nodiscard]]
 	U cursorAs() const;
 
 	template <typename U>
@@ -34,30 +37,42 @@ public:
 
 	void update();
 
+	[[nodiscard]]
 	bool isCursorMin() const;
 
+	[[nodiscard]]
 	bool isCursorMax() const;
 
+	[[nodiscard]]
 	int32 deltaCursor() const;
 
+	[[nodiscard]]
 	double cursorRate() const;
 
+	[[nodiscard]]
 	T& cursorValue();
 
+	[[nodiscard]]
 	const T& cursorValue() const;
 
 	void setArray(const Array<T>& array);
 
+	[[nodiscard]]
 	auto& operator[](std::size_t idx);
 
+	[[nodiscard]]
 	const auto& operator[](std::size_t idx) const;
 
+	[[nodiscard]]
 	auto& at(std::size_t idx);
 
+	[[nodiscard]]
 	const auto& at(std::size_t idx) const;
 
+	[[nodiscard]]
 	auto& atCyclic(int32 idx);
 
+	[[nodiscard]]
 	const auto& atCyclic(int32 idx) const;
 
 	void clear();
@@ -71,36 +86,52 @@ public:
 
 	void pop_back();
 
+	[[nodiscard]]
 	auto begin();
 
+	[[nodiscard]]
 	auto begin() const;
 
+	[[nodiscard]]
 	auto cbegin() const;
 
+	[[nodiscard]]
 	auto end();
 
+	[[nodiscard]]
 	auto end() const;
 
+	[[nodiscard]]
 	auto cend() const;
 
+	[[nodiscard]]
 	auto rbegin();
 
+	[[nodiscard]]
 	auto rbegin() const;
 
+	[[nodiscard]]
 	auto crbegin() const;
 
+	[[nodiscard]]
 	auto rend();
 
+	[[nodiscard]]
 	auto rend() const;
 
+	[[nodiscard]]
 	auto crend() const;
 
+	[[nodiscard]]
 	auto& back();
 
+	[[nodiscard]]
 	const auto& back() const;
 
+	[[nodiscard]]
 	auto size() const;
 
+	[[nodiscard]]
 	auto empty() const;
 };
 

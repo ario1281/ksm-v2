@@ -656,4 +656,9 @@ namespace MusicGame::Audio
 	{
 		return m_legacyAudioFPStream.mode;
 	}
+
+	double BGM::playbackSpeed() const
+	{
+		return m_playbackSpeed;
+	}
 }

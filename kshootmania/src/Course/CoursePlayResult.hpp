@@ -16,7 +16,9 @@ struct CoursePlayResult
 
 	Array<MusicGame::PlayResult> results;
 
+	[[nodiscard]]
 	Achievement achievement() const;
 
+	[[nodiscard]]
 	int32 gaugePercentForHighScore() const;
 };

@@ -50,10 +50,11 @@ namespace
 	constexpr int32 kHispeedOCModMax = 2000; // o/c-modの最大値
 	constexpr int32 kHispeedOCModStep = 25; // o/c-modの刻み幅
 
-	// 再生速度の範囲(カーソル値は10倍した整数値)
-	constexpr int32 kPlaybackSpeedMin = 1; // 0.1倍速
-	constexpr int32 kPlaybackSpeedMax = 30; // 3.0倍速
-	constexpr int32 kPlaybackSpeedDefault = 10; // 1.0倍速
+	// 再生速度の範囲
+	constexpr int32 kPlaybackSpeedMin = 10; // 10%
+	constexpr int32 kPlaybackSpeedMax = 300; // 300%
+	constexpr int32 kPlaybackSpeedDefault = 100; // 100%
+	constexpr int32 kPlaybackSpeedStep = 5; // 5%刻み
 
 	int32 CursorMin(HispeedType hispeedType)
 	{
@@ -183,10 +184,10 @@ namespace
 		}
 	}
 
-	// 再生速度カーソル値(1〜30)から表示文字列を取得
+	// 再生速度のカーソル値をもとに表示文字列を取得
 	String PlaybackSpeedToString(int32 cursor)
 	{
-		return U" x{:.1f} "_fmt(cursor / 10.0);
+		return U" {}% "_fmt(cursor);
 	}
 
 	String FormatMenuLine(StringView label, StringView value, bool isSelected, int32 currentCursor, int32 minCursor, int32 maxCursor)
@@ -283,11 +284,12 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Horizontal,
 			.buttonFlags = CursorButtonFlags::kArrow,
-			.buttonIntervalSec = 0.06,
-			.buttonIntervalSecFirst = 0.12,
+			.buttonIntervalSec = 0.1,
+			.buttonIntervalSecFirst = 0.4,
 		},
 		.cursorMin = kPlaybackSpeedMin,
 		.cursorMax = kPlaybackSpeedMax,
+		.cursorStep = kPlaybackSpeedStep,
 		.cyclic = IsCyclicMenuYN::No,
 	})
 
@@ -554,7 +556,7 @@ bool BTOptionPanel::update(double currentChartStdBPM)
 				valueChanged = m_playbackSpeed.deltaCursor() != 0;
 				if (valueChanged)
 				{
-					RuntimeConfig::SetPlaybackSpeed(m_playbackSpeed.cursor() / 10.0);
+					RuntimeConfig::SetPlaybackSpeed(m_playbackSpeed.cursor() / 100.0);
 				}
 			}
 
@@ -702,7 +704,7 @@ void BTOptionPanel::loadFromConfigIni()
 	// BT-Bメニューの設定(config.iniには保存しない)
 	m_gaugeType.setCursor(static_cast<int32>(RuntimeConfig::GetGaugeType()));
 	m_turnMode.setCursor(static_cast<int32>(RuntimeConfig::GetTurnMode()));
-	m_playbackSpeed.setCursor(static_cast<int32>(Round(RuntimeConfig::GetPlaybackSpeed() * 10.0)));
+	m_playbackSpeed.setCursor(static_cast<int32>(Round(RuntimeConfig::GetPlaybackSpeed() * 100.0)));
 
 	// BT-Cメニューの設定
 	m_assistTick.setCursor(ConfigIni::GetInt(ConfigIni::Key::kAssistTick, static_cast<int32>(AssistTickMode::kOff)));
@@ -749,7 +751,7 @@ void BTOptionPanel::saveToConfigIni()
 	// BT-Bメニューの設定(config.iniには保存しない)
 	RuntimeConfig::SetGaugeType(m_gaugeType.cursorAs<GaugeType>());
 	RuntimeConfig::SetTurnMode(m_turnMode.cursorAs<TurnMode>());
-	RuntimeConfig::SetPlaybackSpeed(m_playbackSpeed.cursor() / 10.0);
+	RuntimeConfig::SetPlaybackSpeed(m_playbackSpeed.cursor() / 100.0);
 
 	// BT-Cメニューの設定
 	ConfigIni::SetInt(ConfigIni::Key::kAssistTick, m_assistTick.cursor());

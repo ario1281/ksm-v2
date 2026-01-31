@@ -25,14 +25,8 @@ void ButtonCursorInputDevice::update()
 
 		if (decrementKeyDown || incrementKeyDown)
 		{
-			if (!m_pressedTimeStopwatch->isStarted())
-			{
-				m_pressedTimeStopwatch->start();
-			}
-			else
-			{
-				m_pressedTimeStopwatch->restart();
-			}
+			m_pressedTimeStopwatch->restart();
+			m_pressedTimeSecPrev = 0.0;
 			moveCursor = true;
 		}
 

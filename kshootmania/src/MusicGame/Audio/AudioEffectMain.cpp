@@ -500,9 +500,9 @@ namespace MusicGame::Audio
 				{
 					.bpm = static_cast<float>(currentBPMForAudio),
 					.sec = static_cast<float>(currentTimeSecForAudio),
+					.playbackSpeed = static_cast<float>(bgm.playbackSpeed()),
 				},
 				m_activeAudioEffectDictFX);
-
 		}
 
 		const Optional<AudioEffectInvocation>& activeLaserInvocation = getActiveLaserAudioEffectInvocation(currentPulseForAudio);
@@ -561,8 +561,9 @@ namespace MusicGame::Audio
 					.v = laserValue,
 					.bpm = static_cast<float>(currentBPMForAudio),
 					.sec = static_cast<float>(currentTimeSecForAudio),
+					.playbackSpeed = static_cast<float>(bgm.playbackSpeed()),
 				},
-				(activeLaserInvocation.has_value() && std::holds_alternative<DSPAudioEffectInvocation>(*activeLaserInvocation))
+				activeLaserInvocation.has_value() && std::holds_alternative<DSPAudioEffectInvocation>(*activeLaserInvocation)
 				? std::make_optional(std::get<DSPAudioEffectInvocation>(*activeLaserInvocation).audioEffectIdx)
 				: std::nullopt);
 		}

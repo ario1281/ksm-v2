@@ -65,6 +65,95 @@ namespace KscIO
 			return true;
 		}
 
+		// kscファイルの行からgaugeType文字列部分を除去したキーを取得
+		// (選曲画面表示時はゲージタイプは合算して表示するため)
+		Optional<String> GetKeyWithoutGaugeTypeFromLine(StringView line)
+		{
+			const size_t eqPos = line.indexOf(U'=');
+			if (eqPos == String::npos)
+			{
+				return none;
+			}
+			const StringView keyPart = line.substr(0, eqPos);
+			const size_t commaPos = keyPart.indexOf(U',');
+			if (commaPos == String::npos)
+			{
+				return none;
+			}
+			return String{ keyPart.substr(commaPos + 1) };
+		}
+
+		// kscファイルの行からgaugeType文字列を取得
+		Optional<StringView> GetGaugeTypeStrFromLine(StringView line)
+		{
+			const size_t commaPos = line.indexOf(U',');
+			if (commaPos == String::npos)
+			{
+				return none;
+			}
+			return line.substr(0, commaPos);
+		}
+
+		// kscファイルの行からvalue文字列を取得
+		Optional<StringView> GetValueStrFromLine(StringView line)
+		{
+			const size_t eqPos = line.indexOf(U'=');
+			if (eqPos == String::npos)
+			{
+				return none;
+			}
+			return line.substr(eqPos + 1);
+		}
+
+		void ReadAllHighScoreInfoFromKscFile(FilePathView kscFilePath, HashTable<String, HighScoreInfo>* pHighScoreInfoMap)
+		{
+			pHighScoreInfoMap->clear();
+
+			if (!FileSystem::Exists(kscFilePath))
+			{
+				return;
+			}
+
+			TextReader reader(kscFilePath);
+			if (!reader)
+			{
+				return;
+			}
+
+			String line;
+			while (reader.readLine(line))
+			{
+				const auto keyWithoutGauge = GetKeyWithoutGaugeTypeFromLine(line);
+				if (!keyWithoutGauge)
+				{
+					continue;
+				}
+
+				const auto gaugeTypeStr = GetGaugeTypeStrFromLine(line);
+				const auto valueStr = GetValueStrFromLine(line);
+				if (!gaugeTypeStr || !valueStr)
+				{
+					continue;
+				}
+
+				HighScoreInfo& info = (*pHighScoreInfoMap)[*keyWithoutGauge];
+				const KscValue kscValue = KscValue::FromString(String{ *valueStr });
+
+				if (*gaugeTypeStr == U"easy")
+				{
+					info.easyGauge = kscValue;
+				}
+				else if (*gaugeTypeStr == U"normal")
+				{
+					info.normalGauge = kscValue;
+				}
+				else if (*gaugeTypeStr == U"hard")
+				{
+					info.hardGauge = kscValue;
+				}
+			}
+		}
+
 		bool TryReadHighScoreInfo(FilePathView kscFilePath, const KscKey& condition, HighScoreInfo* pHighScoreInfo)
 		{
 			if (pHighScoreInfo == nullptr)
@@ -210,6 +299,18 @@ namespace KscIO
 		return highScoreInfo;
 	}
 
+	void ReadAllHighScoreInfo(FilePathView chartFilePath, HashTable<String, HighScoreInfo>* pHighScoreInfoMap)
+	{
+		FilePath kscFilePath;
+		if (!TryConvertChartFilePathToKscPath(chartFilePath, &kscFilePath))
+		{
+			pHighScoreInfoMap->clear();
+			return;
+		}
+
+		ReadAllHighScoreInfoFromKscFile(kscFilePath, pHighScoreInfoMap);
+	}
+
 	bool WriteHighScoreInfo(FilePathView chartFilePath, const MusicGame::PlayResult& playResult, const KscKey& condition)
 	{
 		FilePath kscFilePath;
@@ -253,6 +354,18 @@ namespace KscIO
 		}
 
 		return highScoreInfo;
+	}
+
+	void ReadAllCourseHighScoreInfo(FilePathView courseFilePath, HashTable<String, HighScoreInfo>* pHighScoreInfoMap)
+	{
+		FilePath kscFilePath;
+		if (!TryConvertCourseFilePathToKscPath(courseFilePath, &kscFilePath))
+		{
+			pHighScoreInfoMap->clear();
+			return;
+		}
+
+		ReadAllHighScoreInfoFromKscFile(kscFilePath, pHighScoreInfoMap);
 	}
 
 	bool WriteCourseHighScoreInfo(FilePathView courseFilePath, const CoursePlayState& courseState)

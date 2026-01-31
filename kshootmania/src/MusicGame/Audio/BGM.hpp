@@ -167,5 +167,8 @@ namespace MusicGame::Audio
 
 		[[nodiscard]]
 		LegacyAudioFPMode legacyAudioFPMode() const;
+
+		[[nodiscard]]
+		double playbackSpeed() const;
 	};
 }

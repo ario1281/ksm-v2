@@ -142,6 +142,9 @@ public:
 
 	void reloadCurrentDirectory(RefreshSongPreviewYN refreshSongPreview = RefreshSongPreviewYN::No);
 
+	// ハイスコア表示を更新
+	void refreshHighScoreDisplay();
+
 	void jumpToAlphabetItem(char32 letter);
 
 	void jumpToNextAlphabet();

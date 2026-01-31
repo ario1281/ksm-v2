@@ -6,7 +6,9 @@ class SelectMenuCourseItem : public ISelectMenuItem
 {
 private:
 	CourseInfo m_courseInfo;
-	HighScoreInfo m_highScoreInfo;
+
+	// 全条件のハイスコア情報(キー:gaugeType部分を除いたKscKey文字列)
+	HashTable<String, HighScoreInfo> m_highScoreInfoMap;
 
 public:
 	explicit SelectMenuCourseItem(const CourseInfo& courseInfo);

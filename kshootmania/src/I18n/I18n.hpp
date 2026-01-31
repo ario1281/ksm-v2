@@ -19,6 +19,7 @@ namespace I18n
 		TraditionalChinese,
 	};
 
+	[[nodiscard]]
 	StandardLanguage CurrentLanguage();
 
 	void LoadLanguage(StringView name, StringView fallback = U"English");
@@ -201,6 +202,7 @@ namespace I18n
 	};
 
 	template <typename T>
+	[[nodiscard]]
 	constexpr Category GetCategoryOfEnumType()
 	{
 		if constexpr (std::is_same_v<T, General>)
@@ -230,10 +232,12 @@ namespace I18n
 	}
 
 	template <typename T>
+	[[nodiscard]]
 	StringView Get(T key)
 	{
 		return Get(GetCategoryOfEnumType<T>(), static_cast<int32>(key));
 	}
 
+	[[nodiscard]]
 	StringView Get(Category category, int32 keyIdx);
 };

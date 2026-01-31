@@ -49,12 +49,14 @@ public:
 
 	/// @brief カーソルの値を取得
 	/// @return カーソルの値
+	[[nodiscard]]
 	int32 cursor() const;
 
 	/// @brief カーソルの値を取得
 	/// @tparam T 取得したいenum型を指定
 	/// @return カーソルの値
 	template <typename T>
+	[[nodiscard]]
 	T cursorAs() const;
 
 	/// @brief カーソルの値を設定
@@ -91,18 +93,22 @@ public:
 
 	/// @brief カーソルの値が最小値かどうか返す
 	/// @return 最小値であればtrue、違えばfalse
+	[[nodiscard]]
 	bool isCursorMin() const;
 
 	/// @brief カーソルの値が最大値かどうか返す
 	/// @return 最大値であればtrue、違えばfalse
+	[[nodiscard]]
 	bool isCursorMax() const;
 
 	/// @brief 前回のupdate時のカーソル値の変化量(update後にsetCursorによる変更があった場合は0になる)
 	/// @return 変化量
+	[[nodiscard]]
 	int32 deltaCursor() const;
 
 	/// @brief カーソル位置の割合を返す
 	/// @return カーソル位置の割合(0.0〜1.0)
+	[[nodiscard]]
 	double cursorRate() const;
 };
 

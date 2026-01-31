@@ -147,6 +147,7 @@ namespace MusicGame
 	{
 		// TODO: 描画に使用するものは完全にViewStatusへ移動する(エディタ上でのプレビュー時にViewStatusさえ構築すればプレビューできるようにする想定)
 
+		bool isPaused = false;
 		double currentTimeSec = 0.0;
 		double currentTimeSecForButtonJudgment = 0.0;
 		double currentTimeSecForLaserJudgment = 0.0;

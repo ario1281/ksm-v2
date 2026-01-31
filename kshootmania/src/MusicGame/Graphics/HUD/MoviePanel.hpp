@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Siv3D.hpp>
 
 namespace MusicGame::Graphics
@@ -10,6 +10,7 @@ namespace MusicGame::Graphics
 		bool m_started = false;
 		double m_movieOffsetSec = 0.0;
 		double m_startTimeSec = 0.0;
+		double m_playbackSpeed = 1.0;
 		bool m_enabled = false;
 
 		static constexpr int32 kVideoOffsetFromCenterX = -302;
@@ -22,17 +23,19 @@ namespace MusicGame::Graphics
 		static constexpr double kFrameAlpha = 96.0 / 255.0;
 
 	public:
-		MoviePanel(const FilePath& moviePath, double movieOffsetSec, bool enabled);
+		MoviePanel(const FilePath& moviePath, double movieOffsetSec, double playbackSpeed, bool enabled);
 
 		~MoviePanel();
 
 		void prepare(double globalOffsetSec);
 
-		void update(double currentTimeSec);
+		void update(double currentTimeSec, bool isPaused);
 
 		void draw() const;
 
 		[[nodiscard]]
 		bool isEnabled() const;
+
+		void seekPosSec(SecondsF posSec);
 	};
 }

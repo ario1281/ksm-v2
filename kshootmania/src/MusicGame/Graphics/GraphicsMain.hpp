@@ -63,5 +63,7 @@ namespace MusicGame::Graphics
 
 		[[nodiscard]]
 		bool hasMovie() const;
+
+		void seekMoviePosSec(SecondsF posSec);
 	};
 }

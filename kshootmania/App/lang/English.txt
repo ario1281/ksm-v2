@@ -24,7 +24,7 @@ m01-017|  Mirror
 m01-018|  Random  
 m01-019| S-Random 
 m01-020| H-Random 
-m01-021|Playback Speed: 
+m01-021|Song Speed: 
 m01-030|Assist Tick:  
 m01-031|     On     
 m01-032|    Off     

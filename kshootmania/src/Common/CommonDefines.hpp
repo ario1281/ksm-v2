@@ -163,6 +163,7 @@ enum UnconfigurableButton : Button
 	kButtonEnumCount,
 };
 
+[[nodiscard]]
 constexpr bool IsButtonBTFXLaser(Button button)
 {
 	switch (button)
@@ -184,6 +185,7 @@ constexpr bool IsButtonBTFXLaser(Button button)
 	}
 }
 
+[[nodiscard]]
 constexpr bool IsButtonArrowKey(Button button)
 {
 	switch (button)

@@ -209,7 +209,7 @@ namespace MusicGame::Graphics
 		, m_songInfoPanel(chartData, parentPath)
 		, m_gaugePanel(ToGaugeCalcType(playOption.gaugeType, playOption.gameMode))
 		, m_laserApproachIndicator(chartData)
-		, m_moviePanel(MovieFilePath(chartData, parentPath), chartData.bg.legacy.movie.offset / 1000.0, playOption.movieEnabled)
+		, m_moviePanel(MovieFilePath(chartData, parentPath), chartData.bg.legacy.movie.offset / 1000.0 / playOption.nonZeroPlaybackSpeed(), playOption.playbackSpeed, playOption.movieEnabled)
 		, m_playOption(playOption)
 	{
 	}
@@ -225,7 +225,7 @@ namespace MusicGame::Graphics
 		m_scorePanel.update(viewStatus.score);
 		m_highway3DGraphics.update(viewStatus);
 		m_laserApproachIndicator.update(gameStatus, timingCache);
-		m_moviePanel.update(gameStatus.currentTimeSec);
+		m_moviePanel.update(gameStatus.currentTimeSec, gameStatus.isPaused);
 	}
 
 	void GraphicsMain::draw(const kson::ChartData& chartData, const kson::TimingCache& timingCache, const GameStatus& gameStatus, const ViewStatus& viewStatus, const Scroll::HighwayScrollContext& highwayScrollContext, Duration bgmDuration) const
@@ -277,5 +277,10 @@ namespace MusicGame::Graphics
 	bool GraphicsMain::hasMovie() const
 	{
 		return m_moviePanel.isEnabled();
+	}
+
+	void GraphicsMain::seekMoviePosSec(SecondsF posSec)
+	{
+		m_moviePanel.seekPosSec(posSec);
 	}
 }

@@ -26,8 +26,8 @@ namespace
 
 SelectMenuCourseItem::SelectMenuCourseItem(const CourseInfo& courseInfo)
 	: m_courseInfo(courseInfo)
-	, m_highScoreInfo(KscIO::ReadCourseHighScoreInfo(courseInfo.filePath, CreateKscKeyFromConfig()))
 {
+	KscIO::ReadAllCourseHighScoreInfo(courseInfo.filePath, &m_highScoreInfoMap);
 }
 
 void SelectMenuCourseItem::decide(const SelectMenuEventContext& context, [[maybe_unused]] int32 difficultyIdx)
@@ -96,8 +96,9 @@ void SelectMenuCourseItem::setCanvasParamsCenter(const SelectMenuEventContext& c
 
 	// コースのハイスコア情報を取得
 	const KscKey kscKey = CreateKscKeyFromConfig();
-	const int32 medalIndex = static_cast<int32>(m_highScoreInfo.medal());
-	const int32 achievementRate = m_highScoreInfo.percent(kscKey.gaugeType);
+	const HighScoreInfo info = highScoreInfo(0).value_or(HighScoreInfo{});
+	const int32 medalIndex = static_cast<int32>(info.medal());
+	const int32 achievementRate = info.percent(kscKey.gaugeType);
 
 	// コース情報を設定
 	canvas.setSubCanvasParamValuesByTag(U"center", {
@@ -224,8 +225,9 @@ void SelectMenuCourseItem::setCanvasParamsTopBottom([[maybe_unused]] const Selec
 {
 	// コースのハイスコア情報を取得
 	const KscKey kscKey = CreateKscKeyFromConfig();
-	const int32 medalIndex = static_cast<int32>(m_highScoreInfo.medal());
-	const int32 achievementRate = m_highScoreInfo.percent(kscKey.gaugeType);
+	const HighScoreInfo info = highScoreInfo(0).value_or(HighScoreInfo{});
+	const int32 medalIndex = static_cast<int32>(info.medal());
+	const int32 achievementRate = info.percent(kscKey.gaugeType);
 
 	canvas.setSubCanvasParamValuesByTag(tag, {
 		{ U"isSong", false },
@@ -272,5 +274,10 @@ void SelectMenuCourseItem::showInFileManager([[maybe_unused]] int32 difficultyId
 
 Optional<HighScoreInfo> SelectMenuCourseItem::highScoreInfo([[maybe_unused]] int32 difficultyIdx) const
 {
-	return m_highScoreInfo;
+	const String key = CreateKscKeyFromConfig().toStringWithoutGaugeType();
+	if (auto it = m_highScoreInfoMap.find(key); it != m_highScoreInfoMap.end())
+	{
+		return it->second;
+	}
+	return HighScoreInfo{};
 }
