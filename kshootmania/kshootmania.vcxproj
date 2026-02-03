@@ -50,7 +50,7 @@
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\Debug\Intermediate\</IntDir>
     <TargetName>$(ProjectName)(debug)</TargetName>
     <LocalDebuggerWorkingDirectory>$(ProjectDir)App</LocalDebuggerWorkingDirectory>
-    <IncludePath>$(SIV3D_0_6_16)\include;$(SIV3D_0_6_16)\include\ThirdParty;$(IncludePath)</IncludePath>
+    <IncludePath>$(SIV3D_0_6_16)\include;$(SIV3D_0_6_16)\include\ThirdParty;$(IncludePath);$(ProjectDir)ThirdParty</IncludePath>
     <LibraryPath>$(SIV3D_0_6_16)\lib\Windows;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -58,7 +58,7 @@
     <OutDir>$(ProjectDir)App\</OutDir>
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\Release\Intermediate\</IntDir>
     <LocalDebuggerWorkingDirectory>$(ProjectDir)App</LocalDebuggerWorkingDirectory>
-    <IncludePath>$(SIV3D_0_6_16)\include;$(SIV3D_0_6_16)\include\ThirdParty;$(IncludePath)</IncludePath>
+    <IncludePath>$(SIV3D_0_6_16)\include;$(SIV3D_0_6_16)\include\ThirdParty;$(IncludePath);$(ProjectDir)ThirdParty</IncludePath>
     <LibraryPath>$(SIV3D_0_6_16)\lib\Windows;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -77,6 +77,7 @@
       <BuildStlModules>false</BuildStlModules>
       <AdditionalIncludeDirectories>$(SolutionDir)kson\include;$(SolutionDir)ksmaudio\include;$(SolutionDir)ksmaudio\ThirdParty_Windows\bass;$(SolutionDir)ksmaudio\ThirdParty_Windows\bass_fx;$(ProjectDir)\src;$(ProjectDir)\ThirdParty\CoTaskLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>$(ProjectDir)src\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -105,6 +106,7 @@
       <BuildStlModules>false</BuildStlModules>
       <AdditionalIncludeDirectories>$(SolutionDir)kson\include;$(SolutionDir)ksmaudio\include;$(SolutionDir)ksmaudio\ThirdParty_Windows\bass;$(SolutionDir)ksmaudio\ThirdParty_Windows\bass_fx;$(ProjectDir)\src;$(ProjectDir)\ThirdParty\CoTaskLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>$(ProjectDir)src\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -139,6 +141,7 @@
     <ClCompile Include="src\HighScore\KscIO.cpp" />
     <ClCompile Include="src\I18n\I18n.cpp" />
     <ClCompile Include="src\Ini\ConfigIni.cpp" />
+    <ClCompile Include="src\Ini\FolderConfIni.cpp" />
     <ClCompile Include="src\Ini\KSMIniData.cpp" />
     <ClCompile Include="src\Input\FXButtonUpDetection.cpp" />
     <ClCompile Include="src\Input\InputUtils.cpp" />
@@ -236,7 +239,10 @@
     <ClCompile Include="src\Scenes\Select\SelectSongPreview.cpp" />
     <ClCompile Include="src\Scenes\Title\TitleMenu.cpp" />
     <ClCompile Include="src\Scenes\Title\TitleScene.cpp" />
-    <ClCompile Include="src\stdafx.cpp" />
+    <ClCompile Include="src\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\UI\LinearMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -340,6 +346,7 @@
     <ClInclude Include="src\Common\AssetManagement.hpp" />
     <ClInclude Include="src\Common\CommonDefines.hpp" />
     <ClInclude Include="src\Common\Encoding.hpp" />
+    <ClInclude Include="src\Common\EnumUtils.hpp" />
     <ClInclude Include="src\Common\FrameRateLimit.hpp" />
     <ClInclude Include="src\Common\FsUtils.hpp" />
     <ClInclude Include="src\Common\IMEUtils.hpp" />
@@ -355,6 +362,7 @@
     <ClInclude Include="src\HighScore\KscIO.hpp" />
     <ClInclude Include="src\I18n\I18n.hpp" />
     <ClInclude Include="src\Ini\ConfigIni.hpp" />
+    <ClInclude Include="src\Ini\FolderConfIni.hpp" />
     <ClInclude Include="src\Ini\KSMIniData.hpp" />
     <ClInclude Include="src\Input\FXButtonUpDetection.hpp" />
     <ClInclude Include="src\Input\InputUtils.hpp" />
@@ -431,7 +439,6 @@
     <ClInclude Include="src\RuntimeConfig.hpp" />
     <ClInclude Include="src\Scenes\Common\CommonAssets.hpp" />
     <ClInclude Include="src\Scenes\Common\ShowLoadingOneFrame.hpp" />
-    <ClInclude Include="src\Scenes\Option\OptionAssets.hpp" />
     <ClInclude Include="src\Scenes\Option\OptionKeyConfigMenu.hpp" />
     <ClInclude Include="src\Scenes\Option\OptionMenu.hpp" />
     <ClInclude Include="src\Scenes\Option\OptionMenuField.hpp" />

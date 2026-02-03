@@ -48,7 +48,11 @@ SelectChartInfo::SelectChartInfo(FilePathView chartFilePath)
 	, m_highScoreInfo(LoadHighScoreInfo(chartFilePath))
 =======
 	, m_chartData(kson::LoadKSHMetaChartData(chartFilePath.narrow()))
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+	, m_folderConfIni(FolderConfIni::Load(chartFilePath))
+>>>>>>> origin/master
 {
 	KscIO::ReadAllHighScoreInfo(chartFilePath, &m_highScoreInfoMap);
 }
@@ -145,7 +149,7 @@ Duration SelectChartInfo::previewBGMDuration() const
 
 double SelectChartInfo::previewBGMVolume() const
 {
-	return m_chartData.audio.bgm.vol;
+	return m_chartData.audio.bgm.vol * m_folderConfIni.volumeScale;
 }
 
 FilePath SelectChartInfo::iconFilePath() const
