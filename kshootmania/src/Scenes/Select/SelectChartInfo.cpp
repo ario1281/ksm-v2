@@ -43,16 +43,8 @@ FilePath SelectChartInfo::toFullPath(const std::string& u8Filename) const
 
 SelectChartInfo::SelectChartInfo(FilePathView chartFilePath)
 	: m_chartFilePath(chartFilePath)
-<<<<<<< HEAD
 	, m_chartData(LoadMetaChartData(chartFilePath))
-	, m_highScoreInfo(LoadHighScoreInfo(chartFilePath))
-=======
-	, m_chartData(kson::LoadKSHMetaChartData(chartFilePath.narrow()))
-<<<<<<< HEAD
->>>>>>> upstream/master
-=======
 	, m_folderConfIni(FolderConfIni::Load(chartFilePath))
->>>>>>> origin/master
 {
 	KscIO::ReadAllHighScoreInfo(chartFilePath, &m_highScoreInfoMap);
 }
