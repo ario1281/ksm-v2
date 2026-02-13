@@ -23,11 +23,11 @@ namespace
 	kson::MetaChartData LoadMetaChartData(const FilePathView filePath)
 	{
 		const auto extension = FileSystem::Extension(filePath);
-		if (extension == kKSHExtension)
+		if (extension == kKshExtension)
 		{
-			return kson::LoadKsohMetaChartData(filePath.narrow());
+			return kson::LoadKshMetaChartData(filePath.narrow());
 		}
-		else if (extension == kKSONExtension)
+		else if (extension == kKsonExtension)
 		{
 			return kson::LoadKsonMetaChartData(filePath.narrow());
 		}
