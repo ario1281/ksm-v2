@@ -1,4 +1,4 @@
-﻿#include "ksmaudio/AudioEffect/DSP/BitcrusherDSP.hpp"
+#include "ksmaudio/AudioEffect/DSP/BitcrusherDSP.hpp"
 #include <cmath>
 
 namespace ksmaudio::AudioEffect
@@ -24,7 +24,7 @@ namespace ksmaudio::AudioEffect
 		const std::size_t numFrames = dataSize / m_info.numChannels;
 		for (std::size_t i = 0; i < numFrames; ++i)
 		{
-			const bool updateHoldSample = m_holdSampleCount > reduction;
+			const bool updateHoldSample = m_holdSampleCount >= reduction;
 			if (updateHoldSample)
 			{
 				m_holdSampleCount = std::fmod(m_holdSampleCount, reduction);
