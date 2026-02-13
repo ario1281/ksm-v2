@@ -25,11 +25,11 @@ namespace
 		const auto extension = FileSystem::Extension(filePath);
 		if (extension == kKSHExtension)
 		{
-			return kson::LoadKSHMetaChartData(filePath.narrow());
+			return kson::LoadKsohMetaChartData(filePath.narrow());
 		}
 		else if (extension == kKSONExtension)
 		{
-			return kson::LoadKSONMetaChartData(filePath.narrow());
+			return kson::LoadKsonMetaChartData(filePath.narrow());
 		}
 
 		return kson::MetaChartData();

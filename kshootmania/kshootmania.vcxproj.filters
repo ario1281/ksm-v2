@@ -450,6 +450,9 @@
     <ClCompile Include="src\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\TestPlayArgs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\MusicGame\Graphics\Highway\HighwayRenderTexture.cpp">
       <Filter>Source Files\MusicGame\Graphics\Highway</Filter>
     </ClCompile>
@@ -917,6 +920,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestPlayArgs.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scenes\Title\TitleMenu.hpp">
