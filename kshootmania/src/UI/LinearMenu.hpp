@@ -68,7 +68,7 @@ public:
 	/// @brief デルタカーソルの値を設定
 	/// @tparam T enumをキャストなしで指定するためのテンプレートパラメータ(指定不要)
 	/// @param value デルタカーソルの値
-	template<typename T>
+	template <typename T>
 	void setDeltaCursor(T value);
 
 	/// @brief 更新(毎フレーム呼ぶ。入力を反映したくないときは呼ばないようにすればOK)
@@ -149,7 +149,6 @@ void LinearMenu::setCursor(T value)
 			}
 		}
 	}
-
 	m_cursor = Clamp(cursor, m_cursorMin, m_cursorMax);
 }
 
