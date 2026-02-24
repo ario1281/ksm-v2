@@ -34,7 +34,7 @@
 		"Movie": "MOVIE:        ",
 		"MovieOff": "     关     ",
 		"MovieOn": "     开     ",
-		"Hispeed": "HiSPEED:",
+		"Hispeed": "Hi-Speed:",
 		"PlayStatsPlayCount": "PLAYCOUNT: ",
 		"PlayStatsClear": "  CLEAR  : ",
 		"PlayStatsFullCombo": "FULLCOMBO: ",
@@ -44,6 +44,10 @@
 		"ErrorChartFileNotFound": "找不到谱面文件。",
 		"ErrorChartLoadFailed": "谱面文件加载失败。",
 		"ErrorSomeChartMissingInCourse": "此连曲中缺少部分谱面。"
+	},
+	"Result": {
+		"ScreenshotCopied": "截图已复制到剪贴板。\n在发布页面按Ctrl+V即可附加图片。",
+		"ScreenshotCopied@macOS": "截图已复制到剪贴板。\n在发布页面按Cmd+V即可附加图片。"
 	},
 	"Option": {
 		"FullscreenOff": "窗口化",
@@ -134,10 +138,26 @@
 		"ItemSwapLRLaser": "交换左右LASER",
 		"ItemCloseDirectoryKey": "关闭文件夹按键",
 		"Item3BTKeysStartBack": "同时按3个BT + Start键作为Back键",
-		"ItemHispeedTypeXMod": "HiSpeed x0.5 - x9.9",
-		"ItemHispeedTypeOMod": "HiSpeed 25 - 2000",
-		"ItemHispeedTypeCMod": "HiSpeed C 25 - 2000",
+		"ItemHispeedTypeXMod": "Hi-Speed x0.5 - x9.9",
+		"ItemHispeedTypeOMod": "Hi-Speed 25 - 2000",
+		"ItemHispeedTypeCMod": "Hi-Speed C 25 - 2000",
 		"ItemHideMouseCursor": "隐藏鼠标光标",
 		"ItemUseNumpadAsArrowKeys": "使用数字键盘作为方向键 (用于带数字键盘的控制器)"
+	},
+	"IR": {
+		"WaitingForLogin": "等待浏览器登录中…\n\n按Back键(Esc键)取消",
+		"ErrorMaintenance": "服务器维护中\n{0}",
+		"ErrorVersionTooOld": "使用网络排行榜需要更新版本的K-Shoot MANIA。",
+		"ErrorLoginFailed": "登录失败\n{0}",
+		"ErrorSendFailed": "发生错误\n{0}",
+		"ConnectionFailed": "无法连接到IR服务器",
+		"UnregisteredChart": "未注册的谱面\n长按FX-L+R按钮注册此谱面\n\n重要: 使用未经授权分发的歌曲注册谱面\n将面临账号冻结处理",
+		"ChartRegistered": "谱面注册成功",
+		"SessionExpiredRelogin": "会话已过期。\n等待浏览器重新登录中…\n\n按Back键(Esc键)取消",
+		"ReloginSuccess": "重新登录成功",
+		"ReloginFailed": "已取消重新登录\n已从网络排行榜退出登录",
+		"ScoreNotSentPlaybackSpeed": "由于播放速度已更改，\n不纳入IR成绩统计",
+		"ScoreNotSentCMod": "由于使用了Hi-Speed类型\"C\"，\n不纳入IR成绩统计",
+		"ScoreNotSentPlaybackControl": "由于使用了暂停或快进，\n不纳入IR成绩统计"
 	}
 }

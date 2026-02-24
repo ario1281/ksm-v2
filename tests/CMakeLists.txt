@@ -73,6 +73,8 @@ endif()
 
 target_compile_features(${TARGET_NAME} PRIVATE cxx_std_20)
 
+target_compile_definitions(${TARGET_NAME} PRIVATE)
+
 if(APPLE)
     # Siv3DのmacOS/Linux版はプリコンパイル済みヘッダ非対応のため通常のヘッダとしてインクルード
     target_compile_options(${TARGET_NAME} PRIVATE

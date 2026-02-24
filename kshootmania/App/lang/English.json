@@ -34,7 +34,7 @@
 		"Movie": "Movie:        ",
 		"MovieOff": "    Off     ",
 		"MovieOn": "     On     ",
-		"Hispeed": "Hispeed: ",
+		"Hispeed": "Hi-Speed: ",
 		"PlayStatsPlayCount": "Play count: ",
 		"PlayStatsClear": "  Clear   : ",
 		"PlayStatsFullCombo": "Full combo: ",
@@ -44,6 +44,10 @@
 		"ErrorChartFileNotFound": "Cannot find the chart file.",
 		"ErrorChartLoadFailed": "Failed to load the chart file.",
 		"ErrorSomeChartMissingInCourse": "Some charts in this course are missing."
+	},
+	"Result": {
+		"ScreenshotCopied": "Screenshot has been copied to clipboard.\nPress Ctrl+V on the post screen to attach the image.",
+		"ScreenshotCopied@macOS": "Screenshot has been copied to clipboard.\nPress Cmd+V on the post screen to attach the image."
 	},
 	"Option": {
 		"FullscreenOff": "Window",
@@ -134,10 +138,26 @@
 		"ItemSwapLRLaser": "Swap L/R Laser",
 		"ItemCloseDirectoryKey": "Close Directory Key",
 		"Item3BTKeysStartBack": "3 BT Keys + Start as Back Button",
-		"ItemHispeedTypeXMod": "HiSpeed Type x0.5 - x9.9",
-		"ItemHispeedTypeOMod": "HiSpeed Type 25 - 2000",
-		"ItemHispeedTypeCMod": "HiSpeed Type C 25 - 2000",
+		"ItemHispeedTypeXMod": "Hi-Speed Type x0.5 - x9.9",
+		"ItemHispeedTypeOMod": "Hi-Speed Type 25 - 2000",
+		"ItemHispeedTypeCMod": "Hi-Speed Type C 25 - 2000",
 		"ItemHideMouseCursor": "Hide Mouse Cursor",
 		"ItemUseNumpadAsArrowKeys": "Use Numpad as Arrow Keys (for Controllers with Numpad)"
+	},
+	"IR": {
+		"WaitingForLogin": "Waiting for login in browser...\n\nPress Back (Esc key) to cancel",
+		"ErrorMaintenance": "The server is under maintenance.\n{0}",
+		"ErrorVersionTooOld": "A newer version of K-Shoot MANIA is required to use Internet Ranking.",
+		"ErrorLoginFailed": "Login failed.\n{0}",
+		"ErrorSendFailed": "An error occurred.\n{0}",
+		"ConnectionFailed": "Failed to connect to IR server",
+		"UnregisteredChart": "Unregistered chart\nHold FX-L+R to register this chart\n\nImportant: Registering charts with songs\ndistributed without permission\nis subject to account suspension",
+		"ChartRegistered": "Chart registered successfully",
+		"SessionExpiredRelogin": "Session expired.\nWaiting for re-login in browser...\n\nPress Back (Esc key) to cancel",
+		"ReloginSuccess": "Relogin successful",
+		"ReloginFailed": "Relogin cancelled\nYou have been logged out from Internet Ranking",
+		"ScoreNotSentPlaybackSpeed": "IR score not recorded:\nsong speed has been changed",
+		"ScoreNotSentCMod": "IR score not recorded:\nHi-Speed Type \"C\" was used",
+		"ScoreNotSentPlaybackControl": "IR score not recorded:\npause or fast-forward was used"
 	}
 }

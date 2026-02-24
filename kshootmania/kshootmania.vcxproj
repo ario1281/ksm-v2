@@ -72,7 +72,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>26451;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <AdditionalOptions>/Zc:__cplusplus /Zm500 /MP3 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /Zc:__cplusplus /Zm500 /MP3 %(AdditionalOptions)</AdditionalOptions>
       <ForcedIncludeFiles>$(ProjectDir)src\stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <BuildStlModules>false</BuildStlModules>
       <AdditionalIncludeDirectories>$(SolutionDir)kson\include;$(SolutionDir)ksmaudio\include;$(SolutionDir)ksmaudio\ThirdParty_Windows\bass;$(SolutionDir)ksmaudio\ThirdParty_Windows\bass_fx;$(ProjectDir)\src;$(ProjectDir)\ThirdParty\CoTaskLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -101,7 +101,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>26451;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <AdditionalOptions>/Zc:__cplusplus /Zm500 /MP7 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /Zc:__cplusplus /Zm500 /MP7 %(AdditionalOptions)</AdditionalOptions>
       <ForcedIncludeFiles>$(ProjectDir)src\stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <BuildStlModules>false</BuildStlModules>
       <AdditionalIncludeDirectories>$(SolutionDir)kson\include;$(SolutionDir)ksmaudio\include;$(SolutionDir)ksmaudio\ThirdParty_Windows\bass;$(SolutionDir)ksmaudio\ThirdParty_Windows\bass_fx;$(ProjectDir)\src;$(ProjectDir)\ThirdParty\CoTaskLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -140,6 +140,7 @@
     <ClCompile Include="src\HighScore\KscValue.cpp" />
     <ClCompile Include="src\HighScore\KscIO.cpp" />
     <ClCompile Include="src\I18n\I18n.cpp" />
+    <ClCompile Include="src\IR\IRHash.cpp" />
     <ClCompile Include="src\Ini\ConfigIni.cpp" />
     <ClCompile Include="src\Ini\FolderConfIni.cpp" />
     <ClCompile Include="src\Ini\KSMIniData.cpp" />
@@ -221,6 +222,7 @@
     <ClCompile Include="src\Scenes\CourseResult\CourseResultScene.cpp" />
     <ClCompile Include="src\Scenes\Result\ResultNewRecordPanel.cpp" />
     <ClCompile Include="src\Scenes\Result\ResultScene.cpp" />
+    <ClCompile Include="src\Scenes\Result\ResultSNSShare.cpp" />
     <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuAllFolderItem.cpp" />
     <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuCourseItem.cpp" />
     <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuCoursesFolderItem.cpp" />
@@ -238,6 +240,8 @@
     <ClCompile Include="src\Scenes\Select\SelectMenu.cpp" />
     <ClCompile Include="src\Scenes\Select\SelectScene.cpp" />
     <ClCompile Include="src\Scenes\Select\SelectSongPreview.cpp" />
+    <ClCompile Include="src\Scenes\IREntry\IREntryMenu.cpp" />
+    <ClCompile Include="src\Scenes\IREntry\IREntryScene.cpp" />
     <ClCompile Include="src\Scenes\Title\TitleMenu.cpp" />
     <ClCompile Include="src\Scenes\Title\TitleScene.cpp" />
     <ClCompile Include="src\stdafx.cpp">
@@ -362,6 +366,7 @@
     <ClInclude Include="src\HighScore\KscValue.hpp" />
     <ClInclude Include="src\HighScore\KscIO.hpp" />
     <ClInclude Include="src\I18n\I18n.hpp" />
+    <ClInclude Include="src\IR\IRHash.hpp" />
     <ClInclude Include="src\Ini\ConfigIni.hpp" />
     <ClInclude Include="src\Ini\FolderConfIni.hpp" />
     <ClInclude Include="src\Ini\KSMIniData.hpp" />
@@ -459,6 +464,7 @@
     <ClInclude Include="src\Scenes\CourseResult\CourseResultScene.hpp" />
     <ClInclude Include="src\Scenes\Result\ResultNewRecordPanel.hpp" />
     <ClInclude Include="src\Scenes\Result\ResultScene.hpp" />
+    <ClInclude Include="src\Scenes\Result\ResultSNSShare.hpp" />
     <ClInclude Include="src\Scenes\Result\ResultSceneArgs.hpp" />
     <ClInclude Include="src\Scenes\Select\MenuItem\ISelectMenuItem.hpp" />
     <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuAllFolderItem.hpp" />
@@ -479,6 +485,8 @@
     <ClInclude Include="src\Scenes\Select\SelectMenu.hpp" />
     <ClInclude Include="src\Scenes\Select\SelectScene.hpp" />
     <ClInclude Include="src\Scenes\Select\SelectSongPreview.hpp" />
+    <ClInclude Include="src\Scenes\IREntry\IREntryMenu.hpp" />
+    <ClInclude Include="src\Scenes\IREntry\IREntryScene.hpp" />
     <ClInclude Include="src\Scenes\Title\TitleAssets.hpp" />
     <ClInclude Include="src\Scenes\Title\TitleMenu.hpp" />
     <ClInclude Include="src\Scenes\Title\TitleScene.hpp" />
