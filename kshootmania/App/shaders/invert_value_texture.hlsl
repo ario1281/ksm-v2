@@ -10,7 +10,7 @@
 //-----------------------------------------------
 
 //
-// Textures
+//	Textures
 //
 Texture2D        g_texture0 : register(t0);
 SamplerState     g_textrue0 : register(t0);
@@ -29,7 +29,19 @@ namespace s3d
 }
 
 //
-// HSV and RGB Conversion Functions
+//	Constant Buffer
+//
+cbuffer PSConstants2D : register(b0)
+{
+	float4 g_colorAdd;
+	float4 g_sdfParam;
+	float4 g_sdfOutlineColor;
+	float4 g_sdfShadowColor;
+	float4 g_internal;
+}
+
+//
+//	HSV and RGB Conversion Functions
 //
 float rgb2hsv(float3 c)
 {
@@ -51,19 +63,14 @@ float3 hsv2rgb(float3 c)
 
 float4 PS(s3d::PSInput input) : SV_TARGET
 {
-    // テクスチャから色を取得
     float4 texColor = g_texture0.Sample(g_sampler0, input.uv);
     
-    // RGBからHSVに変換
     float3 hsv = rgb2hsv(texColor.rgb);
     
-    // Value（明度）を反転
     hsv.z = 1.0 - hsv.z;
     
-    // HSVからRGBに戻す
     float3 rgb = hsv2rgb(hsv);
     
-    // 元のアルファ値を保持
     return float4(rgb, texColor.a) * input.color;
 }
 
