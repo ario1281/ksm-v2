@@ -53,6 +53,7 @@ endif()
 
 target_include_directories(${TARGET_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/ThirdParty
     ${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/ThirdParty/CoTaskLib/include
 )
 
@@ -61,6 +62,7 @@ target_link_libraries(${TARGET_NAME} PRIVATE
     Siv3D::Siv3D
     kson
     ksmaudio
+    ksmaxis
     NocoUI
     Catch2::Catch2
 )
@@ -70,6 +72,8 @@ if(APPLE)
 endif()
 
 target_compile_features(${TARGET_NAME} PRIVATE cxx_std_20)
+
+target_compile_definitions(${TARGET_NAME} PRIVATE)
 
 if(APPLE)
     # Siv3DのmacOS/Linux版はプリコンパイル済みヘッダ非対応のため通常のヘッダとしてインクルード

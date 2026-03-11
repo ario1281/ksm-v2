@@ -34,4 +34,4 @@ https://github.com/kshootmania/ksm-v2/wiki#%E9%96%8B%E7%99%BA%E7%8A%B6%E6%B3%81
 
 ## Contributors
 
-@m4saka, @ario1281
+@m4saka, @ario1281, @mikomikotaishi

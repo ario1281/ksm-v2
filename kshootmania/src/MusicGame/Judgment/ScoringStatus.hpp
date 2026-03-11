@@ -11,6 +11,8 @@ namespace MusicGame::Judgment
 		const int32 m_scoreValueMax = 0;
 		const int32 m_gaugeValueMax = 0;
 		const GaugeType m_gaugeType = GaugeType::kNormalGauge;
+		const GameMode m_gameMode = GameMode::kNormal;
+		const GaugeCalcType m_gaugeCalcType;
 
 		int32 m_scoreValue = 0;
 		int32 m_gaugeValue;
@@ -20,12 +22,14 @@ namespace MusicGame::Judgment
 
 		void addGaugeValue(int32 add);
 
+		void addGaugeValueNormal(int32 add);
+
 		void subtractGaugeValue(int32 sub);
 
 		double calcGaugePercentageFromValue(int32 gaugeValue, GaugeType gaugeType) const;
 
 	public:
-		ScoringStatus(int32 scoreValueMax, int32 gaugeValueMax, GaugeType gaugeType);
+		ScoringStatus(int32 scoreValueMax, int32 gaugeValueMax, GaugeType gaugeType, const Optional<CourseContinuation>& courseContinuation, GameMode gameMode);
 
 		void onChipOrLaserSlamJudgment(Judgment::JudgmentResult result);
 
@@ -45,6 +49,10 @@ namespace MusicGame::Judgment
 		/// @return パーセンテージ(0.0～100.0)
 		double gaugePercentageForGrade() const;
 
+		/// @brief 内部ゲージ値を返す(コースモード時の引き継ぎ用)
+		/// @return 内部ゲージ値
+		int32 gaugeValue() const;
+
 		int32 combo() const;
 
 		int32 maxCombo() const;
@@ -54,5 +62,17 @@ namespace MusicGame::Judgment
 		bool isNoError() const;
 
 		int32 totalJudgedCombo() const;
+
+		int32 courseCombo() const;
+
+		bool courseIsNoError() const;
+
+		/// @brief 表示用のコンボ数を返す
+		/// @return コンボ数(コースモード時はコース全体のコンボ数、通常時は楽曲内のコンボ数)
+		int32 displayCombo() const;
+
+		/// @brief 表示用のエラーなし状態を返す
+		/// @return エラーなし状態(コースモード時はコース全体のエラーなし状態、通常時は楽曲内のエラーなし状態)
+		bool displayIsNoError() const;
 	};
 }

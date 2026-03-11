@@ -1,21 +1,23 @@
 ﻿#include "JudgmentMain.hpp"
+#include "kson/Util/TimingUtils.hpp"
 
 namespace MusicGame::Judgment
 {
-	JudgmentMain::JudgmentMain(const kson::ChartData& chartData, const kson::TimingCache& timingCache, const PlayOption& playOption)
+
+	JudgmentMain::JudgmentMain(const kson::ChartData& chartData, const kson::TimingCache& timingCache, const PlayOption& playOption, const Optional<CourseContinuation>& courseContinuation, GameMode gameMode)
 		: m_playOption(playOption)
 		, m_btLaneJudgments{
-			ButtonLaneJudgment(playOption.effectiveBtJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kBTButtons[0], chartData.note.bt[0], chartData.beat, timingCache),
-			ButtonLaneJudgment(playOption.effectiveBtJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kBTButtons[1], chartData.note.bt[1], chartData.beat, timingCache),
-			ButtonLaneJudgment(playOption.effectiveBtJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kBTButtons[2], chartData.note.bt[2], chartData.beat, timingCache),
-			ButtonLaneJudgment(playOption.effectiveBtJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kBTButtons[3], chartData.note.bt[3], chartData.beat, timingCache) }
+			ButtonLaneJudgment(playOption.effectiveBtJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kButtonBT_A, chartData.note.bt[0], chartData.beat, timingCache),
+			ButtonLaneJudgment(playOption.effectiveBtJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kButtonBT_B, chartData.note.bt[1], chartData.beat, timingCache),
+			ButtonLaneJudgment(playOption.effectiveBtJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kButtonBT_C, chartData.note.bt[2], chartData.beat, timingCache),
+			ButtonLaneJudgment(playOption.effectiveBtJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kButtonBT_D, chartData.note.bt[3], chartData.beat, timingCache) }
 		, m_fxLaneJudgments{
-			ButtonLaneJudgment(playOption.effectiveFxJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kFXButtons[0], chartData.note.fx[0], chartData.beat, timingCache),
-			ButtonLaneJudgment(playOption.effectiveFxJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kFXButtons[1], chartData.note.fx[1], chartData.beat, timingCache) }
+			ButtonLaneJudgment(playOption.effectiveFxJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kButtonFX_L, chartData.note.fx[0], chartData.beat, timingCache),
+			ButtonLaneJudgment(playOption.effectiveFxJudgmentPlayMode(), playOption.gaugeType, playOption.fastSlowMode, kButtonFX_R, chartData.note.fx[1], chartData.beat, timingCache) }
 		, m_laserLaneJudgments{
-			LaserLaneJudgment(playOption.effectiveLaserJudgmentPlayMode(), kLaserButtons[0][0], kLaserButtons[0][1], chartData.note.laser[0], chartData.beat, timingCache),
-			LaserLaneJudgment(playOption.effectiveLaserJudgmentPlayMode(), kLaserButtons[1][0], kLaserButtons[1][1], chartData.note.laser[1], chartData.beat, timingCache) }
-		, m_judgmentHandler(chartData, m_btLaneJudgments, m_fxLaneJudgments, m_laserLaneJudgments, playOption)
+			LaserLaneJudgment(playOption.effectiveLaserJudgmentPlayMode(), 0, kButtonLeftLaserL, kButtonLeftLaserR, chartData.note.laser[0], chartData.beat, timingCache),
+			LaserLaneJudgment(playOption.effectiveLaserJudgmentPlayMode(), 1, kButtonRightLaserL, kButtonRightLaserR, chartData.note.laser[1], chartData.beat, timingCache) }
+		, m_judgmentHandler(chartData, m_btLaneJudgments, m_fxLaneJudgments, m_laserLaneJudgments, playOption, courseContinuation, gameMode)
 	{
 	}
 
@@ -63,9 +65,11 @@ namespace MusicGame::Judgment
 		}
 	}
 
-	PlayResult JudgmentMain::playResult() const
+	PlayResult JudgmentMain::playResult(const kson::ChartData& chartData, const kson::TimingCache& timingCache, double currentTimeSec, IsHardFailedYN isHardFailed, bool isAborted) const
 	{
-		return m_judgmentHandler.playResult();
+		const kson::Pulse lastNoteEndY = kson::LastNoteEndY(chartData.note);
+		const double chartEndTimeSec = kson::PulseToSec(lastNoteEndY, chartData.beat, timingCache);
+		return m_judgmentHandler.playResult(currentTimeSec, chartEndTimeSec, isHardFailed, isAborted);
 	}
 
 	bool JudgmentMain::isFinished() const

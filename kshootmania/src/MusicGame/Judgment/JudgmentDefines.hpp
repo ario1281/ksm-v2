@@ -88,6 +88,9 @@ namespace MusicGame::Judgment
 	//  "増幅移動量"での移動幅が理想位置を超えている場合は理想位置にカーソルを吸い付かせる)
 	constexpr double kLaserCursorInputOvershootScale = 20.0;
 
+	// LASER入力の移動量増幅での吸着判定間隔(60fps基準)
+	constexpr double kLaserInputAmplificationCheckIntervalSec = 1.0 / 60.0;
+
 	// 直角LASERをCRITICAL判定するのに必要な累計カーソル移動量
 	constexpr double kLaserSlamCriticalDeltaCursorXThreshold = 0.0005;
 

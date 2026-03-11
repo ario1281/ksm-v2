@@ -1,5 +1,5 @@
 ﻿#include "ResultNewRecordPanel.hpp"
-#include "Common/NocoUtils.hpp"
+#include "NocoExtensions/NocoUtils.hpp"
 
 namespace
 {

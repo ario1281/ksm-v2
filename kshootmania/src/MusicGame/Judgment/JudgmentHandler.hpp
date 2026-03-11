@@ -31,8 +31,10 @@ namespace MusicGame::Judgment
 		/// @param btLaneJudgments BTレーン判定の配列
 		/// @param fxLaneJudgments FXレーン判定の配列
 		/// @param laserLaneJudgments LASERレーン判定の配列
-		/// @param gaugeType ゲージの種類
-		JudgmentHandler(const kson::ChartData& chartData, const BTLaneJudgments& btLaneJudgments, const FXLaneJudgments& fxLaneJudgments, const LaserLaneJudgments& laserLaneJudgments, const PlayOption& playOption);
+		/// @param playOption プレイオプション
+		/// @param courseContinuation コース継続情報(コースモード時に使用)
+		/// @param gameMode ゲームモード
+		JudgmentHandler(const kson::ChartData& chartData, const BTLaneJudgments& btLaneJudgments, const FXLaneJudgments& fxLaneJudgments, const LaserLaneJudgments& laserLaneJudgments, const PlayOption& playOption, const Optional<CourseContinuation>& courseContinuation, GameMode gameMode);
 
 		/// @brief チップノーツ判定時に呼び出される
 		/// @param result 判定結果
@@ -68,7 +70,11 @@ namespace MusicGame::Judgment
 		bool isFinished() const;
 
 		/// @brief PlayResultを取得
+		/// @param currentTimeSec 現在時刻(秒)
+		/// @param chartEndTimeSec 譜面終了時刻(秒)
+		/// @param isHardFailed HARDゲージ/コースモードで途中落ちしたかどうか
+		/// @param isAborted Backボタンで途中終了したかどうか
 		/// @return PlayResult
-		PlayResult playResult() const;
+		PlayResult playResult(double currentTimeSec, double chartEndTimeSec, IsHardFailedYN isHardFailed, bool isAborted) const;
 	};
 }

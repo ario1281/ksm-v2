@@ -20,8 +20,8 @@ namespace MusicGame::Graphics
 		}
 	}
 
-	GaugePanel::GaugePanel(GaugeType gaugeType)
-		: m_gaugeType(gaugeType)
+	GaugePanel::GaugePanel(GaugeCalcType gaugeCalcType)
+		: m_gaugeCalcType(gaugeCalcType)
 		, m_baseTexture(kBaseTextureFilename,
 			{
 				.column = kNumGaugeTypes * 2,
@@ -50,12 +50,17 @@ namespace MusicGame::Graphics
 	{
 		const ScopedRenderStates2D samplerState(SamplerState::ClampAniso);
 
-		const int32 percentThreshold = (m_gaugeType == GaugeType::kHardGauge) ? kGaugePercentageThresholdHardWarning : kGaugePercentageThreshold;
+		const bool isCourseMode = IsCourseGaugeCalcType(m_gaugeCalcType);
+		const GaugeType gaugeTypeForBar = ToGaugeType(m_gaugeCalcType);
+		const GaugeType gaugeTypeForBase = isCourseMode ? GaugeType::kHardGauge : gaugeTypeForBar;
+
+		const int32 percentThreshold = gaugeTypeForBase == GaugeType::kHardGauge ? kGaugePercentageThresholdHardWarning : kGaugePercentageThreshold;
 		const int32 percentInt = static_cast<int32>(percent);
-		const int32 column = static_cast<int32>(m_gaugeType) * 2 + (percentInt < percentThreshold ? 0 : 1);
+		const int32 baseColumn = static_cast<int32>(gaugeTypeForBase) * 2 + (percentInt < percentThreshold ? 0 : 1);
+		const int32 barColumn = static_cast<int32>(gaugeTypeForBar) * 2 + (percentInt < percentThreshold ? 0 : 1);
 
 		const Vec2 basePosition = { Scene::Width() / 2 + Scaled(155), Scaled(88) };
-		m_baseTexture(0, column).draw(basePosition);
+		m_baseTexture(0, baseColumn).draw(basePosition);
 
 		{
 			const ScopedRenderStates2D renderState(BlendState::Additive);
@@ -63,11 +68,11 @@ namespace MusicGame::Graphics
 			const double barHeight = kBarSize.y * percent / 100;
 			const Vec2 barBasePosition = basePosition + Scaled2x(34, 126);
 			const RectF barClipRect = { barBasePosition + Vec2::Down(Scaled2x(kBarSize.y - barHeight)), Scaled2x(SizeF{ kBarSize.x, barHeight }) };
-			m_barTexture(0, column).resized(Scaled2x(kBarSize)).drawClipped(barBasePosition, barClipRect);
+			m_barTexture(0, barColumn).resized(Scaled2x(kBarSize)).drawClipped(barBasePosition, barClipRect);
 
 			const double animRate = AnimRate(currentPulse);
-			m_barAnimTexture(0, column).resized(Scaled2x(kBarAnimSize)).drawClipped(barBasePosition + Vec2::Up(Scaled2x(kBarAnimSize.y) * animRate), barClipRect);
-			m_barAnimTexture(0, column).resized(Scaled2x(kBarAnimSize)).drawClipped(barBasePosition + Vec2::Up(Scaled2x(kBarAnimSize.y) * (animRate - 1.0)), barClipRect);
+			m_barAnimTexture(0, barColumn).resized(Scaled2x(kBarAnimSize)).drawClipped(barBasePosition + Vec2::Up(Scaled2x(kBarAnimSize.y) * animRate), barClipRect);
+			m_barAnimTexture(0, barColumn).resized(Scaled2x(kBarAnimSize)).drawClipped(barBasePosition + Vec2::Up(Scaled2x(kBarAnimSize.y) * (animRate - 1.0)), barClipRect);
 		}
 
 		const Vec2 percentBasePosition = basePosition + Scaled2x(Vec2{ 72, 106 + 431 * (1.0 - percent / 100) });

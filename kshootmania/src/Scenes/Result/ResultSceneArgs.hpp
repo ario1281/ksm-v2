@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "MusicGame/PlayResult.hpp"
+#include "Course/CoursePlayState.hpp"
 
 struct ResultSceneArgs
 {
@@ -8,4 +9,6 @@ struct ResultSceneArgs
 	kson::ChartData chartData;
 
 	MusicGame::PlayResult playResult;
+
+	Optional<CoursePlayState> courseState;
 };

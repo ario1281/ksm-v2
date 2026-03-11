@@ -12,14 +12,14 @@ private:
 
 	Array<Input> m_excludeKeys;
 
-	void updateButton(KeyConfig::Button targetButton, KeyConfig::Button otherFXButton);
+	void updateButton(Button targetButton, Button otherFXButton);
 
 public:
 	explicit FXButtonUpDetection(const Array<Input>& excludeKeys = {});
 
 	void update();
 
-	bool up(KeyConfig::Button targetButton) const;
+	bool up(Button targetButton) const;
 
 	void reset();
 };

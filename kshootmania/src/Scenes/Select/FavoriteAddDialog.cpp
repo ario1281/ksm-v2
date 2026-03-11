@@ -1,4 +1,4 @@
-#include "FavoriteAddDialog.hpp"
+﻿#include "FavoriteAddDialog.hpp"
 #include "Common/FsUtils.hpp"
 #include "Common/Encoding.hpp"
 #include "Input/Cursor/CursorInput.hpp"

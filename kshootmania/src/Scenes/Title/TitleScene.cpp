@@ -1,4 +1,10 @@
 ﻿#include "TitleScene.hpp"
+
+#define NO_IR_ENTRY_SCENE // Note: ソースコード公開用にIR関連処理は削除済み
+
+#ifndef NO_IR_ENTRY_SCENE
+#include "Scenes/IREntry/IREntryScene.hpp"
+#endif
 #include "Scenes/Select/SelectScene.hpp"
 #include "Scenes/Option/OptionScene.hpp"
 #include "Scenes/Common/ShowLoadingOneFrame.hpp"
@@ -26,7 +32,15 @@ namespace
 }
 
 TitleScene::TitleScene(TitleMenuItem defaultMenuitem)
-	: m_canvas(LoadTitleSceneCanvas())
+	: m_bgmStream(std::make_shared<ksmaudio::Stream>("se/title_bgm.ogg", 1.0, false, false, true))
+	, m_canvas(LoadTitleSceneCanvas())
+	, m_menu(defaultMenuitem, m_canvas)
+{
+}
+
+TitleScene::TitleScene(TitleMenuItem defaultMenuitem, std::shared_ptr<ksmaudio::Stream> bgmStream)
+	: m_bgmStream(std::move(bgmStream))
+	, m_canvas(LoadTitleSceneCanvas())
 	, m_menu(defaultMenuitem, m_canvas)
 {
 }
@@ -35,14 +49,24 @@ Co::Task<void> TitleScene::start()
 {
 	const auto updateRunner = Co::UpdaterTask([this] { update(); }).runScoped();
 
-	m_bgmStream.play();
+	if (!m_bgmStream->isPlaying())
+	{
+		m_bgmStream->play();
+	}
 	AutoMuteAddon::SetEnabled(true);
 
 	// メニューが選択されるまで待機
 	m_selectedMenuItem = co_await m_menu.selectedMenuItemAsync();
 
 	// 効果音を鳴らす
-	m_bgmStream.setVolume(0.0);
+#ifdef NO_IR_ENTRY_SCENE
+	m_bgmStream->setVolume(0.0);
+#else
+	if (m_selectedMenuItem != TitleMenuItem::kStart)
+	{
+		m_bgmStream->setVolume(0.0);
+	}
+#endif
 	CommonSEAddon::Play(CommonSEType::kTitleEnter);
 }
 
@@ -73,10 +97,13 @@ Co::Task<void> TitleScene::fadeOut()
 	{
 	case TitleMenuItem::kStart:
 		co_await Co::ScreenFadeOut(kFadeDuration);
+#ifdef NO_IR_ENTRY_SCENE
 		requestNextScene<SelectScene>();
-
 		// SelectSceneはコンストラクタの処理に時間がかかるので、ローディングはここで出しておく
 		co_await ShowLoadingOneFrame::Play(HasBgYN::No);
+#else
+		requestNextScene<IREntryScene>(m_bgmStream);
+#endif
 		break;
 
 	case TitleMenuItem::kOption:
@@ -85,8 +112,9 @@ Co::Task<void> TitleScene::fadeOut()
 		break;
 
 	case TitleMenuItem::kInputGate:
-		// TODO: INPUT GATEへ遷移
+		// Note: ソースコード公開用にINPUT GATE関連処理は削除済み
 		co_await Co::ScreenFadeOut(kFadeDuration);
+		MessageBoxUtils::ShowOK(U"This version does not support INPUT GATE.");
 		requestNextScene<TitleScene>(TitleMenuItem::kInputGate);
 		break;
 

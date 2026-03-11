@@ -1,8 +1,11 @@
 ﻿#include "ResultScene.hpp"
 #include "Scenes/Select/SelectScene.hpp"
+#include "Scenes/PlayPrepare/PlayPrepareScene.hpp"
+#include "Scenes/CourseResult/CourseResultScene.hpp"
 #include "Scenes/Common/ShowLoadingOneFrame.hpp"
 #include "HighScore/KscIO.hpp"
 #include "Common/CommonDefines.hpp"
+#include "Ini/FolderConfIni.hpp"
 
 namespace
 {
@@ -55,6 +58,111 @@ namespace
 		kTopTextureRowAssistHardFailed,
 		kTopTextureRowAssistHardClear,
 	};
+
+	constexpr std::array<StringView, kNumDifficulties> kDifficultyAbbreviations = {
+		U"LT", U"CH", U"EX", U"IN",
+	};
+
+	constexpr StringView ClearStatusText(Achievement achievement, GaugeType gaugeType, bool isAssist)
+	{
+		switch (achievement)
+		{
+		case Achievement::kNone:
+			switch (gaugeType)
+			{
+			case GaugeType::kNormalGauge:
+				return isAssist ? U"ASSIST FAILED..." : U"FAILED...";
+			case GaugeType::kEasyGauge:
+				return isAssist ? U"ASSIST EASY FAILED..." : U"EASY FAILED...";
+			case GaugeType::kHardGauge:
+				return isAssist ? U"ASSIST HARD FAILED..." : U"HARD FAILED...";
+			default:
+				return U"FAILED...";
+			}
+
+		case Achievement::kCleared:
+			switch (gaugeType)
+			{
+			case GaugeType::kNormalGauge:
+				return isAssist ? U"ASSIST CLEARED!" : U"CLEARED!";
+			case GaugeType::kEasyGauge:
+				return isAssist ? U"ASSIST EASY CLEAR!" : U"EASY CLEAR!";
+			case GaugeType::kHardGauge:
+				return isAssist ? U"ASSIST HARD CLEAR!" : U"HARD CLEAR!";
+			default:
+				return U"CLEARED!";
+			}
+
+		case Achievement::kFullCombo:
+			switch (gaugeType)
+			{
+			case GaugeType::kNormalGauge:
+			case GaugeType::kHardGauge:
+				return isAssist ? U"ASSIST FULL COMBO!" : U"FULL COMBO!";
+			case GaugeType::kEasyGauge:
+				return isAssist ? U"ASSIST EASY FULL COMBO!" : U"EASY FULL COMBO!";
+			default:
+				return U"FULL COMBO!";
+			}
+
+		case Achievement::kPerfect:
+			switch (gaugeType)
+			{
+			case GaugeType::kNormalGauge:
+			case GaugeType::kHardGauge:
+				return isAssist ? U"ASSIST PERFECT!" : U"PERFECT!";
+			case GaugeType::kEasyGauge:
+				return isAssist ? U"ASSIST EASY PERFECT!" : U"EASY PERFECT!";
+			default:
+				return U"PERFECT!";
+			}
+
+		default:
+			return U"";
+		}
+	}
+
+	String BuildResultTweetText(const kson::ChartData& chartData, const MusicGame::PlayResult& playResult, FilePathView chartFilePath, const Optional<CoursePlayState>& courseState)
+	{
+		const String title = Unicode::FromUTF8(chartData.meta.title);
+		const String artist = Unicode::FromUTF8(chartData.meta.artist);
+
+		const int32 diffIdx = chartData.meta.difficulty.idx;
+		const StringView diffAbbr = 0 <= diffIdx && diffIdx < kNumDifficulties
+			? kDifficultyAbbreviations[diffIdx]
+			: U"??";
+
+		const StringView clearStatus = ClearStatusText(
+			playResult.achievement(),
+			playResult.playOption.gaugeType,
+			playResult.playOption.isAssist());
+
+		const String tweetOption = FolderConfIni::Load(chartFilePath).tweetOption;
+
+		String text;
+
+		// コースモード中は1行目にコース名を入れる
+		if (courseState)
+		{
+			text += courseState->courseInfo().title + U"\n";
+		}
+
+		text += U"{} / {}\n[{}] Lv{} {} (SCORE: {:08d})\n"_fmt(
+			title,
+			artist,
+			diffAbbr,
+			chartData.meta.level,
+			clearStatus,
+			playResult.score);
+
+		if (!tweetOption.isEmpty())
+		{
+			text += tweetOption + U" ";
+		}
+		text += U"#kshootmania";
+
+		return text;
+	}
 
 	int32 TopTextureRow(const MusicGame::PlayResult& playResult)
 	{
@@ -216,22 +324,31 @@ ResultScene::ResultScene(const ResultSceneArgs& args)
 	, m_chartData(args.chartData)
 	, m_playResult(args.playResult)
 	, m_newRecordPanel(m_canvas)
+	, m_snsShare(BuildResultTweetText(args.chartData, args.playResult, args.chartFilePath, args.courseState))
+	, m_courseState(args.courseState)
 {
-	// 旧スコアを読み込んでNewRecordパネルを設定
+	// コースモードの場合は結果を記録
+	if (m_courseState)
+	{
+		m_courseState->recordResult(m_playResult);
+	}
+
+	// 前回までのハイスコアを読み込んでNewRecordパネルを設定
 	int32 oldScore = 0;
-	if (!m_playResult.playOption.isAutoPlay) // オートプレイの場合はスコアを保存しない(オートプレイではリザルト画面を出さないので不要だが一応チェックはする)
+	if (m_playResult.playOption.shouldSaveScore())
 	{
 		const KscKey condition
 		{
 			.gaugeType = m_playResult.playOption.gaugeType,
 			.turnMode = m_playResult.playOption.turnMode,
+			.playbackSpeed = m_playResult.playOption.playbackSpeed,
 			.btPlayMode = m_playResult.playOption.effectiveBtJudgmentPlayMode(),
 			.fxPlayMode = m_playResult.playOption.effectiveFxJudgmentPlayMode(),
 			.laserPlayMode = m_playResult.playOption.effectiveLaserJudgmentPlayMode(),
 		};
 		const FilePathView chartFilePath = args.chartFilePath;
 
-		// スコア保存前に旧スコアを取得
+		// スコア保存前に前回までのハイスコアを取得
 		const HighScoreInfo oldHighScore = KscIO::ReadHighScoreInfo(chartFilePath, condition);
 		oldScore = oldHighScore.score(m_playResult.playOption.gaugeType);
 
@@ -308,6 +425,7 @@ void ResultScene::updateCanvasParams()
 		{ U"errorCount", U"{:04d}"_fmt(errorCountWithUnjudged) },
 		{ U"gaugePercentageNumber", U"{}"_fmt(static_cast<int32>(m_playResult.gaugePercentage)) },
 		{ U"gaugeTextureIndex", static_cast<double>(gaugeTextureIndex) },
+		{ U"bottomRightText", U"" },
 	});
 
 	// ゲージのバーの高さをパーセンテージに応じて変更
@@ -351,12 +469,55 @@ Co::Task<void> ResultScene::start()
 
 	if (!userPressedStartOrBack)
 	{
-		co_await Co::Any(
-			KeyConfig::WaitUntilDown(KeyConfig::kStart),
-			KeyConfig::WaitUntilDown(KeyConfig::kBack));
+		while (true)
+		{
+			co_await Co::NextFrame();
+			if (KeyConfig::Down(kButtonBack))
+			{
+				break;
+			}
+			if (KeyConfig::Down(kButtonStart) && !KeyShift.pressed())
+			{
+				break;
+			}
+		}
 	}
 
-	requestNextScene<SelectScene>();
+	// コースモードの場合は次の曲またはコースリザルトへ
+	if (m_courseState)
+	{
+		const bool isFailed = m_playResult.achievement() == Achievement::kNone;
+
+		// FAILED時またはコース完了時はコースリザルトへ
+		if (isFailed || !m_courseState->hasNextChart())
+		{
+			if (!isFailed)
+			{
+				m_courseState->setCleared(true);
+			}
+			requestNextScene<CourseResultScene>(*m_courseState);
+		}
+		else
+		{
+			// 次の曲へ
+			m_courseState->advanceToNextChart();
+
+			const FilePath nextChartPath = m_courseState->currentChartPath();
+
+			// 次の曲へ
+			co_await ShowLoadingOneFrame::Play(HasBgYN::Yes);
+			requestNextScene<PlayPrepareScene>(nextChartPath, m_playResult.playOption.isAutoPlay, m_courseState);
+		}
+	}
+	else if (m_playResult.playOption.testPlayOption.has_value())
+	{
+		// テストプレイの場合はアプリケーション終了
+		requestSceneFinish();
+	}
+	else
+	{
+		requestNextScene<SelectScene>();
+	}
 }
 
 Co::Task<bool> ResultScene::waitForNewRecordPanelClose()
@@ -369,17 +530,17 @@ Co::Task<bool> ResultScene::waitForNewRecordPanelClose()
 		co_await Co::NextFrame();
 
 		// FX-L+R同時押しで表示時間を3秒延長
-		const bool fxLRPressed = KeyConfig::Pressed(KeyConfig::kFX_L) && KeyConfig::Pressed(KeyConfig::kFX_R);
+		const bool fxLRPressed = KeyConfig::Pressed(kButtonFX_L) && KeyConfig::Pressed(kButtonFX_R);
 		if (fxLRPressed && !fxLRPressedPrev)
 		{
 			displayStopwatch.restart();
 		}
 		fxLRPressedPrev = fxLRPressed;
 
-		// 3秒経過またはSTART/Backで終了
+		// 3秒経過またはSTART/Backで終了(Shift+STARTはツイート機能用なので除外)
 		if (displayStopwatch.sF() >= 3.0 ||
-			KeyConfig::Down(KeyConfig::kStart) ||
-			KeyConfig::Down(KeyConfig::kBack))
+			(KeyConfig::Down(kButtonStart) && !KeyShift.pressed()) ||
+			KeyConfig::Down(kButtonBack))
 		{
 			break;
 		}
@@ -393,14 +554,14 @@ Co::Task<bool> ResultScene::waitForNewRecordPanelClose()
 	{
 		co_await Co::NextFrame();
 
-		const bool fxLRPressed = KeyConfig::Pressed(KeyConfig::kFX_L) && KeyConfig::Pressed(KeyConfig::kFX_R);
+		const bool fxLRPressed = KeyConfig::Pressed(kButtonFX_L) && KeyConfig::Pressed(kButtonFX_R);
 		if (fxLRPressed && !fxLRPressedPrev)
 		{
 			co_return false;
 		}
 		fxLRPressedPrev = fxLRPressed;
 
-		if (KeyConfig::Down(KeyConfig::kStart) || KeyConfig::Down(KeyConfig::kBack))
+		if ((KeyConfig::Down(kButtonStart) && !KeyShift.pressed()) || KeyConfig::Down(kButtonBack))
 		{
 			co_return true;
 		}
@@ -410,6 +571,7 @@ Co::Task<bool> ResultScene::waitForNewRecordPanelClose()
 void ResultScene::update()
 {
 	m_canvas->update();
+	m_snsShare.update(m_canvas.get());
 }
 
 void ResultScene::draw() const

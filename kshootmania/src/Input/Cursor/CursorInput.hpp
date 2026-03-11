@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <memory>
 #include "ButtonCursorInputDevice.hpp"
+#include "LaserCursorInputDevice.hpp"
 
 using FlipArrowKeyDirectionYN = YesNo<struct FlipArrowKeyDirectionYN_tag>;
 
@@ -32,6 +33,9 @@ class CursorInput
 {
 private:
 	ButtonCursorInputDevice m_buttonDevice;
+	Optional<LaserCursorInputDevice> m_laserDevice;
+	Optional<LaserCursorInputDevice> m_laserDeviceOpposite;
+	NeedStartButtonHoldForNonArrowKeyYN m_needStartButtonHoldForNonArrowKey;
 
 public:
 	enum class Type
@@ -60,8 +64,8 @@ public:
 		/// @brief 1回目のカーソル移動までの所要押下時間(0の場合、buttonIntervalSecと同じ値に設定される)
 		double buttonIntervalSecFirst = 0.0;
 
-		/// @brief BT/FX/LASER入力にStartボタン(Enterキー)との同時押しを必要とするか(プレイ中のハイスピード設定用)
-		StartRequiredForBTFXLaserYN startRequiredForBTFXLaser = StartRequiredForBTFXLaserYN::No;
+		/// @brief 矢印キー以外の入力にStartボタン(Enterキー)との同時押しを必要とするか(プレイ中のハイスピード設定用)
+		NeedStartButtonHoldForNonArrowKeyYN needStartButtonHoldForNonArrowKey = NeedStartButtonHoldForNonArrowKeyYN::No;
 	};
 
 	/// @brief コンストラクタ

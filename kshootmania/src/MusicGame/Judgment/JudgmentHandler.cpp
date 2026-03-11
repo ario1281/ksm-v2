@@ -95,13 +95,15 @@ namespace MusicGame::Judgment
 		}
 	}
 
-	JudgmentHandler::JudgmentHandler(const kson::ChartData& chartData, const BTLaneJudgments& btLaneJudgments, const FXLaneJudgments& fxLaneJudgments, const LaserLaneJudgments& laserLaneJudgments, const PlayOption& playOption)
+	JudgmentHandler::JudgmentHandler(const kson::ChartData& chartData, const BTLaneJudgments& btLaneJudgments, const FXLaneJudgments& fxLaneJudgments, const LaserLaneJudgments& laserLaneJudgments, const PlayOption& playOption, const Optional<CourseContinuation>& courseContinuation, GameMode gameMode)
 		: m_playOption(playOption)
 		, m_totalCombo(TotalCombo(btLaneJudgments, fxLaneJudgments, laserLaneJudgments))
 		, m_scoringStatus(
 			TotalGaugeValue(btLaneJudgments, fxLaneJudgments, laserLaneJudgments, kScoreValueCritical, kScoreValueCritical),
 			GaugeValueMax(chartData.gauge.total, btLaneJudgments, fxLaneJudgments, laserLaneJudgments),
-			playOption.gaugeType)
+			playOption.gaugeType,
+			courseContinuation,
+			gameMode)
 		, m_camPatternMain(chartData)
 	{
 	}
@@ -169,8 +171,8 @@ namespace MusicGame::Judgment
 		viewStatusRef.score = m_scoringStatus.score();
 		viewStatusRef.gaugePercentage = m_scoringStatus.gaugePercentage(m_playOption.gaugeType);
 		viewStatusRef.gaugePercentageInt = m_scoringStatus.gaugePercentageInt(m_playOption.gaugeType);
-		viewStatusRef.combo = m_scoringStatus.combo();
-		viewStatusRef.isNoError = m_scoringStatus.isNoError();
+		viewStatusRef.displayCombo = m_scoringStatus.displayCombo();
+		viewStatusRef.displayIsNoError = m_scoringStatus.displayIsNoError();
 
 		// 直角LASERの振動をViewStatusに反映
 		m_laserSlamShakeStatus.applyToCamStatus(viewStatusRef.camStatus, currentTimeSec);
@@ -189,17 +191,24 @@ namespace MusicGame::Judgment
 		return m_totalCombo <= m_scoringStatus.totalJudgedCombo();
 	}
 
-	PlayResult JudgmentHandler::playResult() const
+	PlayResult JudgmentHandler::playResult(double currentTimeSec, double chartEndTimeSec, IsHardFailedYN isHardFailed, bool isAborted) const
 	{
+		const double chartTimeProgress = chartEndTimeSec > 0.0 ? Clamp(currentTimeSec / chartEndTimeSec, 0.0, 1.0) : 1.0;
+
 		return PlayResult
 		{
 			.score = m_scoringStatus.score(),
 			.maxCombo = m_scoringStatus.maxCombo(),
+			.finalCourseCombo = m_scoringStatus.courseCombo(),
 			.totalCombo = m_totalCombo,
 			.comboStats = m_scoringStatus.comboStats(),
 			.playOption = m_playOption,
 			.gaugePercentage = m_scoringStatus.gaugePercentage(m_playOption.gaugeType),
 			.gaugePercentageForGrade = m_scoringStatus.gaugePercentageForGrade(),
+			.gaugeValue = m_scoringStatus.gaugeValue(),
+			.chartTimeProgress = chartTimeProgress,
+			.isHardFailed = isHardFailed,
+			.isAborted = isAborted,
 		};
 	}
 }

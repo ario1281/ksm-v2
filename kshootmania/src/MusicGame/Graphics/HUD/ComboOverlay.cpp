@@ -31,17 +31,18 @@ namespace MusicGame::Graphics
 	void ComboOverlay::update(const ViewStatus& viewStatus)
 	{
 		// TODO: 楽曲時間を使うべき？
-		if (viewStatus.combo == 0)
+		if (viewStatus.displayCombo == 0)
 		{
 			m_visibleTimer.reset(); // コンボが切れた時は非表示にする
 		}
-		else if (m_combo != viewStatus.combo)
+		else if (m_combo != viewStatus.displayCombo && !m_isFirstUpdate)
 		{
 			m_visibleTimer.restart(); // コンボ数増加から一定時間表示
 		}
 
-		m_combo = viewStatus.combo;
-		m_isNoError = viewStatus.isNoError;
+		m_combo = viewStatus.displayCombo;
+		m_isNoError = viewStatus.displayIsNoError;
+		m_isFirstUpdate = false;
 	}
 
 	void ComboOverlay::draw() const

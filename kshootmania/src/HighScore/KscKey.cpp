@@ -51,14 +51,35 @@ namespace
 			return U"?";
 		}
 	}
+
+	String PlaybackSpeedStr(double playbackSpeed)
+	{
+		if (playbackSpeed == 1.0)
+		{
+			return U"normal";
+		}
+
+		const int32 speedPercent = static_cast<int32>(Round(playbackSpeed * 100.0));
+		// 10%刻みは「x09」など2桁(v2.0.0-alpha5との互換性のため)
+		if (speedPercent % 10 == 0)
+		{
+			return U"x{:02}"_fmt(speedPercent / 10);
+		}
+		// それ以外は「x095」など3桁
+		return U"x{:03}"_fmt(speedPercent);
+	}
 }
 
 String KscKey::toString() const
 {
-	// 3番目は元々ノーツ増減オプション用に予約されていたが不使用なので"normal"固定
-	return U"{},{},normal,{},{},{}"_fmt(
-		GaugeTypeStr(gaugeType),
+	return U"{},{}"_fmt(GaugeTypeStr(gaugeType), toStringWithoutGaugeType());
+}
+
+String KscKey::toStringWithoutGaugeType() const
+{
+	return U"{},{},{},{},{}"_fmt(
 		TurnModeStr(turnMode),
+		PlaybackSpeedStr(playbackSpeed),
 		JudgmentPlayModeStr(btPlayMode),
 		JudgmentPlayModeStr(fxPlayMode),
 		JudgmentPlayModeStr(laserPlayMode));

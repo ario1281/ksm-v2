@@ -31,13 +31,14 @@ namespace MusicGame::Audio
 		DWORD GetMaxPolyphony(const kson::ChartData& chartData)
 		{
 			// 旧バージョンの譜面では最大同時再生数が異なる
-			const bool isLegacy = chartData.compat.isKSHVersionOlderThan(kKeySoundMaxPolyphonyLegacyUntilKSHVersion);
+			const bool isLegacy = chartData.compat.isKshVersionOlderThan(kKeySoundMaxPolyphonyLegacyUntilKSHVersion);
 			return isLegacy ? kKeySoundMaxPolyphonyLegacy : kKeySoundMaxPolyphony;
 		}
 	}
 
-	FXChipSE::FXChipSE(const kson::ChartData& chartData, const kson::TimingCache& timingCache, FilePathView parentPath, bool isAutoPlaySE)
+	FXChipSE::FXChipSE(const kson::ChartData& chartData, const kson::TimingCache& timingCache, FilePathView parentPath, bool isAutoPlaySE, double folderVolumeScale)
 		: m_isAutoPlaySE(isAutoPlaySE)
+		, m_folderVolumeScale(folderVolumeScale)
 	{
 		// SE自動再生モード用にPulseから秒数への変換マップを作成
 		if (m_isAutoPlaySE)
@@ -74,7 +75,7 @@ namespace MusicGame::Audio
 				continue;
 			}
 
-			m_keySounds.emplace(filename, ksmaudio::Sample{ filePath.narrow(), GetMaxPolyphony(chartData) });
+			m_keySounds.emplace(filename, ksmaudio::Sample{ filePath.toUTF8(), GetMaxPolyphony(chartData) });
 		}
 	}
 
@@ -131,7 +132,7 @@ namespace MusicGame::Audio
 
 					// キー音を再生
 					const double volume = chipData.vol;
-					m_keySounds.at(filename).play(volume);
+					m_keySounds.at(filename).play(volume * m_folderVolumeScale);
 					m_lastPlayedTimeSecs[laneIdx] = chipTimeSec;
 					m_autoPlaySELastPulses[laneIdx] = chipPulse;
 				}
@@ -183,7 +184,7 @@ namespace MusicGame::Audio
 
 				// キー音を再生
 				const double volume = it->second.vol;
-				m_keySounds.at(filename).play(volume);
+				m_keySounds.at(filename).play(volume * m_folderVolumeScale);
 				m_lastPlayedTimeSecs[laneIdx] = judgmentTimeSec;
 				break;
 			}

@@ -67,11 +67,17 @@
     <Filter Include="Header Files\Scenes\Title">
       <UniqueIdentifier>{06d51002-dabe-4b44-93eb-624f6e54ae0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scenes\IREntry">
+      <UniqueIdentifier>{a1b2c3d4-1111-2222-3333-444455556666}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\Scenes">
       <UniqueIdentifier>{dbad57e1-4485-46df-8f1d-e630dda5500c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Scenes\Title">
       <UniqueIdentifier>{987a87ef-3722-4f47-983d-5905a3fa05b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenes\IREntry">
+      <UniqueIdentifier>{a1b2c3d4-5555-6666-7777-888899990000}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\UI">
       <UniqueIdentifier>{c63c36d9-9448-45ea-8e1d-40978dc6d13d}</UniqueIdentifier>
@@ -99,6 +105,12 @@
     </Filter>
     <Filter Include="Header Files\Input">
       <UniqueIdentifier>{406ff180-8949-463e-859b-981e95f59292}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IR">
+      <UniqueIdentifier>{b3f2a1c4-5d6e-7f8a-9b0c-1d2e3f4a5b6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IR">
+      <UniqueIdentifier>{c4a3b2d1-6e5f-8a7b-0c9d-2e1f3a4b5c6d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Ini">
       <UniqueIdentifier>{a58e93a7-4cc8-4fb5-928d-dd58599a0eec}</UniqueIdentifier>
@@ -205,6 +217,12 @@
     <Filter Include="Source Files\MusicGame\Camera\CamPattern">
       <UniqueIdentifier>{78bee3cc-8012-48a3-abf8-9508a3cec840}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\NocoExtensions">
+      <UniqueIdentifier>{f101edb1-0a07-4093-8914-0c4e3cc820b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NocoExtensions">
+      <UniqueIdentifier>{f1fb8e9a-9ebd-4385-ad44-b062308bdea4}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Scenes\Select\MenuItem">
       <UniqueIdentifier>{6812799a-0c5d-4132-9f54-6ed625c88584}</UniqueIdentifier>
     </Filter>
@@ -259,6 +277,24 @@
     <Filter Include="Header Files\Scenes\Common">
       <UniqueIdentifier>{a681aa53-9c48-413f-9f33-8c2fec87e745}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Input\LaserInput">
+      <UniqueIdentifier>{5f868033-daab-4587-b0ab-94f9ceddb6bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Input\LaserInput">
+      <UniqueIdentifier>{b168436a-7591-41b7-acf7-091d6939ac07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Course">
+      <UniqueIdentifier>{4e3e9668-aae6-4f39-98db-b23fddc9e8f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenes\CourseResult">
+      <UniqueIdentifier>{686b9990-3ee2-43d4-b6f3-5a7059ea657c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Course">
+      <UniqueIdentifier>{307037fd-110f-4f3e-86ad-0142c12d8886}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scenes\CourseResult">
+      <UniqueIdentifier>{42d69b58-6212-4ddd-8139-e2320779d5b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Scenes\Title\TitleScene.cpp">
@@ -266,6 +302,12 @@
     </ClCompile>
     <ClCompile Include="src\Scenes\Title\TitleMenu.cpp">
       <Filter>Source Files\Scenes\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenes\IREntry\IREntryMenu.cpp">
+      <Filter>Source Files\Scenes\IREntry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenes\IREntry\IREntryScene.cpp">
+      <Filter>Source Files\Scenes\IREntry</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\TiledTexture.cpp">
       <Filter>Source Files\Graphics</Filter>
@@ -282,13 +324,22 @@
     <ClCompile Include="src\Input\FXButtonUpDetection.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
+    <ClCompile Include="src\Input\InputUtils.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
     <ClCompile Include="src\Input\KeyConfig.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
     <ClCompile Include="src\I18n\I18n.cpp">
       <Filter>Source Files\I18n</Filter>
     </ClCompile>
+    <ClCompile Include="src\IR\IRHash.cpp">
+      <Filter>Source Files\IR</Filter>
+    </ClCompile>
     <ClCompile Include="src\Ini\ConfigIni.cpp">
+      <Filter>Source Files\Ini</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Ini\FolderConfIni.cpp">
       <Filter>Source Files\Ini</Filter>
     </ClCompile>
     <ClCompile Include="src\Ini\KSMIniData.cpp">
@@ -333,7 +384,7 @@
     <ClCompile Include="src\Common\MathUtils.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
-    <ClCompile Include="src\Common\NocoUtils.cpp">
+    <ClCompile Include="src\Common\MessageBoxUtils.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
     <ClCompile Include="src\MusicGame\Audio\BGM.cpp">
@@ -423,6 +474,9 @@
     <ClCompile Include="src\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\TestPlayArgs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\MusicGame\Graphics\Highway\HighwayRenderTexture.cpp">
       <Filter>Source Files\MusicGame\Graphics\Highway</Filter>
     </ClCompile>
@@ -430,6 +484,9 @@
       <Filter>Source Files\Input\Cursor</Filter>
     </ClCompile>
     <ClCompile Include="src\Input\Cursor\CursorInput.cpp">
+      <Filter>Source Files\Input\Cursor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input\Cursor\LaserCursorInputDevice.cpp">
       <Filter>Source Files\Input\Cursor</Filter>
     </ClCompile>
     <ClCompile Include="src\MusicGame\Graphics\HUD\HispeedSettingPanel.cpp">
@@ -507,6 +564,12 @@
     <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuAllFolderItem.cpp">
       <Filter>Source Files\Scenes\Select\MenuItem</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuCourseItem.cpp">
+      <Filter>Source Files\Scenes\Select\MenuItem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuCoursesFolderItem.cpp">
+      <Filter>Source Files\Scenes\Select\MenuItem</Filter>
+    </ClCompile>
     <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuDirFolderItem.cpp">
       <Filter>Source Files\Scenes\Select\MenuItem</Filter>
     </ClCompile>
@@ -519,10 +582,16 @@
     <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuLevelSectionItem.cpp">
       <Filter>Source Files\Scenes\Select\MenuItem</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuLevelSongItem.cpp">
+      <Filter>Source Files\Scenes\Select\MenuItem</Filter>
+    </ClCompile>
     <ClCompile Include="src\Scenes\Result\ResultNewRecordPanel.cpp">
       <Filter>Source Files\Scenes\Result</Filter>
     </ClCompile>
     <ClCompile Include="src\Scenes\Result\ResultScene.cpp">
+      <Filter>Source Files\Scenes\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenes\Result\ResultSNSShare.cpp">
       <Filter>Source Files\Scenes\Result</Filter>
     </ClCompile>
     <ClCompile Include="src\HighScore\KscKey.cpp">
@@ -572,6 +641,42 @@
     </ClCompile>
     <ClCompile Include="src\MusicGame\PlayModeUtil.cpp">
       <Filter>Source Files\MusicGame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NocoExtensions\NocoUtils.cpp">
+      <Filter>Source Files\NocoExtensions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NocoExtensions\VerticalMarquee.cpp">
+      <Filter>Source Files\NocoExtensions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input\LaserInput\AnalogStickXYLaserInput.cpp">
+      <Filter>Source Files\Input\LaserInput</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input\LaserInput\KeyboardLaserInput.cpp">
+      <Filter>Source Files\Input\LaserInput</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input\LaserInput\MouseXYLaserInput.cpp">
+      <Filter>Source Files\Input\LaserInput</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input\LaserInput\SliderLaserInput.cpp">
+      <Filter>Source Files\Input\LaserInput</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Course\CourseInfo.cpp">
+      <Filter>Source Files\Course</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Course\CoursePlayResult.cpp">
+      <Filter>Source Files\Course</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Course\CoursePlayState.cpp">
+      <Filter>Source Files\Course</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenes\CourseResult\CourseResultChartList.cpp">
+      <Filter>Source Files\Scenes\CourseResult</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenes\CourseResult\CourseResultNewRecordPanel.cpp">
+      <Filter>Source Files\Scenes\CourseResult</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenes\CourseResult\CourseResultScene.cpp">
+      <Filter>Source Files\Scenes\CourseResult</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -847,11 +952,20 @@
     <ClInclude Include="src\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\TestPlayArgs.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\Scenes\Title\TitleMenu.hpp">
       <Filter>Header Files\Scenes\Title</Filter>
     </ClInclude>
     <ClInclude Include="src\Scenes\Title\TitleAssets.hpp">
       <Filter>Header Files\Scenes\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\IREntry\IREntryMenu.hpp">
+      <Filter>Header Files\Scenes\IREntry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\IREntry\IREntryScene.hpp">
+      <Filter>Header Files\Scenes\IREntry</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\TiledTexture.hpp">
       <Filter>Header Files\Graphics</Filter>
@@ -865,13 +979,13 @@
     <ClInclude Include="src\Scenes\Option\OptionScene.hpp">
       <Filter>Header Files\Scenes\Option</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scenes\Option\OptionAssets.hpp">
-      <Filter>Header Files\Scenes\Option</Filter>
-    </ClInclude>
     <ClInclude Include="src\UI\LinearMenu.hpp">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\Input\FXButtonUpDetection.hpp">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\InputUtils.hpp">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
     <ClInclude Include="src\Input\KeyConfig.hpp">
@@ -883,7 +997,13 @@
     <ClInclude Include="src\I18n\I18n.hpp">
       <Filter>Header Files\I18n</Filter>
     </ClInclude>
+    <ClInclude Include="src\IR\IRHash.hpp">
+      <Filter>Header Files\IR</Filter>
+    </ClInclude>
     <ClInclude Include="src\Ini\KSMIniData.hpp">
+      <Filter>Header Files\Ini</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Ini\FolderConfIni.hpp">
       <Filter>Header Files\Ini</Filter>
     </ClInclude>
     <ClInclude Include="src\Ini\ConfigIni.hpp">
@@ -943,7 +1063,7 @@
     <ClInclude Include="src\Common\MathUtils.hpp">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="src\Common\NocoUtils.hpp">
+    <ClInclude Include="src\Common\MessageBoxUtils.hpp">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
     <ClInclude Include="src\MusicGame\GameDefines.hpp">
@@ -1006,6 +1126,9 @@
     <ClInclude Include="src\Common\Encoding.hpp">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
+    <ClInclude Include="src\Common\EnumUtils.hpp">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
     <ClInclude Include="src\MusicGame\Audio\AudioEffectUtils.hpp">
       <Filter>Header Files\MusicGame\Audio</Filter>
     </ClInclude>
@@ -1046,6 +1169,9 @@
       <Filter>Header Files\Input\Cursor</Filter>
     </ClInclude>
     <ClInclude Include="src\Input\Cursor\CursorInput.hpp">
+      <Filter>Header Files\Input\Cursor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\Cursor\LaserCursorInputDevice.hpp">
       <Filter>Header Files\Input\Cursor</Filter>
     </ClInclude>
     <ClInclude Include="src\MusicGame\Graphics\HUD\HispeedSettingPanel.hpp">
@@ -1135,6 +1261,12 @@
     <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuAllFolderItem.hpp">
       <Filter>Header Files\Scenes\Select\MenuItem</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuCourseItem.hpp">
+      <Filter>Header Files\Scenes\Select\MenuItem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuCoursesFolderItem.hpp">
+      <Filter>Header Files\Scenes\Select\MenuItem</Filter>
+    </ClInclude>
     <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuDirFolderItem.hpp">
       <Filter>Header Files\Scenes\Select\MenuItem</Filter>
     </ClInclude>
@@ -1144,6 +1276,9 @@
     <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuLevelSectionItem.hpp">
       <Filter>Header Files\Scenes\Select\MenuItem</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuLevelSongItem.hpp">
+      <Filter>Header Files\Scenes\Select\MenuItem</Filter>
+    </ClInclude>
     <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuFavFolderItem.hpp">
       <Filter>Header Files\Scenes\Select\MenuItem</Filter>
     </ClInclude>
@@ -1151,6 +1286,9 @@
       <Filter>Header Files\Scenes\Result</Filter>
     </ClInclude>
     <ClInclude Include="src\Scenes\Result\ResultScene.hpp">
+      <Filter>Header Files\Scenes\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\Result\ResultSNSShare.hpp">
       <Filter>Header Files\Scenes\Result</Filter>
     </ClInclude>
     <ClInclude Include="src\Scenes\Result\ResultSceneArgs.hpp">
@@ -1200,6 +1338,12 @@
     </ClInclude>
     <ClInclude Include="src\MusicGame\TurnUtil.hpp">
       <Filter>Header Files\MusicGame</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NocoExtensions\NocoUtils.hpp">
+      <Filter>Header Files\NocoExtensions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NocoExtensions\VerticalMarquee.hpp">
+      <Filter>Header Files\NocoExtensions</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\FontUtils.hpp">
       <Filter>Header Files\Graphics</Filter>
@@ -1251,6 +1395,42 @@
     </ClInclude>
     <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib\ScreenFade.hpp">
       <Filter>Header Files\ThirdParty\CoTaskLib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\LaserInput\AnalogStickXYLaserInput.hpp">
+      <Filter>Header Files\Input\LaserInput</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\LaserInput\MouseXYLaserInput.hpp">
+      <Filter>Header Files\Input\LaserInput</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\LaserInput\KeyboardLaserInput.hpp">
+      <Filter>Header Files\Input\LaserInput</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\LaserInput\ILaserInputMethod.hpp">
+      <Filter>Header Files\Input\LaserInput</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\LaserInput\SliderLaserInput.hpp">
+      <Filter>Header Files\Input\LaserInput</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Course\CourseContinuation.hpp">
+      <Filter>Header Files\Course</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Course\CourseInfo.hpp">
+      <Filter>Header Files\Course</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Course\CoursePlayResult.hpp">
+      <Filter>Header Files\Course</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Course\CoursePlayState.hpp">
+      <Filter>Header Files\Course</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\CourseResult\CourseResultChartList.hpp">
+      <Filter>Header Files\Scenes\CourseResult</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\CourseResult\CourseResultNewRecordPanel.hpp">
+      <Filter>Header Files\Scenes\CourseResult</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\CourseResult\CourseResultScene.hpp">
+      <Filter>Header Files\Scenes\CourseResult</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

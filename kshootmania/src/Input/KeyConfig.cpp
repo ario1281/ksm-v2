@@ -1,11 +1,20 @@
 ﻿#include "KeyConfig.hpp"
+#include "LaserInput/KeyboardLaserInput.hpp"
+#include "LaserInput/AnalogStickXYLaserInput.hpp"
+#include "LaserInput/SliderLaserInput.hpp"
+#include "LaserInput/MouseXYLaserInput.hpp"
 #include "Ini/ConfigIni.hpp"
 
 namespace
 {
+	using namespace KeyConfig;
+
 	// キーコンフィグの設定画面や保存時などに配列サイズが固定のほうが都合が良いのでs3d::InputGroupは不使用
-	using ConfigSetArray = std::array<Input, KeyConfig::kButtonEnumCount>;
-	std::array<ConfigSetArray, KeyConfig::kConfigSetEnumCount> s_configSetArray;
+	using ConfigSetArray = std::array<Input, kButtonEnumCount>;
+	std::array<ConfigSetArray, kConfigSetEnumCount> s_configSetArray;
+
+	// レーザー入力方式のインスタンス
+	std::array<std::unique_ptr<ILaserInputMethod>, kson::kNumLaserLanesSZ> s_laserInputMethods;
 
 #ifdef __APPLE__
 	struct PlatformKeyState
@@ -27,14 +36,14 @@ namespace
 	std::array<PlatformKeyState, kPlatformKeys.size()> s_platformKeyStates;
 #endif
 
-	constexpr std::array<InputDeviceType, KeyConfig::kConfigSetEnumCount> kConfigSetDeviceTypes = {
+	constexpr std::array<InputDeviceType, kConfigSetEnumCount> kConfigSetDeviceTypes = {
 		InputDeviceType::Keyboard,
 		InputDeviceType::Keyboard,
 		InputDeviceType::Gamepad,
 		InputDeviceType::Gamepad,
 	};
 
-	constexpr std::array<StringView, KeyConfig::kConfigSetEnumCount> kConfigSetNames = {
+	constexpr std::array<StringView, kConfigSetEnumCount> kConfigSetNames = {
 		U"Keyboard 1",
 		U"Keyboard 2",
 		U"Gamepad 1",
@@ -58,17 +67,135 @@ namespace
 		}
 	}
 
+	enum UseNumpadAsArrowKeys : int32
+	{
+		kOff = 0,
+		kOnKeyboard,
+		kOnController,
+	};
+
+	UseNumpadAsArrowKeys GetUseNumpadAsArrowKeysMode()
+	{
+		const int32 mode = ConfigIni::GetInt(ConfigIni::Key::kUseNumpadAsArrowKeys, 0);
+		if (mode < 0 || mode > kOnController)
+		{
+			return kOff;
+		}
+		return static_cast<UseNumpadAsArrowKeys>(mode);
+	}
+
+	bool IsNumpadArrowKeyPressed(Button button)
+	{
+		const UseNumpadAsArrowKeys mode = GetUseNumpadAsArrowKeysMode();
+		if (mode == kOff)
+		{
+			return false;
+		}
+
+		switch (button)
+		{
+		case kButtonLeft:
+			return KeyNum4.pressed();
+		case kButtonUp:
+			return mode == kOnKeyboard ? KeyNum8.pressed() : KeyNum2.pressed();
+		case kButtonRight:
+			return KeyNum6.pressed();
+		case kButtonDown:
+			return mode == kOnKeyboard ? KeyNum2.pressed() : KeyNum8.pressed();
+		default:
+			return false;
+		}
+	}
+
+	bool IsNumpadArrowKeyDown(Button button)
+	{
+		const UseNumpadAsArrowKeys mode = GetUseNumpadAsArrowKeysMode();
+		if (mode == kOff)
+		{
+			return false;
+		}
+
+		switch (button)
+		{
+		case kButtonLeft:
+			return KeyNum4.down();
+		case kButtonUp:
+			return mode == kOnKeyboard ? KeyNum8.down() : KeyNum2.down();
+		case kButtonRight:
+			return KeyNum6.down();
+		case kButtonDown:
+			return mode == kOnKeyboard ? KeyNum2.down() : KeyNum8.down();
+		default:
+			return false;
+		}
+	}
+
+	bool IsNumpadArrowKeyUp(Button button)
+	{
+		const UseNumpadAsArrowKeys mode = GetUseNumpadAsArrowKeysMode();
+		if (mode == kOff)
+		{
+			return false;
+		}
+
+		switch (button)
+		{
+		case kButtonLeft:
+			return KeyNum4.up();
+		case kButtonUp:
+			return mode == kOnKeyboard ? KeyNum8.up() : KeyNum2.up();
+		case kButtonRight:
+			return KeyNum6.up();
+		case kButtonDown:
+			return mode == kOnKeyboard ? KeyNum2.up() : KeyNum8.up();
+		default:
+			return false;
+		}
+	}
+
+	Button SwapLaserButtonIfNeeded(Button button)
+	{
+		if (!ConfigIni::GetBool(ConfigIni::Key::kSwapLaserLR, false))
+		{
+			return button;
+		}
+
+		switch (button)
+		{
+		case kButtonLeftLaserL:
+			return kButtonRightLaserL;
+		case kButtonLeftLaserR:
+			return kButtonRightLaserR;
+		case kButtonRightLaserL:
+			return kButtonLeftLaserL;
+		case kButtonRightLaserR:
+			return kButtonLeftLaserR;
+		default:
+			return button;
+		}
+	}
+
+	const Input& GetConfigSetInputApplyingSwap(const ConfigSetArray& configSet, Button button)
+	{
+		return configSet[SwapLaserButtonIfNeeded(button)];
+	}
+
+	Input& GetConfigSetInputApplyingSwap(ConfigSetArray& configSet, Button button)
+	{
+		return configSet[SwapLaserButtonIfNeeded(button)];
+	}
+
 	void RevertUnconfigurableKeyConfigs()
 	{
 		// Keyboard 1の場合、ユーザーによって変更できない固定のキーコンフィグがあるので上書き
-		s_configSetArray[KeyConfig::kKeyboard1][KeyConfig::kStart] = KeyEnter;
-		s_configSetArray[KeyConfig::kKeyboard1][KeyConfig::kBack] = KeyEscape;
-		s_configSetArray[KeyConfig::kKeyboard1][KeyConfig::kAutoPlay] = KeyF11;
-		s_configSetArray[KeyConfig::kKeyboard1][KeyConfig::kUp] = KeyUp;
-		s_configSetArray[KeyConfig::kKeyboard1][KeyConfig::kDown] = KeyDown;
-		s_configSetArray[KeyConfig::kKeyboard1][KeyConfig::kLeft] = KeyLeft;
-		s_configSetArray[KeyConfig::kKeyboard1][KeyConfig::kRight] = KeyRight;
-		s_configSetArray[KeyConfig::kKeyboard1][KeyConfig::kBackspace] = KeyBackspace;
+		s_configSetArray[KeyConfig::kKeyboard1][kButtonStart] = KeyEnter;
+		s_configSetArray[KeyConfig::kKeyboard1][kButtonBack] = KeyEscape;
+		s_configSetArray[KeyConfig::kKeyboard1][kButtonAutoPlay] = KeyF11;
+		s_configSetArray[KeyConfig::kKeyboard1][kButtonUp] = KeyUp;
+		s_configSetArray[KeyConfig::kKeyboard1][kButtonDown] = KeyDown;
+		s_configSetArray[KeyConfig::kKeyboard1][kButtonLeft] = KeyLeft;
+		s_configSetArray[KeyConfig::kKeyboard1][kButtonRight] = KeyRight;
+		s_configSetArray[KeyConfig::kKeyboard1][kButtonBackspace] = KeyBackspace;
 	}
 
 	bool IsBT3PlusStartPressed()
@@ -81,7 +208,7 @@ namespace
 		bool startPressed = false;
 		for (const auto& configSet : s_configSetArray)
 		{
-			if (configSet[KeyConfig::kStart].pressed())
+			if (configSet[kButtonStart].pressed())
 			{
 				startPressed = true;
 				break;
@@ -93,7 +220,7 @@ namespace
 		}
 
 		int32 btPressedCount = 0;
-		for (int32 btIdx = KeyConfig::kBT_A; btIdx <= KeyConfig::kBT_D; ++btIdx)
+		for (int32 btIdx = kButtonBT_A; btIdx <= kButtonBT_D; ++btIdx)
 		{
 			for (const auto& configSet : s_configSetArray)
 			{
@@ -117,13 +244,13 @@ namespace
 
 		for (const auto& configSet : s_configSetArray)
 		{
-			if (configSet[KeyConfig::kStart].down())
+			if (configSet[kButtonStart].down())
 			{
 				return true;
 			}
 		}
 
-		for (int32 btIdx = KeyConfig::kBT_A; btIdx <= KeyConfig::kBT_D; ++btIdx)
+		for (int32 btIdx = kButtonBT_A; btIdx <= kButtonBT_D; ++btIdx)
 		{
 			for (const auto& configSet : s_configSetArray)
 			{
@@ -146,13 +273,13 @@ namespace
 
 		for (const auto& configSet : s_configSetArray)
 		{
-			if (configSet[KeyConfig::kStart].up())
+			if (configSet[kButtonStart].up())
 			{
 				return true;
 			}
 		}
 
-		for (int32 btIdx = KeyConfig::kBT_A; btIdx <= KeyConfig::kBT_D; ++btIdx)
+		for (int32 btIdx = kButtonBT_A; btIdx <= kButtonBT_D; ++btIdx)
 		{
 			for (const auto& configSet : s_configSetArray)
 			{
@@ -164,6 +291,18 @@ namespace
 		}
 
 		return false;
+	}
+
+	std::pair<Button, Button> GetLaserButtons(int32 laneIdx)
+	{
+		if (laneIdx == 0)
+		{
+			return { kButtonLeftLaserL, kButtonLeftLaserR };
+		}
+		else
+		{
+			return { kButtonRightLaserL, kButtonRightLaserR };
+		}
 	}
 }
 
@@ -197,7 +336,7 @@ void KeyConfig::SetConfigValueByCommaSeparated(ConfigSet targetConfigSet, String
 		}
 		catch (const ParseError&)
 		{
-			throw Error(U"KeyConfig::SetConfigValue(): Could not parse KeyConfig::kDefaultConfigValues!");
+			throw Error(U"KeyConfig::SetConfigValue(): Could not parse kDefaultConfigValues!");
 		}
 	}
 
@@ -291,14 +430,14 @@ void KeyConfig::SaveToConfigIni()
 
 bool KeyConfig::Pressed(Button button)
 {
-	if (button == KeyConfig::kUnspecifiedButton)
+	if (button == kUnspecifiedButton)
 	{
 		return false;
 	}
 
 	for (const auto& configSet : s_configSetArray)
 	{
-		const auto& input = configSet[button];
+		const auto& input = GetConfigSetInputApplyingSwap(configSet, button);
 		if (input.deviceType() == InputDeviceType::Keyboard)
 		{
 #ifdef __APPLE__
@@ -333,20 +472,29 @@ bool KeyConfig::Pressed(Button button)
 	}
 
 	// FXの場合はLR両押しキーの状態も反映
-	if (button == kFX_L || button == kFX_R)
+	if (button == kButtonFX_L || button == kButtonFX_R)
 	{
 		for (const auto& configSet : s_configSetArray)
 		{
-			if (configSet[kFX_LR].pressed())
+			if (configSet[kButtonFX_LR].pressed())
 			{
 				return true;
 			}
 		}
 	}
 
-	if (button == kBack)
+	if (button == kButtonBack)
 	{
 		if (IsBT3PlusStartPressed())
+		{
+			return true;
+		}
+	}
+
+	// 矢印キーの場合、Numpadキーの状態も確認
+	if (button == kButtonUp || button == kButtonDown || button == kButtonLeft || button == kButtonRight)
+	{
+		if (IsNumpadArrowKeyPressed(button))
 		{
 			return true;
 		}
@@ -355,10 +503,10 @@ bool KeyConfig::Pressed(Button button)
 	return false;
 }
 
-Optional<KeyConfig::Button> KeyConfig::LastPressedLaserButton(Button button1, Button button2)
+Optional<Button> KeyConfig::LastPressedLaserButton(Button button1, Button button2)
 {
-	assert(button1 == kLeftLaserL || button1 == kLeftLaserR || button1 == kRightLaserL || button1 == kRightLaserR);
-	assert(button2 == kLeftLaserL || button2 == kLeftLaserR || button2 == kRightLaserL || button2 == kRightLaserR);
+	assert(button1 == kButtonLeftLaserL || button1 == kButtonLeftLaserR || button1 == kButtonRightLaserL || button1 == kButtonRightLaserR);
+	assert(button2 == kButtonLeftLaserL || button2 == kButtonLeftLaserR || button2 == kButtonRightLaserL || button2 == kButtonRightLaserR);
 
 	Optional<Button> lastButton = none;
 	Duration minDuration = Duration::zero();
@@ -366,9 +514,9 @@ Optional<KeyConfig::Button> KeyConfig::LastPressedLaserButton(Button button1, Bu
 	{
 		for (Button button : { button1, button2 })
 		{
-			if (configSet[button].pressed())
+			if (GetConfigSetInputApplyingSwap(configSet, button).pressed())
 			{
-				const Duration duration = configSet[button].pressedDuration();
+				const Duration duration = GetConfigSetInputApplyingSwap(configSet, button).pressedDuration();
 				if (!lastButton.has_value() || duration < minDuration)
 				{
 					minDuration = duration;
@@ -383,14 +531,14 @@ Optional<KeyConfig::Button> KeyConfig::LastPressedLaserButton(Button button1, Bu
 
 bool KeyConfig::Down(Button button)
 {
-	if (button == KeyConfig::kUnspecifiedButton)
+	if (button == kUnspecifiedButton)
 	{
 		return false;
 	}
 
 	for (const auto& configSet : s_configSetArray)
 	{
-		const auto& input = configSet[button];
+		const auto& input = GetConfigSetInputApplyingSwap(configSet, button);
 		if (input.deviceType() == InputDeviceType::Keyboard)
 		{
 #ifdef __APPLE__
@@ -425,20 +573,29 @@ bool KeyConfig::Down(Button button)
 	}
 
 	// FXの場合はLR両押しキーの状態も反映
-	if (button == kFX_L || button == kFX_R)
+	if (button == kButtonFX_L || button == kButtonFX_R)
 	{
 		for (const auto& configSet : s_configSetArray)
 		{
-			if (configSet[kFX_LR].down())
+			if (configSet[kButtonFX_LR].down())
 			{
 				return true;
 			}
 		}
 	}
 
-	if (button == kBack)
+	if (button == kButtonBack)
 	{
 		if (IsBT3PlusStartDown())
+		{
+			return true;
+		}
+	}
+
+	// 矢印キーの場合、Numpadキーの状態も確認
+	if (button == kButtonUp || button == kButtonDown || button == kButtonLeft || button == kButtonRight)
+	{
+		if (IsNumpadArrowKeyDown(button))
 		{
 			return true;
 		}
@@ -449,22 +606,22 @@ bool KeyConfig::Down(Button button)
 
 void KeyConfig::ClearInput(Button button)
 {
-	if (button == KeyConfig::kUnspecifiedButton)
+	if (button == kUnspecifiedButton)
 	{
 		return;
 	}
 
 	for (auto& configSet : s_configSetArray)
 	{
-		configSet[button].clearInput();
+		GetConfigSetInputApplyingSwap(configSet, button).clearInput();
 	}
 
 	// FXの場合はLR両押しキーの状態もクリア
-	if (button == kFX_L || button == kFX_R)
+	if (button == kButtonFX_L || button == kButtonFX_R)
 	{
 		for (auto& configSet : s_configSetArray)
 		{
-			configSet[kFX_LR].clearInput();
+			configSet[kButtonFX_LR].clearInput();
 		}
 	}
 }
@@ -479,7 +636,7 @@ Co::Task<void> KeyConfig::WaitUntilDown(Button button)
 
 bool KeyConfig::Up(Button button)
 {
-	if (button == KeyConfig::kUnspecifiedButton)
+	if (button == kUnspecifiedButton)
 	{
 		return false;
 	}
@@ -492,7 +649,7 @@ bool KeyConfig::Up(Button button)
 
 	for (const auto& configSet : s_configSetArray)
 	{
-		const auto& input = configSet[button];
+		const auto& input = GetConfigSetInputApplyingSwap(configSet, button);
 		if (input.deviceType() == InputDeviceType::Keyboard)
 		{
 #ifdef __APPLE__
@@ -526,7 +683,7 @@ bool KeyConfig::Up(Button button)
 		}
 	}
 
-	if (button == kBack)
+	if (button == kButtonBack)
 	{
 		if (IsBT3PlusStartUp())
 		{
@@ -534,5 +691,48 @@ bool KeyConfig::Up(Button button)
 		}
 	}
 
+	// 矢印キーの場合、Numpadキーの状態も確認
+	if (button == kButtonUp || button == kButtonDown || button == kButtonLeft || button == kButtonRight)
+	{
+		if (IsNumpadArrowKeyUp(button))
+		{
+			return true;
+		}
+	}
+
 	return false;
+}
+
+bool KeyConfig::IsLaserInputDigital()
+{
+	const int32 laserInputType = ConfigIni::GetInt(ConfigIni::Key::kLaserInputType, ConfigIni::Value::LaserInputType::kKeyboard);
+	return laserInputType == ConfigIni::Value::LaserInputType::kKeyboard;
+}
+
+double KeyConfig::LaserDeltaCursorX(int32 laneIdx, double deltaTimeSec)
+{
+	// 入力方式が初期化されていない、または設定が変更された場合は再初期化
+	if (!s_laserInputMethods[laneIdx] || s_laserInputMethods[laneIdx]->reconstructionNeeded())
+	{
+		const int32 laserInputType = ConfigIni::GetInt(ConfigIni::Key::kLaserInputType, ConfigIni::Value::LaserInputType::kKeyboard);
+		if (laserInputType == ConfigIni::Value::LaserInputType::kSlider)
+		{
+			s_laserInputMethods[laneIdx] = std::make_unique<SliderLaserInput>(laneIdx);
+		}
+		else if (laserInputType == ConfigIni::Value::LaserInputType::kAnalogStickXY)
+		{
+			s_laserInputMethods[laneIdx] = std::make_unique<AnalogStickXYLaserInput>(laneIdx);
+		}
+		else if (laserInputType == ConfigIni::Value::LaserInputType::kMouseXY)
+		{
+			s_laserInputMethods[laneIdx] = std::make_unique<MouseXYLaserInput>(laneIdx);
+		}
+		else
+		{
+			const auto [buttonL, buttonR] = GetLaserButtons(laneIdx);
+			s_laserInputMethods[laneIdx] = std::make_unique<KeyboardLaserInput>(buttonL, buttonR);
+		}
+	}
+
+	return s_laserInputMethods[laneIdx]->getDeltaCursorX(deltaTimeSec);
 }

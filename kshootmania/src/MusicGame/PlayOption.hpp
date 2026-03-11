@@ -3,13 +3,29 @@
 
 namespace MusicGame
 {
+	// テストプレイ用オプション
+	struct TestPlayOption
+	{
+		Optional<GaugeType> gaugeType;
+		Optional<int32> startMeasure;
+
+		bool hasStartMeasure() const
+		{
+			return startMeasure.has_value() && *startMeasure > 0;
+		}
+	};
+
 	struct PlayOption
 	{
+		GameMode gameMode = GameMode::kNormal;
+
 		IsAutoPlayYN isAutoPlay = IsAutoPlayYN::No;
 
 		GaugeType gaugeType = GaugeType::kNormalGauge;
 
 		TurnMode turnMode = TurnMode::kNormal;
+
+		double playbackSpeed = 1.0;
 
 		JudgmentPlayMode btJudgmentPlayMode = JudgmentPlayMode::kOn;
 
@@ -38,6 +54,18 @@ namespace MusicGame
 		HispeedSetting hispeedSetting = HispeedSetting{ .type = HispeedType::OMod, .value = 500 };
 
 		bool movieEnabled = true;
+
+		bool showBG = true;
+
+		bool showLayer = true;
+
+		Optional<TestPlayOption> testPlayOption;
+
+		// テストプレイで開始小節が指定されているか
+		bool isTestPlayWithStartMeasure() const
+		{
+			return testPlayOption.has_value() && testPlayOption->hasStartMeasure();
+		}
 
 		// オートプレイを考慮したBT判定モードを取得
 		JudgmentPlayMode effectiveBtJudgmentPlayMode() const
@@ -93,6 +121,18 @@ namespace MusicGame
 			return btJudgmentPlayMode != JudgmentPlayMode::kOn ||
 				fxJudgmentPlayMode != JudgmentPlayMode::kOn ||
 				laserJudgmentPlayMode != JudgmentPlayMode::kOn;
+		}
+
+		// スコアを保存すべきかどうか
+		bool shouldSaveScore() const
+		{
+			return !isAutoPlay && !testPlayOption.has_value();
+		}
+
+		// playbackSpeed取得(ゼロ除算対策用に0の場合は1を返す)
+		double nonZeroPlaybackSpeed() const
+		{
+			return playbackSpeed != 0.0 ? playbackSpeed : 1.0;
 		}
 	};
 }

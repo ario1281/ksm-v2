@@ -1,5 +1,8 @@
 ﻿#pragma once
 #include <unordered_map>
+#include "Input/KeyConfig.hpp"
+#include "Input/Cursor/CursorInput.hpp"
+#include "UI/LinearMenu.hpp"
 
 enum class OptionKeyConfigCursor
 {
@@ -31,15 +34,15 @@ private:
 	CursorInput m_verticalCursorInput;
 	OptionKeyConfigCursor m_cursor = OptionKeyConfigCursor::BT_A;
 	OptionKeyConfigMenuState m_state = OptionKeyConfigMenuState::None;
-	KeyConfig::ConfigSet m_targetConfigSet = KeyConfig::ConfigSet::kKeyboard1;
-	const Font m_font = AssetManagement::SystemFont();
-
-	const TiledTexture m_fxLRTexture;
+	LinearMenu m_configSetMenu;
 
 #ifdef __APPLE__
-	// macOSプラットフォーム特有キーの前フレーム状態を管理
+	// macOSプラットフォーム特有キーの前フレーム状態
 	std::unordered_map<int, bool> m_platformKeyWasPressed;
 #endif
+
+	[[nodiscard]]
+	KeyConfig::ConfigSet targetConfigSet() const;
 
 	void setInput(const Input& input);
 
@@ -52,5 +55,11 @@ public:
 
 	void update();
 
-	void draw() const;
+	void updateUI(noco::Canvas* pCanvas) const;
+
+	[[nodiscard]]
+	bool isButtonEditingState() const
+	{
+		return m_state != OptionKeyConfigMenuState::None;
+	}
 };

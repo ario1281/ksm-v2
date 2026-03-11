@@ -23,6 +23,9 @@ namespace MusicGame::Graphics
 		// 直近更新時にエラーが1つも出ていない状態かどうか
 		bool m_isNoError = true;
 
+		// 初回更新かどうか
+		bool m_isFirstUpdate = true;
+
 		// 表示中かどうかのタイマー
 		Timer m_visibleTimer;
 

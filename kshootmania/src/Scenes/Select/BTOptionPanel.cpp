@@ -26,6 +26,7 @@ namespace
 	{
 		kEffRate = 0,
 		kTurn,
+		kPlaybackSpeed,
 
 		kCount,
 	};
@@ -42,15 +43,18 @@ namespace
 		kCount,
 	};
 
-
-
-
 	// ハイスピード値の範囲
 	constexpr int32 kHispeedXModMin = 1; // x-modの最小値(x0.1)
 	constexpr int32 kHispeedXModMax = 99; // x-modの最大値(x9.9)
 	constexpr int32 kHispeedOCModMin = 25; // o/c-modの最小値
 	constexpr int32 kHispeedOCModMax = 2000; // o/c-modの最大値
 	constexpr int32 kHispeedOCModStep = 25; // o/c-modの刻み幅
+
+	// 再生速度の範囲
+	constexpr int32 kPlaybackSpeedMin = 10; // 10%
+	constexpr int32 kPlaybackSpeedMax = 300; // 300%
+	constexpr int32 kPlaybackSpeedDefault = 100; // 100%
+	constexpr int32 kPlaybackSpeedStep = 5; // 5%刻み
 
 	int32 CursorMin(HispeedType hispeedType)
 	{
@@ -98,10 +102,10 @@ namespace
 	{
 		switch (mode)
 		{
-		case ConfigIni::Value::JudgmentMode::kOn: return I18n::Get(I18n::Select::kJudgmentModeOn);
-		case ConfigIni::Value::JudgmentMode::kOff: return I18n::Get(I18n::Select::kJudgmentModeOff);
-		case ConfigIni::Value::JudgmentMode::kAuto: return I18n::Get(I18n::Select::kJudgmentModeAuto);
-		case ConfigIni::Value::JudgmentMode::kHide: return I18n::Get(I18n::Select::kJudgmentModeHide);
+		case ConfigIni::Value::JudgmentMode::kOn: return I18n::Get(I18n::Select::JudgmentModeOn);
+		case ConfigIni::Value::JudgmentMode::kOff: return I18n::Get(I18n::Select::JudgmentModeOff);
+		case ConfigIni::Value::JudgmentMode::kAuto: return I18n::Get(I18n::Select::JudgmentModeAuto);
+		case ConfigIni::Value::JudgmentMode::kHide: return I18n::Get(I18n::Select::JudgmentModeHide);
 		default: return U"";
 		}
 	}
@@ -110,9 +114,9 @@ namespace
 	{
 		switch (gauge)
 		{
-		case GaugeType::kEasyGauge: return I18n::Get(I18n::Select::kEffRateEasy);
-		case GaugeType::kNormalGauge: return I18n::Get(I18n::Select::kEffRateNormal);
-		case GaugeType::kHardGauge: return I18n::Get(I18n::Select::kEffRateHard);
+		case GaugeType::kEasyGauge: return I18n::Get(I18n::Select::EffRateEasy);
+		case GaugeType::kNormalGauge: return I18n::Get(I18n::Select::EffRateNormal);
+		case GaugeType::kHardGauge: return I18n::Get(I18n::Select::EffRateHard);
 		default: return U"";
 		}
 	}
@@ -121,9 +125,9 @@ namespace
 	{
 		switch (turn)
 		{
-		case TurnMode::kNormal: return I18n::Get(I18n::Select::kTurnNormal);
-		case TurnMode::kMirror: return I18n::Get(I18n::Select::kTurnMirror);
-		case TurnMode::kRandom: return I18n::Get(I18n::Select::kTurnRandom);
+		case TurnMode::kNormal: return I18n::Get(I18n::Select::TurnNormal);
+		case TurnMode::kMirror: return I18n::Get(I18n::Select::TurnMirror);
+		case TurnMode::kRandom: return I18n::Get(I18n::Select::TurnRandom);
 		default: return U"";
 		}
 	}
@@ -132,8 +136,8 @@ namespace
 	{
 		switch (assistTick)
 		{
-		case AssistTickMode::kOff: return I18n::Get(I18n::Select::kAssistTickOff);
-		case AssistTickMode::kOn: return I18n::Get(I18n::Select::kAssistTickOn);
+		case AssistTickMode::kOff: return I18n::Get(I18n::Select::AssistTickOff);
+		case AssistTickMode::kOn: return I18n::Get(I18n::Select::AssistTickOn);
 		default: return U"";
 		}
 	}
@@ -142,10 +146,10 @@ namespace
 	{
 		switch (autoSync)
 		{
-		case AutoSyncMode::kOff: return I18n::Get(I18n::Select::kAutoSyncOff);
-		case AutoSyncMode::kLow: return I18n::Get(I18n::Select::kAutoSyncOnLow);
-		case AutoSyncMode::kMid: return I18n::Get(I18n::Select::kAutoSyncOnMid);
-		case AutoSyncMode::kHigh: return I18n::Get(I18n::Select::kAutoSyncOnHigh);
+		case AutoSyncMode::kOff: return I18n::Get(I18n::Select::AutoSyncOff);
+		case AutoSyncMode::kLow: return I18n::Get(I18n::Select::AutoSyncOnLow);
+		case AutoSyncMode::kMid: return I18n::Get(I18n::Select::AutoSyncOnMid);
+		case AutoSyncMode::kHigh: return I18n::Get(I18n::Select::AutoSyncOnHigh);
 		default: return U"";
 		}
 	}*/
@@ -154,8 +158,8 @@ namespace
 	{
 		switch (display)
 		{
-		case FastSlowMode::kHide: return I18n::Get(I18n::Select::kFastSlowHide);
-		case FastSlowMode::kShow: return I18n::Get(I18n::Select::kFastSlowShow);
+		case FastSlowMode::kHide: return I18n::Get(I18n::Select::FastSlowHide);
+		case FastSlowMode::kShow: return I18n::Get(I18n::Select::FastSlowShow);
 		default: return U"";
 		}
 	}
@@ -164,8 +168,8 @@ namespace
 	{
 		switch (skin)
 		{
-		case NoteSkinType::kDefault: return I18n::Get(I18n::Select::kNoteSkinDefault);
-		case NoteSkinType::kNote: return I18n::Get(I18n::Select::kNoteSkinNote);
+		case NoteSkinType::kDefault: return I18n::Get(I18n::Select::NoteSkinDefault);
+		case NoteSkinType::kNote: return I18n::Get(I18n::Select::NoteSkinNote);
 		default: return U"";
 		}
 	}
@@ -174,12 +178,17 @@ namespace
 	{
 		switch (display)
 		{
-		case MovieMode::kOff: return I18n::Get(I18n::Select::kMovieOff);
-		case MovieMode::kOn: return I18n::Get(I18n::Select::kMovieOn);
+		case MovieMode::kOff: return I18n::Get(I18n::Select::MovieOff);
+		case MovieMode::kOn: return I18n::Get(I18n::Select::MovieOn);
 		default: return U"";
 		}
 	}
 
+	// 再生速度のカーソル値をもとに表示文字列を取得
+	String PlaybackSpeedToString(int32 cursor)
+	{
+		return U" {}% "_fmt(cursor);
+	}
 
 	String FormatMenuLine(StringView label, StringView value, bool isSelected, int32 currentCursor, int32 minCursor, int32 maxCursor)
 	{
@@ -205,7 +214,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 	, m_btAMenu(LinearMenu::CreateInfoWithEnumCount{
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Vertical,
-			.buttonFlags = CursorButtonFlags::kArrow,
+			.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 		},
 		.enumCount = static_cast<int32>(BTAMenuItem::kCount),
 		.cyclic = IsCyclicMenuYN::No,
@@ -213,7 +222,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 	, m_btBMenu(LinearMenu::CreateInfoWithEnumCount{
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Vertical,
-			.buttonFlags = CursorButtonFlags::kArrow,
+			.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 		},
 		.enumCount = static_cast<int32>(BTBMenuItem::kCount),
 		.cyclic = IsCyclicMenuYN::No,
@@ -221,7 +230,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 	, m_btCMenu(LinearMenu::CreateInfoWithEnumCount{
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Vertical,
-			.buttonFlags = CursorButtonFlags::kArrow,
+			.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 		},
 		.enumCount = static_cast<int32>(BTCMenuItem::kCount),
 		.cyclic = IsCyclicMenuYN::No,
@@ -231,7 +240,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 	, m_judgmentModeBT(LinearMenu::CreateInfoWithEnumCount{
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Horizontal,
-			.buttonFlags = CursorButtonFlags::kArrow,
+			.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 		},
 		.enumCount = 4, // JudgmentModeの値の数(On, Off, Auto, Hide)
 		.cyclic = IsCyclicMenuYN::No,
@@ -239,7 +248,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 	, m_judgmentModeFX(LinearMenu::CreateInfoWithEnumCount{
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Horizontal,
-			.buttonFlags = CursorButtonFlags::kArrow,
+			.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 		},
 		.enumCount = 4, // JudgmentModeの値の数(On, Off, Auto, Hide)
 		.cyclic = IsCyclicMenuYN::No,
@@ -247,7 +256,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 	, m_judgmentModeLaser(LinearMenu::CreateInfoWithEnumCount{
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Horizontal,
-			.buttonFlags = CursorButtonFlags::kArrow,
+			.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 		},
 		.enumCount = 4, // JudgmentModeの値の数(On, Off, Auto, Hide)
 		.cyclic = IsCyclicMenuYN::No,
@@ -257,7 +266,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 	, m_gaugeType(LinearMenu::CreateInfoWithCursorMinMax{
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Horizontal,
-			.buttonFlags = CursorButtonFlags::kArrow,
+			.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 		},
 		.cursorMin = static_cast<int32>(GaugeType::kEasyGauge),
 		.cursorMax = static_cast<int32>(GaugeType::kHardGauge),
@@ -266,9 +275,21 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 	, m_turnMode(LinearMenu::CreateInfoWithEnumCount{
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Horizontal,
-			.buttonFlags = CursorButtonFlags::kArrow,
+			.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 		},
 		.enumCount = static_cast<int32>(3),
+		.cyclic = IsCyclicMenuYN::No,
+	})
+	, m_playbackSpeed(LinearMenu::CreateInfoWithCursorMinMax{
+		.cursorInputCreateInfo = {
+			.type = CursorInput::Type::Horizontal,
+			.buttonFlags = CursorButtonFlags::kArrowOrLaser,
+			.buttonIntervalSec = 0.1,
+			.buttonIntervalSecFirst = 0.4,
+		},
+		.cursorMin = kPlaybackSpeedMin,
+		.cursorMax = kPlaybackSpeedMax,
+		.cursorStep = kPlaybackSpeedStep,
 		.cyclic = IsCyclicMenuYN::No,
 	})
 
@@ -276,7 +297,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 	, m_assistTick(LinearMenu::CreateInfoWithEnumCount{
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Horizontal,
-			.buttonFlags = CursorButtonFlags::kArrow,
+			.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 		},
 		.enumCount = static_cast<int32>(AssistTickMode::kCount),
 		.cyclic = IsCyclicMenuYN::No,
@@ -284,7 +305,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 	/*, m_autoSync(LinearMenu::CreateInfoWithEnumCount{
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Horizontal,
-			.buttonFlags = CursorButtonFlags::kArrow,
+			.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 		},
 		.enumCount = static_cast<int32>(AutoSyncMode::kCount),
 		.cyclic = IsCyclicMenuYN::No,
@@ -292,7 +313,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 	, m_fastSlow(LinearMenu::CreateInfoWithEnumCount{
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Horizontal,
-			.buttonFlags = CursorButtonFlags::kArrow,
+			.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 		},
 		.enumCount = static_cast<int32>(FastSlowMode::kCount),
 		.cyclic = IsCyclicMenuYN::No,
@@ -300,7 +321,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 	, m_noteSkin(LinearMenu::CreateInfoWithEnumCount{
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Horizontal,
-			.buttonFlags = CursorButtonFlags::kArrow,
+			.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 		},
 		.enumCount = static_cast<int32>(NoteSkinType::kCount),
 		.cyclic = IsCyclicMenuYN::No,
@@ -308,7 +329,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 	, m_movie(LinearMenu::CreateInfoWithEnumCount{
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Horizontal,
-			.buttonFlags = CursorButtonFlags::kArrow,
+			.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 		},
 		.enumCount = static_cast<int32>(MovieMode::kCount),
 		.cyclic = IsCyclicMenuYN::No,
@@ -320,7 +341,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 		LinearMenu::CreateInfoWithCursorMinMax{
 			.cursorInputCreateInfo = {
 				.type = CursorInput::Type::Horizontal,
-				.buttonFlags = CursorButtonFlags::kArrow,
+				.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 				.buttonIntervalSec = 0.12,
 			},
 			.cyclic = IsCyclicMenuYN::No,
@@ -329,7 +350,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 		LinearMenu::CreateInfoWithCursorMinMax{
 			.cursorInputCreateInfo = {
 				.type = CursorInput::Type::Vertical,
-				.buttonFlags = CursorButtonFlags::kArrow,
+				.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 				.flipArrowKeyDirection = FlipArrowKeyDirectionYN::Yes, // 上向きで増加、下向きで減少
 				.buttonIntervalSec = 0.06,
 			},
@@ -342,7 +363,7 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 	loadFromConfigIni();
 }
 
-Optional<KeyConfig::Button> BTOptionPanel::getCurrentSingleBTButton() const
+Optional<Button> BTOptionPanel::getCurrentSingleBTButton() const
 {
 	// Shift押下中はBTメニューを開かない(アルファベットジャンプを優先)
 	if (KeyShift.pressed())
@@ -351,9 +372,9 @@ Optional<KeyConfig::Button> BTOptionPanel::getCurrentSingleBTButton() const
 	}
 
 	int32 pressedCount = 0;
-	Optional<KeyConfig::Button> pressedButton;
+	Optional<Button> pressedButton;
 
-	for (KeyConfig::Button button = KeyConfig::kBT_A; button <= KeyConfig::kBT_D; ++button)
+	for (Button button = kButtonBT_A; button <= kButtonBT_D; ++button)
 	{
 		if (KeyConfig::Pressed(button))
 		{
@@ -386,13 +407,13 @@ String BTOptionPanel::generateBTAMenuText() const
 
 	const auto currentItem = m_btAMenu.cursorAs<BTAMenuItem>();
 
-	String text{ I18n::Get(I18n::Select::kJudgment) };
+	String text{ I18n::Get(I18n::Select::Judgment) };
 	text += U"\n";
-	text += FormatMenuLine(I18n::Get(I18n::Select::kJudgmentBT), JudgmentModeToI18nKey(judgmentModeBT), currentItem == BTAMenuItem::kJudgmentBT, m_judgmentModeBT.cursor(), 0, 3);
+	text += FormatMenuLine(I18n::Get(I18n::Select::JudgmentBT), JudgmentModeToI18nKey(judgmentModeBT), currentItem == BTAMenuItem::kJudgmentBT, m_judgmentModeBT.cursor(), 0, 3);
 	text += U"\n";
-	text += FormatMenuLine(I18n::Get(I18n::Select::kJudgmentFX), JudgmentModeToI18nKey(judgmentModeFX), currentItem == BTAMenuItem::kJudgmentFX, m_judgmentModeFX.cursor(), 0, 3);
+	text += FormatMenuLine(I18n::Get(I18n::Select::JudgmentFX), JudgmentModeToI18nKey(judgmentModeFX), currentItem == BTAMenuItem::kJudgmentFX, m_judgmentModeFX.cursor(), 0, 3);
 	text += U"\n";
-	text += FormatMenuLine(I18n::Get(I18n::Select::kJudgmentLaser), JudgmentModeToI18nKey(judgmentModeLaser), currentItem == BTAMenuItem::kJudgmentLaser, m_judgmentModeLaser.cursor(), 0, 3);
+	text += FormatMenuLine(I18n::Get(I18n::Select::JudgmentLaser), JudgmentModeToI18nKey(judgmentModeLaser), currentItem == BTAMenuItem::kJudgmentLaser, m_judgmentModeLaser.cursor(), 0, 3);
 
 	return text;
 }
@@ -401,13 +422,16 @@ String BTOptionPanel::generateBTBMenuText() const
 {
 	const auto gaugeType = m_gaugeType.cursorAs<GaugeType>();
 	const auto turnMode = m_turnMode.cursorAs<TurnMode>();
+	const int32 playbackSpeedCursor = m_playbackSpeed.cursor();
 
 	const auto currentItem = m_btBMenu.cursorAs<BTBMenuItem>();
 
 	String text = U"";
-	text += FormatMenuLine(I18n::Get(I18n::Select::kEffRate), GaugeTypeToI18nKey(gaugeType), currentItem == BTBMenuItem::kEffRate, m_gaugeType.cursor(), static_cast<int32>(GaugeType::kEasyGauge), static_cast<int32>(GaugeType::kHardGauge));
+	text += FormatMenuLine(I18n::Get(I18n::Select::EffRate), GaugeTypeToI18nKey(gaugeType), currentItem == BTBMenuItem::kEffRate, m_gaugeType.cursor(), static_cast<int32>(GaugeType::kEasyGauge), static_cast<int32>(GaugeType::kHardGauge));
 	text += U"\n";
-	text += FormatMenuLine(I18n::Get(I18n::Select::kTurn), TurnModeToI18nKey(turnMode), currentItem == BTBMenuItem::kTurn, m_turnMode.cursor(), 0, 2);
+	text += FormatMenuLine(I18n::Get(I18n::Select::Turn), TurnModeToI18nKey(turnMode), currentItem == BTBMenuItem::kTurn, m_turnMode.cursor(), 0, 2);
+	text += U"\n";
+	text += FormatMenuLine(I18n::Get(I18n::Select::PlaybackSpeed), PlaybackSpeedToString(playbackSpeedCursor), currentItem == BTBMenuItem::kPlaybackSpeed, playbackSpeedCursor, kPlaybackSpeedMin, kPlaybackSpeedMax);
 
 	return text;
 }
@@ -423,15 +447,15 @@ String BTOptionPanel::generateBTCMenuText() const
 	const auto currentItem = m_btCMenu.cursorAs<BTCMenuItem>();
 
 	String text = U"";
-	text += FormatMenuLine(I18n::Get(I18n::Select::kAssistTick), AssistTickModeToI18nKey(assistTick), currentItem == BTCMenuItem::kAssistTick, m_assistTick.cursor(), 0, static_cast<int32>(AssistTickMode::kCount) - 1);
+	text += FormatMenuLine(I18n::Get(I18n::Select::AssistTick), AssistTickModeToI18nKey(assistTick), currentItem == BTCMenuItem::kAssistTick, m_assistTick.cursor(), 0, static_cast<int32>(AssistTickMode::kCount) - 1);
 	text += U"\n";
-	/*text += FormatMenuLine(I18n::Get(I18n::Select::kAutoSync), AutoSyncModeToI18nKey(autoSync), currentItem == BTCMenuItem::kAutoSync, m_autoSync.cursor(), 0, static_cast<int32>(AutoSyncMode::kCount) - 1);
+	/*text += FormatMenuLine(I18n::Get(I18n::Select::AutoSync), AutoSyncModeToI18nKey(autoSync), currentItem == BTCMenuItem::kAutoSync, m_autoSync.cursor(), 0, static_cast<int32>(AutoSyncMode::kCount) - 1);
 	text += U"\n";*/
-	text += FormatMenuLine(I18n::Get(I18n::Select::kFastSlow), FastSlowModeToI18nKey(fastSlow), currentItem == BTCMenuItem::kFastSlow, m_fastSlow.cursor(), 0, static_cast<int32>(FastSlowMode::kCount) - 1);
+	text += FormatMenuLine(I18n::Get(I18n::Select::FastSlow), FastSlowModeToI18nKey(fastSlow), currentItem == BTCMenuItem::kFastSlow, m_fastSlow.cursor(), 0, static_cast<int32>(FastSlowMode::kCount) - 1);
 	text += U"\n";
-	text += FormatMenuLine(I18n::Get(I18n::Select::kNoteSkin), NoteSkinTypeToI18nKey(noteSkin), currentItem == BTCMenuItem::kNoteSkin, m_noteSkin.cursor(), 0, static_cast<int32>(NoteSkinType::kCount) - 1);
+	text += FormatMenuLine(I18n::Get(I18n::Select::NoteSkin), NoteSkinTypeToI18nKey(noteSkin), currentItem == BTCMenuItem::kNoteSkin, m_noteSkin.cursor(), 0, static_cast<int32>(NoteSkinType::kCount) - 1);
 	text += U"\n";
-	text += FormatMenuLine(I18n::Get(I18n::Select::kMovie), MovieModeToI18nKey(movie), currentItem == BTCMenuItem::kMovie, m_movie.cursor(), 0, static_cast<int32>(MovieMode::kCount) - 1);
+	text += FormatMenuLine(I18n::Get(I18n::Select::Movie), MovieModeToI18nKey(movie), currentItem == BTCMenuItem::kMovie, m_movie.cursor(), 0, static_cast<int32>(MovieMode::kCount) - 1);
 
 	return text;
 }
@@ -441,7 +465,7 @@ String BTOptionPanel::generateBTDMenuText() const
 	const auto hispeedType = m_hispeedTypeMenu.cursorValue();
 	const int32 hispeedValue = m_hispeedValueMenu.cursor();
 
-	String text{ I18n::Get(I18n::Select::kHispeed) };
+	String text{ I18n::Get(I18n::Select::Hispeed) };
 	text += U"\n";
 	text += U"          ";
 	text += MusicGame::HispeedUtils::ToDisplayString(MusicGame::HispeedSetting{ .type = hispeedType, .value = hispeedValue });
@@ -462,13 +486,13 @@ bool BTOptionPanel::update(double currentChartStdBPM)
 		m_isVisible = true;
 
 		// 対応するパネルを表示
-		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_A", currentButton == KeyConfig::kBT_A);
-		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_B", currentButton == KeyConfig::kBT_B);
-		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_C", currentButton == KeyConfig::kBT_C);
-		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_D", currentButton == KeyConfig::kBT_D);
+		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_A", currentButton == kButtonBT_A);
+		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_B", currentButton == kButtonBT_B);
+		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_C", currentButton == kButtonBT_C);
+		m_canvas->setParamValue(U"overlay_btOptionPanelVisible_D", currentButton == kButtonBT_D);
 
 		// 各メニューの更新
-		if (currentButton == KeyConfig::kBT_A)
+		if (currentButton == kButtonBT_A)
 		{
 			m_btAMenu.update();
 
@@ -500,7 +524,7 @@ bool BTOptionPanel::update(double currentChartStdBPM)
 
 			m_canvas->setParamValue(U"overlay_btOptionPanelText_A", generateBTAMenuText());
 		}
-		else if (currentButton == KeyConfig::kBT_B)
+		else if (currentButton == kButtonBT_B)
 		{
 			m_btBMenu.update();
 
@@ -526,6 +550,15 @@ bool BTOptionPanel::update(double currentChartStdBPM)
 					RuntimeConfig::SetTurnMode(m_turnMode.cursorAs<TurnMode>());
 				}
 			}
+			else if (currentItem == BTBMenuItem::kPlaybackSpeed)
+			{
+				m_playbackSpeed.update();
+				valueChanged = m_playbackSpeed.deltaCursor() != 0;
+				if (valueChanged)
+				{
+					RuntimeConfig::SetPlaybackSpeed(m_playbackSpeed.cursor() / 100.0);
+				}
+			}
 
 			if (valueChanged)
 			{
@@ -535,7 +568,7 @@ bool BTOptionPanel::update(double currentChartStdBPM)
 
 			m_canvas->setParamValue(U"overlay_btOptionPanelText_B", generateBTBMenuText());
 		}
-		else if (currentButton == KeyConfig::kBT_C)
+		else if (currentButton == kButtonBT_C)
 		{
 			m_btCMenu.update();
 
@@ -576,7 +609,7 @@ bool BTOptionPanel::update(double currentChartStdBPM)
 
 			m_canvas->setParamValue(U"overlay_btOptionPanelText_C", generateBTCMenuText());
 		}
-		else if (currentButton == KeyConfig::kBT_D)
+		else if (currentButton == kButtonBT_D)
 		{
 			m_hispeedTypeMenu.update();
 			m_hispeedValueMenu.update();
@@ -671,6 +704,7 @@ void BTOptionPanel::loadFromConfigIni()
 	// BT-Bメニューの設定(config.iniには保存しない)
 	m_gaugeType.setCursor(static_cast<int32>(RuntimeConfig::GetGaugeType()));
 	m_turnMode.setCursor(static_cast<int32>(RuntimeConfig::GetTurnMode()));
+	m_playbackSpeed.setCursor(static_cast<int32>(Round(RuntimeConfig::GetPlaybackSpeed() * 100.0)));
 
 	// BT-Cメニューの設定
 	m_assistTick.setCursor(ConfigIni::GetInt(ConfigIni::Key::kAssistTick, static_cast<int32>(AssistTickMode::kOff)));
@@ -700,15 +734,7 @@ void BTOptionPanel::loadFromConfigIni()
 	loadedType = hispeedSetting.type;
 	loadedValue = hispeedSetting.value;
 
-	// ハイスピード種類の配列から該当するインデックスを探して設定
-	for (int32 i = 0; i < static_cast<int32>(m_hispeedTypeMenu.size()); ++i)
-	{
-		if (m_hispeedTypeMenu[i] == loadedType)
-		{
-			m_hispeedTypeMenu.setCursor(i);
-			break;
-		}
-	}
+	m_hispeedTypeMenu.setCursorToValue(loadedType);
 
 	refreshHispeedValueMenuConstraints();
 	m_hispeedValueMenu.setCursor(loadedValue);
@@ -725,6 +751,7 @@ void BTOptionPanel::saveToConfigIni()
 	// BT-Bメニューの設定(config.iniには保存しない)
 	RuntimeConfig::SetGaugeType(m_gaugeType.cursorAs<GaugeType>());
 	RuntimeConfig::SetTurnMode(m_turnMode.cursorAs<TurnMode>());
+	RuntimeConfig::SetPlaybackSpeed(m_playbackSpeed.cursor() / 100.0);
 
 	// BT-Cメニューの設定
 	ConfigIni::SetInt(ConfigIni::Key::kAssistTick, m_assistTick.cursor());

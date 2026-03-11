@@ -11,7 +11,7 @@
 class SelectScene : public Co::UpdaterSceneBase
 {
 private:
-	const KeyConfig::Button m_folderCloseButton;
+	const Button m_folderCloseButton;
 
 	ColorF m_fadeOutColor = Palette::Black;
 
@@ -39,7 +39,7 @@ private:
 	// 次回のStartボタンの離した判定を無視するか
 	bool m_ignoreNextStartUp = false;
 
-	void moveToPlayScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay);
+	void moveToPlayScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay, const Optional<CoursePlayState>& courseState = none);
 
 	void refreshCanvasPlayerName();
 

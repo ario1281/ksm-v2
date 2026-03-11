@@ -30,6 +30,27 @@ KscValue KscValue::applyPlayResult(const MusicGame::PlayResult& playResult) cons
 	};
 }
 
+KscValue KscValue::applyPlayResultForCourse(const MusicGame::PlayResult& playResult) const
+{
+	// コースモードではフルコンボ未満の場合はachievementを更新しない
+	const Achievement newAchievement = playResult.achievement() >= Achievement::kFullCombo
+		? Max(achievement, playResult.achievement())
+		: achievement;
+
+	return KscValue
+	{
+		.score = Max(score, playResult.score),
+		.achievement = newAchievement,
+		.grade = Max(grade, playResult.grade()),
+		.percent = Max(percent, playResult.gaugePercentForHighScore()),
+		.maxCombo = Max(maxCombo, playResult.maxCombo),
+		.playCount = playCount + 1,
+		.clearCount = clearCount,
+		.fullComboCount = fullComboCount + (playResult.achievement() >= Achievement::kFullCombo ? 1 : 0),
+		.perfectCount = perfectCount + (playResult.achievement() >= Achievement::kPerfect ? 1 : 0),
+	};
+}
+
 String KscValue::toString() const
 {
 	return U"{},{},{},{},{},{},{},{},{}"_fmt(

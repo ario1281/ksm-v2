@@ -50,7 +50,7 @@ namespace MusicGame::Audio
 			return result;
 		}
 
-		void RegisterAudioEffects(BGM& bgm, const kson::ChartData& chartData, const kson::TimingCache& timingCache, const FilePath& parentPath)
+		void RegisterAudioEffects(BGM& bgm, const kson::ChartData& chartData, const kson::TimingCache& timingCache, const FilePath& parentPath, double bgmVolume)
 		{
 			using AudioEffectUtils::PrecalculateUpdateTriggerTiming;
 
@@ -62,9 +62,11 @@ namespace MusicGame::Audio
 				+ 1/* インデックスを要素数にするために1を足す */;
 
 			// legacy.filterGainに0.5以外の値が存在する場合、ビルトインのフィルタエフェクトのgain・qのパラメータ変更として反映
+			// (p音源が指定されているがファイルが存在しない場合、pfiltergainの値を無視して50%で適用)
 			kson::Dict<kson::Dict<kson::ByPulse<std::string>>> laserParamChangeDict = chartData.audio.audioEffect.laser.paramChange;
 			const auto& filterGain = chartData.audio.audioEffect.laser.legacy.filterGain;
-			if (!filterGain.empty())
+			const bool isLaserFallback = !chartData.audio.bgm.legacy.filenameP.empty() && legacyMode != LegacyAudioFPMode::kFP;
+			if (!filterGain.empty() && !isLaserFallback)
 			{
 				// 0.5以外の値が含まれているかチェック
 				bool hasNonDefaultValue = std::any_of(
@@ -169,7 +171,7 @@ namespace MusicGame::Audio
 						{
 							// ファイル名をもとに音声を追加ロード
 							const std::string& filename = def.v.at("filename");
-							bgm.emplaceSwitchAudioStream(true, name, filename, parentPath, chartData.audio.bgm.vol);
+							bgm.emplaceSwitchAudioStream(true, name, filename, parentPath, bgmVolume);
 						}
 					}
 					else
@@ -219,7 +221,7 @@ namespace MusicGame::Audio
 						{
 							// ファイル名をもとに音声を追加ロード
 							const std::string& filename = def.v.at("filename");
-							bgm.emplaceSwitchAudioStream(false, name, filename, parentPath, chartData.audio.bgm.vol);
+							bgm.emplaceSwitchAudioStream(false, name, filename, parentPath, bgmVolume);
 						}
 					}
 					else
@@ -444,8 +446,8 @@ namespace MusicGame::Audio
 		return audioEffectInvocation;
 	}
 
-	AudioEffectMain::AudioEffectMain(BGM& bgm, const kson::ChartData& chartData, const kson::TimingCache& timingCache, const FilePath& parentPath, double audioProcDelaySec)
-		: m_longFXNoteInvocations((RegisterAudioEffects(bgm, chartData, timingCache, parentPath), CreateLongFXNoteAudioEffectInvocations(bgm, chartData))) // 先に登録しておく必要があるので、分かりにくいがカンマ演算子を使用している(TODO: もうちょっとどうにかする)
+	AudioEffectMain::AudioEffectMain(BGM& bgm, const kson::ChartData& chartData, const kson::TimingCache& timingCache, const FilePath& parentPath, double audioProcDelaySec, double bgmVolume)
+		: m_longFXNoteInvocations((RegisterAudioEffects(bgm, chartData, timingCache, parentPath, bgmVolume), CreateLongFXNoteAudioEffectInvocations(bgm, chartData))) // 先に登録しておく必要があるので、分かりにくいがカンマ演算子を使用している(TODO: もうちょっとどうにかする)
 		, m_laserPulseInvocations(CreateLaserPulseAudioEffectInvocations(bgm, chartData))
 		, m_audioProcDelaySec(audioProcDelaySec)
 		, m_peakingFilterDelaySec(GetEffectivePeakingFilterDelaySec(chartData))
@@ -500,9 +502,9 @@ namespace MusicGame::Audio
 				{
 					.bpm = static_cast<float>(currentBPMForAudio),
 					.sec = static_cast<float>(currentTimeSecForAudio),
+					.playbackSpeed = static_cast<float>(bgm.playbackSpeed()),
 				},
 				m_activeAudioEffectDictFX);
-
 		}
 
 		const Optional<AudioEffectInvocation>& activeLaserInvocation = getActiveLaserAudioEffectInvocation(currentPulseForAudio);
@@ -561,8 +563,9 @@ namespace MusicGame::Audio
 					.v = laserValue,
 					.bpm = static_cast<float>(currentBPMForAudio),
 					.sec = static_cast<float>(currentTimeSecForAudio),
+					.playbackSpeed = static_cast<float>(bgm.playbackSpeed()),
 				},
-				(activeLaserInvocation.has_value() && std::holds_alternative<DSPAudioEffectInvocation>(*activeLaserInvocation))
+				activeLaserInvocation.has_value() && std::holds_alternative<DSPAudioEffectInvocation>(*activeLaserInvocation)
 				? std::make_optional(std::get<DSPAudioEffectInvocation>(*activeLaserInvocation).audioEffectIdx)
 				: std::nullopt);
 		}

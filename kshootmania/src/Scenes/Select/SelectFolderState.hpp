@@ -8,6 +8,7 @@ struct SelectFolderState
 		kDirectory,
 		kAll,
 		kFavorite,
+		kCourses,
 	};
 
 	enum class SortMode

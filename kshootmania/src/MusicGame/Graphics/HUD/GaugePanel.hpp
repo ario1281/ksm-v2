@@ -7,7 +7,7 @@ namespace MusicGame::Graphics
 	class GaugePanel
 	{
 	private:
-		const GaugeType m_gaugeType;
+		const GaugeCalcType m_gaugeCalcType;
 		const TiledTexture m_baseTexture;
 		const TiledTexture m_barTexture;
 		const TiledTexture m_barAnimTexture;
@@ -16,7 +16,7 @@ namespace MusicGame::Graphics
 		const TextureFontTextLayout m_percentNumberLayout;
 
 	public:
-		explicit GaugePanel(GaugeType gaugeType);
+		explicit GaugePanel(GaugeCalcType gaugeCalcType);
 
 		void draw(double percent, kson::Pulse currentPulse) const;
 	};

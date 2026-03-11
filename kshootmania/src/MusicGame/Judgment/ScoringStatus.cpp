@@ -2,83 +2,113 @@
 
 namespace MusicGame::Judgment
 {
-	namespace
-	{
-		// ゲージ種類に応じた上昇率倍率を取得
-		double GetGaugeIncreaseRate(GaugeType gaugeType)
-		{
-			switch (gaugeType)
-			{
-			case GaugeType::kEasyGauge:
-				return kGaugeIncreaseRateEasy;
-			case GaugeType::kNormalGauge:
-				return kGaugeIncreaseRateNormal;
-			case GaugeType::kHardGauge:
-				return kGaugeIncreaseRateHard;
-			default:
-				throw Error{ U"GetGaugeIncreaseRate(): Invalid gauge type (gaugeType:{})"_fmt(static_cast<std::underlying_type_t<GaugeType>>(gaugeType)) };
-			}
-		}
-
-		// ゲージ種類に応じた下降率倍率を取得(EASY/NORMAL用)
-		double GetGaugeDecreaseRate(GaugeType gaugeType)
-		{
-			switch (gaugeType)
-			{
-			case GaugeType::kEasyGauge:
-				return kGaugeDecreaseRateEasy;
-			case GaugeType::kNormalGauge:
-				return kGaugeDecreaseRateNormal;
-			default:
-				throw Error{ U"GetGaugeDecreaseRate(): Invalid gauge type (gaugeType:{})"_fmt(static_cast<std::underlying_type_t<GaugeType>>(gaugeType)) };
-			}
-		}
-	}
 
 	void ScoringStatus::addGaugeValue(int32 add)
 	{
-		const double rate = GetGaugeIncreaseRate(m_gaugeType);
-		const int32 adjustedAdd = static_cast<int32>(add * rate);
-		m_gaugeValue = Min(m_gaugeValue + adjustedAdd, m_gaugeValueMax);
+		int32 adjustedAdd = 0;
+
+		switch (m_gaugeCalcType)
+		{
+		case GaugeCalcType::kNormalEasy:
+			adjustedAdd = static_cast<int32>(add * kGaugeIncreaseRateEasy);
+			m_gaugeValue = Min(m_gaugeValue + adjustedAdd, m_gaugeValueMax);
+			break;
+
+		case GaugeCalcType::kNormalNormal:
+			adjustedAdd = static_cast<int32>(add * kGaugeIncreaseRateNormal);
+			m_gaugeValue = Min(m_gaugeValue + adjustedAdd, m_gaugeValueMax);
+			break;
+
+		case GaugeCalcType::kNormalHard:
+			adjustedAdd = static_cast<int32>(add * kGaugeIncreaseRateHard);
+			m_gaugeValue = Min(m_gaugeValue + adjustedAdd, kGaugeValueMaxHard);
+			break;
+
+		case GaugeCalcType::kCourseNormal:
+			adjustedAdd = static_cast<int32>(kGaugeValueMaxHard * add * kGaugeIncreaseRateCourseNormal / m_gaugeValueMax);
+			m_gaugeValue = Min(m_gaugeValue + adjustedAdd, kGaugeValueMaxHard);
+			break;
+
+		case GaugeCalcType::kCourseEasy:
+			adjustedAdd = static_cast<int32>(kGaugeValueMaxHard * add * kGaugeIncreaseRateCourseEasy / m_gaugeValueMax);
+			m_gaugeValue = Min(m_gaugeValue + adjustedAdd, kGaugeValueMaxHard);
+			break;
+
+		case GaugeCalcType::kCourseHard:
+			adjustedAdd = static_cast<int32>(add * kGaugeIncreaseRateCourseHard);
+			m_gaugeValue = Min(m_gaugeValue + adjustedAdd, kGaugeValueMaxHard);
+			break;
+		}
 
 		// Grade計算用にNORMAL基準のゲージ値も更新
-		const double normalRate = GetGaugeIncreaseRate(GaugeType::kNormalGauge);
-		const int32 normalAdd = static_cast<int32>(add * normalRate);
+		addGaugeValueNormal(add);
+	}
+
+	void ScoringStatus::addGaugeValueNormal(int32 add)
+	{
+		const int32 normalAdd = static_cast<int32>(add * kGaugeIncreaseRateNormal);
 		m_gaugeValueNormal = Min(m_gaugeValueNormal + normalAdd, m_gaugeValueMax);
 	}
 
 	void ScoringStatus::subtractGaugeValue(int32 sub)
 	{
 		int32 adjustedSub = 0;
+		const int32 currentPercentageInt = gaugePercentageInt(m_gaugeType);
 
-		if (m_gaugeType == GaugeType::kHardGauge)
+		switch (m_gaugeCalcType)
 		{
-			// HARDゲージは固定値を使用
-			// 百分率を切り捨てで整数化してから判定
-			const int32 currentPercentageInt = gaugePercentageInt(GaugeType::kHardGauge);
-			const double rate = currentPercentageInt <= kGaugePercentageThresholdHardWarning ? kGaugeDecreaseRateHardLow : 1.0;
-			adjustedSub = static_cast<int32>(sub * rate);
-		}
-		else
-		{
-			// EASY/NORMALはm_gaugeValueMaxに対する割合で計算
-			const double rate = GetGaugeDecreaseRate(m_gaugeType);
-			adjustedSub = static_cast<int32>(sub * rate);
+		case GaugeCalcType::kNormalEasy:
+			adjustedSub = static_cast<int32>(sub * kGaugeDecreaseRateEasy);
+			break;
+
+		case GaugeCalcType::kNormalNormal:
+			adjustedSub = static_cast<int32>(sub * kGaugeDecreaseRateNormal);
+			break;
+
+		case GaugeCalcType::kNormalHard:
+			{
+				const double rate = currentPercentageInt <= kGaugePercentageThresholdHardWarning ? kGaugeDecreaseRateHardLow : 1.0;
+				adjustedSub = static_cast<int32>(sub * rate);
+				break;
+			}
+
+		case GaugeCalcType::kCourseNormal:
+			{
+				const double rate = currentPercentageInt <= kGaugePercentageThresholdHardWarning ? kGaugeDecreaseRateCourseLow : 1.0;
+				adjustedSub = static_cast<int32>(sub * kGaugeDecreaseRateCourseNormal * rate);
+				break;
+			}
+
+		case GaugeCalcType::kCourseEasy:
+			{
+				const double rate = currentPercentageInt <= kGaugePercentageThresholdHardWarning ? kGaugeDecreaseRateCourseLow : 1.0;
+				adjustedSub = static_cast<int32>(sub * kGaugeDecreaseRateCourseEasy * rate);
+				break;
+			}
+
+		case GaugeCalcType::kCourseHard:
+			{
+				const double rate = currentPercentageInt <= kGaugePercentageThresholdHardWarning ? kGaugeDecreaseRateCourseHardLow : 1.0;
+				adjustedSub = static_cast<int32>(sub * kGaugeDecreaseRateCourseHard * rate);
+				break;
+			}
 		}
 
 		m_gaugeValue = Max(m_gaugeValue - adjustedSub, 0);
 
 		// Grade計算用にNORMAL基準のゲージ値も更新
-		const double normalRate = GetGaugeDecreaseRate(GaugeType::kNormalGauge);
-		const int32 normalSub = static_cast<int32>(sub * normalRate);
+		const int32 normalSub = static_cast<int32>(sub * kGaugeDecreaseRateNormal);
 		m_gaugeValueNormal = Max(m_gaugeValueNormal - normalSub, 0);
 	}
 
-	ScoringStatus::ScoringStatus(int32 scoreValueMax, int32 gaugeValueMax, GaugeType gaugeType)
+	ScoringStatus::ScoringStatus(int32 scoreValueMax, int32 gaugeValueMax, GaugeType gaugeType, const Optional<CourseContinuation>& courseContinuation, GameMode gameMode)
 		: m_scoreValueMax(scoreValueMax)
 		, m_gaugeValueMax(gaugeValueMax)
 		, m_gaugeType(gaugeType)
-		, m_gaugeValue(gaugeType == GaugeType::kHardGauge ? kGaugeValueMaxHard : 0)
+		, m_gameMode(gameMode)
+		, m_gaugeCalcType(ToGaugeCalcType(gaugeType, gameMode))
+		, m_gaugeValue(courseContinuation.has_value() ? courseContinuation->gaugeValue : ((gaugeType == GaugeType::kHardGauge || gameMode == GameMode::kCourseMode) ? kGaugeValueMaxHard : 0))
+		, m_comboStatus(courseContinuation)
 	{
 	}
 
@@ -96,14 +126,29 @@ namespace MusicGame::Judgment
 		case Judgment::JudgmentResult::kNearFast:
 		case Judgment::JudgmentResult::kNearSlow:
 			m_scoreValue += Judgment::kScoreValueNear;
-			if (m_gaugeType != GaugeType::kHardGauge) // HARDゲージの場合、NEARではゲージ上昇しない
+			if (m_gaugeCalcType == GaugeCalcType::kCourseHard)
 			{
+				// コースモードのHARDゲージでは、NEARでゲージが減る
+				subtractGaugeValue(kGaugeDecreaseBaseValueCourseChipError);
+			}
+			else if (m_gaugeType != GaugeType::kHardGauge)
+			{
+				// 通常モードのEASY/NORMALゲージでは、NEARでゲージが増える
 				addGaugeValue(kGaugeValueChipNear);
+			}
+			else
+			{
+				// 通常モードのHARDゲージでは、実ゲージは増減なしだが、グレード計算用のNORMAL基準ゲージは増やす
+				addGaugeValueNormal(kGaugeValueChipNear);
 			}
 			break;
 
 		case Judgment::JudgmentResult::kError:
-			if (m_gaugeType == GaugeType::kHardGauge)
+			if (m_gaugeCalcType == GaugeCalcType::kCourseEasy || m_gaugeCalcType == GaugeCalcType::kCourseNormal || m_gaugeCalcType == GaugeCalcType::kCourseHard)
+			{
+				subtractGaugeValue(kGaugeDecreaseBaseValueCourseChipError);
+			}
+			else if (m_gaugeCalcType == GaugeCalcType::kNormalHard)
 			{
 				subtractGaugeValue(kGaugeDecreaseValueHardChipError);
 			}
@@ -131,7 +176,11 @@ namespace MusicGame::Judgment
 			break;
 
 		case Judgment::JudgmentResult::kError:
-			if (m_gaugeType == GaugeType::kHardGauge)
+			if (m_gaugeCalcType == GaugeCalcType::kCourseEasy || m_gaugeCalcType == GaugeCalcType::kCourseNormal || m_gaugeCalcType == GaugeCalcType::kCourseHard)
+			{
+				subtractGaugeValue(kGaugeDecreaseBaseValueCourseLongError);
+			}
+			else if (m_gaugeCalcType == GaugeCalcType::kNormalHard)
 			{
 				subtractGaugeValue(kGaugeDecreaseValueHardLongError);
 			}
@@ -158,7 +207,7 @@ namespace MusicGame::Judgment
 
 	double ScoringStatus::calcGaugePercentageFromValue(int32 gaugeValue, GaugeType gaugeType) const
 	{
-		if (gaugeType == GaugeType::kHardGauge)
+		if (gaugeType == GaugeType::kHardGauge || m_gameMode == GameMode::kCourseMode)
 		{
 			return Max(0.0, 100.0 * gaugeValue / kGaugeValueMaxHard);
 		}
@@ -179,7 +228,7 @@ namespace MusicGame::Judgment
 
 	int32 ScoringStatus::gaugePercentageInt(GaugeType gaugeType) const
 	{
-		if (gaugeType == GaugeType::kHardGauge)
+		if (gaugeType == GaugeType::kHardGauge || m_gameMode == GameMode::kCourseMode)
 		{
 			return m_gaugeValue / 1000;
 		}
@@ -195,8 +244,8 @@ namespace MusicGame::Judgment
 
 	double ScoringStatus::gaugePercentageForGrade() const
 	{
-		// HARDゲージの場合はNORMAL基準のゲージ値を使用
-		if (m_gaugeType == GaugeType::kHardGauge)
+		// HARDゲージまたはコースモードの場合はNORMAL基準のゲージ値を使用
+		if (m_gaugeType == GaugeType::kHardGauge || m_gameMode == GameMode::kCourseMode)
 		{
 			return calcGaugePercentageFromValue(m_gaugeValueNormal, GaugeType::kNormalGauge);
 		}
@@ -204,6 +253,11 @@ namespace MusicGame::Judgment
 		{
 			return calcGaugePercentageFromValue(m_gaugeValue, m_gaugeType);
 		}
+	}
+
+	int32 ScoringStatus::gaugeValue() const
+	{
+		return m_gaugeValue;
 	}
 
 	int32 ScoringStatus::combo() const
@@ -229,5 +283,25 @@ namespace MusicGame::Judgment
 	int32 ScoringStatus::totalJudgedCombo() const
 	{
 		return m_comboStatus.totalJudgedCombo();
+	}
+
+	int32 ScoringStatus::courseCombo() const
+	{
+		return m_comboStatus.courseCombo();
+	}
+
+	bool ScoringStatus::courseIsNoError() const
+	{
+		return m_comboStatus.courseIsNoError();
+	}
+
+	int32 ScoringStatus::displayCombo() const
+	{
+		return m_gameMode == GameMode::kCourseMode ? m_comboStatus.courseCombo() : m_comboStatus.combo();
+	}
+
+	bool ScoringStatus::displayIsNoError() const
+	{
+		return m_gameMode == GameMode::kCourseMode ? m_comboStatus.courseIsNoError() : m_comboStatus.isNoError();
 	}
 }

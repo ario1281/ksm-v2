@@ -1,4 +1,5 @@
 ﻿#include "LinearMenu.hpp"
+#include "Input/KeyConfig.hpp"
 
 void LinearMenu::increment(int32 absDeltaCursor)
 {
@@ -109,4 +110,13 @@ bool LinearMenu::isCursorMax() const
 int32 LinearMenu::deltaCursor() const
 {
 	return m_deltaCursor;
+}
+
+double LinearMenu::cursorRate() const
+{
+	if (m_cursorMax <= m_cursorMin)
+	{
+		return 0.0;
+	}
+	return static_cast<double>(m_cursor - m_cursorMin) / static_cast<double>(m_cursorMax - m_cursorMin);
 }

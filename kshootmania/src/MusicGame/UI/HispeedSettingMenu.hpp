@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "MusicGame/Scroll/HispeedSetting.hpp"
 #include "MusicGame/Scroll/HighwayScroll.hpp"
+#include "UI/LinearMenu.hpp"
+#include "UI/ArrayWithLinearMenu.hpp"
 
 namespace MusicGame
 {

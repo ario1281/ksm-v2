@@ -5,6 +5,7 @@ template <typename T>
 class ArrayWithLinearMenu
 {
 private:
+	[[nodiscard]]
 	static LinearMenu::CreateInfoWithCursorMinMax FixLinearMenuCreateInfo(const Array<T>& array, LinearMenu::CreateInfoWithCursorMinMax createInfo);
 
 	Array<T> m_array;
@@ -19,38 +20,59 @@ public:
 
 	explicit ArrayWithLinearMenu(Array<T>&& array, const LinearMenu::CreateInfoWithCursorMinMax& createInfo);
 
+	[[nodiscard]]
 	int32 cursor() const;
 
 	template <typename U>
+	[[nodiscard]]
 	U cursorAs() const;
 
 	template <typename U>
 	void setCursor(U value);
 
+	/// @brief 配列内で指定した値に一致する要素のインデックスにカーソルを設定
+	/// @param value 検索する値
+	/// @return 値が見つかった場合はtrue、見つからなかった場合はfalse(カーソルは変更されない)
+	bool setCursorToValue(const T& value);
+
 	void update();
 
+	[[nodiscard]]
 	bool isCursorMin() const;
 
+	[[nodiscard]]
 	bool isCursorMax() const;
 
+	[[nodiscard]]
 	int32 deltaCursor() const;
 
+	[[nodiscard]]
+	double cursorRate() const;
+
+	[[nodiscard]]
 	T& cursorValue();
 
+	[[nodiscard]]
 	const T& cursorValue() const;
 
 	void setArray(const Array<T>& array);
 
+	[[nodiscard]]
 	auto& operator[](std::size_t idx);
 
+	[[nodiscard]]
 	const auto& operator[](std::size_t idx) const;
 
+	[[nodiscard]]
 	auto& at(std::size_t idx);
 
+	[[nodiscard]]
 	const auto& at(std::size_t idx) const;
 
+	[[nodiscard]]
 	auto& atCyclic(int32 idx);
 
+	[[nodiscard]]
 	const auto& atCyclic(int32 idx) const;
 
 	void clear();
@@ -64,36 +86,52 @@ public:
 
 	void pop_back();
 
+	[[nodiscard]]
 	auto begin();
 
+	[[nodiscard]]
 	auto begin() const;
 
+	[[nodiscard]]
 	auto cbegin() const;
 
+	[[nodiscard]]
 	auto end();
 
+	[[nodiscard]]
 	auto end() const;
 
+	[[nodiscard]]
 	auto cend() const;
 
+	[[nodiscard]]
 	auto rbegin();
 
+	[[nodiscard]]
 	auto rbegin() const;
 
+	[[nodiscard]]
 	auto crbegin() const;
 
+	[[nodiscard]]
 	auto rend();
 
+	[[nodiscard]]
 	auto rend() const;
 
+	[[nodiscard]]
 	auto crend() const;
 
+	[[nodiscard]]
 	auto& back();
 
+	[[nodiscard]]
 	const auto& back() const;
 
+	[[nodiscard]]
 	auto size() const;
 
+	[[nodiscard]]
 	auto empty() const;
 };
 
@@ -124,6 +162,20 @@ template <typename U>
 void ArrayWithLinearMenu<T>::setCursor(U value)
 {
 	m_linearMenu.setCursor(value);
+}
+
+template <typename T>
+bool ArrayWithLinearMenu<T>::setCursorToValue(const T& value)
+{
+	for (int32 i = 0; i < static_cast<int32>(m_array.size()); ++i)
+	{
+		if (m_array[i] == value)
+		{
+			m_linearMenu.setCursor(i);
+			return true;
+		}
+	}
+	return false;
 }
 
 template <typename T>
@@ -174,6 +226,12 @@ template<typename T>
 int32 ArrayWithLinearMenu<T>::deltaCursor() const
 {
 	return m_linearMenu.deltaCursor();
+}
+
+template<typename T>
+double ArrayWithLinearMenu<T>::cursorRate() const
+{
+	return m_linearMenu.cursorRate();
 }
 
 template <typename T>

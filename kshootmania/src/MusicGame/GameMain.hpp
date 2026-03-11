@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "Course/CoursePlayState.hpp"
 #include "GameStatus.hpp"
 #include "PlayOption.hpp"
 #include "PlayResult.hpp"
@@ -14,6 +15,7 @@
 #include "UI/HispeedSettingMenu.hpp"
 #include "Graphics/GraphicsMain.hpp"
 #include "kson/Util/TimingUtils.hpp"
+#include "Ini/FolderConfIni.hpp"
 
 namespace MusicGame
 {
@@ -24,6 +26,10 @@ namespace MusicGame
 		PlayOption playOption;
 
 		AssistTickMode assistTickMode = AssistTickMode::kOff;
+
+		Optional<CourseContinuation> courseContinuation = none;
+
+		FolderConfIni folderConfIni;
 	};
 
 	class GameMain
@@ -41,6 +47,7 @@ namespace MusicGame
 		bool m_isFirstUpdate = true;
 
 		// 譜面情報
+		std::array<HashSet<kson::Pulse>, kson::kNumLaserLanesSZ> m_laserCurvedPulses;
 		const kson::ChartData m_chartData;
 		const kson::TimingCache m_timingCache;
 
@@ -77,6 +84,9 @@ namespace MusicGame
 		GameStatus m_gameStatus;
 		ViewStatus m_viewStatus;
 		bool m_isFinishedPrev = false;
+
+		// Backボタンによる途中終了かどうか(未判定ノーツが残った状態でlockForExitが呼ばれた場合にtrue)
+		bool m_isAborted = false;
 
 		// 再生制御
 		bool m_isPaused = false;

@@ -9,7 +9,7 @@ PlayStatsPanel::PlayStatsPanel(std::shared_ptr<noco::Canvas> canvas)
 bool PlayStatsPanel::isThreeBTButtonsPressed() const
 {
 	int32 btPressedCount = 0;
-	for (KeyConfig::Button btButton = KeyConfig::kBT_A; btButton <= KeyConfig::kBT_D; ++btButton)
+	for (Button btButton = kButtonBT_A; btButton <= kButtonBT_D; ++btButton)
 	{
 		if (KeyConfig::Pressed(btButton))
 		{
@@ -27,25 +27,25 @@ String PlayStatsPanel::generateStatsText(const HighScoreInfo& highScore, GaugeTy
 	const int32 perfectCount = highScore.perfectCount(gaugeType);
 
 	return U"{}{}\n{}{}\n{}{}\n{}{}"_fmt(
-		I18n::Get(I18n::Select::kPlayStatsPlayCount),
+		I18n::Get(I18n::Select::PlayStatsPlayCount),
 		playCount,
-		I18n::Get(I18n::Select::kPlayStatsClear),
+		I18n::Get(I18n::Select::PlayStatsClear),
 		clearCount,
-		I18n::Get(I18n::Select::kPlayStatsFullCombo),
+		I18n::Get(I18n::Select::PlayStatsFullCombo),
 		fullComboCount,
-		I18n::Get(I18n::Select::kPlayStatsPerfect),
+		I18n::Get(I18n::Select::PlayStatsPerfect),
 		perfectCount
 	);
 }
 
-void PlayStatsPanel::update(const HighScoreInfo& highScore, GaugeType gaugeType)
+void PlayStatsPanel::update(const Optional<HighScoreInfo>& highScore, GaugeType gaugeType)
 {
-	const bool shouldBeVisible = isThreeBTButtonsPressed();
+	const bool shouldBeVisible = isThreeBTButtonsPressed() && highScore.has_value();
 
 	if (shouldBeVisible)
 	{
 		// 統計情報テキストを生成してCanvasに設定
-		const String statsText = generateStatsText(highScore, gaugeType);
+		const String statsText = generateStatsText(*highScore, gaugeType);
 		m_canvas->setParamValue(U"overlay_playStatsPanelText", statsText);
 	}
 

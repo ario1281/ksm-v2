@@ -8,24 +8,29 @@ namespace MusicGame::Judgment
 		{
 		case JudgmentResult::kCritical:
 			++m_combo;
+			++m_courseCombo;
 			m_maxCombo = Max(m_maxCombo, m_combo);
 			++m_stats.critical;
 			break;
 
 		case JudgmentResult::kNearFast:
 			++m_combo;
+			++m_courseCombo;
 			m_maxCombo = Max(m_maxCombo, m_combo);
 			++m_stats.nearFast;
 			break;
 
 		case JudgmentResult::kNearSlow:
 			++m_combo;
+			++m_courseCombo;
 			m_maxCombo = Max(m_maxCombo, m_combo);
 			++m_stats.nearSlow;
 			break;
 
 		case JudgmentResult::kError:
 			m_combo = 0;
+			m_courseCombo = 0;
+			m_courseIsNoError = false;
 			++m_stats.error;
 			break;
 
@@ -58,5 +63,15 @@ namespace MusicGame::Judgment
 	int32 ComboStatus::totalJudgedCombo() const
 	{
 		return m_stats.totalJudgedCombo();
+	}
+
+	int32 ComboStatus::courseCombo() const
+	{
+		return m_courseCombo;
+	}
+
+	bool ComboStatus::courseIsNoError() const
+	{
+		return m_courseIsNoError;
 	}
 }

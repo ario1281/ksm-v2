@@ -3,8 +3,9 @@
 
 namespace MusicGame::Graphics
 {
-	MoviePanel::MoviePanel(const FilePath& moviePath, double movieOffsetSec, bool enabled)
+	MoviePanel::MoviePanel(const FilePath& moviePath, double movieOffsetSec, double playbackSpeed, bool enabled)
 		: m_movieOffsetSec(movieOffsetSec)
+		, m_playbackSpeed(playbackSpeed)
 		, m_enabled(enabled)
 	{
 		if (!m_enabled)
@@ -65,7 +66,7 @@ namespace MusicGame::Graphics
 		m_started = false;
 	}
 
-	void MoviePanel::update(double currentTimeSec)
+	void MoviePanel::update(double currentTimeSec, bool isPaused)
 	{
 		if (!m_enabled || !m_movie)
 		{
@@ -78,14 +79,14 @@ namespace MusicGame::Graphics
 
 			if (currentTimeSec > m_startTimeSec)
 			{
-				const double seekSec = currentTimeSec - m_startTimeSec;
+				const double seekSec = (currentTimeSec - m_startTimeSec) * m_playbackSpeed;
 				m_movie.setPosSec(seekSec);
 			}
 		}
 
-		if (m_started)
+		if (m_started && !isPaused)
 		{
-			m_movie.advance(Scene::DeltaTime());
+			m_movie.advance(Scene::DeltaTime() * m_playbackSpeed);
 		}
 	}
 
@@ -145,5 +146,19 @@ namespace MusicGame::Graphics
 	bool MoviePanel::isEnabled() const
 	{
 		return m_enabled && m_movie;
+	}
+
+	void MoviePanel::seekPosSec(SecondsF posSec)
+	{
+		if (!m_enabled || !m_movie || !m_started)
+		{
+			return;
+		}
+
+		const double moviePosSec = (posSec.count() - m_startTimeSec) * m_playbackSpeed;
+		if (moviePosSec >= 0.0)
+		{
+			m_movie.setPosSec(moviePosSec);
+		}
 	}
 }

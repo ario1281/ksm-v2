@@ -50,7 +50,7 @@
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\Debug\Intermediate\</IntDir>
     <TargetName>$(ProjectName)(debug)</TargetName>
     <LocalDebuggerWorkingDirectory>$(ProjectDir)App</LocalDebuggerWorkingDirectory>
-    <IncludePath>$(SIV3D_0_6_16)\include;$(SIV3D_0_6_16)\include\ThirdParty;$(IncludePath)</IncludePath>
+    <IncludePath>$(SIV3D_0_6_16)\include;$(SIV3D_0_6_16)\include\ThirdParty;$(IncludePath);$(ProjectDir)ThirdParty</IncludePath>
     <LibraryPath>$(SIV3D_0_6_16)\lib\Windows;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -58,7 +58,7 @@
     <OutDir>$(ProjectDir)App\</OutDir>
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\Release\Intermediate\</IntDir>
     <LocalDebuggerWorkingDirectory>$(ProjectDir)App</LocalDebuggerWorkingDirectory>
-    <IncludePath>$(SIV3D_0_6_16)\include;$(SIV3D_0_6_16)\include\ThirdParty;$(IncludePath)</IncludePath>
+    <IncludePath>$(SIV3D_0_6_16)\include;$(SIV3D_0_6_16)\include\ThirdParty;$(IncludePath);$(ProjectDir)ThirdParty</IncludePath>
     <LibraryPath>$(SIV3D_0_6_16)\lib\Windows;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -72,11 +72,12 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>26451;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <AdditionalOptions>/Zc:__cplusplus /Zm500 /MP3 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /Zc:__cplusplus /Zm500 /MP3 %(AdditionalOptions)</AdditionalOptions>
       <ForcedIncludeFiles>$(ProjectDir)src\stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <BuildStlModules>false</BuildStlModules>
       <AdditionalIncludeDirectories>$(SolutionDir)kson\include;$(SolutionDir)ksmaudio\include;$(SolutionDir)ksmaudio\ThirdParty_Windows\bass;$(SolutionDir)ksmaudio\ThirdParty_Windows\bass_fx;$(ProjectDir)\src;$(ProjectDir)\ThirdParty\CoTaskLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>$(ProjectDir)src\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -100,11 +101,12 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>26451;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <AdditionalOptions>/Zc:__cplusplus /Zm500 /MP7 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /Zc:__cplusplus /Zm500 /MP7 %(AdditionalOptions)</AdditionalOptions>
       <ForcedIncludeFiles>$(ProjectDir)src\stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <BuildStlModules>false</BuildStlModules>
       <AdditionalIncludeDirectories>$(SolutionDir)kson\include;$(SolutionDir)ksmaudio\include;$(SolutionDir)ksmaudio\ThirdParty_Windows\bass;$(SolutionDir)ksmaudio\ThirdParty_Windows\bass_fx;$(ProjectDir)\src;$(ProjectDir)\ThirdParty\CoTaskLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>$(ProjectDir)src\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -128,7 +130,7 @@
     <ClCompile Include="src\Common\FsUtils.cpp" />
     <ClCompile Include="src\Common\IMEUtils.cpp" />
     <ClCompile Include="src\Common\MathUtils.cpp" />
-    <ClCompile Include="src\Common\NocoUtils.cpp" />
+    <ClCompile Include="src\Common\MessageBoxUtils.cpp" />
     <ClCompile Include="src\Graphics\FontUtils.cpp" />
     <ClCompile Include="src\Graphics\TextureFontTextLayout.cpp" />
     <ClCompile Include="src\Graphics\NumberTextureFont.cpp" />
@@ -139,14 +141,23 @@
     <ClCompile Include="src\HighScore\KscValue.cpp" />
     <ClCompile Include="src\HighScore\KscIO.cpp" />
     <ClCompile Include="src\I18n\I18n.cpp" />
+    <ClCompile Include="src\IR\IRHash.cpp" />
     <ClCompile Include="src\Ini\ConfigIni.cpp" />
+    <ClCompile Include="src\Ini\FolderConfIni.cpp" />
     <ClCompile Include="src\Ini\KSMIniData.cpp" />
     <ClCompile Include="src\Input\FXButtonUpDetection.cpp" />
+    <ClCompile Include="src\Input\InputUtils.cpp" />
     <ClCompile Include="src\Input\Cursor\ButtonCursorInputDevice.cpp" />
     <ClCompile Include="src\Input\Cursor\CursorInput.cpp" />
+    <ClCompile Include="src\Input\Cursor\LaserCursorInputDevice.cpp" />
     <ClCompile Include="src\Input\KeyConfig.cpp" />
+    <ClCompile Include="src\Input\LaserInput\AnalogStickXYLaserInput.cpp" />
+    <ClCompile Include="src\Input\LaserInput\KeyboardLaserInput.cpp" />
+    <ClCompile Include="src\Input\LaserInput\MouseXYLaserInput.cpp" />
+    <ClCompile Include="src\Input\LaserInput\SliderLaserInput.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\RuntimeConfig.cpp" />
+    <ClCompile Include="src\TestPlayArgs.cpp" />
     <ClCompile Include="src\MusicGame\Audio\AssistTick.cpp" />
     <ClCompile Include="src\MusicGame\Audio\AudioEffectMain.cpp" />
     <ClCompile Include="src\MusicGame\Audio\AudioEffectUtils.cpp" />
@@ -194,6 +205,8 @@
     <ClCompile Include="src\MusicGame\PlayResult.cpp" />
     <ClCompile Include="src\MusicGame\Scroll\HighwayScroll.cpp" />
     <ClCompile Include="src\MusicGame\UI\HispeedSettingMenu.cpp" />
+    <ClCompile Include="src\NocoExtensions\NocoUtils.cpp" />
+    <ClCompile Include="src\NocoExtensions\VerticalMarquee.cpp" />
     <ClCompile Include="src\Scenes\Common\ShowLoadingOneFrame.cpp" />
     <ClCompile Include="src\Scenes\Option\OptionKeyConfigMenu.cpp" />
     <ClCompile Include="src\Scenes\Option\OptionMenu.cpp" />
@@ -202,12 +215,22 @@
     <ClCompile Include="src\Scenes\Option\OptionScene.cpp" />
     <ClCompile Include="src\Scenes\Play\PlayScene.cpp" />
     <ClCompile Include="src\Scenes\PlayPrepare\PlayPrepareScene.cpp" />
+    <ClCompile Include="src\Course\CourseInfo.cpp" />
+    <ClCompile Include="src\Course\CoursePlayResult.cpp" />
+    <ClCompile Include="src\Course\CoursePlayState.cpp" />
+    <ClCompile Include="src\Scenes\CourseResult\CourseResultChartList.cpp" />
+    <ClCompile Include="src\Scenes\CourseResult\CourseResultNewRecordPanel.cpp" />
+    <ClCompile Include="src\Scenes\CourseResult\CourseResultScene.cpp" />
     <ClCompile Include="src\Scenes\Result\ResultNewRecordPanel.cpp" />
     <ClCompile Include="src\Scenes\Result\ResultScene.cpp" />
+    <ClCompile Include="src\Scenes\Result\ResultSNSShare.cpp" />
     <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuAllFolderItem.cpp" />
+    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuCourseItem.cpp" />
+    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuCoursesFolderItem.cpp" />
     <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuDirFolderItem.cpp" />
     <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuFavFolderItem.cpp" />
     <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuLevelSectionItem.cpp" />
+    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuLevelSongItem.cpp" />
     <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuSongItem.cpp" />
     <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuSubDirSectionItem.cpp" />
     <ClCompile Include="src\Scenes\Select\BTOptionPanel.cpp" />
@@ -219,9 +242,14 @@
     <ClCompile Include="src\Scenes\Select\SelectMenu.cpp" />
     <ClCompile Include="src\Scenes\Select\SelectScene.cpp" />
     <ClCompile Include="src\Scenes\Select\SelectSongPreview.cpp" />
+    <ClCompile Include="src\Scenes\IREntry\IREntryMenu.cpp" />
+    <ClCompile Include="src\Scenes\IREntry\IREntryScene.cpp" />
     <ClCompile Include="src\Scenes\Title\TitleMenu.cpp" />
     <ClCompile Include="src\Scenes\Title\TitleScene.cpp" />
-    <ClCompile Include="src\stdafx.cpp" />
+    <ClCompile Include="src\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\UI\LinearMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -325,11 +353,12 @@
     <ClInclude Include="src\Common\AssetManagement.hpp" />
     <ClInclude Include="src\Common\CommonDefines.hpp" />
     <ClInclude Include="src\Common\Encoding.hpp" />
+    <ClInclude Include="src\Common\EnumUtils.hpp" />
     <ClInclude Include="src\Common\FrameRateLimit.hpp" />
     <ClInclude Include="src\Common\FsUtils.hpp" />
     <ClInclude Include="src\Common\IMEUtils.hpp" />
     <ClInclude Include="src\Common\MathUtils.hpp" />
-    <ClInclude Include="src\Common\NocoUtils.hpp" />
+    <ClInclude Include="src\Common\MessageBoxUtils.hpp" />
     <ClInclude Include="src\Graphics\FontUtils.hpp" />
     <ClInclude Include="src\Graphics\TextureFontTextLayout.hpp" />
     <ClInclude Include="src\Graphics\NumberTextureFont.hpp" />
@@ -340,13 +369,22 @@
     <ClInclude Include="src\HighScore\KscValue.hpp" />
     <ClInclude Include="src\HighScore\KscIO.hpp" />
     <ClInclude Include="src\I18n\I18n.hpp" />
+    <ClInclude Include="src\IR\IRHash.hpp" />
     <ClInclude Include="src\Ini\ConfigIni.hpp" />
+    <ClInclude Include="src\Ini\FolderConfIni.hpp" />
     <ClInclude Include="src\Ini\KSMIniData.hpp" />
     <ClInclude Include="src\Input\FXButtonUpDetection.hpp" />
+    <ClInclude Include="src\Input\InputUtils.hpp" />
     <ClInclude Include="src\Input\Cursor\ButtonCursorInputDevice.hpp" />
     <ClInclude Include="src\Input\Cursor\CursorInput.hpp" />
     <ClInclude Include="src\Input\Cursor\ICursorInputDevice.hpp" />
+    <ClInclude Include="src\Input\Cursor\LaserCursorInputDevice.hpp" />
     <ClInclude Include="src\Input\KeyConfig.hpp" />
+    <ClInclude Include="src\Input\LaserInput\AnalogStickXYLaserInput.hpp" />
+    <ClInclude Include="src\Input\LaserInput\ILaserInputMethod.hpp" />
+    <ClInclude Include="src\Input\LaserInput\MouseXYLaserInput.hpp" />
+    <ClInclude Include="src\Input\LaserInput\SliderLaserInput.hpp" />
+    <ClInclude Include="src\Input\LaserInput\KeyboardLaserInput.hpp" />
     <ClInclude Include="src\Input\PlatformKey.hpp" />
     <ClInclude Include="src\MusicGame\Audio\AssistTick.hpp" />
     <ClInclude Include="src\MusicGame\Audio\AudioDefines.hpp" />
@@ -405,10 +443,12 @@
     <ClInclude Include="src\MusicGame\Timeline.hpp" />
     <ClInclude Include="src\MusicGame\UI\HispeedSettingMenu.hpp" />
     <ClInclude Include="src\MusicGame\ViewStatus.hpp" />
+    <ClInclude Include="src\NocoExtensions\NocoUtils.hpp" />
+    <ClInclude Include="src\NocoExtensions\VerticalMarquee.hpp" />
     <ClInclude Include="src\RuntimeConfig.hpp" />
+    <ClInclude Include="src\TestPlayArgs.hpp" />
     <ClInclude Include="src\Scenes\Common\CommonAssets.hpp" />
     <ClInclude Include="src\Scenes\Common\ShowLoadingOneFrame.hpp" />
-    <ClInclude Include="src\Scenes\Option\OptionAssets.hpp" />
     <ClInclude Include="src\Scenes\Option\OptionKeyConfigMenu.hpp" />
     <ClInclude Include="src\Scenes\Option\OptionMenu.hpp" />
     <ClInclude Include="src\Scenes\Option\OptionMenuField.hpp" />
@@ -418,14 +458,25 @@
     <ClInclude Include="src\Scenes\Play\PlaySceneArgs.hpp" />
     <ClInclude Include="src\Scenes\PlayPrepare\PlayPrepareAssets.hpp" />
     <ClInclude Include="src\Scenes\PlayPrepare\PlayPrepareScene.hpp" />
+    <ClInclude Include="src\Course\CourseContinuation.hpp" />
+    <ClInclude Include="src\Course\CourseInfo.hpp" />
+    <ClInclude Include="src\Course\CoursePlayResult.hpp" />
+    <ClInclude Include="src\Course\CoursePlayState.hpp" />
+    <ClInclude Include="src\Scenes\CourseResult\CourseResultChartList.hpp" />
+    <ClInclude Include="src\Scenes\CourseResult\CourseResultNewRecordPanel.hpp" />
+    <ClInclude Include="src\Scenes\CourseResult\CourseResultScene.hpp" />
     <ClInclude Include="src\Scenes\Result\ResultNewRecordPanel.hpp" />
     <ClInclude Include="src\Scenes\Result\ResultScene.hpp" />
+    <ClInclude Include="src\Scenes\Result\ResultSNSShare.hpp" />
     <ClInclude Include="src\Scenes\Result\ResultSceneArgs.hpp" />
     <ClInclude Include="src\Scenes\Select\MenuItem\ISelectMenuItem.hpp" />
     <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuAllFolderItem.hpp" />
+    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuCourseItem.hpp" />
+    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuCoursesFolderItem.hpp" />
     <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuDirFolderItem.hpp" />
     <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuFavFolderItem.hpp" />
     <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuLevelSectionItem.hpp" />
+    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuLevelSongItem.hpp" />
     <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuSongItem.hpp" />
     <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuSubDirSectionItem.hpp" />
     <ClInclude Include="src\Scenes\Select\BTOptionPanel.hpp" />
@@ -438,6 +489,8 @@
     <ClInclude Include="src\Scenes\Select\SelectMenu.hpp" />
     <ClInclude Include="src\Scenes\Select\SelectScene.hpp" />
     <ClInclude Include="src\Scenes\Select\SelectSongPreview.hpp" />
+    <ClInclude Include="src\Scenes\IREntry\IREntryMenu.hpp" />
+    <ClInclude Include="src\Scenes\IREntry\IREntryScene.hpp" />
     <ClInclude Include="src\Scenes\Title\TitleAssets.hpp" />
     <ClInclude Include="src\Scenes\Title\TitleMenu.hpp" />
     <ClInclude Include="src\Scenes\Title\TitleScene.hpp" />
@@ -466,6 +519,9 @@
     </ProjectReference>
     <ProjectReference Include="ThirdParty\NocoUI\NocoUI.vcxproj">
       <Project>{557d3fbd-c267-4eb1-8ad6-2c19af884151}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ksmaxis\ksmaxis.vcxproj">
+      <Project>{e367b8ef-8306-4266-8577-77ae178fe5d0}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

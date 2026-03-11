@@ -1,38 +1,23 @@
 ﻿#include "SelectChartInfo.hpp"
 #include "HighScore/KscIO.hpp"
+#include "HighScore/KscKey.hpp"
 #include "Ini/ConfigIni.hpp"
 #include "kson/IO/KshIO.hpp"
 #include "RuntimeConfig.hpp"
 
 namespace
 {
-	HighScoreInfo LoadHighScoreInfo(FilePathView chartFilePath)
+	KscKey CreateKscKeyFromConfig()
 	{
-		const KscKey condition
+		return KscKey
 		{
 			.gaugeType = RuntimeConfig::GetGaugeType(),
 			.turnMode = RuntimeConfig::GetTurnMode(),
+			.playbackSpeed = RuntimeConfig::GetPlaybackSpeed(),
 			.btPlayMode = RuntimeConfig::GetJudgmentPlayModeBT(),
 			.fxPlayMode = RuntimeConfig::GetJudgmentPlayModeFX(),
 			.laserPlayMode = RuntimeConfig::GetJudgmentPlayModeLaser(),
 		};
-
-		return KscIO::ReadHighScoreInfo(chartFilePath, condition);
-	}
-
-	kson::MetaChartData LoadMetaChartData(const FilePathView filePath)
-	{
-		const auto extension = FileSystem::Extension(filePath);
-		if (extension == kKSHExtension)
-		{
-			return kson::LoadKSHMetaChartData(filePath.narrow());
-		}
-		else if (extension == kKSONExtension)
-		{
-			return kson::LoadKSONMetaChartData(filePath.narrow());
-		}
-
-		return kson::MetaChartData();
 	}
 }
 
@@ -43,9 +28,12 @@ FilePath SelectChartInfo::toFullPath(const std::string& u8Filename) const
 
 SelectChartInfo::SelectChartInfo(FilePathView chartFilePath)
 	: m_chartFilePath(chartFilePath)
-	, m_chartData(LoadMetaChartData(chartFilePath))
-	, m_highScoreInfo(LoadHighScoreInfo(chartFilePath))
+	, m_chartData(FsUtils::HasKsonExtension(chartFilePath)
+		? kson::LoadKsonMetaChartData(chartFilePath.toUTF8())
+		: kson::LoadKshMetaChartData(chartFilePath.toUTF8()))
+	, m_folderConfIni(FolderConfIni::Load(chartFilePath))
 {
+	KscIO::ReadAllHighScoreInfo(chartFilePath, &m_highScoreInfoMap);
 }
 
 String SelectChartInfo::title() const
@@ -140,7 +128,7 @@ Duration SelectChartInfo::previewBGMDuration() const
 
 double SelectChartInfo::previewBGMVolume() const
 {
-	return m_chartData.audio.bgm.vol;
+	return m_chartData.audio.bgm.vol * m_folderConfIni.volumeScale;
 }
 
 FilePath SelectChartInfo::iconFilePath() const
@@ -153,14 +141,14 @@ String SelectChartInfo::information() const
 	return Unicode::FromUTF8(m_chartData.meta.information);
 }
 
-const HighScoreInfo& SelectChartInfo::highScoreInfo() const
+HighScoreInfo SelectChartInfo::highScoreInfo() const
 {
-	return m_highScoreInfo;
-}
-
-void SelectChartInfo::reloadHighScoreInfo()
-{
-	m_highScoreInfo = LoadHighScoreInfo(m_chartFilePath);
+	const String key = CreateKscKeyFromConfig().toStringWithoutGaugeType();
+	if (auto it = m_highScoreInfoMap.find(key); it != m_highScoreInfoMap.end())
+	{
+		return it->second;
+	}
+	return HighScoreInfo{};
 }
 
 bool SelectChartInfo::hasError() const

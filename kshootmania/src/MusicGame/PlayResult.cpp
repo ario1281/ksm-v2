@@ -8,25 +8,9 @@ namespace MusicGame
 		constexpr int32 kGaugeFactorMax = kScoreMax - kScoreFactorMax;
 	}
 
-	bool PlayResult::isAborted() const
-	{
-		const int32 judgedCombo = comboStats.critical + comboStats.totalNear() + comboStats.error;
-		if (judgedCombo < totalCombo)
-		{
-			// 途中でプレイをやめた場合
-			return true;
-		}
-		else
-		{
-			// 途中でプレイをやめていなければ判定内訳の合計がtotalComboになるはず
-			assert(judgedCombo == totalCombo);
-			return false;
-		}
-	}
-
 	Achievement PlayResult::achievement() const
 	{
-		if (isAborted())
+		if (isAborted)
 		{
 			// 途中でプレイをやめた場合
 			return Achievement::kNone;
@@ -35,9 +19,9 @@ namespace MusicGame
 		// クリア判定
 		bool cleared = false;
 		const int32 gaugePercentageInt = static_cast<int32>(gaugePercentage);
-		if (playOption.gaugeType == GaugeType::kHardGauge)
+		if (playOption.gaugeType == GaugeType::kHardGauge || playOption.gameMode == GameMode::kCourseMode)
 		{
-			// HARDゲージの場合、1%以上でクリア
+			// HARDゲージまたはコースモードの場合、1%以上でクリア
 			cleared = gaugePercentageInt > kGaugePercentageThresholdHard;
 		}
 		else
@@ -68,7 +52,7 @@ namespace MusicGame
 
 	Grade PlayResult::grade() const
 	{
-		if (isAborted())
+		if (isAborted)
 		{
 			// 途中でプレイをやめた場合はDにする(未プレイと区別するためにNoGradeにはしない)
 			return Grade::kD;
@@ -106,7 +90,7 @@ namespace MusicGame
 
 	int32 PlayResult::gaugePercentForHighScore() const
 	{
-		if (isAborted())
+		if (isAborted)
 		{
 			// 途中でプレイをやめた場合は0%扱いにする
 			// (プレイ途中のゲージのパーセンテージがハイスコアに記録されないようにするため)

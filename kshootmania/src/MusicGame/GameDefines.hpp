@@ -2,6 +2,84 @@
 
 namespace MusicGame
 {
+	enum class GameMode
+	{
+		kNormal,
+		kCourseMode,
+	};
+
+	enum class GaugeCalcType
+	{
+		kNormalEasy,
+		kNormalNormal,
+		kNormalHard,
+		kCourseEasy,
+		kCourseNormal,
+		kCourseHard,
+	};
+
+	// GaugeTypeとGameModeからGaugeCalcTypeを取得
+	inline GaugeCalcType ToGaugeCalcType(GaugeType gaugeType, GameMode gameMode)
+	{
+		if (gameMode == GameMode::kCourseMode)
+		{
+			if (gaugeType == GaugeType::kEasyGauge)
+			{
+				return GaugeCalcType::kCourseEasy;
+			}
+			else if (gaugeType == GaugeType::kNormalGauge)
+			{
+				return GaugeCalcType::kCourseNormal;
+			}
+			else
+			{
+				return GaugeCalcType::kCourseHard;
+			}
+		}
+		else
+		{
+			if (gaugeType == GaugeType::kEasyGauge)
+			{
+				return GaugeCalcType::kNormalEasy;
+			}
+			else if (gaugeType == GaugeType::kNormalGauge)
+			{
+				return GaugeCalcType::kNormalNormal;
+			}
+			else
+			{
+				return GaugeCalcType::kNormalHard;
+			}
+		}
+	}
+
+	// GaugeCalcTypeからGaugeTypeを取得
+	inline GaugeType ToGaugeType(GaugeCalcType gaugeCalcType)
+	{
+		switch (gaugeCalcType)
+		{
+		case GaugeCalcType::kNormalEasy:
+		case GaugeCalcType::kCourseEasy:
+			return GaugeType::kEasyGauge;
+		case GaugeCalcType::kNormalNormal:
+		case GaugeCalcType::kCourseNormal:
+			return GaugeType::kNormalGauge;
+		case GaugeCalcType::kNormalHard:
+		case GaugeCalcType::kCourseHard:
+			return GaugeType::kHardGauge;
+		default:
+			return GaugeType::kNormalGauge;
+		}
+	}
+
+	// GaugeCalcTypeがコースモードかどうか
+	inline bool IsCourseGaugeCalcType(GaugeCalcType gaugeCalcType)
+	{
+		return gaugeCalcType == GaugeCalcType::kCourseEasy ||
+			gaugeCalcType == GaugeCalcType::kCourseNormal ||
+			gaugeCalcType == GaugeCalcType::kCourseHard;
+	}
+
 	constexpr Duration kTimeSecBeforeStart = 3.4s;
 	constexpr Duration kTimeSecBeforeStartMovie = 4.4s;
 
@@ -9,23 +87,6 @@ namespace MusicGame
 	{
 		return movie ? kTimeSecBeforeStartMovie : kTimeSecBeforeStart;
 	}
-
-	const std::array<KeyConfig::Button, kson::kNumBTLanesSZ> kBTButtons = {
-		KeyConfig::kBT_A,
-		KeyConfig::kBT_B,
-		KeyConfig::kBT_C,
-		KeyConfig::kBT_D,
-	};
-
-	const std::array<KeyConfig::Button, kson::kNumFXLanesSZ> kFXButtons = {
-		KeyConfig::kFX_L,
-		KeyConfig::kFX_R,
-	};
-
-	const std::array<std::array<KeyConfig::Button, 2U>, kson::kNumFXLanesSZ> kLaserButtons = { {
-		{ KeyConfig::kLeftLaserL, KeyConfig::kLeftLaserR },
-		{ KeyConfig::kRightLaserL, KeyConfig::kRightLaserR },
-	} };
 
 	constexpr kson::Pulse kPastPulse = -100000000;
 
@@ -46,7 +107,11 @@ namespace MusicGame
 
 	// HARDゲージの固定減少値
 	constexpr int32 kGaugeDecreaseValueHardChipError = 9000; // チップ/直角LASERエラー時
-	constexpr int32 kGaugeDecreaseValueHardLongError = 2250; // ロング/LASER接続エラー時
+	constexpr int32 kGaugeDecreaseValueHardLongError = 2250; // ロング/LASERエラー時
+
+	// コースモードのゲージ減少基本値
+	constexpr int32 kGaugeDecreaseBaseValueCourseChipError = 4; // チップ/直角LASERエラー時
+	constexpr int32 kGaugeDecreaseBaseValueCourseLongError = 1; // ロング/LASERエラー時
 
 	// ゲージ種類別の上昇率倍率
 	constexpr double kGaugeIncreaseRateEasy = 1.10; // EASY
@@ -60,9 +125,25 @@ namespace MusicGame
 	// HARDゲージが一定以下の場合の減少率軽減倍率
 	constexpr double kGaugeDecreaseRateHardLow = 0.59; // 41%軽減
 
+	// コースモード用のゲージ増加率倍率
+	constexpr double kGaugeIncreaseRateCourseEasy = 1.10; // EASY
+	constexpr double kGaugeIncreaseRateCourseNormal = 0.5; // NORMAL
+	constexpr double kGaugeIncreaseRateCourseHard = 0.4; // HARD
+
+	// コースモード用のゲージ減少率倍率
+	constexpr double kGaugeDecreaseRateCourseNormal = 850.0;
+	constexpr double kGaugeDecreaseRateCourseEasy = 637.5;
+	constexpr double kGaugeDecreaseRateCourseHard = 3037.5;
+
+	// コースモードでゲージが一定以下の場合の減少率軽減倍率
+	constexpr double kGaugeDecreaseRateCourseLow = 10.0 / 17.0; // 約41%軽減
+	constexpr double kGaugeDecreaseRateCourseHardLow = 0.59; // 41%軽減
+
 	constexpr double kTiltRadians = 10_deg;
+	constexpr double kBgLayerTiltMaxRadians = 14_deg;
 
 	using IsAutoPlayYN = YesNo<struct IsAutoPlayYN_tag>;
+	using IsHardFailedYN = YesNo<struct IsHardFailedYN_tag>;
 
 	// Turn変換テーブル
 	struct TurnTable

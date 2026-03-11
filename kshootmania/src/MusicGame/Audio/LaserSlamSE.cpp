@@ -32,14 +32,15 @@ namespace MusicGame::Audio
 		DWORD GetMaxPolyphony(const kson::ChartData& chartData)
 		{
 			// 旧バージョンの譜面では最大同時再生数が異なる
-			const bool isLegacy = chartData.compat.isKSHVersionOlderThan(kLaserSlamSEMaxPolyphonyLegacyUntilKSHVersion);
+			const bool isLegacy = chartData.compat.isKshVersionOlderThan(kLaserSlamSEMaxPolyphonyLegacyUntilKSHVersion);
 			return isLegacy ? kLaserSlamSEMaxPolyphonyLegacy : kLaserSlamSEMaxPolyphony;
 		}
 	}
 
-	LaserSlamSE::LaserSlamSE(const kson::ChartData& chartData, const kson::TimingCache& timingCache, FilePathView parentPath, bool isAutoPlaySE)
+	LaserSlamSE::LaserSlamSE(const kson::ChartData& chartData, const kson::TimingCache& timingCache, FilePathView parentPath, bool isAutoPlaySE, double folderVolumeScale)
 		: m_defaultSlamSound(kDefaultSlamSoundPath, GetMaxPolyphony(chartData))
 		, m_isAutoPlaySE(isAutoPlaySE)
+		, m_folderVolumeScale(folderVolumeScale)
 	{
 		// SE自動再生モード用にPulseから秒数への変換マップを作成
 		if (m_isAutoPlaySE)
@@ -83,7 +84,7 @@ namespace MusicGame::Audio
 				continue;
 			}
 
-			m_slamSounds.emplace(filename, ksmaudio::Sample{ filePath.narrow(), GetMaxPolyphony(chartData) });
+			m_slamSounds.emplace(filename, ksmaudio::Sample{ filePath.toUTF8(), GetMaxPolyphony(chartData) });
 		}
 	}
 
@@ -213,7 +214,7 @@ namespace MusicGame::Audio
 					}
 
 					// 直角音を再生
-					pSlamSound->play(volume * volumeScaleByNote);
+					pSlamSound->play(volume * volumeScaleByNote * m_folderVolumeScale);
 					m_lastPlayedTimeSecs[i] = slamTimeSec;
 					m_autoPlaySELastPulses[i] = slamY;
 				}
@@ -311,7 +312,7 @@ namespace MusicGame::Audio
 			}
 
 			// 直角音を再生
-			pSlamSound->play(volume * volumeScaleByNote);
+			pSlamSound->play(volume * volumeScaleByNote * m_folderVolumeScale);
 			m_lastPlayedTimeSecs[i] = laneStatus.lastLaserSlamJudgedTimeSec;
 		}
 	}

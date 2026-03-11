@@ -139,10 +139,10 @@ namespace MusicGame::Graphics
 		const ScopedRenderStates3D samplerState(SamplerState::ClampNearest);
 
 		// ゲージパーセンテージに応じてBGテクスチャのインデックスを決定
-		const int32 percentThreshold = (m_playOption.gaugeType == GaugeType::kHardGauge) ? kGaugePercentageThresholdHardWarning : kGaugePercentageThreshold;
+		const int32 percentThreshold = (m_playOption.gaugeType == GaugeType::kHardGauge || m_playOption.gameMode == GameMode::kCourseMode) ? kGaugePercentageThresholdHardWarning : kGaugePercentageThreshold;
 		const int32 bgTextureIndex = viewStatus.gaugePercentageInt >= percentThreshold ? 1 : 0;
 
-		double bgTiltRadians = viewStatus.tiltRadians / 3;
+		double bgTiltRadians = viewStatus.tiltRadiansForBgLayer / 3;
 		m_bgBillboardMesh.draw(m_bgTransform * TiltTransformMatrix(bgTiltRadians, kBGBillboardPosition), m_bgTextures[bgTextureIndex]);
 	}
 
@@ -154,7 +154,7 @@ namespace MusicGame::Graphics
 		double layerTiltRadians = 0.0;
 		if (chartData.bg.legacy.layer.rotation.tilt)
 		{
-			layerTiltRadians += viewStatus.tiltRadians * 0.8;
+			layerTiltRadians += viewStatus.tiltRadiansForBgLayer * 0.8;
 		}
 		if (chartData.bg.legacy.layer.rotation.spin)
 		{
@@ -162,7 +162,7 @@ namespace MusicGame::Graphics
 		}
 
 		// ゲージパーセンテージに応じてレイヤーテクスチャのインデックスを決定
-		const int32 percentThreshold = (m_playOption.gaugeType == GaugeType::kHardGauge) ? kGaugePercentageThresholdHardWarning : kGaugePercentageThreshold;
+		const int32 percentThreshold = (m_playOption.gaugeType == GaugeType::kHardGauge || m_playOption.gameMode == GameMode::kCourseMode) ? kGaugePercentageThresholdHardWarning : kGaugePercentageThreshold;
 		const int32 layerTextureIndex = viewStatus.gaugePercentageInt >= percentThreshold ? 1 : 0;
 
 		if (!m_layerFrameTextures[layerTextureIndex].empty())
@@ -207,9 +207,9 @@ namespace MusicGame::Graphics
 		, m_layerTransform(m_camera.billboard(kLayerBillboardPosition, kLayerBillboardSize))
 		, m_jdgoverlay3DGraphics(m_camera)
 		, m_songInfoPanel(chartData, parentPath)
-		, m_gaugePanel(playOption.gaugeType)
+		, m_gaugePanel(ToGaugeCalcType(playOption.gaugeType, playOption.gameMode))
 		, m_laserApproachIndicator(chartData)
-		, m_moviePanel(MovieFilePath(chartData, parentPath), chartData.bg.legacy.movie.offset / 1000.0, playOption.movieEnabled)
+		, m_moviePanel(MovieFilePath(chartData, parentPath), chartData.bg.legacy.movie.offset / 1000.0 / playOption.nonZeroPlaybackSpeed(), playOption.playbackSpeed, playOption.movieEnabled)
 		, m_playOption(playOption)
 	{
 	}
@@ -225,20 +225,26 @@ namespace MusicGame::Graphics
 		m_scorePanel.update(viewStatus.score);
 		m_highway3DGraphics.update(viewStatus);
 		m_laserApproachIndicator.update(gameStatus, timingCache);
-		m_moviePanel.update(gameStatus.currentTimeSec);
+		m_moviePanel.update(gameStatus.currentTimeSec, gameStatus.isPaused);
 	}
 
-	void GraphicsMain::draw(const kson::ChartData& chartData, const kson::TimingCache& timingCache, const GameStatus& gameStatus, const ViewStatus& viewStatus, const Scroll::HighwayScrollContext& highwayScrollContext, Duration bgmDuration) const
+	void GraphicsMain::draw(const kson::ChartData& chartData, const std::array<HashSet<kson::Pulse>, kson::kNumLaserLanesSZ>& laserCurvedPulses, const kson::TimingCache& timingCache, const GameStatus& gameStatus, const ViewStatus& viewStatus, const Scroll::HighwayScrollContext& highwayScrollContext, Duration bgmDuration) const
 	{
 		// 各レンダーテクスチャを用意
-		m_highway3DGraphics.draw2D(chartData, m_playOption, timingCache, gameStatus, viewStatus, highwayScrollContext);
+		m_highway3DGraphics.draw2D(chartData, laserCurvedPulses, m_playOption, timingCache, gameStatus, viewStatus, highwayScrollContext);
 		m_jdgoverlay3DGraphics.draw2D(gameStatus, viewStatus);
 		Graphics2D::Flush();
 
 		// 3D空間を描画
 		Graphics3D::SetCameraTransform(m_camera);
-		drawBG(viewStatus);
-		drawLayer(chartData, gameStatus, viewStatus);
+		if (m_playOption.showBG)
+		{
+			drawBG(viewStatus);
+		}
+		if (m_playOption.showLayer)
+		{
+			drawLayer(chartData, gameStatus, viewStatus);
+		}
 		m_highway3DGraphics.draw3D(viewStatus);
 		m_jdgline3DGraphics.draw3D(viewStatus);
 		m_jdgoverlay3DGraphics.draw3D(viewStatus);
@@ -255,7 +261,7 @@ namespace MusicGame::Graphics
 		m_moviePanel.draw();
 
 		// HARDゲージ落ち時の赤色オーバーレイ
-		if (gameStatus.playFinishStatus.has_value() && gameStatus.playFinishStatus->isHardGaugeFailed)
+		if (gameStatus.playFinishStatus.has_value() && gameStatus.playFinishStatus->isHardFailed)
 		{
 			constexpr double kFadeTimeSec = 0.75;
 			const double elapsedSec = gameStatus.currentTimeSec - gameStatus.playFinishStatus->finishTimeSec;
@@ -271,5 +277,10 @@ namespace MusicGame::Graphics
 	bool GraphicsMain::hasMovie() const
 	{
 		return m_moviePanel.isEnabled();
+	}
+
+	void GraphicsMain::seekMoviePosSec(SecondsF posSec)
+	{
+		m_moviePanel.seekPosSec(posSec);
 	}
 }

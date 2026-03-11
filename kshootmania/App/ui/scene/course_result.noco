@@ -1,0 +1,3101 @@
+﻿{
+  "autoFitMode": "FitHeightMatchWidth",
+  "children": [
+    {
+      "activeSelf": true,
+      "children": [],
+      "childrenLayout": {
+        "horizontalAlign": "Left",
+        "padding": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "spacing": [
+          0.0,
+          0.0
+        ],
+        "type": "FlowLayout",
+        "verticalAlign": "Top"
+      },
+      "clippingEnabled": false,
+      "components": [
+        {
+          "addColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "blendMode": "Normal",
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "gridAnimationEndIndex": 0,
+          "gridAnimationFPS": 10.0,
+          "gridAnimationStartIndex": 0,
+          "gridAnimationType": "None",
+          "nineSliceBottomTiled": false,
+          "nineSliceCenterTiled": false,
+          "nineSliceEnabled": false,
+          "nineSliceFallback": true,
+          "nineSliceLeftTiled": false,
+          "nineSliceMargin": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "nineSliceRightTiled": false,
+          "nineSliceScale": [
+            1.0,
+            1.0
+          ],
+          "nineSliceTopTiled": false,
+          "offsetAnimationSpeed": [
+            0.0,
+            0.0
+          ],
+          "offsetAnimationType": "None",
+          "preserveAspect": true,
+          "textureAddressMode": "Default",
+          "textureAssetName": "",
+          "textureFilePath": "imgs/bg2.jpg",
+          "textureFilter": "Default",
+          "textureGridCellSize": [
+            32.0,
+            32.0
+          ],
+          "textureGridCellTrim": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "textureGridColumns": 1,
+          "textureGridIndex": 0,
+          "textureGridRows": 1,
+          "textureOffset": [
+            0.0,
+            0.0
+          ],
+          "textureRegionMode": "Full",
+          "textureSize": [
+            100.0,
+            100.0
+          ],
+          "type": "Sprite"
+        }
+      ],
+      "decelerationRate": 0.2,
+      "dragScrollEnabled": true,
+      "hitPadding": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "horizontalScrollable": false,
+      "inheritChildrenHover": false,
+      "inheritChildrenPress": false,
+      "interactable": true,
+      "isHitTarget": true,
+      "name": "Background",
+      "region": {
+        "anchorMax": [
+          0.5,
+          0.5
+        ],
+        "anchorMin": [
+          0.5,
+          0.5
+        ],
+        "posDelta": [
+          0.0,
+          0.0
+        ],
+        "sizeDelta": [
+          853.0,
+          480.0
+        ],
+        "sizeDeltaPivot": [
+          0.5,
+          0.5
+        ],
+        "type": "AnchorRegion"
+      },
+      "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
+      "styleState": "",
+      "transform": {
+        "color": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "hitTestAffected": true,
+        "pivot": [
+          0.5,
+          0.5
+        ],
+        "rotation": 0.0,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "translate": [
+          0.0,
+          0.0
+        ]
+      },
+      "verticalScrollable": false,
+      "wheelScrollEnabled": true,
+      "zOrderInSiblings": 0
+    },
+    {
+      "activeSelf": true,
+      "children": [],
+      "childrenLayout": {
+        "horizontalAlign": "Left",
+        "padding": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "spacing": [
+          0.0,
+          0.0
+        ],
+        "type": "FlowLayout",
+        "verticalAlign": "Top"
+      },
+      "clippingEnabled": false,
+      "components": [
+        {
+          "addColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "blendMode": "Normal",
+          "color": {
+            "default": [
+              255,
+              255,
+              255,
+              0
+            ],
+            "hovered": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "pressed": [
+              200,
+              240,
+              255,
+              255
+            ],
+            "smoothTime": 0.04
+          },
+          "gridAnimationEndIndex": 0,
+          "gridAnimationFPS": 10.0,
+          "gridAnimationStartIndex": 0,
+          "gridAnimationType": "None",
+          "nineSliceBottomTiled": false,
+          "nineSliceCenterTiled": false,
+          "nineSliceEnabled": false,
+          "nineSliceFallback": true,
+          "nineSliceLeftTiled": false,
+          "nineSliceMargin": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "nineSliceRightTiled": false,
+          "nineSliceScale": [
+            1.0,
+            1.0
+          ],
+          "nineSliceTopTiled": false,
+          "offsetAnimationSpeed": [
+            0.0,
+            0.0
+          ],
+          "offsetAnimationType": "None",
+          "preserveAspect": false,
+          "textureAddressMode": "Default",
+          "textureAssetName": "",
+          "textureFilePath": "imgs/result_tweetbtn.png",
+          "textureFilter": "Default",
+          "textureGridCellSize": [
+            180.0,
+            48.0
+          ],
+          "textureGridCellTrim": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "textureGridColumns": 1,
+          "textureGridIndex": 0,
+          "textureGridRows": 3,
+          "textureOffset": [
+            0.0,
+            0.0
+          ],
+          "textureRegionMode": "Grid",
+          "textureSize": [
+            100.0,
+            100.0
+          ],
+          "type": "Sprite"
+        },
+        {
+          "cursorStyle": "Hand",
+          "includingDisabled": false,
+          "recursive": false,
+          "type": "CursorChanger"
+        },
+        {
+          "recursive": false,
+          "tag": "onClickSNSButton",
+          "triggerType": "Click",
+          "type": "EventTrigger"
+        }
+      ],
+      "decelerationRate": 0.2,
+      "dragScrollEnabled": true,
+      "hitPadding": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "horizontalScrollable": false,
+      "inheritChildrenHover": false,
+      "inheritChildrenPress": false,
+      "interactable": true,
+      "isHitTarget": true,
+      "name": "SNSButton",
+      "region": {
+        "anchorMax": [
+          1.0,
+          0.0
+        ],
+        "anchorMin": [
+          1.0,
+          0.0
+        ],
+        "posDelta": [
+          0.0,
+          0.0
+        ],
+        "sizeDelta": [
+          90.0,
+          24.0
+        ],
+        "sizeDeltaPivot": [
+          1.0,
+          0.0
+        ],
+        "type": "AnchorRegion"
+      },
+      "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
+      "styleState": "",
+      "transform": {
+        "color": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "hitTestAffected": true,
+        "pivot": [
+          1.0,
+          0.0
+        ],
+        "rotation": 0.0,
+        "scale": {
+          "default": [
+            0.96,
+            0.96
+          ],
+          "hovered": [
+            1.0,
+            1.0
+          ],
+          "pressed": [
+            0.98,
+            0.98
+          ],
+          "smoothTime": 0.04
+        },
+        "translate": [
+          0.0,
+          0.0
+        ]
+      },
+      "verticalScrollable": false,
+      "wheelScrollEnabled": true,
+      "zOrderInSiblings": 0
+    },
+    {
+      "activeSelf": true,
+      "children": [
+        {
+          "activeSelf": true,
+          "children": [],
+          "childrenLayout": {
+            "horizontalAlign": "Left",
+            "padding": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "spacing": [
+              0.0,
+              0.0
+            ],
+            "type": "FlowLayout",
+            "verticalAlign": "Top"
+          },
+          "clippingEnabled": false,
+          "components": [
+            {
+              "characterSpacing": [
+                0.0,
+                0.0
+              ],
+              "color": [
+                255,
+                255,
+                255,
+                255
+              ],
+              "fontAssetName": "SystemBold",
+              "fontSize": 27.0,
+              "gradationColor1": [
+                255,
+                255,
+                255,
+                255
+              ],
+              "gradationColor2": [
+                255,
+                255,
+                255,
+                255
+              ],
+              "gradationType": "None",
+              "horizontalAlign": "Center",
+              "horizontalOverflow": "Wrap",
+              "minFontSize": 1.0,
+              "outlineColor": [
+                0,
+                0,
+                0,
+                255
+              ],
+              "outlineFactorInner": 0.0,
+              "outlineFactorOuter": 0.0,
+              "padding": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "shadowColor": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "shadowOffset": [
+                1.0,
+                1.0
+              ],
+              "sizingMode": "AutoShrink",
+              "text": "courseTitle",
+              "text_paramRef": "courseTitle",
+              "type": "Label",
+              "underlineColor": [
+                255,
+                255,
+                255,
+                255
+              ],
+              "underlineStyle": "None",
+              "underlineThickness": 1.0,
+              "verticalAlign": "Middle",
+              "verticalOverflow": "Overflow"
+            }
+          ],
+          "decelerationRate": 0.2,
+          "dragScrollEnabled": true,
+          "hitPadding": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "horizontalScrollable": false,
+          "inheritChildrenHover": false,
+          "inheritChildrenPress": false,
+          "interactable": true,
+          "isHitTarget": false,
+          "name": "CourseTitle",
+          "region": {
+            "anchorMax": [
+              0.5,
+              0.5
+            ],
+            "anchorMin": [
+              0.5,
+              0.5
+            ],
+            "posDelta": [
+              0.0,
+              -337.0
+            ],
+            "sizeDelta": [
+              780.0,
+              48.0
+            ],
+            "sizeDeltaPivot": [
+              0.5,
+              0.5
+            ],
+            "type": "AnchorRegion"
+          },
+          "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
+          "styleState": "",
+          "transform": {
+            "color": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "hitTestAffected": true,
+            "pivot": [
+              0.5,
+              0.5
+            ],
+            "rotation": 0.0,
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "translate": [
+              0.0,
+              0.0
+            ]
+          },
+          "verticalScrollable": false,
+          "wheelScrollEnabled": true,
+          "zOrderInSiblings": 0
+        },
+        {
+          "activeSelf": true,
+          "children": [
+            {
+              "activeSelf": true,
+              "children": [
+                {
+                  "activeSelf": true,
+                  "children": [],
+                  "childrenLayout": {
+                    "horizontalAlign": "Left",
+                    "padding": [
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    "spacing": [
+                      0.0,
+                      0.0
+                    ],
+                    "type": "FlowLayout",
+                    "verticalAlign": "Top"
+                  },
+                  "clippingEnabled": false,
+                  "components": [
+                    {
+                      "addColor": [
+                        0,
+                        0,
+                        0,
+                        0
+                      ],
+                      "blendMode": "Normal",
+                      "color": [
+                        255,
+                        255,
+                        255,
+                        255
+                      ],
+                      "gridAnimationEndIndex": 0,
+                      "gridAnimationFPS": 10.0,
+                      "gridAnimationStartIndex": 0,
+                      "gridAnimationType": "None",
+                      "nineSliceBottomTiled": false,
+                      "nineSliceCenterTiled": false,
+                      "nineSliceEnabled": false,
+                      "nineSliceFallback": true,
+                      "nineSliceLeftTiled": false,
+                      "nineSliceMargin": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                      ],
+                      "nineSliceRightTiled": false,
+                      "nineSliceScale": [
+                        1.0,
+                        1.0
+                      ],
+                      "nineSliceTopTiled": false,
+                      "offsetAnimationSpeed": [
+                        0.0,
+                        0.0
+                      ],
+                      "offsetAnimationType": "None",
+                      "preserveAspect": false,
+                      "textureAddressMode": "Default",
+                      "textureAssetName": "",
+                      "textureFilePath": "imgs/courseresult_gauge.png",
+                      "textureFilter": "Default",
+                      "textureGridCellSize": [
+                        540.0,
+                        36.0
+                      ],
+                      "textureGridCellTrim": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                      ],
+                      "textureGridColumns": 1,
+                      "textureGridIndex": 3,
+                      "textureGridIndex_paramRef": "gaugeTextureIndex",
+                      "textureGridRows": 6,
+                      "textureOffset": [
+                        0.0,
+                        0.0
+                      ],
+                      "textureRegionMode": "Grid",
+                      "textureSize": [
+                        100.0,
+                        100.0
+                      ],
+                      "type": "Sprite"
+                    }
+                  ],
+                  "decelerationRate": 0.2,
+                  "dragScrollEnabled": true,
+                  "hitPadding": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "horizontalScrollable": false,
+                  "inheritChildrenHover": false,
+                  "inheritChildrenPress": false,
+                  "interactable": true,
+                  "isHitTarget": false,
+                  "name": "Gauge",
+                  "region": {
+                    "flexibleWeight": 0.0,
+                    "margin": [
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    "sizeDelta": [
+                      540.0,
+                      36.0
+                    ],
+                    "sizeRatio": [
+                      0.0,
+                      0.0
+                    ],
+                    "type": "InlineRegion"
+                  },
+                  "rubberBandScrollEnabled": true,
+                  "scrollBarType": "Overlay",
+                  "styleState": "",
+                  "transform": {
+                    "color": [
+                      255,
+                      255,
+                      255,
+                      255
+                    ],
+                    "hitTestAffected": true,
+                    "pivot": [
+                      0.5,
+                      0.5
+                    ],
+                    "rotation": 0.0,
+                    "scale": [
+                      1.0,
+                      1.0
+                    ],
+                    "translate": [
+                      0.0,
+                      0.0
+                    ]
+                  },
+                  "verticalScrollable": false,
+                  "wheelScrollEnabled": true,
+                  "zOrderInSiblings": 0
+                }
+              ],
+              "childrenLayout": {
+                "horizontalAlign": "Center",
+                "padding": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "spacing": 0.0,
+                "type": "HorizontalLayout",
+                "verticalAlign": "Bottom"
+              },
+              "clippingEnabled": true,
+              "components": [],
+              "decelerationRate": 0.2,
+              "dragScrollEnabled": true,
+              "hitPadding": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "horizontalScrollable": false,
+              "inheritChildrenHover": false,
+              "inheritChildrenPress": false,
+              "interactable": true,
+              "isHitTarget": false,
+              "name": "GaugeClippingMask",
+              "region": {
+                "flexibleWeight": 0.0,
+                "margin": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "sizeDelta": [
+                  540.0,
+                  36.0
+                ],
+                "sizeRatio": [
+                  0.0,
+                  0.0
+                ],
+                "type": "InlineRegion"
+              },
+              "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
+              "styleState": "",
+              "transform": {
+                "color": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "hitTestAffected": true,
+                "pivot": [
+                  0.5,
+                  0.5
+                ],
+                "rotation": 0.0,
+                "scale": [
+                  1.006,
+                  1.1
+                ],
+                "translate": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "verticalScrollable": false,
+              "wheelScrollEnabled": true,
+              "zOrderInSiblings": 0
+            }
+          ],
+          "childrenLayout": {
+            "horizontalAlign": "Left",
+            "padding": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "spacing": 0.0,
+            "type": "HorizontalLayout",
+            "verticalAlign": "Middle"
+          },
+          "clippingEnabled": false,
+          "components": [],
+          "decelerationRate": 0.2,
+          "dragScrollEnabled": true,
+          "hitPadding": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "horizontalScrollable": false,
+          "inheritChildrenHover": false,
+          "inheritChildrenPress": false,
+          "interactable": true,
+          "isHitTarget": false,
+          "name": "GaugeParent",
+          "region": {
+            "anchorMax": [
+              0.5,
+              0.5
+            ],
+            "anchorMin": [
+              0.5,
+              0.5
+            ],
+            "posDelta": [
+              -68.0,
+              -261.0
+            ],
+            "sizeDelta": [
+              540.0,
+              36.0
+            ],
+            "sizeDeltaPivot": [
+              0.5,
+              0.5
+            ],
+            "type": "AnchorRegion"
+          },
+          "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
+          "styleState": "",
+          "transform": {
+            "color": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "hitTestAffected": true,
+            "pivot": [
+              0.5,
+              0.5
+            ],
+            "rotation": 0.0,
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "translate": [
+              0.0,
+              0.0
+            ]
+          },
+          "verticalScrollable": false,
+          "wheelScrollEnabled": true,
+          "zOrderInSiblings": 0
+        },
+        {
+          "activeSelf": true,
+          "children": [],
+          "childrenLayout": {
+            "horizontalAlign": "Left",
+            "padding": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "spacing": [
+              0.0,
+              0.0
+            ],
+            "type": "FlowLayout",
+            "verticalAlign": "Top"
+          },
+          "clippingEnabled": false,
+          "components": [
+            {
+              "addColor": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "blendMode": "Normal",
+              "characterSet": "0123456789",
+              "characterSize": [
+                22.5,
+                24.0
+              ],
+              "characterSpacing": [
+                2.0,
+                0.0
+              ],
+              "color": [
+                255,
+                255,
+                255,
+                255
+              ],
+              "horizontalAlign": "Right",
+              "horizontalOverflow": "Wrap",
+              "padding": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "preserveAspect": false,
+              "sizingMode": "AutoShrinkWidth",
+              "text": "198",
+              "text_paramRef": "gaugePercentageNumber",
+              "textureAddressMode": "Default",
+              "textureAssetName": "",
+              "textureCellSize": [
+                136.0,
+                120.0
+              ],
+              "textureCellTrim": [
+                0.0,
+                0.0,
+                1.5,
+                1.5
+              ],
+              "textureCellTrimByCharacterJSON": "{}",
+              "textureFilePath": "imgs/num0.png",
+              "textureFilter": "Nearest",
+              "textureGridColumns": 1,
+              "textureGridRows": 10,
+              "textureOffset": [
+                0.0,
+                0.0
+              ],
+              "type": "TextureFontLabel",
+              "verticalAlign": "Middle",
+              "verticalOverflow": "Overflow"
+            }
+          ],
+          "decelerationRate": 0.2,
+          "dragScrollEnabled": true,
+          "hitPadding": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "horizontalScrollable": false,
+          "inheritChildrenHover": false,
+          "inheritChildrenPress": false,
+          "interactable": true,
+          "isHitTarget": false,
+          "name": "GaugePercentage",
+          "region": {
+            "anchorMax": [
+              0.5,
+              0.5
+            ],
+            "anchorMin": [
+              0.5,
+              0.5
+            ],
+            "posDelta": [
+              270.0,
+              -260.0
+            ],
+            "sizeDelta": [
+              80.0,
+              40.0
+            ],
+            "sizeDeltaPivot": [
+              0.5,
+              0.5
+            ],
+            "type": "AnchorRegion"
+          },
+          "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
+          "styleState": "",
+          "transform": {
+            "color": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "hitTestAffected": true,
+            "pivot": [
+              0.5,
+              0.5
+            ],
+            "rotation": 0.0,
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "translate": [
+              0.0,
+              0.0
+            ]
+          },
+          "verticalScrollable": false,
+          "wheelScrollEnabled": true,
+          "zOrderInSiblings": 0
+        },
+        {
+          "activeSelf": false,
+          "activeSelf_paramRef": "arrowUpVisible",
+          "children": [],
+          "childrenLayout": {
+            "horizontalAlign": "Left",
+            "padding": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "spacing": [
+              0.0,
+              0.0
+            ],
+            "type": "FlowLayout",
+            "verticalAlign": "Top"
+          },
+          "clippingEnabled": false,
+          "components": [
+            {
+              "addColor": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "blendMode": "Normal",
+              "color": [
+                255,
+                255,
+                255,
+                255
+              ],
+              "gridAnimationEndIndex": 0,
+              "gridAnimationFPS": 10.0,
+              "gridAnimationStartIndex": 0,
+              "gridAnimationType": "None",
+              "nineSliceBottomTiled": false,
+              "nineSliceCenterTiled": false,
+              "nineSliceEnabled": false,
+              "nineSliceFallback": true,
+              "nineSliceLeftTiled": false,
+              "nineSliceMargin": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "nineSliceRightTiled": false,
+              "nineSliceScale": [
+                1.0,
+                1.0
+              ],
+              "nineSliceTopTiled": false,
+              "offsetAnimationSpeed": [
+                0.0,
+                0.0
+              ],
+              "offsetAnimationType": "None",
+              "preserveAspect": false,
+              "textureAddressMode": "Default",
+              "textureAssetName": "",
+              "textureFilePath": "imgs/courseresult_arrow.png",
+              "textureFilter": "Default",
+              "textureGridCellSize": [
+                720.0,
+                24.0
+              ],
+              "textureGridCellTrim": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "textureGridColumns": 1,
+              "textureGridIndex": 0,
+              "textureGridRows": 2,
+              "textureOffset": [
+                0.0,
+                0.0
+              ],
+              "textureRegionMode": "Grid",
+              "textureSize": [
+                100.0,
+                100.0
+              ],
+              "type": "Sprite"
+            }
+          ],
+          "decelerationRate": 0.2,
+          "dragScrollEnabled": true,
+          "hitPadding": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "horizontalScrollable": false,
+          "inheritChildrenHover": false,
+          "inheritChildrenPress": false,
+          "interactable": true,
+          "isHitTarget": true,
+          "name": "ArrowUp",
+          "region": {
+            "anchorMax": [
+              0.5,
+              0.5
+            ],
+            "anchorMin": [
+              0.5,
+              0.5
+            ],
+            "posDelta": [
+              0.0,
+              -212.0
+            ],
+            "sizeDelta": [
+              720.0,
+              24.0
+            ],
+            "sizeDeltaPivot": [
+              0.5,
+              0.5
+            ],
+            "type": "AnchorRegion"
+          },
+          "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
+          "styleState": "",
+          "transform": {
+            "color": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "hitTestAffected": true,
+            "pivot": [
+              0.5,
+              0.5
+            ],
+            "rotation": 0.0,
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "translate": [
+              0.0,
+              0.0
+            ]
+          },
+          "verticalScrollable": false,
+          "wheelScrollEnabled": true,
+          "zOrderInSiblings": 0
+        },
+        {
+          "activeSelf": false,
+          "activeSelf_paramRef": "arrowDownVisible",
+          "children": [],
+          "childrenLayout": {
+            "horizontalAlign": "Left",
+            "padding": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "spacing": [
+              0.0,
+              0.0
+            ],
+            "type": "FlowLayout",
+            "verticalAlign": "Top"
+          },
+          "clippingEnabled": false,
+          "components": [
+            {
+              "addColor": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "blendMode": "Normal",
+              "color": [
+                255,
+                255,
+                255,
+                255
+              ],
+              "gridAnimationEndIndex": 0,
+              "gridAnimationFPS": 10.0,
+              "gridAnimationStartIndex": 0,
+              "gridAnimationType": "None",
+              "nineSliceBottomTiled": false,
+              "nineSliceCenterTiled": false,
+              "nineSliceEnabled": false,
+              "nineSliceFallback": true,
+              "nineSliceLeftTiled": false,
+              "nineSliceMargin": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "nineSliceRightTiled": false,
+              "nineSliceScale": [
+                1.0,
+                1.0
+              ],
+              "nineSliceTopTiled": false,
+              "offsetAnimationSpeed": [
+                0.0,
+                0.0
+              ],
+              "offsetAnimationType": "None",
+              "preserveAspect": false,
+              "textureAddressMode": "Default",
+              "textureAssetName": "",
+              "textureFilePath": "imgs/courseresult_arrow.png",
+              "textureFilter": "Default",
+              "textureGridCellSize": [
+                720.0,
+                24.0
+              ],
+              "textureGridCellTrim": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "textureGridColumns": 1,
+              "textureGridIndex": 1,
+              "textureGridRows": 2,
+              "textureOffset": [
+                0.0,
+                0.0
+              ],
+              "textureRegionMode": "Grid",
+              "textureSize": [
+                100.0,
+                100.0
+              ],
+              "type": "Sprite"
+            }
+          ],
+          "decelerationRate": 0.2,
+          "dragScrollEnabled": true,
+          "hitPadding": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "horizontalScrollable": false,
+          "inheritChildrenHover": false,
+          "inheritChildrenPress": false,
+          "interactable": true,
+          "isHitTarget": true,
+          "name": "ArrowDown",
+          "region": {
+            "anchorMax": [
+              0.5,
+              0.5
+            ],
+            "anchorMin": [
+              0.5,
+              0.5
+            ],
+            "posDelta": [
+              0.0,
+              342.0
+            ],
+            "sizeDelta": [
+              720.0,
+              24.0
+            ],
+            "sizeDeltaPivot": [
+              0.5,
+              0.5
+            ],
+            "type": "AnchorRegion"
+          },
+          "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
+          "styleState": "",
+          "transform": {
+            "color": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "hitTestAffected": true,
+            "pivot": [
+              0.5,
+              0.5
+            ],
+            "rotation": 0.0,
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "translate": [
+              0.0,
+              0.0
+            ]
+          },
+          "verticalScrollable": false,
+          "wheelScrollEnabled": true,
+          "zOrderInSiblings": 0
+        },
+        {
+          "activeSelf": true,
+          "children": [
+            {
+              "activeSelf": true,
+              "activeSelf_paramRef": "chartItem1Visible",
+              "children": [],
+              "childrenLayout": {
+                "horizontalAlign": "Left",
+                "padding": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "spacing": [
+                  0.0,
+                  0.0
+                ],
+                "type": "FlowLayout",
+                "verticalAlign": "Top"
+              },
+              "clippingEnabled": false,
+              "components": [
+                {
+                  "canvasPath": "ui/parts/course_result_chart_item.noco",
+                  "propagateEvents": true,
+                  "serializedParamsJSON": "{}",
+                  "tag": "chartItem1",
+                  "type": "SubCanvas"
+                }
+              ],
+              "decelerationRate": 0.2,
+              "dragScrollEnabled": true,
+              "hitPadding": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "horizontalScrollable": false,
+              "inheritChildrenHover": false,
+              "inheritChildrenPress": false,
+              "interactable": true,
+              "isHitTarget": true,
+              "name": "ChartItem1",
+              "region": {
+                "flexibleWeight": 0.0,
+                "margin": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "sizeDelta": [
+                  720.0,
+                  128.0
+                ],
+                "sizeRatio": [
+                  0.0,
+                  0.0
+                ],
+                "type": "InlineRegion"
+              },
+              "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
+              "styleState": "",
+              "transform": {
+                "color": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "hitTestAffected": true,
+                "pivot": [
+                  0.5,
+                  0.5
+                ],
+                "rotation": 0.0,
+                "scale": [
+                  1.0,
+                  1.0
+                ],
+                "translate": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "verticalScrollable": false,
+              "wheelScrollEnabled": true,
+              "zOrderInSiblings": 0
+            },
+            {
+              "activeSelf": true,
+              "activeSelf_paramRef": "chartItem2Visible",
+              "children": [],
+              "childrenLayout": {
+                "horizontalAlign": "Left",
+                "padding": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "spacing": [
+                  0.0,
+                  0.0
+                ],
+                "type": "FlowLayout",
+                "verticalAlign": "Top"
+              },
+              "clippingEnabled": false,
+              "components": [
+                {
+                  "canvasPath": "ui/parts/course_result_chart_item.noco",
+                  "propagateEvents": true,
+                  "serializedParamsJSON": "{}",
+                  "tag": "chartItem2",
+                  "type": "SubCanvas"
+                }
+              ],
+              "decelerationRate": 0.2,
+              "dragScrollEnabled": true,
+              "hitPadding": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "horizontalScrollable": false,
+              "inheritChildrenHover": false,
+              "inheritChildrenPress": false,
+              "interactable": true,
+              "isHitTarget": true,
+              "name": "ChartItem2",
+              "region": {
+                "flexibleWeight": 0.0,
+                "margin": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "sizeDelta": [
+                  720.0,
+                  128.0
+                ],
+                "sizeRatio": [
+                  0.0,
+                  0.0
+                ],
+                "type": "InlineRegion"
+              },
+              "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
+              "styleState": "",
+              "transform": {
+                "color": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "hitTestAffected": true,
+                "pivot": [
+                  0.5,
+                  0.5
+                ],
+                "rotation": 0.0,
+                "scale": [
+                  1.0,
+                  1.0
+                ],
+                "translate": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "verticalScrollable": false,
+              "wheelScrollEnabled": true,
+              "zOrderInSiblings": 0
+            },
+            {
+              "activeSelf": true,
+              "activeSelf_paramRef": "chartItem3Visible",
+              "children": [],
+              "childrenLayout": {
+                "horizontalAlign": "Left",
+                "padding": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "spacing": [
+                  0.0,
+                  0.0
+                ],
+                "type": "FlowLayout",
+                "verticalAlign": "Top"
+              },
+              "clippingEnabled": false,
+              "components": [
+                {
+                  "canvasPath": "ui/parts/course_result_chart_item.noco",
+                  "propagateEvents": true,
+                  "serializedParamsJSON": "{}",
+                  "tag": "chartItem3",
+                  "type": "SubCanvas"
+                }
+              ],
+              "decelerationRate": 0.2,
+              "dragScrollEnabled": true,
+              "hitPadding": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "horizontalScrollable": false,
+              "inheritChildrenHover": false,
+              "inheritChildrenPress": false,
+              "interactable": true,
+              "isHitTarget": true,
+              "name": "ChartItem3",
+              "region": {
+                "flexibleWeight": 0.0,
+                "margin": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "sizeDelta": [
+                  720.0,
+                  128.0
+                ],
+                "sizeRatio": [
+                  0.0,
+                  0.0
+                ],
+                "type": "InlineRegion"
+              },
+              "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
+              "styleState": "",
+              "transform": {
+                "color": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "hitTestAffected": true,
+                "pivot": [
+                  0.5,
+                  0.5
+                ],
+                "rotation": 0.0,
+                "scale": [
+                  1.0,
+                  1.0
+                ],
+                "translate": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "verticalScrollable": false,
+              "wheelScrollEnabled": true,
+              "zOrderInSiblings": 0
+            },
+            {
+              "activeSelf": true,
+              "activeSelf_paramRef": "chartItem4Visible",
+              "children": [],
+              "childrenLayout": {
+                "horizontalAlign": "Left",
+                "padding": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "spacing": [
+                  0.0,
+                  0.0
+                ],
+                "type": "FlowLayout",
+                "verticalAlign": "Top"
+              },
+              "clippingEnabled": false,
+              "components": [
+                {
+                  "canvasPath": "ui/parts/course_result_chart_item.noco",
+                  "propagateEvents": true,
+                  "serializedParamsJSON": "{}",
+                  "tag": "chartItem4",
+                  "type": "SubCanvas"
+                }
+              ],
+              "decelerationRate": 0.2,
+              "dragScrollEnabled": true,
+              "hitPadding": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "horizontalScrollable": false,
+              "inheritChildrenHover": false,
+              "inheritChildrenPress": false,
+              "interactable": true,
+              "isHitTarget": true,
+              "name": "ChartItem4",
+              "region": {
+                "flexibleWeight": 0.0,
+                "margin": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "sizeDelta": [
+                  720.0,
+                  128.0
+                ],
+                "sizeRatio": [
+                  0.0,
+                  0.0
+                ],
+                "type": "InlineRegion"
+              },
+              "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
+              "styleState": "",
+              "transform": {
+                "color": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "hitTestAffected": true,
+                "pivot": [
+                  0.5,
+                  0.5
+                ],
+                "rotation": 0.0,
+                "scale": [
+                  1.0,
+                  1.0
+                ],
+                "translate": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "verticalScrollable": false,
+              "wheelScrollEnabled": true,
+              "zOrderInSiblings": 0
+            }
+          ],
+          "childrenLayout": {
+            "horizontalAlign": "Center",
+            "padding": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "spacing": [
+              0.0,
+              2.0
+            ],
+            "type": "FlowLayout",
+            "verticalAlign": "Top"
+          },
+          "clippingEnabled": false,
+          "components": [
+            {
+              "active": true,
+              "applyDuringDelay": false,
+              "colorEnabled": true,
+              "colorFrom": [
+                255,
+                255,
+                255,
+                0
+              ],
+              "colorTo": [
+                255,
+                255,
+                255,
+                255
+              ],
+              "delay": 0.0,
+              "duration": 0.2,
+              "easing": "Linear",
+              "loopDuration": 0.0,
+              "loopType": "None",
+              "manualMode": false,
+              "manualTime": 0.0,
+              "restartOnActive": true,
+              "rotationEnabled": false,
+              "rotationFrom": 0.0,
+              "rotationTo": 0.0,
+              "scaleEnabled": false,
+              "scaleFrom": [
+                1.0,
+                1.0
+              ],
+              "scaleTo": [
+                1.0,
+                1.0
+              ],
+              "tag": "onScroll",
+              "translateEnabled": false,
+              "translateFrom": [
+                0.0,
+                0.0
+              ],
+              "translateTo": [
+                0.0,
+                0.0
+              ],
+              "type": "Tween"
+            }
+          ],
+          "decelerationRate": 0.2,
+          "dragScrollEnabled": true,
+          "hitPadding": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "horizontalScrollable": false,
+          "inheritChildrenHover": false,
+          "inheritChildrenPress": false,
+          "interactable": true,
+          "isHitTarget": true,
+          "name": "ChartItems",
+          "region": {
+            "anchorMax": [
+              0.5,
+              0.5
+            ],
+            "anchorMin": [
+              0.5,
+              0.5
+            ],
+            "posDelta": [
+              0.0,
+              66.0
+            ],
+            "sizeDelta": [
+              730.0,
+              518.0
+            ],
+            "sizeDeltaPivot": [
+              0.5,
+              0.5
+            ],
+            "type": "AnchorRegion"
+          },
+          "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
+          "styleState": "",
+          "transform": {
+            "color": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "hitTestAffected": true,
+            "pivot": [
+              0.5,
+              0.5
+            ],
+            "rotation": 0.0,
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "translate": [
+              0.0,
+              0.0
+            ]
+          },
+          "verticalScrollable": false,
+          "wheelScrollEnabled": true,
+          "zOrderInSiblings": 0
+        }
+      ],
+      "childrenLayout": {
+        "horizontalAlign": "Left",
+        "padding": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "spacing": [
+          0.0,
+          0.0
+        ],
+        "type": "FlowLayout",
+        "verticalAlign": "Top"
+      },
+      "clippingEnabled": false,
+      "components": [
+        {
+          "addColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "blendMode": "Normal",
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "gridAnimationEndIndex": 0,
+          "gridAnimationFPS": 10.0,
+          "gridAnimationStartIndex": 0,
+          "gridAnimationType": "None",
+          "nineSliceBottomTiled": false,
+          "nineSliceCenterTiled": false,
+          "nineSliceEnabled": false,
+          "nineSliceFallback": true,
+          "nineSliceLeftTiled": false,
+          "nineSliceMargin": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "nineSliceRightTiled": false,
+          "nineSliceScale": [
+            1.0,
+            1.0
+          ],
+          "nineSliceTopTiled": false,
+          "offsetAnimationSpeed": [
+            0.0,
+            0.0
+          ],
+          "offsetAnimationType": "None",
+          "preserveAspect": false,
+          "textureAddressMode": "Default",
+          "textureAssetName": "",
+          "textureFilePath": "imgs/courseresult_info.png",
+          "textureFilter": "Default",
+          "textureGridCellSize": [
+            32.0,
+            32.0
+          ],
+          "textureGridCellTrim": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "textureGridColumns": 1,
+          "textureGridIndex": 0,
+          "textureGridRows": 1,
+          "textureOffset": [
+            0.0,
+            0.0
+          ],
+          "textureRegionMode": "Full",
+          "textureSize": [
+            100.0,
+            100.0
+          ],
+          "type": "Sprite"
+        }
+      ],
+      "decelerationRate": 0.2,
+      "dragScrollEnabled": true,
+      "hitPadding": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "horizontalScrollable": false,
+      "inheritChildrenHover": false,
+      "inheritChildrenPress": false,
+      "interactable": true,
+      "isHitTarget": true,
+      "name": "ResultPanel",
+      "region": {
+        "anchorMax": [
+          0.5,
+          0.5
+        ],
+        "anchorMin": [
+          0.5,
+          0.5
+        ],
+        "posDelta": [
+          0.0,
+          17.0
+        ],
+        "sizeDelta": [
+          800.0,
+          740.0
+        ],
+        "sizeDeltaPivot": [
+          0.5,
+          0.5
+        ],
+        "type": "AnchorRegion"
+      },
+      "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
+      "styleState": "",
+      "transform": {
+        "color": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "hitTestAffected": true,
+        "pivot": [
+          0.5,
+          0.5
+        ],
+        "rotation": 0.0,
+        "scale": [
+          0.5874,
+          0.5874
+        ],
+        "translate": [
+          0.0,
+          0.0
+        ]
+      },
+      "verticalScrollable": false,
+      "wheelScrollEnabled": true,
+      "zOrderInSiblings": 0
+    },
+    {
+      "activeSelf": true,
+      "children": [],
+      "childrenLayout": {
+        "horizontalAlign": "Left",
+        "padding": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "spacing": [
+          0.0,
+          0.0
+        ],
+        "type": "FlowLayout",
+        "verticalAlign": "Top"
+      },
+      "clippingEnabled": false,
+      "components": [
+        {
+          "addColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "blendMode": "Normal",
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "gridAnimationEndIndex": 0,
+          "gridAnimationFPS": 10.0,
+          "gridAnimationStartIndex": 0,
+          "gridAnimationType": "None",
+          "nineSliceBottomTiled": false,
+          "nineSliceCenterTiled": false,
+          "nineSliceEnabled": false,
+          "nineSliceFallback": true,
+          "nineSliceLeftTiled": false,
+          "nineSliceMargin": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "nineSliceRightTiled": false,
+          "nineSliceScale": [
+            1.0,
+            1.0
+          ],
+          "nineSliceTopTiled": false,
+          "offsetAnimationSpeed": [
+            0.0,
+            0.0
+          ],
+          "offsetAnimationType": "None",
+          "preserveAspect": false,
+          "textureAddressMode": "Default",
+          "textureAssetName": "",
+          "textureFilePath": "imgs/result_top.png",
+          "textureFilter": "Default",
+          "textureGridCellSize": [
+            600.0,
+            50.0
+          ],
+          "textureGridCellTrim": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "textureGridColumns": 1,
+          "textureGridIndex": 1,
+          "textureGridIndex_paramRef": "resultTopIndex",
+          "textureGridRows": 20,
+          "textureOffset": [
+            0.0,
+            0.0
+          ],
+          "textureRegionMode": "Grid",
+          "textureSize": [
+            100.0,
+            100.0
+          ],
+          "type": "Sprite"
+        }
+      ],
+      "decelerationRate": 0.2,
+      "dragScrollEnabled": true,
+      "hitPadding": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "horizontalScrollable": false,
+      "inheritChildrenHover": false,
+      "inheritChildrenPress": false,
+      "interactable": true,
+      "isHitTarget": true,
+      "name": "ResultTop",
+      "region": {
+        "anchorMax": [
+          0.5,
+          0.5
+        ],
+        "anchorMin": [
+          0.5,
+          0.5
+        ],
+        "posDelta": [
+          0.0,
+          -221.0
+        ],
+        "sizeDelta": [
+          600.0,
+          50.0
+        ],
+        "sizeDeltaPivot": [
+          0.5,
+          0.5
+        ],
+        "type": "AnchorRegion"
+      },
+      "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
+      "styleState": "",
+      "transform": {
+        "color": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "hitTestAffected": true,
+        "pivot": [
+          0.5,
+          0.5
+        ],
+        "rotation": 0.0,
+        "scale": [
+          0.5874,
+          0.5874
+        ],
+        "translate": [
+          0.0,
+          0.0
+        ]
+      },
+      "verticalScrollable": false,
+      "wheelScrollEnabled": true,
+      "zOrderInSiblings": 0
+    },
+    {
+      "activeSelf": true,
+      "children": [],
+      "childrenLayout": {
+        "horizontalAlign": "Left",
+        "padding": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "spacing": [
+          0.0,
+          0.0
+        ],
+        "type": "FlowLayout",
+        "verticalAlign": "Top"
+      },
+      "clippingEnabled": false,
+      "components": [
+        {
+          "characterSpacing": [
+            0.0,
+            0.0
+          ],
+          "color": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "fontAssetName": "",
+          "fontSize": 10.0,
+          "gradationColor1": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "gradationColor2": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "gradationType": "None",
+          "horizontalAlign": "Center",
+          "horizontalOverflow": "Wrap",
+          "minFontSize": 1.0,
+          "outlineColor": [
+            0,
+            0,
+            0,
+            255
+          ],
+          "outlineFactorInner": 0.0,
+          "outlineFactorOuter": 0.0,
+          "padding": [
+            4.0,
+            6.0,
+            2.0,
+            4.0
+          ],
+          "shadowColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "shadowOffset": [
+            1.0,
+            1.0
+          ],
+          "sizingMode": "AutoResize",
+          "text": "",
+          "text_paramRef": "bottomRightText",
+          "type": "Label",
+          "underlineColor": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "underlineStyle": "None",
+          "underlineThickness": 1.0,
+          "verticalAlign": "Middle",
+          "verticalOverflow": "Overflow"
+        }
+      ],
+      "decelerationRate": 0.2,
+      "dragScrollEnabled": true,
+      "hitPadding": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "horizontalScrollable": false,
+      "inheritChildrenHover": false,
+      "inheritChildrenPress": false,
+      "interactable": true,
+      "isHitTarget": true,
+      "name": "BottomRightText",
+      "region": {
+        "anchorMax": [
+          1.0,
+          1.0
+        ],
+        "anchorMin": [
+          1.0,
+          1.0
+        ],
+        "posDelta": [
+          0.0,
+          0.0
+        ],
+        "sizeDelta": [
+          38.0,
+          21.0
+        ],
+        "sizeDeltaPivot": [
+          1.0,
+          1.0
+        ],
+        "type": "AnchorRegion"
+      },
+      "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
+      "styleState": "",
+      "transform": {
+        "color": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "hitTestAffected": true,
+        "pivot": [
+          0.5,
+          0.5
+        ],
+        "rotation": 0.0,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "translate": [
+          0.0,
+          0.0
+        ]
+      },
+      "verticalScrollable": false,
+      "wheelScrollEnabled": true,
+      "zOrderInSiblings": 0
+    },
+    {
+      "activeSelf": true,
+      "children": [
+        {
+          "activeSelf": false,
+          "activeSelf_paramRef": "overlay_newRecordPanelVisible",
+          "children": [
+            {
+              "activeSelf": true,
+              "children": [
+                {
+                  "activeSelf": true,
+                  "children": [],
+                  "childrenLayout": {
+                    "horizontalAlign": "Left",
+                    "padding": [
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    "spacing": [
+                      0.0,
+                      0.0
+                    ],
+                    "type": "FlowLayout",
+                    "verticalAlign": "Top"
+                  },
+                  "clippingEnabled": false,
+                  "components": [
+                    {
+                      "addColor": [
+                        0,
+                        0,
+                        0,
+                        0
+                      ],
+                      "blendMode": "Normal",
+                      "characterSet": "0123456789",
+                      "characterSize": [
+                        25.0,
+                        24.0
+                      ],
+                      "characterSpacing": [
+                        3.0,
+                        0.0
+                      ],
+                      "color": [
+                        255,
+                        255,
+                        255,
+                        255
+                      ],
+                      "horizontalAlign": "Right",
+                      "horizontalOverflow": "Wrap",
+                      "padding": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                      ],
+                      "preserveAspect": false,
+                      "sizingMode": "Fixed",
+                      "text": "123",
+                      "text_paramRef": "overlay_newRecordAchievementRateBefore",
+                      "textureAddressMode": "Default",
+                      "textureAssetName": "",
+                      "textureCellSize": [
+                        136.0,
+                        120.0
+                      ],
+                      "textureCellTrim": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                      ],
+                      "textureCellTrimByCharacterJSON": "{}",
+                      "textureFilePath": "imgs/num0.png",
+                      "textureFilter": "Nearest",
+                      "textureGridColumns": 1,
+                      "textureGridRows": 10,
+                      "textureOffset": [
+                        0.0,
+                        0.0
+                      ],
+                      "type": "TextureFontLabel",
+                      "verticalAlign": "Middle",
+                      "verticalOverflow": "Overflow"
+                    }
+                  ],
+                  "decelerationRate": 0.2,
+                  "dragScrollEnabled": true,
+                  "hitPadding": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "horizontalScrollable": false,
+                  "inheritChildrenHover": false,
+                  "inheritChildrenPress": false,
+                  "interactable": true,
+                  "isHitTarget": false,
+                  "name": "AchievementRateBefore",
+                  "region": {
+                    "anchorMax": [
+                      0.5,
+                      0.5
+                    ],
+                    "anchorMin": [
+                      0.5,
+                      0.5
+                    ],
+                    "posDelta": [
+                      -95.0,
+                      8.0
+                    ],
+                    "sizeDelta": [
+                      87.0,
+                      30.0
+                    ],
+                    "sizeDeltaPivot": [
+                      0.5,
+                      0.5
+                    ],
+                    "type": "AnchorRegion"
+                  },
+                  "rubberBandScrollEnabled": true,
+                  "scrollBarType": "Overlay",
+                  "styleState": "",
+                  "transform": {
+                    "color": [
+                      255,
+                      255,
+                      255,
+                      255
+                    ],
+                    "hitTestAffected": true,
+                    "pivot": [
+                      0.5,
+                      0.5
+                    ],
+                    "rotation": 0.0,
+                    "scale": [
+                      1.0,
+                      1.0
+                    ],
+                    "translate": [
+                      0.0,
+                      0.0
+                    ]
+                  },
+                  "verticalScrollable": false,
+                  "wheelScrollEnabled": true,
+                  "zOrderInSiblings": 0
+                },
+                {
+                  "activeSelf": true,
+                  "children": [],
+                  "childrenLayout": {
+                    "horizontalAlign": "Left",
+                    "padding": [
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    "spacing": [
+                      0.0,
+                      0.0
+                    ],
+                    "type": "FlowLayout",
+                    "verticalAlign": "Top"
+                  },
+                  "clippingEnabled": false,
+                  "components": [
+                    {
+                      "addColor": [
+                        0,
+                        0,
+                        0,
+                        0
+                      ],
+                      "blendMode": "Normal",
+                      "characterSet": "0123456789",
+                      "characterSize": [
+                        25.0,
+                        24.0
+                      ],
+                      "characterSpacing": [
+                        3.0,
+                        0.0
+                      ],
+                      "color": [
+                        255,
+                        255,
+                        255,
+                        255
+                      ],
+                      "horizontalAlign": "Right",
+                      "horizontalOverflow": "Wrap",
+                      "padding": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                      ],
+                      "preserveAspect": false,
+                      "sizingMode": "Fixed",
+                      "text": "198",
+                      "text_paramRef": "overlay_newRecordAchievementRateAfter",
+                      "textureAddressMode": "Default",
+                      "textureAssetName": "",
+                      "textureCellSize": [
+                        136.0,
+                        120.0
+                      ],
+                      "textureCellTrim": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                      ],
+                      "textureCellTrimByCharacterJSON": "{}",
+                      "textureFilePath": "imgs/num0.png",
+                      "textureFilter": "Nearest",
+                      "textureGridColumns": 1,
+                      "textureGridRows": 10,
+                      "textureOffset": [
+                        0.0,
+                        0.0
+                      ],
+                      "type": "TextureFontLabel",
+                      "verticalAlign": "Middle",
+                      "verticalOverflow": "Overflow"
+                    }
+                  ],
+                  "decelerationRate": 0.2,
+                  "dragScrollEnabled": true,
+                  "hitPadding": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "horizontalScrollable": false,
+                  "inheritChildrenHover": false,
+                  "inheritChildrenPress": false,
+                  "interactable": true,
+                  "isHitTarget": false,
+                  "name": "AchievementRateAfter",
+                  "region": {
+                    "anchorMax": [
+                      0.5,
+                      0.5
+                    ],
+                    "anchorMin": [
+                      0.5,
+                      0.5
+                    ],
+                    "posDelta": [
+                      72.0,
+                      8.0
+                    ],
+                    "sizeDelta": [
+                      86.0,
+                      30.0
+                    ],
+                    "sizeDeltaPivot": [
+                      0.5,
+                      0.5
+                    ],
+                    "type": "AnchorRegion"
+                  },
+                  "rubberBandScrollEnabled": true,
+                  "scrollBarType": "Overlay",
+                  "styleState": "",
+                  "transform": {
+                    "color": [
+                      255,
+                      255,
+                      255,
+                      255
+                    ],
+                    "hitTestAffected": true,
+                    "pivot": [
+                      0.5,
+                      0.5
+                    ],
+                    "rotation": 0.0,
+                    "scale": [
+                      1.0,
+                      1.0
+                    ],
+                    "translate": [
+                      0.0,
+                      0.0
+                    ]
+                  },
+                  "verticalScrollable": false,
+                  "wheelScrollEnabled": true,
+                  "zOrderInSiblings": 0
+                }
+              ],
+              "childrenLayout": {
+                "horizontalAlign": "Left",
+                "padding": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "spacing": [
+                  0.0,
+                  0.0
+                ],
+                "type": "FlowLayout",
+                "verticalAlign": "Top"
+              },
+              "clippingEnabled": false,
+              "components": [
+                {
+                  "addColor": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  "blendMode": "Normal",
+                  "color": [
+                    255,
+                    255,
+                    255,
+                    255
+                  ],
+                  "gridAnimationEndIndex": 0,
+                  "gridAnimationFPS": 10.0,
+                  "gridAnimationStartIndex": 0,
+                  "gridAnimationType": "None",
+                  "nineSliceBottomTiled": false,
+                  "nineSliceCenterTiled": false,
+                  "nineSliceEnabled": false,
+                  "nineSliceFallback": true,
+                  "nineSliceLeftTiled": false,
+                  "nineSliceMargin": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "nineSliceRightTiled": false,
+                  "nineSliceScale": [
+                    1.0,
+                    1.0
+                  ],
+                  "nineSliceTopTiled": false,
+                  "offsetAnimationSpeed": [
+                    0.0,
+                    0.0
+                  ],
+                  "offsetAnimationType": "None",
+                  "preserveAspect": false,
+                  "textureAddressMode": "Default",
+                  "textureAssetName": "",
+                  "textureFilePath": "imgs/courseresult_newrecord.png",
+                  "textureFilter": "Default",
+                  "textureGridCellSize": [
+                    32.0,
+                    32.0
+                  ],
+                  "textureGridCellTrim": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "textureGridColumns": 1,
+                  "textureGridIndex": 0,
+                  "textureGridRows": 1,
+                  "textureOffset": [
+                    0.0,
+                    0.0
+                  ],
+                  "textureRegionMode": "Full",
+                  "textureSize": [
+                    100.0,
+                    100.0
+                  ],
+                  "type": "Sprite"
+                },
+                {
+                  "active": false,
+                  "applyDuringDelay": true,
+                  "colorEnabled": true,
+                  "colorFrom": [
+                    255,
+                    255,
+                    255,
+                    0
+                  ],
+                  "colorTo": [
+                    255,
+                    255,
+                    255,
+                    255
+                  ],
+                  "delay": 0.35,
+                  "duration": 0.15,
+                  "easing": "Linear",
+                  "loopDuration": 0.0,
+                  "loopType": "None",
+                  "manualMode": false,
+                  "manualTime": 0.0,
+                  "restartOnActive": true,
+                  "rotationEnabled": false,
+                  "rotationFrom": 0.0,
+                  "rotationTo": 0.0,
+                  "scaleEnabled": false,
+                  "scaleFrom": [
+                    1.0,
+                    1.0
+                  ],
+                  "scaleTo": [
+                    1.0,
+                    1.0
+                  ],
+                  "tag": "in_newRecord",
+                  "translateEnabled": false,
+                  "translateFrom": [
+                    0.0,
+                    0.0
+                  ],
+                  "translateTo": [
+                    0.0,
+                    0.0
+                  ],
+                  "type": "Tween"
+                },
+                {
+                  "active": false,
+                  "applyDuringDelay": false,
+                  "colorEnabled": true,
+                  "colorFrom": [
+                    255,
+                    255,
+                    255,
+                    255
+                  ],
+                  "colorTo": [
+                    255,
+                    255,
+                    255,
+                    0
+                  ],
+                  "delay": 0.0,
+                  "duration": 0.15,
+                  "easing": "Linear",
+                  "loopDuration": 0.0,
+                  "loopType": "None",
+                  "manualMode": false,
+                  "manualTime": 0.0,
+                  "restartOnActive": true,
+                  "rotationEnabled": false,
+                  "rotationFrom": 0.0,
+                  "rotationTo": 0.0,
+                  "scaleEnabled": false,
+                  "scaleFrom": [
+                    1.0,
+                    1.0
+                  ],
+                  "scaleTo": [
+                    1.0,
+                    1.0
+                  ],
+                  "tag": "out_newRecord",
+                  "translateEnabled": false,
+                  "translateFrom": [
+                    0.0,
+                    0.0
+                  ],
+                  "translateTo": [
+                    0.0,
+                    0.0
+                  ],
+                  "type": "Tween"
+                },
+                {
+                  "active": false,
+                  "applyDuringDelay": false,
+                  "colorEnabled": true,
+                  "colorFrom": [
+                    255,
+                    255,
+                    255,
+                    0
+                  ],
+                  "colorTo": [
+                    255,
+                    255,
+                    255,
+                    255
+                  ],
+                  "delay": 0.0,
+                  "duration": 0.15,
+                  "easing": "Linear",
+                  "loopDuration": 0.0,
+                  "loopType": "None",
+                  "manualMode": false,
+                  "manualTime": 0.0,
+                  "restartOnActive": true,
+                  "rotationEnabled": false,
+                  "rotationFrom": 0.0,
+                  "rotationTo": 0.0,
+                  "scaleEnabled": false,
+                  "scaleFrom": [
+                    1.0,
+                    1.0
+                  ],
+                  "scaleTo": [
+                    1.0,
+                    1.0
+                  ],
+                  "tag": "inAgain_newRecord",
+                  "translateEnabled": false,
+                  "translateFrom": [
+                    0.0,
+                    0.0
+                  ],
+                  "translateTo": [
+                    0.0,
+                    0.0
+                  ],
+                  "type": "Tween"
+                }
+              ],
+              "decelerationRate": 0.2,
+              "dragScrollEnabled": true,
+              "hitPadding": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "horizontalScrollable": false,
+              "inheritChildrenHover": false,
+              "inheritChildrenPress": false,
+              "interactable": true,
+              "isHitTarget": false,
+              "name": "Body",
+              "region": {
+                "anchorMax": [
+                  0.5,
+                  0.5
+                ],
+                "anchorMin": [
+                  0.5,
+                  0.5
+                ],
+                "posDelta": [
+                  0.0,
+                  -76.0
+                ],
+                "sizeDelta": [
+                  320.0,
+                  90.0
+                ],
+                "sizeDeltaPivot": [
+                  0.5,
+                  0.5
+                ],
+                "type": "AnchorRegion"
+              },
+              "rubberBandScrollEnabled": true,
+              "scrollBarType": "Overlay",
+              "styleState": "",
+              "transform": {
+                "color": [
+                  255,
+                  255,
+                  255,
+                  255
+                ],
+                "hitTestAffected": true,
+                "pivot": [
+                  0.5,
+                  0.5
+                ],
+                "rotation": 0.0,
+                "scale": [
+                  0.5874,
+                  0.5874
+                ],
+                "translate": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "verticalScrollable": false,
+              "wheelScrollEnabled": true,
+              "zOrderInSiblings": 0
+            }
+          ],
+          "childrenLayout": {
+            "horizontalAlign": "Left",
+            "padding": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "spacing": [
+              0.0,
+              0.0
+            ],
+            "type": "FlowLayout",
+            "verticalAlign": "Top"
+          },
+          "clippingEnabled": false,
+          "components": [],
+          "decelerationRate": 0.2,
+          "dragScrollEnabled": true,
+          "hitPadding": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "horizontalScrollable": false,
+          "inheritChildrenHover": false,
+          "inheritChildrenPress": false,
+          "interactable": true,
+          "isHitTarget": false,
+          "name": "NewRecordPanel",
+          "region": {
+            "anchorMax": [
+              1.0,
+              1.0
+            ],
+            "anchorMin": [
+              0.0,
+              0.0
+            ],
+            "posDelta": [
+              0.0,
+              0.0
+            ],
+            "sizeDelta": [
+              0.0,
+              0.0
+            ],
+            "sizeDeltaPivot": [
+              0.0,
+              0.0
+            ],
+            "type": "AnchorRegion"
+          },
+          "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
+          "styleState": "",
+          "transform": {
+            "color": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "hitTestAffected": true,
+            "pivot": [
+              0.5,
+              0.5
+            ],
+            "rotation": 0.0,
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "translate": [
+              0.0,
+              0.0
+            ]
+          },
+          "verticalScrollable": false,
+          "wheelScrollEnabled": true,
+          "zOrderInSiblings": 0
+        }
+      ],
+      "childrenLayout": {
+        "horizontalAlign": "Left",
+        "padding": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "spacing": [
+          0.0,
+          0.0
+        ],
+        "type": "FlowLayout",
+        "verticalAlign": "Top"
+      },
+      "clippingEnabled": false,
+      "components": [],
+      "decelerationRate": 0.2,
+      "dragScrollEnabled": true,
+      "hitPadding": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "horizontalScrollable": false,
+      "inheritChildrenHover": false,
+      "inheritChildrenPress": false,
+      "interactable": true,
+      "isHitTarget": false,
+      "name": "Overlay",
+      "region": {
+        "anchorMax": [
+          1.0,
+          1.0
+        ],
+        "anchorMin": [
+          0.0,
+          0.0
+        ],
+        "posDelta": [
+          0.0,
+          0.0
+        ],
+        "sizeDelta": [
+          0.0,
+          0.0
+        ],
+        "sizeDeltaPivot": [
+          0.0,
+          0.0
+        ],
+        "type": "AnchorRegion"
+      },
+      "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
+      "styleState": "",
+      "transform": {
+        "color": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "hitTestAffected": true,
+        "pivot": [
+          0.5,
+          0.5
+        ],
+        "rotation": 0.0,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "translate": [
+          0.0,
+          0.0
+        ]
+      },
+      "verticalScrollable": false,
+      "wheelScrollEnabled": true,
+      "zOrderInSiblings": 0
+    }
+  ],
+  "childrenLayout": {
+    "horizontalAlign": "Left",
+    "padding": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "spacing": [
+      0.0,
+      0.0
+    ],
+    "type": "FlowLayout",
+    "verticalAlign": "Top"
+  },
+  "defaultFontAssetName": "System",
+  "params": {
+    "arrowDownVisible": {
+      "type": "Bool",
+      "value": false
+    },
+    "arrowUpVisible": {
+      "type": "Bool",
+      "value": false
+    },
+    "bottomRightText": {
+      "type": "String",
+      "value": "vX.X.X"
+    },
+    "chartItem1Visible": {
+      "type": "Bool",
+      "value": true
+    },
+    "chartItem2Visible": {
+      "type": "Bool",
+      "value": true
+    },
+    "chartItem3Visible": {
+      "type": "Bool",
+      "value": true
+    },
+    "chartItem4Visible": {
+      "type": "Bool",
+      "value": true
+    },
+    "courseTitle": {
+      "type": "String",
+      "value": "courseTitle"
+    },
+    "gaugePercentageNumber": {
+      "type": "String",
+      "value": "198"
+    },
+    "gaugeTextureIndex": {
+      "type": "Number",
+      "value": 3.0
+    },
+    "overlay_newRecordAchievementRateAfter": {
+      "type": "String",
+      "value": "198"
+    },
+    "overlay_newRecordAchievementRateBefore": {
+      "type": "String",
+      "value": "123"
+    },
+    "overlay_newRecordPanelVisible": {
+      "type": "Bool",
+      "value": false
+    },
+    "resultTopIndex": {
+      "type": "Number",
+      "value": 1.0
+    }
+  },
+  "referenceSize": [
+    640.0,
+    480.0
+  ],
+  "serializedVersion": 5,
+  "version": "0.3.1"
+}

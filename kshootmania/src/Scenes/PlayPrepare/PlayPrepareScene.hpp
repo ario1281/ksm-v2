@@ -3,6 +3,7 @@
 #include "PlayPrepareAssets.hpp"
 #include "MusicGame/UI/HispeedSettingMenu.hpp"
 #include "MusicGame/Scroll/HighwayScroll.hpp"
+#include "Course/CoursePlayState.hpp"
 
 class PlayPrepareScene : public Co::SceneBase
 {
@@ -13,6 +14,10 @@ private:
 
 	const kson::ChartData m_chartData;
 
+	Optional<CoursePlayState> m_courseState;
+
+	Optional<MusicGame::TestPlayOption> m_testPlayOption;
+
 	std::shared_ptr<noco::Canvas> m_canvas;
 
 	MusicGame::HispeedSettingMenu m_hispeedMenu;
@@ -22,7 +27,7 @@ private:
 	Stopwatch m_stopwatchSinceHispeedChange{ StartImmediately::Yes };
 
 public:
-	explicit PlayPrepareScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay);
+	explicit PlayPrepareScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay, const Optional<CoursePlayState>& courseState = none, const Optional<MusicGame::TestPlayOption>& testPlayOption = none);
 
 	virtual ~PlayPrepareScene() = default;
 

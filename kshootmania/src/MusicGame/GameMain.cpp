@@ -10,6 +10,19 @@ namespace MusicGame
 	namespace
 	{
 		constexpr double kPlayFinishFadeOutStartSec = 2.4; // TODO: HARD落ちした場合は赤色表示を加えた上で4.8秒にする
+		constexpr double kTestPlaySeekMarginSec = 1.0; // テストプレイで開始小節より前にシークするマージン(秒)
+
+		Audio::BGM CreateBGM(const kson::ChartData& chartData, const FilePath& parentPath, const PlayOption& playOption, const FolderConfIni& folderConfIni)
+		{
+			const FilePath filePath = FileSystem::PathAppend(parentPath, Unicode::FromUTF8(chartData.audio.bgm.filename));
+			const double volume = chartData.audio.bgm.vol * folderConfIni.volumeScale;
+			const double chartOffsetMs = static_cast<double>(chartData.audio.bgm.offset + folderConfIni.offsetMs);
+			const double playbackSpeed = playOption.nonZeroPlaybackSpeed();
+			const SecondsF offset{ (chartOffsetMs / playbackSpeed + playOption.effectiveGlobalOffsetMs()) / 1000.0 };
+			const Audio::LegacyAudioFPMode legacyMode = Audio::DetermineLegacyAudioFPMode(chartData, parentPath);
+
+			return Audio::BGM{ filePath, volume, offset, legacyMode, chartData, parentPath, playOption.playbackSpeed };
+		}
 
 		bool ShouldStartFadeOut(const GameStatus& gameStatus)
 		{
@@ -28,18 +41,11 @@ namespace MusicGame
 		}
 
 		// 譜面データを読み込み、Turn変換とPlayModeフィルタを適用
-		kson::ChartData LoadChartDataWithTurn(const GameCreateInfo& createInfo)
+		kson::ChartData LoadChartDataWithTurn(const GameCreateInfo& createInfo, std::array<HashSet<kson::Pulse>, kson::kNumLaserLanesSZ>* pLaserCurvedPulses)
 		{
-			kson::ChartData chartData;
-			const auto extension = FileSystem::Extension(createInfo.chartFilePath);
-			if (extension == kKSHExtension)
-			{
-				chartData = kson::LoadKSHChartData(createInfo.chartFilePath.narrow());
-			}
-			else if (extension == kKSONExtension)
-			{
-				chartData = kson::LoadKSONChartData(createInfo.chartFilePath.narrow());
-			}
+			auto chartData = FsUtils::HasKsonExtension(createInfo.chartFilePath)
+				? kson::LoadKsonChartData(createInfo.chartFilePath.toUTF8())
+				: kson::LoadKshChartData(createInfo.chartFilePath.toUTF8());
 
 			// Turn変換を適用
 			const TurnTable turnTable = MakeTurnTable(createInfo.playOption.turnMode);
@@ -47,6 +53,75 @@ namespace MusicGame
 
 			// Off/Hideモードフィルタを適用
 			ApplyPlayModeFilter(chartData, createInfo.playOption);
+
+			// テストプレイの場合、開始小節より手前のノーツを削除
+			if (createInfo.playOption.isTestPlayWithStartMeasure())
+			{
+				const auto tempTimingCache = kson::CreateTimingCache(chartData.beat);
+				const int32 startMeasure = *createInfo.playOption.testPlayOption->startMeasure;
+				const kson::Pulse startPulse = kson::MeasureIdxToPulse(startMeasure, chartData.beat, tempTimingCache);
+
+				// BT/FXノーツ削除
+				for (auto& lane : chartData.note.bt)
+				{
+					lane.erase(lane.begin(), lane.lower_bound(startPulse));
+				}
+				for (auto& lane : chartData.note.fx)
+				{
+					lane.erase(lane.begin(), lane.lower_bound(startPulse));
+				}
+
+				// LASERセクションのトリミング
+				for (auto& lane : chartData.note.laser)
+				{
+					auto it = lane.begin();
+					while (it != lane.end() && it->first < startPulse)
+					{
+						const kson::Pulse sectionY = it->first;
+						const kson::LaserSection& section = it->second;
+						const kson::RelPulse relStart = startPulse - sectionY;
+
+						// セクション全体が開始位置以前にある場合はセクションごと削除
+						if (section.v.rbegin()->first <= relStart)
+						{
+							it = lane.erase(it);
+							continue;
+						}
+
+						// 開始位置以降の点でセクションを作り直す
+						const double valueAtStart = kson::GraphValueAt(section.v, relStart);
+						kson::LaserSection newSection;
+						newSection.w = section.w;
+						newSection.v[0] = kson::GraphPoint(valueAtStart);
+						for (auto pointIt = section.v.upper_bound(relStart); pointIt != section.v.end(); ++pointIt)
+						{
+							newSection.v[pointIt->first - relStart] = pointIt->second;
+						}
+
+						it = lane.erase(it);
+						lane[startPulse] = std::move(newSection);
+						it = lane.upper_bound(startPulse);
+					}
+				}
+			}
+
+			// 曲線を持つレーザー点のPulseを列挙
+			if (pLaserCurvedPulses != nullptr)
+			{
+				for (std::size_t laneIdx = 0; laneIdx < kson::kNumLaserLanesSZ; ++laneIdx)
+				{
+					for (const auto& [y, section] : chartData.note.laser[laneIdx])
+					{
+						for (const auto& [ry, point] : section.v)
+						{
+							if (!point.curve.isLinear())
+							{
+								pLaserCurvedPulses->at(laneIdx).insert(y + ry);
+							}
+						}
+					}
+				}
+			}
 
 			// レーザーを非カーブのみのグラフへ展開
 			for (auto& lane : chartData.note.laser)
@@ -62,6 +137,16 @@ namespace MusicGame
 
 			// stopをscroll_speedへ焼き込む
 			chartData.beat.scrollSpeed = kson::BakeStopIntoScrollSpeed(chartData.beat.scrollSpeed, chartData.beat.stop);
+
+			// 再生速度に応じてBPMをスケーリング
+			const double playbackSpeed = createInfo.playOption.playbackSpeed;
+			if (playbackSpeed != 1.0)
+			{
+				for (auto& [pulse, bpm] : chartData.beat.bpm)
+				{
+					bpm *= playbackSpeed;
+				}
+			}
 
 			return chartData;
 		}
@@ -104,20 +189,21 @@ namespace MusicGame
 		// 傾きを更新
 		m_highwayTilt.update(m_chartData, m_gameStatus.currentPulse);
 		m_viewStatus.tiltRadians = m_highwayTilt.radians();
+		m_viewStatus.tiltRadiansForBgLayer = m_highwayTilt.radiansForBgLayer();
 
 		// 判定の更新
 		m_judgmentMain.update(m_chartData, m_gameStatus, m_viewStatus);
 
-		// HARDゲージ落ち判定
+		// HARDゲージ/コースモード落ち判定
 		if (!m_gameStatus.playFinishStatus.has_value() &&
-			m_playOption.gaugeType == GaugeType::kHardGauge &&
+			(m_playOption.gaugeType == GaugeType::kHardGauge || m_playOption.gameMode == GameMode::kCourseMode) &&
 			m_viewStatus.gaugePercentageInt <= kGaugePercentageThresholdHard)
 		{
 			m_gameStatus.playFinishStatus = PlayFinishStatus
 			{
 				.finishTimeSec = currentTimeSec,
 				.achievement = Achievement::kNone,
-				.isHardGaugeFailed = true,
+				.isHardFailed = IsHardFailedYN::Yes,
 			};
 
 			// HARD落ち効果音を再生
@@ -132,7 +218,7 @@ namespace MusicGame
 			m_gameStatus.playFinishStatus = PlayFinishStatus
 			{
 				.finishTimeSec = currentTimeSec,
-				.achievement = m_judgmentMain.playResult().achievement(),
+				.achievement = m_judgmentMain.playResult(m_chartData, m_timingCache, currentTimeSec, IsHardFailedYN::No, false).achievement(),
 			};
 		}
 	}
@@ -152,18 +238,23 @@ namespace MusicGame
 	GameMain::GameMain(const GameCreateInfo& createInfo)
 		: m_chartFilePath(createInfo.chartFilePath)
 		, m_parentPath(FileSystem::ParentPath(createInfo.chartFilePath))
-		, m_chartData(LoadChartDataWithTurn(createInfo))
+		, m_chartData(LoadChartDataWithTurn(createInfo, &m_laserCurvedPulses))
 		, m_timingCache(kson::CreateTimingCache(m_chartData.beat))
 		, m_playOption(createInfo.playOption)
-		, m_judgmentMain(m_chartData, m_timingCache, createInfo.playOption)
+		, m_judgmentMain(
+			m_chartData,
+			m_timingCache,
+			createInfo.playOption,
+			createInfo.courseContinuation,
+			createInfo.playOption.gameMode)
 		, m_camSystem(m_chartData)
 		, m_highwayScroll(m_chartData)
-		, m_bgm(FileSystem::PathAppend(m_parentPath, Unicode::FromUTF8(m_chartData.audio.bgm.filename)), m_chartData.audio.bgm.vol, SecondsF{ static_cast<double>(m_chartData.audio.bgm.offset + createInfo.playOption.effectiveGlobalOffsetMs()) / 1000 }, Audio::DetermineLegacyAudioFPMode(m_chartData, m_parentPath), m_chartData, m_parentPath)
+		, m_bgm(CreateBGM(m_chartData, m_parentPath, createInfo.playOption, createInfo.folderConfIni))
 		, m_assistTick(createInfo.assistTickMode)
-		, m_laserSlamSE(m_chartData, m_timingCache, m_parentPath, createInfo.playOption.isAutoPlaySE)
-		, m_fxChipSE(m_chartData, m_timingCache, m_parentPath, createInfo.playOption.isAutoPlaySE)
+		, m_laserSlamSE(m_chartData, m_timingCache, m_parentPath, createInfo.playOption.isAutoPlaySE, createInfo.folderConfIni.volumeScale)
+		, m_fxChipSE(m_chartData, m_timingCache, m_parentPath, createInfo.playOption.isAutoPlaySE, createInfo.folderConfIni.volumeScale)
 		, m_hardFailedSound("se/play_hardfailed.wav")
-		, m_audioEffectMain(m_bgm, m_chartData, m_timingCache, m_parentPath, createInfo.playOption.effectiveAudioProcDelayMs() / 1000.0)
+		, m_audioEffectMain(m_bgm, m_chartData, m_timingCache, m_parentPath, createInfo.playOption.effectiveAudioProcDelayMs() / 1000.0, m_chartData.audio.bgm.vol * createInfo.folderConfIni.volumeScale)
 		, m_hispeedSettingMenu(createInfo.playOption.availableHispeedTypes, createInfo.playOption.hispeedSetting, kson::GetEffectiveStdBPM(m_chartData), GetInitialBPM(m_chartData))
 		, m_graphicsMain(m_chartData, m_parentPath, createInfo.playOption)
 	{
@@ -173,8 +264,26 @@ namespace MusicGame
 	{
 		const double globalOffsetSec = m_playOption.effectiveGlobalOffsetMs() / 1000.0;
 		m_graphicsMain.prepareMovie(globalOffsetSec);
-		m_bgm.seekPosSec(-TimeSecBeforeStart(m_graphicsMain.hasMovie()));
-		m_bgm.play();
+
+		if (m_playOption.isTestPlayWithStartMeasure())
+		{
+			const int32 startMeasure = *m_playOption.testPlayOption->startMeasure;
+			const kson::Pulse startPulse = kson::MeasureIdxToPulse(
+				startMeasure, m_chartData.beat, m_timingCache);
+			const double startSec = kson::PulseToSec(
+				startPulse, m_chartData.beat, m_timingCache);
+
+			// 少し手前から再生開始
+			const double seekSec = Max(startSec - kTestPlaySeekMarginSec, 0.0);
+			m_bgm.seekPosSec(SecondsF{ seekSec });
+			m_graphicsMain.seekMoviePosSec(SecondsF{ seekSec });
+			m_bgm.play();
+		}
+		else
+		{
+			m_bgm.seekPosSec(-TimeSecBeforeStart(m_graphicsMain.hasMovie()));
+			m_bgm.play();
+		}
 	}
 
 	GameMain::StartFadeOutYN GameMain::update()
@@ -227,11 +336,12 @@ namespace MusicGame
 		const Scroll::HighwayScrollContext highwayScrollContext(&m_highwayScroll, &m_chartData.beat, &m_timingCache, &m_gameStatus);
 
 		// 描画実行
-		m_graphicsMain.draw(m_chartData, m_timingCache, m_gameStatus, m_viewStatus, highwayScrollContext, m_bgm.duration());
+		m_graphicsMain.draw(m_chartData, m_laserCurvedPulses, m_timingCache, m_gameStatus, m_viewStatus, highwayScrollContext, m_bgm.duration());
 	}
 
 	void GameMain::lockForExit()
 	{
+		m_isAborted = !m_judgmentMain.isFinished();
 		m_judgmentMain.lockForExit();
 	}
 
@@ -252,7 +362,8 @@ namespace MusicGame
 
 	PlayResult GameMain::playResult() const
 	{
-		return m_judgmentMain.playResult();
+		const IsHardFailedYN isHardFailed{ m_gameStatus.playFinishStatus.has_value() && m_gameStatus.playFinishStatus->isHardFailed };
+		return m_judgmentMain.playResult(m_chartData, m_timingCache, m_gameStatus.currentTimeSec, isHardFailed, m_isAborted);
 	}
 
 	void GameMain::startBGMFadeOut(Duration duration)
@@ -277,6 +388,7 @@ namespace MusicGame
 				m_bgm.pause();
 				m_isPaused = true;
 			}
+			m_gameStatus.isPaused = m_isPaused;
 		}
 
 		// 早送り(Ctrl+Right)
@@ -285,7 +397,9 @@ namespace MusicGame
 			if (m_fastForwardStopwatch.ms() >= 60)
 			{
 				const auto currentPos = m_bgm.posSec();
-				m_bgm.seekPosSec(currentPos + SecondsF(1.0));
+				const auto newPos = currentPos + SecondsF{ 1.0 };
+				m_bgm.seekPosSec(newPos);
+				m_graphicsMain.seekMoviePosSec(newPos);
 				m_fastForwardStopwatch.restart();
 			}
 		}

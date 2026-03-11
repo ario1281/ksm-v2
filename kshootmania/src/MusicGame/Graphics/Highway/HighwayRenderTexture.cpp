@@ -61,28 +61,32 @@ namespace MusicGame::Graphics
 	{
 		if (MathUtils::AlmostEquals(centerSplit, 0.0)) [[likely]]
 		{
+			// center_splitが0の場合は一発で描画
 			Shader::Copy(m_additiveBaseTexture, m_additiveTexture);
 			Shader::Copy(m_invMultiplyBaseTexture, m_invMultiplyTexture);
 			return;
 		}
 
 		const double centerSplitShiftX = Camera::CenterSplitShiftX(centerSplit);
-		const Size halfHighwayTextureSize = { kHighwayTextureSizeWide.x / 2, kHighwayTextureSizeWide.y };
+		constexpr double xOffset = (kHighwayTextureSizeWide.x - kHighwayTextureSize.x) / 2;
+		constexpr SizeF halfHighwayTextureSize{ kHighwayTextureSize.x / 2, kHighwayTextureSize.y };
 
-		const ScopedRenderStates2D samplerState(SamplerState::ClampNearest);
+		const ScopedRenderStates2D samplerState{ SamplerState::ClampNearest };
+
+		// center_splitが指定されている場合は左右別々に描画
 
 		m_additiveTexture.clear(Palette::Black);
 		{
 			const ScopedRenderTarget2D renderTarget(m_additiveTexture);
-			m_additiveBaseTexture(0, 0, halfHighwayTextureSize).draw(-centerSplitShiftX, 0);
-			m_additiveBaseTexture(halfHighwayTextureSize.x, 0, halfHighwayTextureSize).draw(halfHighwayTextureSize.x + centerSplitShiftX, 0);
+			m_additiveBaseTexture(xOffset, 0, halfHighwayTextureSize).draw(xOffset - centerSplitShiftX, 0); // 左側
+			m_additiveBaseTexture(xOffset + halfHighwayTextureSize.x, 0, halfHighwayTextureSize).draw(xOffset + halfHighwayTextureSize.x + centerSplitShiftX, 0); // 右側
 		}
 
 		m_invMultiplyTexture.clear(Palette::Black);
 		{
 			const ScopedRenderTarget2D renderTarget(m_invMultiplyTexture);
-			m_invMultiplyBaseTexture(0, 0, halfHighwayTextureSize).draw(-centerSplitShiftX, 0);
-			m_invMultiplyBaseTexture(halfHighwayTextureSize.x, 0, halfHighwayTextureSize).draw(halfHighwayTextureSize.x + centerSplitShiftX, 0);
+			m_invMultiplyBaseTexture(xOffset, 0, halfHighwayTextureSize).draw(xOffset - centerSplitShiftX, 0); // 左側
+			m_invMultiplyBaseTexture(xOffset + halfHighwayTextureSize.x, 0, halfHighwayTextureSize).draw(xOffset + halfHighwayTextureSize.x + centerSplitShiftX, 0); // 右側
 		}
 	}
 }

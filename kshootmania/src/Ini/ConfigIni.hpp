@@ -32,7 +32,7 @@ namespace ConfigIni
 		constexpr StringView kLaserInputDelay = U"laserdelay";
 		constexpr StringView kLaserMouseDirectionX = U"mouse_directionx";
 		constexpr StringView kLaserMouseDirectionY = U"mouse_directiony";
-		constexpr StringView kLaserSignalSensitivity = U"mouse_sensitivity";
+		constexpr StringView kLaserInputSensitivity = U"mouse_sensitivity";
 		constexpr StringView kSwapLaserLR = U"switchlaser";
 		constexpr StringView kSelectCloseFolderKey = U"closekey";
 		constexpr StringView kUse3BTsPlusStartAsBack = U"esckey_bt3";
@@ -105,8 +105,8 @@ namespace ConfigIni
 			enum BGDisplayMode : int32
 			{
 				kHide = 0,
-				kShowNoAnim,
-				kShowAnim,
+				kShowNoLayer,
+				kShowLayer,
 			};
 		}
 
@@ -148,14 +148,19 @@ namespace ConfigIni
 
 	void Save();
 
+	[[nodiscard]]
 	bool HasValue(StringView key);
 
+	[[nodiscard]]
 	bool GetBool(StringView key, bool defaultValue = false);
 
+	[[nodiscard]]
 	int32 GetInt(StringView key, int32 defaultValue = 0);
 
+	[[nodiscard]]
 	double GetDouble(StringView key, double defaultValue = 0.0);
 
+	[[nodiscard]]
 	StringView GetString(StringView key, StringView defaultValue = U"");
 
 	void SetBool(StringView key, bool value);
@@ -168,5 +173,6 @@ namespace ConfigIni
 
 	/// @brief ConfigIniから利用可能なハイスピードタイプを読み込み
 	/// @return 利用可能なハイスピードタイプの配列
+	[[nodiscard]]
 	Array<MusicGame::HispeedType> LoadAvailableHispeedTypes();
 }

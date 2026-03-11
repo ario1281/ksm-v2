@@ -138,7 +138,7 @@ namespace MusicGame
 	{
 		double finishTimeSec = kPastTimeSec;
 		Achievement achievement = Achievement::kNone;
-		bool isHardGaugeFailed = false;
+		IsHardFailedYN isHardFailed = IsHardFailedYN::No;
 	};
 
 	/// @brief ゲームステータス
@@ -147,6 +147,7 @@ namespace MusicGame
 	{
 		// TODO: 描画に使用するものは完全にViewStatusへ移動する(エディタ上でのプレビュー時にViewStatusさえ構築すればプレビューできるようにする想定)
 
+		bool isPaused = false;
 		double currentTimeSec = 0.0;
 		double currentTimeSecForButtonJudgment = 0.0;
 		double currentTimeSecForLaserJudgment = 0.0;

@@ -1,4 +1,4 @@
-#include "FavoriteRemoveDialog.hpp"
+﻿#include "FavoriteRemoveDialog.hpp"
 #include "Input/Cursor/CursorInput.hpp"
 
 FavoriteRemoveDialog::FavoriteRemoveDialog(const std::shared_ptr<noco::Canvas>& canvas)

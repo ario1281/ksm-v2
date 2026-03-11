@@ -8,9 +8,14 @@
 #include "Addon/CommonSEAddon.hpp"
 #include "Addon/DisableIMEAddon.hpp"
 #include "ksmaudio/ksmaudio.hpp"
+#include <ksmaxis/ksmaxis.hpp>
 #include "RuntimeConfig.hpp"
 #include "Scenes/Title/TitleScene.hpp"
+#include "Scenes/Play/PlayScene.hpp"
+#include "Scenes/PlayPrepare/PlayPrepareScene.hpp"
+#include "TestPlayArgs.hpp"
 #include "Input/KeyConfig.hpp"
+#include "Input/InputUtils.hpp"
 
 #ifdef __APPLE__
 #include <ksmplatform_macos/input_method.h>
@@ -149,13 +154,36 @@ void OutputLicenseTxt()
 		U"SOFTWARE.";
 	licenses.push_back(ksonLicense);
 
+	// ksmaxisのライセンス情報を追加
+	LicenseInfo ksmaxisLicense;
+	ksmaxisLicense.title = U"ksmaxis";
+	ksmaxisLicense.copyright = U"Copyright (c) 2025 masaka";
+	ksmaxisLicense.text = U"Permission is hereby granted, free of charge, to any person obtaining a copy\n"
+		U"of this software and associated documentation files (the \"Software\"), to deal\n"
+		U"in the Software without restriction, including without limitation the rights\n"
+		U"to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n"
+		U"copies of the Software, and to permit persons to whom the Software is\n"
+		U"furnished to do so, subject to the following conditions:\n"
+		U"\n"
+		U"The above copyright notice and this permission notice shall be included in all\n"
+		U"copies or substantial portions of the Software.\n"
+		U"\n"
+		U"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n"
+		U"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n"
+		U"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n"
+		U"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n"
+		U"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n"
+		U"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n"
+		U"SOFTWARE.";
+	licenses.push_back(ksmaxisLicense);
+
 	// KSMフォントのライセンス情報を追加
 	LicenseInfo ksmFontLicense;
-	ksmFontLicense.title = U"KSM Fonts (KSM-JA/KR/SC/TC-Medium)";
+	ksmFontLicense.title = U"KSM Fonts (KSM-JA/SC/TC-Medium)";
 	ksmFontLicense.copyright = U"Component fonts:\n"
 		U"1. Tektur (Modified as Tektur-KSM) - Copyright 2023 The Tektur Project Authors, Modified by K-Shoot MANIA Project\n"
 		U"2. Corporate Logo ver3 - Copyright LOGOTYPE.JP, Based on Source Han Sans (Copyright 2014-2020 Adobe)\n"
-		U"3. Noto Sans JP/KR/SC/TC - Copyright Google Inc. and Adobe Inc.";
+		U"3. Noto Sans, Noto Sans JP/KR/SC/TC, Noto Sans Math, Noto Sans Symbols, Noto Music, Arabic, Thai, Hebrew, Cherokee - Copyright Google Inc. and Adobe Inc.";
 	ksmFontLicense.text = U"All component fonts are licensed under the SIL Open Font License, Version 1.1.\n"
 		U"\n"
 		U"Permission is hereby granted, free of charge, to any person obtaining a copy of the Font Software,\n"
@@ -203,6 +231,10 @@ void OutputLicenseTxt()
 
 void KSMMain()
 {
+#if defined(__linux__)
+	FsUtils::InitModulePathForLinux();
+#endif
+
 	// Escキーによるプログラム終了を無効化
 	System::SetTerminationTriggers(UserAction::CloseButtonClicked);
 
@@ -210,7 +242,7 @@ void KSMMain()
 	LicenseManager::DisableDefaultTrigger();
 
 	// ウィンドウタイトル
-	Window::SetTitle(U"K-Shoot MANIA v2.0.0-alpha3");
+	Window::SetTitle(U"K-Shoot MANIA {} (unofficial build)"_fmt(kAppVersion));
 
 	// カレントディレクトリを設定
 	// (ChangeCurrentDirectoryはここ以外は基本的に使用禁止。どうしても使う必要がある場合は必ずResourceDirectoryPathに戻すこと)
@@ -240,6 +272,13 @@ void KSMMain()
 	// ランタイム設定を初期化
 	RuntimeConfig::RestoreJudgmentModesFromConfigIni();
 
+	// マスターボリュームを適用
+	{
+		constexpr int32 kMasterVolumeDefault = 100;
+		const int32 masterVolume = ConfigIni::GetInt(ConfigIni::Key::kMasterVolume, kMasterVolumeDefault);
+		ksmaudio::SetMasterVolume(masterVolume / 100.0);
+	}
+
 	// 言語ファイルを読み込み
 	I18n::LoadLanguage(ConfigIni::GetString(ConfigIni::Key::kLanguage));
 
@@ -253,9 +292,15 @@ void KSMMain()
 	// アセット一覧を登録
 	AssetManagement::RegisterAssets();
 
-	// フレームレート制限
-	Graphics::SetVSyncEnabled(false);
-	Addon::Register(U"FrameRateLimit", std::make_unique<FrameRateLimit>(300), -100);
+	// Vsync設定を反映("0;120"または"1"の形式)
+	const Array<String> vsyncParts = String{ ConfigIni::GetString(ConfigIni::Key::kVsync, U"0;300") }.split(U';');
+	const bool vsyncEnabled = vsyncParts[0] == U"1";
+	Graphics::SetVSyncEnabled(vsyncEnabled);
+
+	// フレームレート制限(Vsync有効時は無効化)
+	const int32 fpsLimitValue = vsyncParts.size() >= 2 ? ParseOr<int32>(vsyncParts[1], 300) : 300;
+	const Optional<int32> frameRateLimit = vsyncEnabled ? none : Optional<int32>(fpsLimitValue);
+	Addon::Register(FrameRateLimit::kAddonName, std::make_unique<FrameRateLimit>(frameRateLimit), -100);
 
 	Addon::Register(AutoMuteAddon::kAddonName, std::make_unique<AutoMuteAddon>(), 1);
 
@@ -289,6 +334,9 @@ void KSMMain()
 	Co::Init();
 	noco::Init();
 
+	// レーザー入力方式がキーボード以外なら、ksmaxisを初期化
+	InputUtils::InitKsmaxisForCurrentLaserInput();
+
 	// NocoUIのグローバルデフォルトフォントを設定
 	noco::SetGlobalDefaultFont(AssetManagement::SystemFont());
 
@@ -296,11 +344,69 @@ void KSMMain()
 	OutputLicenseTxt();
 #endif
 
+	// コマンドライン引数をパース
+	bool shouldExit = false;
+	const auto testPlayArgs = ParseTestPlayArgs(&shouldExit);
+	if (shouldExit)
+	{
+		return;
+	}
+
+	// テストプレイの場合、譜面ファイルの読み込みを事前検証
+	if (testPlayArgs.has_value())
+	{
+		const auto chartData = FsUtils::HasKsonExtension(testPlayArgs->chartFilePath)
+			? kson::LoadKsonChartData(testPlayArgs->chartFilePath.toUTF8())
+			: kson::LoadKshChartData(testPlayArgs->chartFilePath.toUTF8());
+		if (chartData.error != kson::ErrorType::None)
+		{
+			MessageBoxUtils::ShowOK(I18n::Get(I18n::Play::ErrorChartLoadFailed), MessageBoxStyle::Error);
+			return;
+		}
+	}
+
+	// 開始シーンを決定
+	Co::SceneFactory initialSceneFactory;
+	if (testPlayArgs.has_value() && testPlayArgs->testPlayOption.hasStartMeasure())
+	{
+		// テストプレイ(-from指定あり)の場合
+		initialSceneFactory = Co::MakeSceneFactory<PlayScene>(
+			testPlayArgs->chartFilePath,
+			testPlayArgs->isAutoPlay,
+			Optional<CoursePlayState>{ none },
+			MakeOptional(testPlayArgs->testPlayOption));
+	}
+	else if (testPlayArgs.has_value())
+	{
+		// テストプレイ(-fromなし)の場合
+		initialSceneFactory = Co::MakeSceneFactory<PlayPrepareScene>(
+			testPlayArgs->chartFilePath,
+			testPlayArgs->isAutoPlay,
+			Optional<CoursePlayState>{ none },
+			MakeOptional(testPlayArgs->testPlayOption));
+	}
+	else
+	{
+		// 通常起動
+		initialSceneFactory = Co::MakeSceneFactory<TitleScene>(TitleMenuItem::kStart);
+	}
+
 	// メインループ
-	const auto sceneRunner = Co::PlaySceneFrom<TitleScene>(TitleMenuItem::kStart).runScoped();
+	const auto sceneRunner = Co::PlaySceneFrom(std::move(initialSceneFactory)).runScoped();
 	
 	while (System::Update())
 	{
+		// マウスカーソル非表示設定
+		if (ConfigIni::GetBool(ConfigIni::Key::kHideMouseCursor))
+		{
+			Cursor::RequestStyle(CursorStyle::Hidden);
+		}
+
+		if (ksmaxis::IsInitialized())
+		{
+			ksmaxis::Update();
+		}
+
 #ifdef __APPLE__
 		// macOSプラットフォーム特有のキーボード状態を更新
 		KeyConfig::UpdatePlatformKeyboard();
@@ -323,7 +429,11 @@ void KSMMain()
 	KSMPlatformMacOS_StopBlockingIMEKeys();
 #endif
 
-	// 音声のバックエンドを終了
+	// ライブラリ終了
+	if (ksmaxis::IsInitialized())
+	{
+		ksmaxis::Terminate();
+	}
 	ksmaudio::Terminate();
 }
 
@@ -335,7 +445,7 @@ void Main()
 	}
 	catch (const Error& e)
 	{
-		System::MessageBoxOK(e.what(), MessageBoxStyle::Error);
+		MessageBoxUtils::ShowOK(e.what(), MessageBoxStyle::Error);
 		throw;
 	}
 }

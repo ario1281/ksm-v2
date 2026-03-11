@@ -1,6 +1,7 @@
 ﻿#pragma once
 #undef near // Windows.h対策
 #include "JudgmentDefines.hpp"
+#include "Course/CourseContinuation.hpp"
 
 namespace MusicGame::Judgment
 {
@@ -34,10 +35,22 @@ namespace MusicGame::Judgment
 		/// @brief 最大コンボ数
 		int32 m_maxCombo = 0;
 
+		/// @brief コース全体でのコンボ数(コースモード時のみ使用)
+		int32 m_courseCombo = 0;
+
+		/// @brief コース全体でのエラーなし状態(コースモード時のみ使用)
+		bool m_courseIsNoError = true;
+
 		/// @brief 判定毎のコンボ数の内訳
 		ComboStats m_stats;
 
 	public:
+		explicit ComboStatus(const Optional<CourseContinuation>& courseContinuation)
+			: m_courseCombo(courseContinuation.has_value() ? courseContinuation->combo : 0)
+			, m_courseIsNoError(courseContinuation.has_value() ? courseContinuation->isNoError : true)
+		{
+		}
+
 		void processJudgmentResult(JudgmentResult result);
 
 		/// @brief 現在のコンボ数を取得
@@ -59,5 +72,13 @@ namespace MusicGame::Judgment
 		/// @brief 判定済みのコンボ数(ERROR判定含む)を取得
 		/// @return コンボ数
 		int32 totalJudgedCombo() const;
+
+		/// @brief コース全体でのコンボ数を取得(コースモード時のみ使用)
+		/// @return コンボ数
+		int32 courseCombo() const;
+
+		/// @brief コース全体でのエラーなし状態を取得(コースモード時のみ使用)
+		/// @return エラーなし状態
+		bool courseIsNoError() const;
 	};
 }

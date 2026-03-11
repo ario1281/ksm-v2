@@ -2,9 +2,9 @@
 
 namespace
 {
-	int32 GetFXButtonIndex(KeyConfig::Button button)
+	int32 GetFXButtonIndex(Button button)
 	{
-		return button - KeyConfig::kFX_L;
+		return button - kButtonFX_L;
 	}
 }
 
@@ -13,7 +13,7 @@ FXButtonUpDetection::FXButtonUpDetection(const Array<Input>& excludeKeys)
 {
 }
 
-void FXButtonUpDetection::updateButton(KeyConfig::Button targetButton, KeyConfig::Button otherFXButton)
+void FXButtonUpDetection::updateButton(Button targetButton, Button otherFXButton)
 {
 	const int32 targetIdx = GetFXButtonIndex(targetButton);
 
@@ -55,11 +55,11 @@ void FXButtonUpDetection::updateButton(KeyConfig::Button targetButton, KeyConfig
 
 void FXButtonUpDetection::update()
 {
-	updateButton(KeyConfig::kFX_L, KeyConfig::kFX_R);
-	updateButton(KeyConfig::kFX_R, KeyConfig::kFX_L);
+	updateButton(kButtonFX_L, kButtonFX_R);
+	updateButton(kButtonFX_R, kButtonFX_L);
 }
 
-bool FXButtonUpDetection::up(KeyConfig::Button targetButton) const
+bool FXButtonUpDetection::up(Button targetButton) const
 {
 	const int32 targetIdx = GetFXButtonIndex(targetButton);
 	return KeyConfig::Up(targetButton) && !m_otherFXButtonPressed[targetIdx] && !m_excludeKeyPressed[targetIdx];

@@ -131,10 +131,10 @@ namespace
 	}
 }
 
-void SelectScene::moveToPlayScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay)
+void SelectScene::moveToPlayScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay, const Optional<CoursePlayState>& courseState)
 {
 	m_fadeOutColor = Palette::White;
-	requestNextScene<PlayPrepareScene>(FilePath{ chartFilePath }, isAutoPlay);
+	requestNextScene<PlayPrepareScene>(FilePath{ chartFilePath }, isAutoPlay, courseState);
 }
 
 void SelectScene::refreshCanvasPlayerName()
@@ -145,14 +145,14 @@ void SelectScene::refreshCanvasPlayerName()
 
 void SelectScene::updatePlayerSwitching()
 {
-	const bool btBCPressed = KeyConfig::Pressed(KeyConfig::kBT_B) && KeyConfig::Pressed(KeyConfig::kBT_C);
+	const bool btBCPressed = KeyConfig::Pressed(kButtonBT_B) && KeyConfig::Pressed(kButtonBT_C);
 	if (!btBCPressed)
 	{
 		return;
 	}
 
-	const bool leftDown = KeyConfig::Down(KeyConfig::kLeft);
-	const bool rightDown = KeyConfig::Down(KeyConfig::kRight);
+	const bool leftDown = KeyConfig::Down(kButtonLeft);
+	const bool rightDown = KeyConfig::Down(kButtonRight);
 
 	if (!leftDown && !rightDown)
 	{
@@ -187,7 +187,7 @@ void SelectScene::updateAlphabetJump()
 
 	// いずれかのBTボタンが押されているかをチェック
 	bool btButtonPressed = false;
-	for (KeyConfig::Button btButton = KeyConfig::kBT_A; btButton <= KeyConfig::kBT_D; ++btButton)
+	for (Button btButton = kButtonBT_A; btButton <= kButtonBT_D; ++btButton)
 	{
 		if (KeyConfig::Pressed(btButton))
 		{
@@ -197,34 +197,50 @@ void SelectScene::updateAlphabetJump()
 	}
 
 	// BTボタン押下中 + FX-Lを離した時はリスト先頭へジャンプ
-	if (btButtonPressed && m_fxButtonUpDetection.up(KeyConfig::kFX_L))
+	if (btButtonPressed && m_fxButtonUpDetection.up(kButtonFX_L))
 	{
 		m_menu.jumpToFirst();
 	}
 	// BTボタン押下中 + FX-Rを離した時はリスト末尾へジャンプ
-	else if (btButtonPressed && m_fxButtonUpDetection.up(KeyConfig::kFX_R))
+	else if (btButtonPressed && m_fxButtonUpDetection.up(kButtonFX_R))
 	{
 		m_menu.jumpToLast();
 	}
-	// FX-Lを単独で離した時は前のアルファベットグループにジャンプ
-	else if (m_fxButtonUpDetection.up(KeyConfig::kFX_L))
+	else if (m_fxButtonUpDetection.up(kButtonFX_L)) // FX-Lを単体で離した時
 	{
-		m_menu.jumpToPrevAlphabet();
+		if (m_menu.folderState().sortMode == SelectFolderState::SortMode::kLevel)
+		{
+			// 前のレベル見出しにジャンプ
+			m_menu.moveToPrevSubDirSection();
+		}
+		else
+		{
+			// 前のアルファベットの先頭にジャンプ
+			m_menu.jumpToPrevAlphabet();
+		}
 	}
-	// FX-Rを単独で離した時は次のアルファベットグループにジャンプ
-	else if (m_fxButtonUpDetection.up(KeyConfig::kFX_R))
+	else if (m_fxButtonUpDetection.up(kButtonFX_R)) // FX-Rを単体で離した時
 	{
-		m_menu.jumpToNextAlphabet();
+		if (m_menu.folderState().sortMode == SelectFolderState::SortMode::kLevel)
+		{
+			// 次のレベル見出しにジャンプ
+			m_menu.moveToNextSubDirSection();
+		}
+		else
+		{
+			// 次のアルファベットの先頭にジャンプ
+			m_menu.jumpToNextAlphabet();
+		}
 	}
 }
 
 SelectScene::SelectScene()
 	: m_folderCloseButton(
 		ConfigIni::GetInt(ConfigIni::Key::kSelectCloseFolderKey) == ConfigIni::Value::SelectCloseFolderKey::kBackButton
-			? static_cast<KeyConfig::Button>(KeyConfig::kBack)
-			: static_cast<KeyConfig::Button>(KeyConfig::kBackspace))
+			? static_cast<Button>(kButtonBack)
+			: static_cast<Button>(kButtonBackspace))
 	, m_canvas(LoadSelectSceneCanvas())
-	, m_menu(m_canvas, [this](FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlayYN) { moveToPlayScene(chartFilePath, isAutoPlayYN); })
+	, m_menu(m_canvas, [this](FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlayYN, Optional<CoursePlayState> courseState) { moveToPlayScene(chartFilePath, isAutoPlayYN, courseState); })
 	, m_playerNames(GetPlayerNames())
 	, m_fxButtonUpDetection({ KeyShift })
 	, m_btOptionPanel(m_canvas)
@@ -244,14 +260,14 @@ SelectScene::SelectScene()
 	refreshCanvasPlayerName();
 
 	// 最初からStartボタンが押されている場合は離した時の入力を無視
-	if (KeyConfig::Pressed(KeyConfig::kStart))
+	if (KeyConfig::Pressed(kButtonStart))
 	{
 		m_ignoreNextStartUp = true;
 	}
 
 	if (m_menu.empty())
 	{
-		System::MessageBoxOK(U"譜面データが見つかりませんでした。", MessageBoxStyle::Warning);
+		MessageBoxUtils::ShowOK(U"譜面データが見つかりませんでした。", MessageBoxStyle::Warning);
 		m_skipFadeout = true;
 		requestNextScene<TitleScene>(TitleMenuItem::kStart);
 	}
@@ -268,11 +284,11 @@ void SelectScene::update()
 	}
 
 	// BTオプションパネル更新
-	const bool needsHighScoreReload = m_btOptionPanel.update(m_menu.getCurrentChartStdBPM());
-	if (needsHighScoreReload)
+	const bool needsDisplayRefresh = m_btOptionPanel.update(m_menu.getCurrentChartStdBPM());
+	if (needsDisplayRefresh)
 	{
-		// ハイスコア情報再読み込み
-		m_menu.reloadCurrentDirectory();
+		// ハイスコア表示を更新
+		m_menu.refreshHighScoreDisplay();
 	}
 
 	// プレイ統計パネル更新
@@ -291,7 +307,7 @@ void SelectScene::update()
 	}
 
 	// Backボタン(Escキー)を押した場合、(フォルダを閉じる状況でなければ)タイトル画面へ戻る
-	if (!closeFolder && KeyConfig::Down(KeyConfig::kBack))
+	if (!closeFolder && KeyConfig::Down(kButtonBack))
 	{
 		m_menu.fadeOutSongPreviewForExit(kFadeOutDuration);
 		m_fadeOutColor = Palette::Black;
@@ -299,10 +315,26 @@ void SelectScene::update()
 		return;
 	}
 
+	// Ctrl+C: 選択中の譜面のパスをクリップボードにコピー
+	if (PlatformKey::KeyCommandControl.pressed() && KeyC.down())
+	{
+		const Optional<String> relativePath = m_menu.currentItemRelativePathToCopy();
+		if (relativePath.has_value())
+		{
+			Clipboard::SetText(*relativePath);
+		}
+	}
+
 	// Ctrl+O: 選択中の項目をエクスプローラで表示
 	if (PlatformKey::KeyCommandControl.pressed() && KeyO.down())
 	{
 		m_menu.showCurrentItemInFileManager();
+	}
+
+	// Ctrl+I: 選択中の譜面のIRランキングページをブラウザで開く
+	if (PlatformKey::KeyCommandControl.pressed() && KeyI.down())
+	{
+		m_menu.openCurrentChartIRPage();
 	}
 
 	if (anyPanelVisible)
@@ -331,7 +363,7 @@ void SelectScene::update()
 
 	// スタートボタンを離した場合、フォルダを開く または プレイ開始
 	// Shift+スタートボタンの場合はオートプレイ開始
-	if (KeyConfig::Up(KeyConfig::kStart))
+	if (KeyConfig::Up(kButtonStart))
 	{
 		if (m_ignoreNextStartUp)
 		{
@@ -352,7 +384,7 @@ void SelectScene::update()
 	}
 
 	// オートプレイボタン(F11)を押した場合、オートプレイ開始
-	if (KeyConfig::Down(KeyConfig::kAutoPlay))
+	if (KeyConfig::Down(kButtonAutoPlay))
 	{
 		m_menu.decideAutoPlay();
 	}
@@ -395,10 +427,10 @@ void SelectScene::update()
 
 void SelectScene::updateStartKeyLongPress()
 {
-	const bool startKeyPressed = KeyConfig::Pressed(KeyConfig::kStart);
-	const bool startKeyDown = KeyConfig::Down(KeyConfig::kStart);
+	const bool startKeyPressed = KeyConfig::Pressed(kButtonStart);
+	const bool startKeyDown = KeyConfig::Down(kButtonStart);
 
-	if (startKeyDown)
+	if (startKeyDown && !m_ignoreNextStartUp)
 	{
 		m_startKeyPressStopwatch.restart();
 	}
@@ -408,7 +440,7 @@ void SelectScene::updateStartKeyLongPress()
 		if (m_startKeyPressStopwatch.elapsed() >= kStartKeyLongPressDuration)
 		{
 			// お気に入り登録可能な項目が選択されているかチェック
-			if (m_menu.empty() || m_menu.cursorMenuItem().isFolder())
+			if (m_menu.empty() || !m_menu.cursorMenuItem().isFavoriteRegisterableItemType())
 			{
 				m_startKeyPressStopwatch.reset();
 				return;
@@ -441,11 +473,10 @@ void SelectScene::updateDialogs()
 		m_favoriteAddDialog.update();
 
 		// Startボタンで決定
-		if (KeyConfig::Down(KeyConfig::kStart))
+		if (KeyConfig::Down(kButtonStart))
 		{
 			// 楽曲の相対パス
 			const FilePath songFullPath{ m_menu.cursorMenuItem().fullPath() };
-			const FilePath songsDir = FsUtils::SongsDirectoryPath();
 
 			// ゲーム上では楽曲単位での登録のみ対応するため、単一譜面の場合は親フォルダを取得
 			FilePath songFolderFullPath = songFullPath;
@@ -454,7 +485,7 @@ void SelectScene::updateDialogs()
 				songFolderFullPath = FileSystem::ParentPath(songFullPath);
 			}
 
-			const String songRelativePath = FileSystem::RelativePath(songFolderFullPath, songsDir);
+			const String songRelativePath = FsUtils::RelativePathFromSongsDir(songFolderFullPath);
 
 			// .favファイルが新規作成される場合、他フォルダ表示の更新が必要
 			// (ファイル存在判定するため、お気に入り追加実行より前で判定する必要があるので注意)
@@ -474,7 +505,7 @@ void SelectScene::updateDialogs()
 			m_ignoreNextStartUp = true;
 		}
 		// Backボタンでキャンセル
-		else if (KeyConfig::Down(KeyConfig::kBack))
+		else if (KeyConfig::Down(kButtonBack))
 		{
 			m_favoriteAddDialog.hide();
 		}
@@ -484,7 +515,7 @@ void SelectScene::updateDialogs()
 		m_favoriteRemoveDialog.update();
 
 		// Startボタンで決定
-		if (KeyConfig::Down(KeyConfig::kStart))
+		if (KeyConfig::Down(kButtonStart))
 		{
 			if (m_favoriteRemoveDialog.selectedChoice() == FavoriteRemoveChoice::Yes)
 			{
@@ -498,8 +529,7 @@ void SelectScene::updateDialogs()
 
 				// 楽曲の相対パスを取得
 				const FilePath songFullPath{ m_menu.cursorMenuItem().fullPath() };
-				const FilePath songsDir = FsUtils::SongsDirectoryPath();
-				const String songRelativePath = FileSystem::RelativePath(songFullPath, songsDir);
+				const String songRelativePath = FsUtils::RelativePathFromSongsDir(songFullPath);
 
 				// お気に入り削除実行
 				const bool fileRemoved = RemoveFromFavorite(favoriteName, songRelativePath);
@@ -507,6 +537,7 @@ void SelectScene::updateDialogs()
 				if (fileRemoved)
 				{
 					// .favファイルが削除された場合はフォルダを閉じる
+					const FilePath songsDir = FsUtils::SongsDirectoryPath();
 					const FilePath favPath = FileSystem::PathAppend(songsDir, favoriteName + U".fav");
 					if (!FileSystem::Exists(favPath))
 					{
@@ -524,7 +555,7 @@ void SelectScene::updateDialogs()
 			m_ignoreNextStartUp = true;
 		}
 		// Backボタンでキャンセル
-		else if (KeyConfig::Down(KeyConfig::kBack))
+		else if (KeyConfig::Down(kButtonBack))
 		{
 			m_favoriteRemoveDialog.hide();
 		}

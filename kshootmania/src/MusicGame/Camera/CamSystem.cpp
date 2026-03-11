@@ -11,12 +11,12 @@ namespace MusicGame::Camera
 
 		double ZoomSideToShiftX(double zoomSide)
 		{
-			return zoomSide / 3.0;
+			return zoomSide / 6.0;
 		}
 	}
 
 	CamSystem::CamSystem(const kson::ChartData& chartData)
-		: m_useLegacyZoomRelaxation(chartData.compat.isKSHVersionOlderThan(kZoomRelaxationChangedKSHVersion))
+		: m_useLegacyZoomRelaxation(chartData.compat.isKshVersionOlderThan(kZoomRelaxationChangedKSHVersion))
 	{
 	}
 

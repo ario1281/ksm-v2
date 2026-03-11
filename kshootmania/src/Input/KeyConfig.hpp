@@ -6,7 +6,9 @@
 #include <ksmplatform_macos/input_method.h>
 #endif
 
-using StartRequiredForBTFXLaserYN = YesNo<struct StartRequiredForBTFXLaserYN_tag>;
+class ILaserInputMethod;
+
+using NeedStartButtonHoldForNonArrowKeyYN = YesNo<struct NeedStartButtonHoldForNonArrowKeyYN_tag>;
 
 namespace KeyConfig
 {
@@ -27,64 +29,6 @@ namespace KeyConfig
 		U"-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1",  // Gamepad 2
 	};
 
-	using Button = int32;
-
-	constexpr Button kUnspecifiedButton = -1;
-
-	// Note: Do not reorder, as it will affect the loading of config.ini.
-	enum ConfigurableButton : int32
-	{
-		kBT_A = 0,
-		kBT_B,
-		kBT_C,
-		kBT_D,
-		kFX_L,
-		kFX_R,
-		kLeftLaserL,
-		kLeftLaserR,
-		kRightLaserL,
-		kRightLaserR,
-		kFX_LR,
-		kStart,
-		kBack,
-		kAutoPlay,
-
-		kConfigurableButtonEnumCount,
-	};
-
-	enum UnconfigurableButton : int32
-	{
-		kUp = kConfigurableButtonEnumCount,
-		kDown,
-		kLeft,
-		kRight,
-
-		kBackspace,
-
-		kButtonEnumCount,
-	};
-
-	constexpr bool IsButtonBTFXLaser(Button button)
-	{
-		switch (button)
-		{
-		case kBT_A:
-		case kBT_B:
-		case kBT_C:
-		case kBT_D:
-		case kFX_L:
-		case kFX_R:
-		case kLeftLaserL:
-		case kLeftLaserR:
-		case kRightLaserL:
-		case kRightLaserR:
-			return true;
-
-		default:
-			return false;
-		}
-	}
-
 	void SetConfigValueByCommaSeparated(ConfigSet targetConfigSet, StringView configValue);
 
 	void SetConfigValue(ConfigSet targetConfigSet, ConfigurableButton button, const Input& input);
@@ -100,7 +44,18 @@ namespace KeyConfig
 
 	bool Pressed(Button button);
 
-	Optional<KeyConfig::Button> LastPressedLaserButton(Button button1, Button button2);
+	Optional<Button> LastPressedLaserButton(Button button1, Button button2);
+
+	/// @brief レーザー入力からカーソルの移動量を取得
+	/// @param laneIdx レーンのインデックス(0=左LASER, 1=右LASER)
+	/// @param deltaTimeSec 前フレームからの経過時間(秒)
+	/// @return カーソルのX方向移動量
+	double LaserDeltaCursorX(int32 laneIdx, double deltaTimeSec);
+
+	/// @brief レーザー入力がデジタル(キーボード)かどうかを判定
+	/// @return デジタル入力の場合true、アナログ入力の場合false
+	[[nodiscard]]
+	bool IsLaserInputDigital();
 
 	bool Down(Button button);
 
@@ -111,12 +66,12 @@ namespace KeyConfig
 	bool Up(Button button);
 
 	template <class C>
-	bool AnyButtonPressed(const C& buttons, StartRequiredForBTFXLaserYN startRequiredForBTFXLaser = StartRequiredForBTFXLaserYN::No)
+	bool AnyButtonPressed(const C& buttons, NeedStartButtonHoldForNonArrowKeyYN needStartButtonHoldForNonArrowKey = NeedStartButtonHoldForNonArrowKeyYN::No)
 	{
-		const bool btFXLaserAccepted = !startRequiredForBTFXLaser || KeyConfig::Pressed(kStart);
+		const bool nonArrowKeyAccepted = !needStartButtonHoldForNonArrowKey || KeyConfig::Pressed(kButtonStart);
 		for (const auto& button : buttons)
 		{
-			const bool accepted = btFXLaserAccepted || !IsButtonBTFXLaser(button);
+			const bool accepted = nonArrowKeyAccepted || IsButtonArrowKey(button);
 			if (accepted && KeyConfig::Pressed(button))
 			{
 				return true;
@@ -126,12 +81,12 @@ namespace KeyConfig
 	}
 
 	template <class C>
-	bool AnyButtonDown(const C& buttons, StartRequiredForBTFXLaserYN startRequiredForBTFXLaser = StartRequiredForBTFXLaserYN::No)
+	bool AnyButtonDown(const C& buttons, NeedStartButtonHoldForNonArrowKeyYN needStartButtonHoldForNonArrowKey = NeedStartButtonHoldForNonArrowKeyYN::No)
 	{
-		const bool btFXLaserAccepted = !startRequiredForBTFXLaser || KeyConfig::Pressed(kStart); // Startボタン判定側は押しっぱなしかの判定なのでPressedで正しい
+		const bool nonArrowKeyAccepted = !needStartButtonHoldForNonArrowKey || KeyConfig::Pressed(kButtonStart); // Startボタン判定側は押しっぱなしかの判定なのでPressedで正しい
 		for (const auto& button : buttons)
 		{
-			const bool accepted = btFXLaserAccepted || !IsButtonBTFXLaser(button);
+			const bool accepted = nonArrowKeyAccepted || IsButtonArrowKey(button);
 			if (accepted && KeyConfig::Down(button))
 			{
 				return true;
