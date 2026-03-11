@@ -144,6 +144,9 @@
 		"ItemHideMouseCursor": "Hide Mouse Cursor",
 		"ItemUseNumpadAsArrowKeys": "Use Numpad as Arrow Keys (for Controllers with Numpad)"
 	},
+	"InputGate": {
+		"BulkDownloadConfirm": "There are {0} charts available for input.\nWould you like to download them all at once?"
+	},
 	"IR": {
 		"WaitingForLogin": "Waiting for login in browser...\n\nPress Back (Esc key) to cancel",
 		"ErrorMaintenance": "The server is under maintenance.\n{0}",
@@ -158,6 +161,8 @@
 		"ReloginFailed": "Relogin cancelled\nYou have been logged out from Internet Ranking",
 		"ScoreNotSentPlaybackSpeed": "IR score not recorded:\nsong speed has been changed",
 		"ScoreNotSentCMod": "IR score not recorded:\nHi-Speed Type \"C\" was used",
-		"ScoreNotSentPlaybackControl": "IR score not recorded:\npause or fast-forward was used"
+		"ScoreNotSentPlaybackControl": "IR score not recorded:\npause or fast-forward was used",
+		"ScoreNotSentTurn": "IR score not recorded:\nTurn option was used",
+		"ScoreNotSentAssist": "IR score not recorded:\nJudgment Mode option has been changed"
 	}
 }

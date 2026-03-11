@@ -35,7 +35,7 @@ void SelectMenuCourseItem::decide(const SelectMenuEventContext& context, [[maybe
 	// コースの全譜面が存在するかチェック
 	if (!m_courseInfo.isValid())
 	{
-		System::MessageBoxOK(I18n::Get(I18n::Play::ErrorSomeChartMissingInCourse), MessageBoxStyle::Error);
+		MessageBoxUtils::ShowOK(I18n::Get(I18n::Play::ErrorSomeChartMissingInCourse), MessageBoxStyle::Error);
 		return;
 	}
 
@@ -43,7 +43,7 @@ void SelectMenuCourseItem::decide(const SelectMenuEventContext& context, [[maybe
 	const FilePath firstChartPath = m_courseInfo.charts[0].absolutePath;
 	if (!FileSystem::Exists(firstChartPath))
 	{
-		System::MessageBoxOK(I18n::Get(I18n::Play::ErrorChartFileNotFound), MessageBoxStyle::Error);
+		MessageBoxUtils::ShowOK(I18n::Get(I18n::Play::ErrorChartFileNotFound), MessageBoxStyle::Error);
 		return;
 	}
 
@@ -58,7 +58,7 @@ void SelectMenuCourseItem::decideAutoPlay(const SelectMenuEventContext& context,
 	// コースの全譜面が存在するかチェック
 	if (!m_courseInfo.isValid())
 	{
-		System::MessageBoxOK(I18n::Get(I18n::Play::ErrorSomeChartMissingInCourse), MessageBoxStyle::Error);
+		MessageBoxUtils::ShowOK(I18n::Get(I18n::Play::ErrorSomeChartMissingInCourse), MessageBoxStyle::Error);
 		return;
 	}
 
@@ -66,7 +66,7 @@ void SelectMenuCourseItem::decideAutoPlay(const SelectMenuEventContext& context,
 	const FilePath firstChartPath = m_courseInfo.charts[0].absolutePath;
 	if (!FileSystem::Exists(firstChartPath))
 	{
-		System::MessageBoxOK(I18n::Get(I18n::Play::ErrorChartFileNotFound), MessageBoxStyle::Error);
+		MessageBoxUtils::ShowOK(I18n::Get(I18n::Play::ErrorChartFileNotFound), MessageBoxStyle::Error);
 		return;
 	}
 
@@ -158,8 +158,8 @@ void SelectMenuCourseItem::setCanvasParamsCenter(const SelectMenuEventContext& c
 				if (FileSystem::Exists(chart.absolutePath))
 				{
 					const kson::MetaChartData chartData = FsUtils::HasKsonExtension(chart.absolutePath)
-						? kson::LoadKsonMetaChartData(chart.absolutePath.narrow())
-						: kson::LoadKshMetaChartData(chart.absolutePath.narrow());
+						? kson::LoadKsonMetaChartData(chart.absolutePath.toUTF8())
+						: kson::LoadKshMetaChartData(chart.absolutePath.toUTF8());
 
 					if (chartData.error == kson::ErrorType::None)
 					{

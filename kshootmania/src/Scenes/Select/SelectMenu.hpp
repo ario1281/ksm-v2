@@ -36,6 +36,8 @@ struct SelectMenuEventContext
 	std::function<const Texture&(FilePathView)> fnGetIconTexture;
 	std::function<void()> fnMoveToNextSubDirSection;
 	std::function<void()> fnMoveToPrevSubDirSection;
+	std::function<void(int32)> fnChangeDifficulty;
+	std::function<void(int32, int32)> fnJumpToItemWithDifficulty;
 };
 
 class SelectMenu
@@ -103,10 +105,6 @@ private:
 
 	void playShakeDownTween();
 
-	void moveToNextSubDirSection();
-
-	void moveToPrevSubDirSection();
-
 	Array<FilePath> getSortedFolderPaths() const;
 
 	Optional<std::size_t> findFolderIndex(const Array<FilePath>& folderPaths, FilePathView targetFullPath) const;
@@ -151,6 +149,10 @@ public:
 	void refreshHighScoreDisplay();
 
 	void jumpToAlphabetItem(char32 letter);
+
+	void moveToNextSubDirSection();
+
+	void moveToPrevSubDirSection();
 
 	void jumpToNextAlphabet();
 
