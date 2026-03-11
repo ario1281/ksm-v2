@@ -356,11 +356,11 @@ void KSMMain()
 	if (testPlayArgs.has_value())
 	{
 		const auto chartData = FsUtils::HasKsonExtension(testPlayArgs->chartFilePath)
-			? kson::LoadKsonChartData(testPlayArgs->chartFilePath.narrow())
-			: kson::LoadKshChartData(testPlayArgs->chartFilePath.narrow());
+			? kson::LoadKsonChartData(testPlayArgs->chartFilePath.toUTF8())
+			: kson::LoadKshChartData(testPlayArgs->chartFilePath.toUTF8());
 		if (chartData.error != kson::ErrorType::None)
 		{
-			System::MessageBoxOK(I18n::Get(I18n::Play::ErrorChartLoadFailed), MessageBoxStyle::Error);
+			MessageBoxUtils::ShowOK(I18n::Get(I18n::Play::ErrorChartLoadFailed), MessageBoxStyle::Error);
 			return;
 		}
 	}
@@ -445,7 +445,7 @@ void Main()
 	}
 	catch (const Error& e)
 	{
-		System::MessageBoxOK(e.what(), MessageBoxStyle::Error);
+		MessageBoxUtils::ShowOK(e.what(), MessageBoxStyle::Error);
 		throw;
 	}
 }

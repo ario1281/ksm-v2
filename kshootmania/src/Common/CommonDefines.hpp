@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-inline constexpr StringView kAppVersion = U"v2.0.0-alpha6";
+inline constexpr StringView kAppVersion = U"v2.0.0-alpha7";
 
 enum DifficultyIdx : int32
 {
@@ -16,8 +16,8 @@ constexpr int32 kLevelMin = 1;
 constexpr int32 kLevelMax = 20;
 constexpr int32 kNumLevels = kLevelMax - kLevelMin + 1;
 
-inline constexpr StringView kKshExtension = U"ksh";
-inline constexpr StringView kKsonExtension = U"kson";
+inline constexpr StringView kKSHExtension = U"ksh";
+inline constexpr StringView kKSONExtension = U"kson";
 
 constexpr double kPastTimeSec = -100000.0;
 

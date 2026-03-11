@@ -385,6 +385,9 @@
     <ClCompile Include="src\Common\MathUtils.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
+    <ClCompile Include="src\Common\MessageBoxUtils.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
     <ClCompile Include="src\MusicGame\Audio\BGM.cpp">
       <Filter>Source Files\MusicGame\Audio</Filter>
     </ClCompile>
@@ -578,6 +581,9 @@
       <Filter>Source Files\Scenes\Select\MenuItem</Filter>
     </ClCompile>
     <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuLevelSectionItem.cpp">
+      <Filter>Source Files\Scenes\Select\MenuItem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenes\Select\MenuItem\SelectMenuLevelSongItem.cpp">
       <Filter>Source Files\Scenes\Select\MenuItem</Filter>
     </ClCompile>
     <ClCompile Include="src\Scenes\Result\ResultNewRecordPanel.cpp">
@@ -1058,6 +1064,9 @@
     <ClInclude Include="src\Common\MathUtils.hpp">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
+    <ClInclude Include="src\Common\MessageBoxUtils.hpp">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
     <ClInclude Include="src\MusicGame\GameDefines.hpp">
       <Filter>Header Files\MusicGame</Filter>
     </ClInclude>
@@ -1266,6 +1275,9 @@
       <Filter>Header Files\Scenes\Select\MenuItem</Filter>
     </ClInclude>
     <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuLevelSectionItem.hpp">
+      <Filter>Header Files\Scenes\Select\MenuItem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuLevelSongItem.hpp">
       <Filter>Header Files\Scenes\Select\MenuItem</Filter>
     </ClInclude>
     <ClInclude Include="src\Scenes\Select\MenuItem\SelectMenuFavFolderItem.hpp">

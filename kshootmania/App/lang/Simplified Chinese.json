@@ -144,6 +144,9 @@
 		"ItemHideMouseCursor": "隐藏鼠标光标",
 		"ItemUseNumpadAsArrowKeys": "使用数字键盘作为方向键 (用于带数字键盘的控制器)"
 	},
+	"InputGate": {
+		"BulkDownloadConfirm": "有{0}个可输入的谱面。\n是否一次性全部下载？"
+	},
 	"IR": {
 		"WaitingForLogin": "等待浏览器登录中…\n\n按Back键(Esc键)取消",
 		"ErrorMaintenance": "服务器维护中\n{0}",
@@ -158,6 +161,8 @@
 		"ReloginFailed": "已取消重新登录\n已从网络排行榜退出登录",
 		"ScoreNotSentPlaybackSpeed": "由于播放速度已更改，\n不纳入IR成绩统计",
 		"ScoreNotSentCMod": "由于使用了Hi-Speed类型\"C\"，\n不纳入IR成绩统计",
-		"ScoreNotSentPlaybackControl": "由于使用了暂停或快进，\n不纳入IR成绩统计"
+		"ScoreNotSentPlaybackControl": "由于使用了暂停或快进，\n不纳入IR成绩统计",
+		"ScoreNotSentTurn": "由于使用了Turn选项，\n不纳入IR成绩统计",
+		"ScoreNotSentAssist": "由于判定模式选项已更改，\n不纳入IR成绩统计"
 	}
 }
