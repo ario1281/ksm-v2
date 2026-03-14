@@ -32,11 +32,17 @@ namespace MusicGame::Camera
 			return;
 		}
 
+		// 回転数が0以下の場合は何もしない
+		if (spinEvent.v.count <= 0)
+		{
+			return;
+		}
+
 		// 回転開始
 		m_startPulse = currentPulse;
 		m_durationRelPulse = spinEvent.length;
 		m_direction = direction;
-		m_count = spinEvent.v.count;
+		m_spinCount = spinEvent.v.count;
 		m_alreadyInvokedEventPulses.insert(laserSlamPulse);
 	}
 
