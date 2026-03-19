@@ -65,7 +65,7 @@ namespace MusicGame::Camera
 			constexpr double kDuration = 675.0;
 			if (rate < 360.0 / kDuration)
 			{
-				absDegrees = Sin(rate / (360.0 / kDuration) * 0.75) / Sin(0.75) * (360.0 * m_count);
+				absDegrees = Sin(rate / (360.0 / kDuration) * 0.75) / Sin(0.75) * (360.0 * m_spinCount);
 			}
 			else if (rate < 440.0 / kDuration)
 			{
