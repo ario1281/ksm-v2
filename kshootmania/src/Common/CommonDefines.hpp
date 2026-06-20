@@ -18,6 +18,7 @@ constexpr int32 kNumLevels = kLevelMax - kLevelMin + 1;
 
 inline constexpr StringView kKSHExtension = U"ksh";
 inline constexpr StringView kKSONExtension = U"kson";
+inline constexpr StringView kKCOExtension = U"kco";
 
 constexpr double kPastTimeSec = -100000.0;
 

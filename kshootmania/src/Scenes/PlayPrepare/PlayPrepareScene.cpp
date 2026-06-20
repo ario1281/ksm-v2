@@ -51,11 +51,11 @@ namespace
 	kson::ChartData LoadChartData(const FilePathView filePath)
 	{
 		const auto extension = FileSystem::Extension(filePath);
-		if (extension == kKshExtension)
+		if (extension == kKSHExtension)
 		{
 			return kson::LoadKshChartData(filePath.narrow());
 		}
-		else if (extension == kKsonExtension)
+		else if (extension == kKSONExtension)
 		{
 			return kson::LoadKsonChartData(filePath.narrow());
 		}

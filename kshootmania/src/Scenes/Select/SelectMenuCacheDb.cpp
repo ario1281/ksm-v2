@@ -119,9 +119,9 @@ namespace
 		}
 
 		const String extension = FileSystem::Extension(path).lowercased();
-		return extension == U"ksh"
-			|| extension == U"kson"
-			|| extension == U"kco"
+		return extension == kKSHExtension
+			|| extension == kKSONExtension
+			|| extension == kKCOExtension
 			|| filename.lowercased() == U"foldername.csv"
 			|| filename.lowercased() == U"conf.ini";
 	}

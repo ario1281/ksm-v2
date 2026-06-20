@@ -4,37 +4,7 @@
 
 namespace
 {
-<<<<<<< HEAD
-	KscKey CreateKscKeyFromConfig()
-	{
-		return KscKey
-		{
-			.gaugeType = RuntimeConfig::GetGaugeType(),
-			.turnMode = RuntimeConfig::GetTurnMode(),
-			.playbackSpeed = RuntimeConfig::GetPlaybackSpeed(),
-			.btPlayMode = RuntimeConfig::GetJudgmentPlayModeBT(),
-			.fxPlayMode = RuntimeConfig::GetJudgmentPlayModeFX(),
-			.laserPlayMode = RuntimeConfig::GetJudgmentPlayModeLaser(),
-		};
-	}
-
-	kson::MetaChartData LoadMetaChartData(const FilePathView filePath)
-	{
-		const auto extension = FileSystem::Extension(filePath);
-		if (extension == kKshExtension)
-		{
-			return kson::LoadKshMetaChartData(filePath.narrow());
-		}
-		else if (extension == kKsonExtension)
-		{
-			return kson::LoadKsonMetaChartData(filePath.narrow());
-		}
-
-		return kson::MetaChartData();
-	}
-=======
 	constexpr char32_t kSearchTextSeparator = U'\n';
->>>>>>> upstream/master
 }
 
 FilePath SelectChartInfo::toFullPath(const std::string& u8Filename) const

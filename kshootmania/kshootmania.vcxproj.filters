@@ -1520,16 +1520,13 @@
     <ClInclude Include="ThirdParty\CoTaskLib\include\CoTaskLib\ScreenFade.hpp">
       <Filter>Header Files\ThirdParty\CoTaskLib</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="src\Scenes\CourseResult\CourseResultChartList.hpp">
       <Filter>Header Files\Scenes\CourseResult</Filter>
-=======
     <ClInclude Include="ThirdParty\stb\stb_image.h">
       <Filter>Header Files\ThirdParty\stb</Filter>
     </ClInclude>
     <ClInclude Include="src\Input\LaserInput\AnalogStickXYLaserInput.hpp">
       <Filter>Header Files\Input\LaserInput</Filter>
->>>>>>> upstream/master
     </ClInclude>
     <ClInclude Include="src\Scenes\CourseResult\CourseResultNewRecordPanel.hpp">
       <Filter>Header Files\Scenes\CourseResult</Filter>
