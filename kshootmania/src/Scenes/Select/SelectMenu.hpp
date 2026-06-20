@@ -1,17 +1,17 @@
 ﻿#pragma once
 #include "SelectFolderState.hpp"
+#include "SelectHighScoreCache.hpp"
 #include "UI/ArrayWithLinearMenu.hpp"
 #include "SelectDifficultyMenu.hpp"
 #include "SelectSongPreview.hpp"
 #include "ksmaudio/ksmaudio.hpp"
 #include "Course/CoursePlayState.hpp"
 
-struct HighScoreInfo;
-
 using PlaySeYN = YesNo<struct PlaySeYN_tag>;
 using RefreshSongPreviewYN = YesNo<struct RefreshSongPreviewYN_tag>;
 using SaveToConfigIniYN = YesNo<struct SaveToConfigIniYN_tag>;
 using SongPreviewOnlyYN = YesNo<struct SongPreviewOnlyYN_tag>;
+using ReloadFromDiskYN = YesNo<struct ReloadFromDiskYN_tag>;
 
 enum class SelectMenuShakeDirection
 {
@@ -32,12 +32,18 @@ struct SelectMenuEventContext
 	std::function<void(FilePath)> fnOpenFavoriteFolder;
 	std::function<void()> fnOpenCoursesFolder;
 	std::function<void()> fnCloseFolder;
-	std::function<const Texture&(FilePathView)> fnGetJacketTexture;
-	std::function<const Texture&(FilePathView)> fnGetIconTexture;
+	std::function<void()> fnExitSearch;
 	std::function<void()> fnMoveToNextSubDirSection;
 	std::function<void()> fnMoveToPrevSubDirSection;
 	std::function<void(int32)> fnChangeDifficulty;
 	std::function<void(int32, int32)> fnJumpToItemWithDifficulty;
+	std::function<void(StringView)> fnShowErrorDialog;
+
+	// 譜面のハイスコア情報を取得
+	std::function<HighScoreInfo(FilePathView)> fnGetHighScore;
+
+	// コースのハイスコア情報を取得
+	std::function<HighScoreInfo(FilePathView)> fnGetCourseHighScore;
 };
 
 class SelectMenu
@@ -53,21 +59,27 @@ private:
 
 	SelectFolderState m_folderState;
 
+	bool m_searchActive = false;
+
+	String m_searchQuery;
+
+	// 検索フィルタ有効時のカーソル保持先の譜面ファイルパス
+	Optional<FilePath> m_searchPreservedChartPath;
+
 	ArrayWithLinearMenu<std::unique_ptr<ISelectMenuItem>> m_menu;
 
 	SelectDifficultyMenu m_difficultyMenu;
 
 	SelectSongPreview m_songPreview;
 
+	// 譜面・コースのハイスコア情報のキャッシュ
+	SelectHighScoreCache m_highScoreCache;
+
 	const ksmaudio::Sample m_songSelectSe{"se/sel_m.wav"};
 
 	const ksmaudio::Sample m_difficultySelectSe{"se/sel_l.wav"};
 
 	const ksmaudio::Sample m_folderSelectSe{"se/sel_dir.wav"};
-
-	HashTable<String, Texture> m_jacketTextureCache;
-
-	HashTable<String, Texture> m_iconTextureCache;
 
 	bool openDirectory(FilePathView directoryPath, PlaySeYN playSe, RefreshSongPreviewYN refreshSongPreview = RefreshSongPreviewYN::Yes, SaveToConfigIniYN saveToConfigIni = SaveToConfigIniYN::Yes);
 
@@ -97,6 +109,8 @@ private:
 
 	void setCursorToItemByFullPath(FilePathView fullPath);
 
+	void resetSongInfoTextDisplayTimer();
+
 	void refreshContentCanvasParams();
 
 	void refreshSongPreview();
@@ -113,8 +127,14 @@ private:
 
 	void addOtherFolderItemsSimple();
 
+	void applySearchModeFilter();
+
 public:
-	explicit SelectMenu(const std::shared_ptr<noco::Canvas>& selectSceneCanvas, std::function<void(FilePathView, MusicGame::IsAutoPlayYN, const Optional<CoursePlayState>&)> fnMoveToPlayScene);
+	explicit SelectMenu(
+		const std::shared_ptr<noco::Canvas>& selectSceneCanvas,
+		std::function<void(FilePathView, MusicGame::IsAutoPlayYN, const Optional<CoursePlayState>&)> fnMoveToPlayScene,
+		std::function<void(StringView)> fnShowErrorDialog,
+		std::function<void()> fnExitSearchMode);
 
 	~SelectMenu(); // ヘッダではISelectMenuItemが不完全型なのでソースファイル側で定義
 
@@ -137,18 +157,21 @@ public:
 
 	void fadeOutSongPreviewForExit(Duration duration);
 
-	[[nodiscard]]
-	const Texture& getJacketTexture(FilePathView filePath);
+	void reloadCurrentDirectory(RefreshSongPreviewYN refreshSongPreview, ReloadFromDiskYN reloadFromDisk);
 
-	[[nodiscard]]
-	const Texture& getIconTexture(FilePathView filePath);
+	void forceReloadCurrentDirectory();
 
-	void reloadCurrentDirectory(RefreshSongPreviewYN refreshSongPreview = RefreshSongPreviewYN::No);
+	void clearHighScoreCache();
 
 	// ハイスコア表示を更新
 	void refreshHighScoreDisplay();
 
 	void jumpToAlphabetItem(char32 letter);
+
+	void setCursorByChartFilePath(FilePathView chartFilePath);
+
+	[[nodiscard]]
+	Optional<FilePath> currentChartFilePath() const;
 
 	void moveToNextSubDirSection();
 
@@ -177,4 +200,25 @@ public:
 
 	[[nodiscard]]
 	const SelectFolderState& folderState() const;
+
+	/// @brief 検索モードに入る
+	/// @param preservedChartPath カーソルを保持する譜面ファイルパス
+	void enterSearchMode(const Optional<FilePath>& preservedChartPath = none);
+
+	/// @brief 検索モードを抜ける
+	void exitSearchMode();
+
+	/// @brief 維持対象譜面パスを更新
+	/// @param chartPath カーソルを保持する譜面ファイルパス
+	void setSearchPreservedChartPath(const Optional<FilePath>& chartPath);
+
+	/// @brief 検索クエリを設定
+	/// @param query 検索クエリ
+	void setSearchQuery(StringView query);
+
+	[[nodiscard]]
+	bool isSearchActive() const;
+
+	[[nodiscard]]
+	const String& searchQuery() const;
 };

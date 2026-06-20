@@ -1,4 +1,7 @@
 {
+	"General": {
+		"ErrorBassInitFailed": "Failed to initialize BASS audio library.\nSpeakers might be disconnected or disabled.\n(BASS error code: {0})"
+	},
 	"Select": {
 		"Judgment": "Judgment/Display Settings",
 		"JudgmentBT": "BT Notes     : ",
@@ -38,12 +41,14 @@
 		"PlayStatsPlayCount": "Play count: ",
 		"PlayStatsClear": "  Clear   : ",
 		"PlayStatsFullCombo": "Full combo: ",
-		"PlayStatsPerfect": " Perfect  : "
+		"PlayStatsPerfect": " Perfect  : ",
+		"SearchCloseResult": "Close Search Results"
 	},
 	"Play": {
 		"ErrorChartFileNotFound": "Cannot find the chart file.",
 		"ErrorChartLoadFailed": "Failed to load the chart file.",
-		"ErrorSomeChartMissingInCourse": "Some charts in this course are missing."
+		"ErrorSomeChartMissingInCourse": "Some charts in this course are missing.",
+		"AutoSyncSaveConfirm": "Save the chart with the timing adjustment?\n(Offset timing: {0}ms)\n\nBefore: {1}ms → After: {2}ms"
 	},
 	"Result": {
 		"ScreenshotCopied": "Screenshot has been copied to clipboard.\nPress Ctrl+V on the post screen to attach the image.",
@@ -63,6 +68,8 @@
 		"BGDisplayModeShowNoLayer": "Show (Animation off)",
 		"BGDisplayModeShowLayer": "Show (Animation on)",
 		"MasterVolumePercent": "%",
+		"AudioBackendDefault": "Default (WASAPI preferred)",
+		"AudioBackendDirectSound": "DirectSound",
 		"VsyncOffWithFps": "Off ({0}fps)",
 		"VsyncOn": "On",
 		"JudgmentOn": "Judgement On",
@@ -121,6 +128,7 @@
 		"ItemAlwaysShowOtherFolders": "Always Show Other Folders",
 		"ItemHideAllFolder": "Hide \"All\" Folder",
 		"ItemMasterVolume": "Master Volume",
+		"ItemAudioBackend": "Audio Output Method (Applied after app restart)",
 		"ItemVsync": "VSync",
 		"ItemDefaultBTJudgmentMode": "BT Notes Default Judgment Mode",
 		"ItemDefaultFXJudgmentMode": "FX Notes Default Judgment Mode",
@@ -142,7 +150,10 @@
 		"ItemHispeedTypeOMod": "Hi-Speed Type 25 - 2000",
 		"ItemHispeedTypeCMod": "Hi-Speed Type C 25 - 2000",
 		"ItemHideMouseCursor": "Hide Mouse Cursor",
-		"ItemUseNumpadAsArrowKeys": "Use Numpad as Arrow Keys (for Controllers with Numpad)"
+		"ItemUseNumpadAsArrowKeys": "Use Numpad as Arrow Keys (for Controllers with Numpad)",
+		"ItemShowTranslitKana": "Show romanized song titles and artists containing kana",
+		"ItemShowTranslitHangul": "Show romanized song titles and artists containing hangul",
+		"ItemShowTranslitKanji": "Show romanized song titles and artists containing kanji"
 	},
 	"InputGate": {
 		"BulkDownloadConfirm": "There are {0} charts available for input.\nWould you like to download them all at once?"
@@ -162,6 +173,7 @@
 		"ScoreNotSentPlaybackSpeed": "IR score not recorded:\nsong speed has been changed",
 		"ScoreNotSentCMod": "IR score not recorded:\nHi-Speed Type \"C\" was used",
 		"ScoreNotSentPlaybackControl": "IR score not recorded:\npause or fast-forward was used",
+		"ScoreNotSentTimingAdjust": "IR score not recorded:\nAuto Sync or manual timing adjustment was used",
 		"ScoreNotSentTurn": "IR score not recorded:\nTurn option was used",
 		"ScoreNotSentAssist": "IR score not recorded:\nJudgment Mode option has been changed"
 	}

@@ -39,6 +39,7 @@
           "gridAnimationFPS": 10.0,
           "gridAnimationStartIndex": 0,
           "gridAnimationType": "None",
+          "hideIfTextureEmpty": false,
           "nineSliceBottomTiled": false,
           "nineSliceCenterTiled": false,
           "nineSliceEnabled": false,
@@ -61,6 +62,7 @@
             0.0
           ],
           "offsetAnimationType": "None",
+          "pixelShaderAssetName": "",
           "preserveAspect": true,
           "textureAddressMode": "Default",
           "textureAssetName": "",
@@ -129,6 +131,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -194,6 +197,7 @@
           "gridAnimationFPS": 10.0,
           "gridAnimationStartIndex": 0,
           "gridAnimationType": "None",
+          "hideIfTextureEmpty": false,
           "nineSliceBottomTiled": false,
           "nineSliceCenterTiled": false,
           "nineSliceEnabled": false,
@@ -216,10 +220,12 @@
             0.0
           ],
           "offsetAnimationType": "None",
+          "pixelShaderAssetName": "",
           "preserveAspect": true,
           "textureAddressMode": "Default",
           "textureAssetName": "",
           "textureFilePath": "imgs/jacket/nowprinting1.jpg",
+          "textureFilePath_paramRef": "jacketFilePath",
           "textureFilter": "Default",
           "textureGridCellSize": [
             32.0,
@@ -332,6 +338,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -489,6 +496,166 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
+          "styleState": "",
+          "transform": {
+            "color": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "hitTestAffected": true,
+            "pivot": [
+              0.5,
+              0.5
+            ],
+            "rotation": 0.0,
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "translate": [
+              0.0,
+              0.0
+            ]
+          },
+          "verticalScrollable": false,
+          "wheelScrollEnabled": true,
+          "zOrderInSiblings": 0
+        },
+        {
+          "activeSelf": true,
+          "children": [],
+          "childrenLayout": {
+            "horizontalAlign": "Left",
+            "padding": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "spacing": [
+              0.0,
+              0.0
+            ],
+            "type": "FlowLayout",
+            "verticalAlign": "Top"
+          },
+          "clippingEnabled": false,
+          "components": [
+            {
+              "addColor": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "blendMode": "Normal",
+              "color": [
+                0,
+                0,
+                0,
+                255
+              ],
+              "gridAnimationEndIndex": 0,
+              "gridAnimationFPS": 10.0,
+              "gridAnimationStartIndex": 0,
+              "gridAnimationType": "None",
+              "hideIfTextureEmpty": true,
+              "nineSliceBottomTiled": false,
+              "nineSliceCenterTiled": false,
+              "nineSliceEnabled": false,
+              "nineSliceFallback": true,
+              "nineSliceLeftTiled": false,
+              "nineSliceMargin": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "nineSliceRightTiled": false,
+              "nineSliceScale": [
+                1.0,
+                1.0
+              ],
+              "nineSliceTopTiled": false,
+              "offsetAnimationSpeed": [
+                0.0,
+                0.0
+              ],
+              "offsetAnimationType": "None",
+              "pixelShaderAssetName": "MonochromeAlpha",
+              "preserveAspect": true,
+              "textureAddressMode": "Default",
+              "textureAssetName": "",
+              "textureFilePath": "",
+              "textureFilePath_paramRef": "titleImgFilePath",
+              "textureFilter": "Default",
+              "textureGridCellSize": [
+                32.0,
+                32.0
+              ],
+              "textureGridCellTrim": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "textureGridColumns": 1,
+              "textureGridIndex": 0,
+              "textureGridRows": 1,
+              "textureOffset": [
+                0.0,
+                0.0
+              ],
+              "textureRegionMode": "Full",
+              "textureSize": [
+                100.0,
+                100.0
+              ],
+              "type": "Sprite"
+            }
+          ],
+          "decelerationRate": 0.2,
+          "dragScrollEnabled": true,
+          "hitPadding": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "horizontalScrollable": false,
+          "inheritChildrenHover": false,
+          "inheritChildrenPress": false,
+          "interactable": true,
+          "isHitTarget": true,
+          "name": "TitleImg",
+          "region": {
+            "anchorMax": [
+              0.5,
+              0.5
+            ],
+            "anchorMin": [
+              0.5,
+              0.5
+            ],
+            "posDelta": [
+              1.0,
+              -45.0
+            ],
+            "sizeDelta": [
+              672.0,
+              57.0
+            ],
+            "sizeDeltaPivot": [
+              0.5,
+              0.5
+            ],
+            "type": "AnchorRegion"
+          },
+          "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -643,6 +810,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -698,57 +866,165 @@
                 0
               ],
               "blendMode": "Normal",
-              "characterSet": "0123456789.xCmaO",
-              "characterSize": [
-                34.0,
-                42.0
-              ],
-              "characterSpacing": [
-                0.0,
-                0.0
-              ],
               "color": [
-                255,
-                255,
-                255,
+                0,
+                0,
+                0,
                 255
               ],
-              "horizontalAlign": "Left",
-              "horizontalOverflow": "Wrap",
-              "padding": [
+              "gridAnimationEndIndex": 0,
+              "gridAnimationFPS": 10.0,
+              "gridAnimationStartIndex": 0,
+              "gridAnimationType": "None",
+              "hideIfTextureEmpty": true,
+              "nineSliceBottomTiled": false,
+              "nineSliceCenterTiled": false,
+              "nineSliceEnabled": false,
+              "nineSliceFallback": true,
+              "nineSliceLeftTiled": false,
+              "nineSliceMargin": [
                 0.0,
                 0.0,
                 0.0,
                 0.0
               ],
+              "nineSliceRightTiled": false,
+              "nineSliceScale": [
+                1.0,
+                1.0
+              ],
+              "nineSliceTopTiled": false,
+              "offsetAnimationSpeed": [
+                0.0,
+                0.0
+              ],
+              "offsetAnimationType": "None",
+              "pixelShaderAssetName": "MonochromeAlpha",
               "preserveAspect": true,
-              "sizingMode": "AutoShrinkWidth",
-              "text": "15",
-              "text_paramRef": "levelNumber",
               "textureAddressMode": "Default",
               "textureAssetName": "",
-              "textureCellSize": [
-                20.0,
-                18.0
-              ],
-              "textureCellTrim": [
-                0.0,
-                0.0,
-                0.5,
-                0.5
-              ],
-              "textureCellTrimByCharacterJSON": "{}",
-              "textureFilePath": "imgs/num2.png",
+              "textureFilePath": "",
+              "textureFilePath_paramRef": "artistImgFilePath",
               "textureFilter": "Default",
+              "textureGridCellSize": [
+                32.0,
+                32.0
+              ],
+              "textureGridCellTrim": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
               "textureGridColumns": 1,
-              "textureGridRows": 16,
+              "textureGridIndex": 0,
+              "textureGridRows": 1,
               "textureOffset": [
                 0.0,
                 0.0
               ],
-              "type": "TextureFontLabel",
-              "verticalAlign": "Middle",
-              "verticalOverflow": "Overflow"
+              "textureRegionMode": "Full",
+              "textureSize": [
+                100.0,
+                100.0
+              ],
+              "type": "Sprite"
+            }
+          ],
+          "decelerationRate": 0.2,
+          "dragScrollEnabled": true,
+          "hitPadding": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "horizontalScrollable": false,
+          "inheritChildrenHover": false,
+          "inheritChildrenPress": false,
+          "interactable": true,
+          "isHitTarget": true,
+          "name": "ArtistImg",
+          "region": {
+            "anchorMax": [
+              0.5,
+              0.5
+            ],
+            "anchorMin": [
+              0.5,
+              0.5
+            ],
+            "posDelta": [
+              1.0,
+              13.0
+            ],
+            "sizeDelta": [
+              672.0,
+              40.0
+            ],
+            "sizeDeltaPivot": [
+              0.5,
+              0.5
+            ],
+            "type": "AnchorRegion"
+          },
+          "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
+          "styleState": "",
+          "transform": {
+            "color": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "hitTestAffected": true,
+            "pivot": [
+              0.5,
+              0.5
+            ],
+            "rotation": 0.0,
+            "scale": [
+              1.0,
+              1.0
+            ],
+            "translate": [
+              0.0,
+              0.0
+            ]
+          },
+          "verticalScrollable": false,
+          "wheelScrollEnabled": true,
+          "zOrderInSiblings": 0
+        },
+        {
+          "activeSelf": true,
+          "children": [],
+          "childrenLayout": {
+            "horizontalAlign": "Left",
+            "padding": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "spacing": [
+              0.0,
+              0.0
+            ],
+            "type": "FlowLayout",
+            "verticalAlign": "Top"
+          },
+          "clippingEnabled": false,
+          "components": [
+            {
+              "canvasPath": "ui/font/num2.noco",
+              "propagateEvents": true,
+              "serializedParamBindingModesJSON": "{\"text\":\"Normal\"}",
+              "serializedParamBindingsJSON": "{\"text\":\"levelNumber\"}",
+              "serializedParamsJSON": "{\"characterSize\":[34.0,42.0],\"characterSpacing\":[0.0,0.0],\"horizontalAlign\":\"Left\",\"horizontalOverflow\":\"Wrap\",\"preserveAspect\":true,\"sizingMode\":\"AutoShrinkWidth\",\"textureCellTrim\":[0.0,0.0,0.5,0.5],\"verticalAlign\":\"Middle\"}",
+              "tag": "",
+              "type": "SubCanvas"
             }
           ],
           "decelerationRate": 0.2,
@@ -789,6 +1065,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -837,64 +1114,13 @@
           "clippingEnabled": false,
           "components": [
             {
-              "addColor": [
-                0,
-                0,
-                0,
-                0
-              ],
-              "blendMode": "Normal",
-              "characterSet": "0123456789.xCmaO",
-              "characterSize": [
-                34.0,
-                42.0
-              ],
-              "characterSpacing": [
-                0.0,
-                0.0
-              ],
-              "color": [
-                255,
-                255,
-                255,
-                255
-              ],
-              "horizontalAlign": "Left",
-              "horizontalOverflow": "Wrap",
-              "padding": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "preserveAspect": true,
-              "sizingMode": "AutoShrinkWidth",
-              "text": "180",
-              "text_paramRef": "bpmNumber",
-              "textureAddressMode": "Default",
-              "textureAssetName": "",
-              "textureCellSize": [
-                20.0,
-                18.0
-              ],
-              "textureCellTrim": [
-                0.0,
-                0.0,
-                0.5,
-                0.5
-              ],
-              "textureCellTrimByCharacterJSON": "{}",
-              "textureFilePath": "imgs/num2.png",
-              "textureFilter": "Default",
-              "textureGridColumns": 1,
-              "textureGridRows": 16,
-              "textureOffset": [
-                0.0,
-                0.0
-              ],
-              "type": "TextureFontLabel",
-              "verticalAlign": "Middle",
-              "verticalOverflow": "Overflow"
+              "canvasPath": "ui/font/num2.noco",
+              "propagateEvents": true,
+              "serializedParamBindingModesJSON": "{\"text\":\"Normal\"}",
+              "serializedParamBindingsJSON": "{\"text\":\"bpmNumberText\"}",
+              "serializedParamsJSON": "{\"characterSize\":[34.0,42.0],\"characterSpacing\":[0.0,0.0],\"horizontalAlign\":\"Left\",\"horizontalOverflow\":\"Wrap\",\"preserveAspect\":true,\"sizingMode\":\"AutoShrinkWidth\",\"textureCellTrim\":[0.0,0.0,0.5,0.5],\"verticalAlign\":\"Middle\"}",
+              "tag": "",
+              "type": "SubCanvas"
             }
           ],
           "decelerationRate": 0.2,
@@ -935,6 +1161,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -1000,6 +1227,7 @@
               "gridAnimationFPS": 10.0,
               "gridAnimationStartIndex": 0,
               "gridAnimationType": "None",
+              "hideIfTextureEmpty": false,
               "nineSliceBottomTiled": false,
               "nineSliceCenterTiled": false,
               "nineSliceEnabled": false,
@@ -1022,6 +1250,7 @@
                 0.0
               ],
               "offsetAnimationType": "None",
+              "pixelShaderAssetName": "",
               "preserveAspect": false,
               "textureAddressMode": "Default",
               "textureAssetName": "",
@@ -1091,6 +1320,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -1154,6 +1384,7 @@
           "gridAnimationFPS": 10.0,
           "gridAnimationStartIndex": 0,
           "gridAnimationType": "None",
+          "hideIfTextureEmpty": false,
           "nineSliceBottomTiled": false,
           "nineSliceCenterTiled": false,
           "nineSliceEnabled": false,
@@ -1176,6 +1407,7 @@
             0.0
           ],
           "offsetAnimationType": "None",
+          "pixelShaderAssetName": "",
           "preserveAspect": false,
           "textureAddressMode": "Default",
           "textureAssetName": "",
@@ -1244,6 +1476,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -1295,64 +1528,13 @@
           "clippingEnabled": false,
           "components": [
             {
-              "addColor": [
-                0,
-                0,
-                0,
-                0
-              ],
-              "blendMode": "Normal",
-              "characterSet": "0123456789.xCmaO",
-              "characterSize": [
-                20.0,
-                18.0
-              ],
-              "characterSpacing": [
-                0.5,
-                0.0
-              ],
-              "color": [
-                255,
-                255,
-                255,
-                255
-              ],
-              "horizontalAlign": "Center",
-              "horizontalOverflow": "Wrap",
-              "padding": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "preserveAspect": true,
-              "sizingMode": "AutoShrinkWidth",
-              "text": "725",
-              "text_paramRef": "hispeedValue",
-              "textureAddressMode": "Default",
-              "textureAssetName": "",
-              "textureCellSize": [
-                20.0,
-                18.0
-              ],
-              "textureCellTrim": [
-                0.5,
-                0.5,
-                0.5,
-                0.5
-              ],
-              "textureCellTrimByCharacterJSON": "{}",
-              "textureFilePath": "imgs/num2.png",
-              "textureFilter": "Default",
-              "textureGridColumns": 1,
-              "textureGridRows": 16,
-              "textureOffset": [
-                0.0,
-                0.0
-              ],
-              "type": "TextureFontLabel",
-              "verticalAlign": "Middle",
-              "verticalOverflow": "Overflow"
+              "canvasPath": "ui/font/num2.noco",
+              "propagateEvents": true,
+              "serializedParamBindingModesJSON": "{\"text\":\"Normal\"}",
+              "serializedParamBindingsJSON": "{\"text\":\"hispeedValueText\"}",
+              "serializedParamsJSON": "{\"characterSize\":[20.0,18.0],\"characterSpacing\":[0.5,0.0],\"horizontalAlign\":\"Center\",\"horizontalOverflow\":\"Wrap\",\"preserveAspect\":true,\"sizingMode\":\"AutoShrinkWidth\",\"textureCellTrim\":[0.5,0.5,0.5,0.5],\"verticalAlign\":\"Middle\"}",
+              "tag": "",
+              "type": "SubCanvas"
             }
           ],
           "decelerationRate": 0.2,
@@ -1393,6 +1575,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -1441,64 +1624,13 @@
           "clippingEnabled": false,
           "components": [
             {
-              "addColor": [
-                0,
-                0,
-                0,
-                0
-              ],
-              "blendMode": "Normal",
-              "characterSet": "0123456789.xCmaO",
-              "characterSize": [
-                20.0,
-                18.0
-              ],
-              "characterSpacing": [
-                0.5,
-                0.0
-              ],
-              "color": [
-                255,
-                255,
-                255,
-                255
-              ],
-              "horizontalAlign": "Center",
-              "horizontalOverflow": "Wrap",
-              "padding": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-              ],
-              "preserveAspect": true,
-              "sizingMode": "AutoShrinkWidth",
-              "text": "725",
-              "text_paramRef": "hispeedValueEffective",
-              "textureAddressMode": "Default",
-              "textureAssetName": "",
-              "textureCellSize": [
-                20.0,
-                18.0
-              ],
-              "textureCellTrim": [
-                0.5,
-                0.5,
-                0.5,
-                0.5
-              ],
-              "textureCellTrimByCharacterJSON": "{}",
-              "textureFilePath": "imgs/num2.png",
-              "textureFilter": "Default",
-              "textureGridColumns": 1,
-              "textureGridRows": 16,
-              "textureOffset": [
-                20.0,
-                0.0
-              ],
-              "type": "TextureFontLabel",
-              "verticalAlign": "Middle",
-              "verticalOverflow": "Overflow"
+              "canvasPath": "ui/font/num2.noco",
+              "propagateEvents": true,
+              "serializedParamBindingModesJSON": "{\"text\":\"Normal\"}",
+              "serializedParamBindingsJSON": "{\"text\":\"hispeedValueTextEffective\"}",
+              "serializedParamsJSON": "{\"characterSize\":[20.0,18.0],\"characterSpacing\":[0.5,0.0],\"horizontalAlign\":\"Center\",\"horizontalOverflow\":\"Wrap\",\"preserveAspect\":true,\"sizingMode\":\"AutoShrinkWidth\",\"textureCellTrim\":[0.5,0.5,0.5,0.5],\"verticalAlign\":\"Middle\",\"textureOffset\":[20.0,0.0]}",
+              "tag": "",
+              "type": "SubCanvas"
             }
           ],
           "decelerationRate": 0.2,
@@ -1539,6 +1671,7 @@
             "type": "AnchorRegion"
           },
           "rubberBandScrollEnabled": true,
+          "scrollBarType": "Overlay",
           "styleState": "",
           "transform": {
             "color": [
@@ -1602,6 +1735,7 @@
           "gridAnimationFPS": 10.0,
           "gridAnimationStartIndex": 0,
           "gridAnimationType": "None",
+          "hideIfTextureEmpty": false,
           "nineSliceBottomTiled": false,
           "nineSliceCenterTiled": false,
           "nineSliceEnabled": false,
@@ -1624,6 +1758,7 @@
             0.0
           ],
           "offsetAnimationType": "None",
+          "pixelShaderAssetName": "",
           "preserveAspect": false,
           "textureAddressMode": "Default",
           "textureAssetName": "",
@@ -1678,7 +1813,7 @@
           1.0
         ],
         "posDelta": [
-          -0.0,
+          0.0,
           0.0
         ],
         "sizeDelta": [
@@ -1692,6 +1827,7 @@
         "type": "AnchorRegion"
       },
       "rubberBandScrollEnabled": true,
+      "scrollBarType": "Overlay",
       "styleState": "",
       "transform": {
         "color": [
@@ -1741,35 +1877,47 @@
       "type": "String",
       "value": "artist"
     },
-    "bpmNumber": {
+    "artistImgFilePath": {
+      "type": "String",
+      "value": ""
+    },
+    "bpmNumberText": {
       "type": "String",
       "value": "180"
     },
     "difficultyIndex": {
-      "type": "Number",
-      "value": 2.0
+      "type": "Int",
+      "value": 2
     },
-    "hispeedValue": {
+    "hispeedValueText": {
       "type": "String",
       "value": "725"
     },
-    "hispeedValueEffective": {
+    "hispeedValueTextEffective": {
       "type": "String",
       "value": "725"
+    },
+    "jacketFilePath": {
+      "type": "String",
+      "value": ""
     },
     "levelNumber": {
-      "type": "String",
-      "value": "15"
+      "type": "Int",
+      "value": 15
     },
     "title": {
       "type": "String",
       "value": "title"
+    },
+    "titleImgFilePath": {
+      "type": "String",
+      "value": ""
     }
   },
   "referenceSize": [
     640.0,
     480.0
   ],
-  "serializedVersion": 5,
-  "version": "0.3.0-beta1"
+  "serializedVersion": 9,
+  "version": "0.4.1"
 }

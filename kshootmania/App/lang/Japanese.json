@@ -1,4 +1,7 @@
 {
+	"General": {
+		"ErrorBassInitFailed": "BASS音声ライブラリの初期化に失敗しました。\nスピーカーが接続されていないか、無効になっている可能性があります。\n(BASSエラーコード: {0})"
+	},
 	"Select": {
 		"Judgment": "判定/表示の設定",
 		"JudgmentBT": "BT Notes     : ",
@@ -38,12 +41,14 @@
 		"PlayStatsPlayCount": "PLAYCOUNT: ",
 		"PlayStatsClear": "  CLEAR  : ",
 		"PlayStatsFullCombo": "FULLCOMBO: ",
-		"PlayStatsPerfect": " PERFECT : "
+		"PlayStatsPerfect": " PERFECT : ",
+		"SearchCloseResult": "検索結果を閉じる"
 	},
 	"Play": {
 		"ErrorChartFileNotFound": "指定された譜面ファイルが見つかりません。",
 		"ErrorChartLoadFailed": "譜面ファイルの読み込みに失敗しました。",
-		"ErrorSomeChartMissingInCourse": "指定された譜面ファイルが見つかりません。"
+		"ErrorSomeChartMissingInCourse": "指定された譜面ファイルが見つかりません。",
+		"AutoSyncSaveConfirm": "曲のタイミング修正を譜面ファイルに保存しますか?\n(曲のオフセットのずれ: {0}ms)\n\n変更前: {1}ms → 変更後: {2}ms"
 	},
 	"Result": {
 		"ScreenshotCopied": "スクリーンショットをクリップボードにコピーしました。\n投稿画面でCtrl+Vを押すと画像を添付できます。",
@@ -63,6 +68,8 @@
 		"BGDisplayModeShowNoLayer": "表示 (アニメーションなし)",
 		"BGDisplayModeShowLayer": "表示 (アニメーションあり)",
 		"MasterVolumePercent": "%",
+		"AudioBackendDefault": "デフォルト(WASAPI優先)",
+		"AudioBackendDirectSound": "DirectSound",
 		"VsyncOffWithFps": "無効 ({0}fps)",
 		"VsyncOn": "有効",
 		"JudgmentOn": "ON (表示あり・判定あり)",
@@ -121,6 +128,7 @@
 		"ItemAlwaysShowOtherFolders": "他フォルダを常に表示",
 		"ItemHideAllFolder": "\"All\"フォルダを非表示化",
 		"ItemMasterVolume": "マスター音量",
+		"ItemAudioBackend": "オーディオ出力方式(アプリ再起動後に反映)",
 		"ItemVsync": "垂直同期",
 		"ItemDefaultBTJudgmentMode": "BTノーツのデフォルト判定モード",
 		"ItemDefaultFXJudgmentMode": "FXノーツのデフォルト判定モード",
@@ -142,7 +150,10 @@
 		"ItemHispeedTypeOMod": "ハイスピード 25 - 2000",
 		"ItemHispeedTypeCMod": "ハイスピード C 25 - 2000",
 		"ItemHideMouseCursor": "マウスカーソルを非表示化",
-		"ItemUseNumpadAsArrowKeys": "テンキーを方向キーとして使用(テンキー付き専用コントローラー向け)"
+		"ItemUseNumpadAsArrowKeys": "テンキーを方向キーとして使用(テンキー付き専用コントローラー向け)",
+		"ItemShowTranslitKana": "かなを含む曲名・アーティスト名は英字表記を表示",
+		"ItemShowTranslitHangul": "ハングルを含む曲名・アーティスト名は英字表記を表示",
+		"ItemShowTranslitKanji": "漢字を含む曲名・アーティスト名は英字表記を表示"
 	},
 	"InputGate": {
 		"BulkDownloadConfirm": "インプット可能な譜面が{0}件あります。\n一括でダウンロードしますか？"
@@ -162,6 +173,7 @@
 		"ScoreNotSentPlaybackSpeed": "再生速度が変更されているため、\nIRのスコア集計対象外",
 		"ScoreNotSentCMod": "ハイスピードの種類「C」が使用されたため、\nIRのスコア集計対象外",
 		"ScoreNotSentPlaybackControl": "一時停止または早送りが使用されたため、\nIRのスコア集計対象外",
+		"ScoreNotSentTimingAdjust": "AUTO SYNCまたは手動タイミング調整が使用されたため、\nIRのスコア集計対象外",
 		"ScoreNotSentTurn": "Turnオプションが使用されたため、\nIRのスコア集計対象外",
 		"ScoreNotSentAssist": "判定モードオプションが変更されているため、\nIRのスコア集計対象外"
 	}

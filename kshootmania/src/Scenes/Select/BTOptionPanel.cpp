@@ -35,7 +35,7 @@ namespace
 	enum class BTCMenuItem : int32
 	{
 		kAssistTick = 0,
-		// kAutoSync, // TODO: 未実装
+		kAutoSync,
 		kFastSlow,
 		kNoteSkin,
 		kMovie,
@@ -53,7 +53,6 @@ namespace
 	// 再生速度の範囲
 	constexpr int32 kPlaybackSpeedMin = 10; // 10%
 	constexpr int32 kPlaybackSpeedMax = 300; // 300%
-	constexpr int32 kPlaybackSpeedDefault = 100; // 100%
 	constexpr int32 kPlaybackSpeedStep = 5; // 5%刻み
 
 	int32 CursorMin(HispeedType hispeedType)
@@ -142,7 +141,7 @@ namespace
 		}
 	}
 
-	/*StringView AutoSyncModeToI18nKey(AutoSyncMode autoSync)
+	StringView AutoSyncModeToI18nKey(AutoSyncMode autoSync)
 	{
 		switch (autoSync)
 		{
@@ -152,7 +151,7 @@ namespace
 		case AutoSyncMode::kHigh: return I18n::Get(I18n::Select::AutoSyncOnHigh);
 		default: return U"";
 		}
-	}*/
+	}
 
 	StringView FastSlowModeToI18nKey(FastSlowMode display)
 	{
@@ -302,14 +301,14 @@ BTOptionPanel::BTOptionPanel(std::shared_ptr<noco::Canvas> canvas)
 		.enumCount = static_cast<int32>(AssistTickMode::kCount),
 		.cyclic = IsCyclicMenuYN::No,
 	})
-	/*, m_autoSync(LinearMenu::CreateInfoWithEnumCount{
+	, m_autoSync(LinearMenu::CreateInfoWithEnumCount{
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Horizontal,
 			.buttonFlags = CursorButtonFlags::kArrowOrLaser,
 		},
 		.enumCount = static_cast<int32>(AutoSyncMode::kCount),
 		.cyclic = IsCyclicMenuYN::No,
-	})*/
+	})
 	, m_fastSlow(LinearMenu::CreateInfoWithEnumCount{
 		.cursorInputCreateInfo = {
 			.type = CursorInput::Type::Horizontal,
@@ -439,7 +438,7 @@ String BTOptionPanel::generateBTBMenuText() const
 String BTOptionPanel::generateBTCMenuText() const
 {
 	const auto assistTick = m_assistTick.cursorAs<AssistTickMode>();
-	// const auto autoSync = m_autoSync.cursorAs<AutoSyncMode>();
+	const auto autoSync = m_autoSync.cursorAs<AutoSyncMode>();
 	const auto fastSlow = m_fastSlow.cursorAs<FastSlowMode>();
 	const auto noteSkin = m_noteSkin.cursorAs<NoteSkinType>();
 	const auto movie = m_movie.cursorAs<MovieMode>();
@@ -449,8 +448,8 @@ String BTOptionPanel::generateBTCMenuText() const
 	String text = U"";
 	text += FormatMenuLine(I18n::Get(I18n::Select::AssistTick), AssistTickModeToI18nKey(assistTick), currentItem == BTCMenuItem::kAssistTick, m_assistTick.cursor(), 0, static_cast<int32>(AssistTickMode::kCount) - 1);
 	text += U"\n";
-	/*text += FormatMenuLine(I18n::Get(I18n::Select::AutoSync), AutoSyncModeToI18nKey(autoSync), currentItem == BTCMenuItem::kAutoSync, m_autoSync.cursor(), 0, static_cast<int32>(AutoSyncMode::kCount) - 1);
-	text += U"\n";*/
+	text += FormatMenuLine(I18n::Get(I18n::Select::AutoSync), AutoSyncModeToI18nKey(autoSync), currentItem == BTCMenuItem::kAutoSync, m_autoSync.cursor(), 0, static_cast<int32>(AutoSyncMode::kCount) - 1);
+	text += U"\n";
 	text += FormatMenuLine(I18n::Get(I18n::Select::FastSlow), FastSlowModeToI18nKey(fastSlow), currentItem == BTCMenuItem::kFastSlow, m_fastSlow.cursor(), 0, static_cast<int32>(FastSlowMode::kCount) - 1);
 	text += U"\n";
 	text += FormatMenuLine(I18n::Get(I18n::Select::NoteSkin), NoteSkinTypeToI18nKey(noteSkin), currentItem == BTCMenuItem::kNoteSkin, m_noteSkin.cursor(), 0, static_cast<int32>(NoteSkinType::kCount) - 1);
@@ -581,11 +580,11 @@ bool BTOptionPanel::update(double currentChartStdBPM)
 				m_assistTick.update();
 				valueChanged = m_assistTick.deltaCursor() != 0;
 			}
-			/*else if (currentItem == BTCMenuItem::kAutoSync)
+			else if (currentItem == BTCMenuItem::kAutoSync)
 			{
 				m_autoSync.update();
 				valueChanged = m_autoSync.deltaCursor() != 0;
-			}*/
+			}
 			else if (currentItem == BTCMenuItem::kFastSlow)
 			{
 				m_fastSlow.update();
@@ -693,6 +692,15 @@ bool BTOptionPanel::isVisible() const
 	return m_isVisible;
 }
 
+void BTOptionPanel::hide()
+{
+	m_isVisible = false;
+	m_canvas->setParamValue(U"overlay_btOptionPanelVisible_A", false);
+	m_canvas->setParamValue(U"overlay_btOptionPanelVisible_B", false);
+	m_canvas->setParamValue(U"overlay_btOptionPanelVisible_C", false);
+	m_canvas->setParamValue(U"overlay_btOptionPanelVisible_D", false);
+}
+
 void BTOptionPanel::loadFromConfigIni()
 {
 
@@ -709,7 +717,7 @@ void BTOptionPanel::loadFromConfigIni()
 	// BT-Cメニューの設定
 	m_assistTick.setCursor(ConfigIni::GetInt(ConfigIni::Key::kAssistTick, static_cast<int32>(AssistTickMode::kOff)));
 
-	// TODO: AutoSync設定を実装
+	m_autoSync.setCursor(ConfigIni::GetInt(ConfigIni::Key::kAutoSync, static_cast<int32>(AutoSyncMode::kOff)));
 	m_fastSlow.setCursor(ConfigIni::GetInt(ConfigIni::Key::kShowFastSlow, static_cast<int32>(FastSlowMode::kHide)));
 
 	// noteskinは文字列として保存される
@@ -756,7 +764,7 @@ void BTOptionPanel::saveToConfigIni()
 	// BT-Cメニューの設定
 	ConfigIni::SetInt(ConfigIni::Key::kAssistTick, m_assistTick.cursor());
 
-	// TODO: AutoSync設定を実装
+	ConfigIni::SetInt(ConfigIni::Key::kAutoSync, m_autoSync.cursor());
 	ConfigIni::SetInt(ConfigIni::Key::kShowFastSlow, m_fastSlow.cursor());
 
 	// noteskinは文字列として保存

@@ -2,6 +2,7 @@
 #include "NoteGraphicsUtils.hpp"
 #include "MusicGame/Graphics/GraphicsDefines.hpp"
 #include "MusicGame/Camera/CameraMath.hpp"
+#include "Graphics/ImageUtils.hpp"
 
 namespace MusicGame::Graphics
 {
@@ -19,9 +20,18 @@ namespace MusicGame::Graphics
 		constexpr double kLongNoteSourceYPressed2 = 9.0;
 		constexpr double kLongNoteSourceYNotPressed = 10.0;
 
+		constexpr double kLongNoteStartTextureY = 1.0;
+		constexpr int32 kLongNoteStartTextureHeight = 7;
+
 		double PressedLongNoteSourceY(double currentTimeSec)
 		{
 			return (MathUtils::WrappedFmod(currentTimeSec, 0.1) < 0.05) ? kLongNoteSourceYPressed1 : kLongNoteSourceYPressed2;
+		}
+
+		Texture CreateLongNoteStartTexture(StringView filename)
+		{
+			const Image source{ FileSystem::PathAppend(FsUtils::GetResourcePath(U"imgs"), filename) };
+			return Texture{ ImageUtils::ReplaceBlackWithTransparent(source.clipped(0, static_cast<int32>(kLongNoteStartTextureY), source.width(), kLongNoteStartTextureHeight)) };
 		}
 	}
 
@@ -126,14 +136,10 @@ namespace MusicGame::Graphics
 
 				const int32 positionEndY = note.length == 0 ? positionStartY : highwayScrollContext.getPositionY(y + note.length);
 
-				// scroll_speedが負の場合、始点と終点が逆転する可能性があるため両方チェック
-				const int32 minY = Min(positionStartY, positionEndY);
-				const int32 maxY = Max(positionStartY, positionEndY);
-
 				// ノーツ全体が描画範囲外の場合はスキップ
-				if (maxY < 0 || minY >= kHighwayTextureSize.y)
+				if (!highwayScrollContext.isPulseRangeInDrawRange(y, y + note.length))
 				{
-					if (!hasNegativeScrollSpeed && maxY < 0)
+					if (!hasNegativeScrollSpeed && Max(positionStartY, positionEndY) < 0)
 					{
 						// scroll_speedに負の値がなく、ノーツ全体が上にある場合はループを抜ける
 						break;
@@ -183,7 +189,6 @@ namespace MusicGame::Graphics
 						// 現在判定対象でないロングノーツ
 						sourceY = kLongNoteSourceYDefault;
 					}
-					// TODO: 始点テクスチャの描画
 					const Texture& sourceTexture = isBT ? m_longBTNoteTexture : m_longFXNoteTexture;
 					const int32 width = isBT ? 40 : 82;
 					// scroll_speedが負の場合、positionStartYとpositionEndYが逆転するため、小さい方を使用
@@ -191,6 +196,15 @@ namespace MusicGame::Graphics
 					sourceTexture(width * i, sourceY + kOnePixelTextureSourceOffset, width, kOnePixelTextureSourceSize)
 						.resized(width, absHeight)
 						.draw(position);
+
+					// 始点テクスチャの描画
+					const int32 startTextureY = height >= 0
+						? positionStartY - kLongNoteStartTextureHeight
+						: positionStartY;
+					const Vec2 startPosition = offsetPosition + Vec2::Right(centerSplitShiftX) + Vec2::Down(startTextureY);
+					const Texture& startTexture = isBT ? m_longBTNoteStartTexture : m_longFXNoteStartTexture;
+					startTexture(width * i, 0, width, kLongNoteStartTextureHeight)
+						.draw(startPosition);
 				}
 			}
 		}
@@ -213,6 +227,7 @@ namespace MusicGame::Graphics
 				.sourceSize = { 40, 14 },
 			}))
 		, m_longBTNoteTexture(TextureAsset(kLongBTNoteTextureFilename))
+		, m_longBTNoteStartTexture(CreateLongNoteStartTexture(kLongBTNoteTextureFilename))
 		, m_chipFXNoteTexture(NoteGraphicsUtils::ApplyAlphaToNoteTexture(TextureAsset(kChipFXNoteTextureFilename),
 			{
 				.column = kNumTextureColumnsMainSub,
@@ -224,6 +239,7 @@ namespace MusicGame::Graphics
 				.sourceSize = { 82, 14 },
 			}))
 		, m_longFXNoteTexture(TextureAsset(kLongFXNoteTextureFilename))
+		, m_longFXNoteStartTexture(CreateLongNoteStartTexture(kLongFXNoteTextureFilename))
 	{
 	}
 

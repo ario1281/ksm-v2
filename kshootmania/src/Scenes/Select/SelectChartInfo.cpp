@@ -1,12 +1,10 @@
 ﻿#include "SelectChartInfo.hpp"
-#include "HighScore/KscIO.hpp"
-#include "HighScore/KscKey.hpp"
 #include "Ini/ConfigIni.hpp"
 #include "kson/IO/KshIO.hpp"
-#include "RuntimeConfig.hpp"
 
 namespace
 {
+<<<<<<< HEAD
 	KscKey CreateKscKeyFromConfig()
 	{
 		return KscKey
@@ -34,6 +32,9 @@ namespace
 
 		return kson::MetaChartData();
 	}
+=======
+	constexpr char32_t kSearchTextSeparator = U'\n';
+>>>>>>> upstream/master
 }
 
 FilePath SelectChartInfo::toFullPath(const std::string& u8Filename) const
@@ -47,8 +48,29 @@ SelectChartInfo::SelectChartInfo(FilePathView chartFilePath)
 		? kson::LoadKsonMetaChartData(chartFilePath.toUTF8())
 		: kson::LoadKshMetaChartData(chartFilePath.toUTF8()))
 	, m_folderConfIni(FolderConfIni::Load(chartFilePath))
+	{
+		// 検索用文字列をあらかじめ用意
+		const String songFolderName = FsUtils::DirectoryNameByDirectoryPath(FileSystem::ParentPath(chartFilePath));
+		m_joinedTextForSearch = (
+			Unicode::FromUTF8(m_chartData.meta.title) + kSearchTextSeparator +
+			Unicode::FromUTF8(m_chartData.meta.titleTranslit) + kSearchTextSeparator +
+			Unicode::FromUTF8(m_chartData.meta.artist) + kSearchTextSeparator +
+			Unicode::FromUTF8(m_chartData.meta.artistTranslit) + kSearchTextSeparator +
+			songFolderName).lowercased();
+	}
+
+SelectChartInfo::SelectChartInfo(FilePathView chartFilePath, const kson::MetaChartData& chartData, const FolderConfIni& folderConfIni)
+	: m_chartFilePath(chartFilePath)
+	, m_chartData(chartData)
+	, m_folderConfIni(folderConfIni)
 {
-	KscIO::ReadAllHighScoreInfo(chartFilePath, &m_highScoreInfoMap);
+	const String songFolderName = FsUtils::DirectoryNameByDirectoryPath(FileSystem::ParentPath(chartFilePath));
+	m_joinedTextForSearch = (
+		Unicode::FromUTF8(m_chartData.meta.title) + kSearchTextSeparator +
+		Unicode::FromUTF8(m_chartData.meta.titleTranslit) + kSearchTextSeparator +
+		Unicode::FromUTF8(m_chartData.meta.artist) + kSearchTextSeparator +
+		Unicode::FromUTF8(m_chartData.meta.artistTranslit) + kSearchTextSeparator +
+		songFolderName).lowercased();
 }
 
 String SelectChartInfo::title() const
@@ -56,14 +78,42 @@ String SelectChartInfo::title() const
 	return Unicode::FromUTF8(m_chartData.meta.title);
 }
 
+String SelectChartInfo::titleTranslit() const
+{
+	return Unicode::FromUTF8(m_chartData.meta.titleTranslit);
+}
+
 String SelectChartInfo::artist() const
 {
 	return Unicode::FromUTF8(m_chartData.meta.artist);
 }
 
+String SelectChartInfo::artistTranslit() const
+{
+	return Unicode::FromUTF8(m_chartData.meta.artistTranslit);
+}
+
+FilePath SelectChartInfo::titleImgFilePath() const
+{
+	if (m_chartData.meta.titleImgFilename.empty())
+	{
+		return FilePath{};
+	}
+	return toFullPath(m_chartData.meta.titleImgFilename);
+}
+
+FilePath SelectChartInfo::artistImgFilePath() const
+{
+	if (m_chartData.meta.artistImgFilename.empty())
+	{
+		return FilePath{};
+	}
+	return toFullPath(m_chartData.meta.artistImgFilename);
+}
+
 FilePath SelectChartInfo::jacketFilePath() const
 {
-	return toFullPath(m_chartData.meta.jacketFilename);
+	return FsUtils::ResolveJacketPath(FileSystem::ParentPath(m_chartFilePath), Unicode::FromUTF8(m_chartData.meta.jacketFilename));
 }
 
 String SelectChartInfo::jacketAuthor() const
@@ -148,22 +198,12 @@ double SelectChartInfo::previewBGMVolume() const
 
 FilePath SelectChartInfo::iconFilePath() const
 {
-	return toFullPath(m_chartData.meta.iconFilename);
+	return FsUtils::ResolveIconPath(FileSystem::ParentPath(m_chartFilePath), Unicode::FromUTF8(m_chartData.meta.iconFilename));
 }
 
 String SelectChartInfo::information() const
 {
 	return Unicode::FromUTF8(m_chartData.meta.information);
-}
-
-HighScoreInfo SelectChartInfo::highScoreInfo() const
-{
-	const String key = CreateKscKeyFromConfig().toStringWithoutGaugeType();
-	if (auto it = m_highScoreInfoMap.find(key); it != m_highScoreInfoMap.end())
-	{
-		return it->second;
-	}
-	return HighScoreInfo{};
 }
 
 bool SelectChartInfo::hasError() const
@@ -174,4 +214,9 @@ bool SelectChartInfo::hasError() const
 String SelectChartInfo::errorString() const
 {
 	return Unicode::FromUTF8(kson::GetErrorString(m_chartData.error));
+}
+
+StringView SelectChartInfo::joinedTextForSearch() const
+{
+	return m_joinedTextForSearch;
 }

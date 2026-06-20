@@ -1,4 +1,7 @@
 {
+	"General": {
+		"ErrorBassInitFailed": "BASS音频库初始化失败。\n音响设备可能没有正常接入。\n(BASS错误代码: {0})"
+	},
 	"Select": {
 		"Judgment": "判定/显示 设定",
 		"JudgmentBT": "BT 音符     : ",
@@ -38,12 +41,14 @@
 		"PlayStatsPlayCount": "PLAYCOUNT: ",
 		"PlayStatsClear": "  CLEAR  : ",
 		"PlayStatsFullCombo": "FULLCOMBO: ",
-		"PlayStatsPerfect": " PERFECT : "
+		"PlayStatsPerfect": " PERFECT : ",
+		"SearchCloseResult": "关闭搜索结果"
 	},
 	"Play": {
 		"ErrorChartFileNotFound": "找不到谱面文件。",
 		"ErrorChartLoadFailed": "谱面文件加载失败。",
-		"ErrorSomeChartMissingInCourse": "此连曲中缺少部分谱面。"
+		"ErrorSomeChartMissingInCourse": "此连曲中缺少部分谱面。",
+		"AutoSyncSaveConfirm": "保存时间调整后的谱面\n(时间偏移量: {0}ms)\n\n变更前: {1}ms → 变更后: {2}ms"
 	},
 	"Result": {
 		"ScreenshotCopied": "截图已复制到剪贴板。\n在发布页面按Ctrl+V即可附加图片。",
@@ -63,6 +68,8 @@
 		"BGDisplayModeShowNoLayer": "显示 (关闭特效)",
 		"BGDisplayModeShowLayer": "显示 (打开特效)",
 		"MasterVolumePercent": "%",
+		"AudioBackendDefault": "默认 (WASAPI 优先)",
+		"AudioBackendDirectSound": "DirectSound",
 		"VsyncOffWithFps": "关 ({0}fps)",
 		"VsyncOn": "开",
 		"JudgmentOn": "判定开",
@@ -121,6 +128,7 @@
 		"ItemAlwaysShowOtherFolders": "始终显示其他文件夹",
 		"ItemHideAllFolder": "隐藏\"All\"文件夹",
 		"ItemMasterVolume": "主音量",
+		"ItemAudioBackend": "音频输出方式 (重启后生效)",
 		"ItemVsync": "垂直同步",
 		"ItemDefaultBTJudgmentMode": "BT 音符默认判定模式",
 		"ItemDefaultFXJudgmentMode": "FX 音符默认判定模式",
@@ -142,7 +150,10 @@
 		"ItemHispeedTypeOMod": "Hi-Speed 25 - 2000",
 		"ItemHispeedTypeCMod": "Hi-Speed C 25 - 2000",
 		"ItemHideMouseCursor": "隐藏鼠标光标",
-		"ItemUseNumpadAsArrowKeys": "使用数字键盘作为方向键 (用于带数字键盘的控制器)"
+		"ItemUseNumpadAsArrowKeys": "使用数字键盘作为方向键 (用于带数字键盘的控制器)",
+		"ItemShowTranslitKana": "含假名的曲名・艺术家名显示英字表记",
+		"ItemShowTranslitHangul": "含谚文的曲名・艺术家名显示英字表记",
+		"ItemShowTranslitKanji": "含汉字的曲名・艺术家名显示英字表记"
 	},
 	"InputGate": {
 		"BulkDownloadConfirm": "有{0}个可输入的谱面。\n是否一次性全部下载？"
@@ -162,6 +173,7 @@
 		"ScoreNotSentPlaybackSpeed": "由于播放速度已更改，\n不纳入IR成绩统计",
 		"ScoreNotSentCMod": "由于使用了Hi-Speed类型\"C\"，\n不纳入IR成绩统计",
 		"ScoreNotSentPlaybackControl": "由于使用了暂停或快进，\n不纳入IR成绩统计",
+		"ScoreNotSentTimingAdjust": "由于使用了Auto Sync或手动时间调整，\n不纳入IR成绩统计",
 		"ScoreNotSentTurn": "由于使用了Turn选项，\n不纳入IR成绩统计",
 		"ScoreNotSentAssist": "由于判定模式选项已更改，\n不纳入IR成绩统计"
 	}

@@ -36,12 +36,19 @@ namespace I18n
 	/// @brief カテゴリ名
 	enum class Category
 	{
+		General,
 		Select,
 		Play,
 		Result,
 		Option,
 		IR,
 		InputGate,
+	};
+
+	/// @brief 共通/起動時テキストのキー名
+	enum class General
+	{
+		ErrorBassInitFailed,
 	};
 
 	/// @brief 選曲画面テキストのキー名
@@ -86,6 +93,7 @@ namespace I18n
 		PlayStatsClear,
 		PlayStatsFullCombo,
 		PlayStatsPerfect,
+		SearchCloseResult,
 	};
 
 	/// @brief プレイ画面テキストのキー名
@@ -94,6 +102,7 @@ namespace I18n
 		ErrorChartFileNotFound,
 		ErrorChartLoadFailed,
 		ErrorSomeChartMissingInCourse,
+		AutoSyncSaveConfirm,
 	};
 
 	/// @brief リザルト画面テキストのキー名
@@ -119,6 +128,7 @@ namespace I18n
 		ScoreNotSentPlaybackSpeed,
 		ScoreNotSentCMod,
 		ScoreNotSentPlaybackControl,
+		ScoreNotSentTimingAdjust,
 		ScoreNotSentTurn,
 		ScoreNotSentAssist,
 	};
@@ -145,6 +155,8 @@ namespace I18n
 		BGDisplayModeShowNoLayer,
 		BGDisplayModeShowLayer,
 		MasterVolumePercent,
+		AudioBackendDefault,
+		AudioBackendDirectSound,
 		VsyncOffWithFps,
 		VsyncOn,
 		JudgmentOn,
@@ -203,6 +215,7 @@ namespace I18n
 		ItemAlwaysShowOtherFolders,
 		ItemHideAllFolder,
 		ItemMasterVolume,
+		ItemAudioBackend,
 		ItemVsync,
 		ItemDefaultBTJudgmentMode,
 		ItemDefaultFXJudgmentMode,
@@ -225,6 +238,9 @@ namespace I18n
 		ItemHispeedTypeCMod,
 		ItemHideMouseCursor,
 		ItemUseNumpadAsArrowKeys,
+		ItemShowTranslitKana,
+		ItemShowTranslitHangul,
+		ItemShowTranslitKanji,
 	};
 
 	/// @brief カテゴリ名とキー名からテキストを直接取得
@@ -243,7 +259,11 @@ namespace I18n
 	[[nodiscard]]
 	StringView Get(T key)
 	{
-		if constexpr (std::is_same_v<T, Select>)
+		if constexpr (std::is_same_v<T, General>)
+		{
+			return GetByCategoryAndKey(EnumUtils::EnumToString(Category::General), EnumUtils::EnumToString(key));
+		}
+		else if constexpr (std::is_same_v<T, Select>)
 		{
 			return GetByCategoryAndKey(EnumUtils::EnumToString(Category::Select), EnumUtils::EnumToString(key));
 		}

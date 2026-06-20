@@ -171,8 +171,17 @@ namespace MusicGame::Judgment
 		viewStatusRef.score = m_scoringStatus.score();
 		viewStatusRef.gaugePercentage = m_scoringStatus.gaugePercentage(m_playOption.gaugeType);
 		viewStatusRef.gaugePercentageInt = m_scoringStatus.gaugePercentageInt(m_playOption.gaugeType);
-		viewStatusRef.displayCombo = m_scoringStatus.displayCombo();
+		const int32 displayCombo = m_scoringStatus.displayCombo();
+		viewStatusRef.displayCombo = displayCombo;
 		viewStatusRef.displayIsNoError = m_scoringStatus.displayIsNoError();
+
+		// 100コンボ毎にアニメーションの開始時刻を記録する
+		if (displayCombo > m_prevDisplayCombo && displayCombo / 100 > m_prevDisplayCombo / 100)
+		{
+			m_comboMilestoneEffectStartTimeSec = currentTimeSec;
+		}
+		m_prevDisplayCombo = displayCombo;
+		viewStatusRef.comboMilestoneEffectStartTimeSec = m_comboMilestoneEffectStartTimeSec;
 
 		// 直角LASERの振動をViewStatusに反映
 		m_laserSlamShakeStatus.applyToCamStatus(viewStatusRef.camStatus, currentTimeSec);
@@ -189,6 +198,25 @@ namespace MusicGame::Judgment
 	bool JudgmentHandler::isFinished() const
 	{
 		return m_totalCombo <= m_scoringStatus.totalJudgedCombo();
+	}
+
+	double JudgmentHandler::timingAdjustOffsetSec() const
+	{
+		return m_timingAdjustOffsetSec;
+	}
+
+	void JudgmentHandler::applyAutoSyncTimingAdjust(double diffSec)
+	{
+		const int32 autoSyncLevel = static_cast<int32>(m_playOption.autoSyncMode);
+		if (autoSyncLevel > 0)
+		{
+			m_timingAdjustOffsetSec += diffSec * autoSyncLevel / 90.0;
+		}
+	}
+
+	void JudgmentHandler::addTimingAdjustOffset(double offsetSec)
+	{
+		m_timingAdjustOffsetSec += offsetSec;
 	}
 
 	PlayResult JudgmentHandler::playResult(double currentTimeSec, double chartEndTimeSec, IsHardFailedYN isHardFailed, bool isAborted) const

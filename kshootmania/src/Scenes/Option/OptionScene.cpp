@@ -42,7 +42,6 @@ std::unique_ptr<std::array<OptionMenu, OptionScene::kOptionMenuTypeEnumCount>> O
 {
 	using StrPair = std::pair<String, String>;
 	using IntStrPair = std::pair<int32, String>;
-	using DoubleStrPair = std::pair<double, String>;
 	using CreateInfo = OptionMenuField::CreateInfo;
 
 	Array<StrPair> availableLanguageStrPairs;
@@ -122,6 +121,12 @@ std::unique_ptr<std::array<OptionMenu, OptionScene::kOptionMenuTypeEnumCount>> O
 					const int32 volume = ConfigIni::GetInt(ConfigIni::Key::kMasterVolume, kMasterVolumeDefault);
 					ksmaudio::SetMasterVolume(volume / 100.0);
 				}),
+#ifdef _WIN32
+			CreateInfo::Enum(I18n::Get(I18n::Option::ItemAudioBackend), ConfigIni::Key::kAudioBackend, Array<StrPair>{
+				StrPair{ String{ ConfigIni::Value::AudioBackend::kDefault }, I18n::Get(I18n::Option::AudioBackendDefault) },
+				StrPair{ String{ ConfigIni::Value::AudioBackend::kDirectSound }, I18n::Get(I18n::Option::AudioBackendDirectSound) },
+			}),
+#endif
 			CreateInfo::Enum(I18n::Get(I18n::Option::ItemVsync), ConfigIni::Key::kVsync, Array<StrPair>{
 				StrPair{ U"0;120", I18n::Get(I18n::Option::VsyncOffWithFps, 120) },
 				StrPair{ U"0;144", I18n::Get(I18n::Option::VsyncOffWithFps, 144) },
@@ -229,6 +234,18 @@ std::unique_ptr<std::array<OptionMenu, OptionScene::kOptionMenuTypeEnumCount>> O
 				I18n::Get(I18n::Option::UseNumpadAsArrowKeysOnKeyboard),
 				I18n::Get(I18n::Option::UseNumpadAsArrowKeysOnController),
 			}),
+			CreateInfo::Enum(I18n::Get(I18n::Option::ItemShowTranslitKana), ConfigIni::Key::kShowTranslitKana, Array<StringView>{
+				I18n::Get(I18n::Option::Off),
+				I18n::Get(I18n::Option::On),
+			}),
+			CreateInfo::Enum(I18n::Get(I18n::Option::ItemShowTranslitHangul), ConfigIni::Key::kShowTranslitHangul, Array<StringView>{
+				I18n::Get(I18n::Option::Off),
+				I18n::Get(I18n::Option::On),
+			}),
+			CreateInfo::Enum(I18n::Get(I18n::Option::ItemShowTranslitKanji), ConfigIni::Key::kShowTranslitKanji, Array<StringView>{
+				I18n::Get(I18n::Option::Off),
+				I18n::Get(I18n::Option::On),
+			}),
 		}),
 		OptionMenu({}),
 	});
@@ -322,7 +339,6 @@ void OptionScene::update()
 		{ U"guideText", guideText },
 		{ U"settingHeaderIndex", settingHeaderIndex },
 		{ U"isJapanese", I18n::CurrentLanguage() == I18n::StandardLanguage::Japanese },
-		{ U"isNonJapanese", I18n::CurrentLanguage() != I18n::StandardLanguage::Japanese },
 	});
 
 	// UI更新

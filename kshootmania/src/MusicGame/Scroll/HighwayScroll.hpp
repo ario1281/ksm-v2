@@ -36,6 +36,13 @@ namespace MusicGame::Scroll
 		/// @return Y座標
 		int32 getPositionY(kson::Pulse pulse) const;
 
+		/// @brief Pulse値の区間がHighwayの描画範囲内にあるかを返す
+		/// @param startPulse 開始Pulse値
+		/// @param endPulse 終了Pulse値
+		/// @param positionYOffset Y座標への加算オフセット
+		/// @return 描画範囲内にある場合true
+		bool isPulseRangeInDrawRange(kson::Pulse startPulse, kson::Pulse endPulse, int32 positionYOffset = 0) const;
+
 		/// @brief 相対Pulse値をピクセル高さに変換する
 		/// @param basePulse 基準となるPulse位置(scroll_speed計算に使用)
 		/// @param relPulse 相対Pulse値
@@ -54,6 +61,10 @@ namespace MusicGame::Scroll
 		/// @param pulse Pulse位置
 		/// @return scrollSpeedが0以上ならtrue
 		bool isScrollSpeedPositiveAt(kson::Pulse pulse) const;
+
+		/// @brief scroll_speedを考慮した現在のハイスピード値を返す
+		/// @return scroll_speed適用済みのハイスピード値(負のscroll_speedは絶対値で計算)
+		int32 currentHispeedWithScrollSpeed() const;
 	};
 
 	/// @brief Highway上のスクロール計算(ハイスピードおよびscroll_speedの計算)

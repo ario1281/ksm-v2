@@ -1,5 +1,8 @@
 ﻿#include "HighwayScroll.hpp"
 
+#include <cmath>
+#include <utility>
+
 namespace MusicGame::Scroll
 {
 	namespace
@@ -10,6 +13,7 @@ namespace MusicGame::Scroll
 		//     https://github.com/kshootmania/ksm-v1/blob/d2811a09e2d75dad5cc152d7c4073897061addb7/src/scene/play/play_draw_frame.hsp#L96
 		// 上記の「108/2」と「10」を乗算した値にあたる
 		constexpr double kBasePixels = 540.0;
+		constexpr kson::RelPulse kDrawRangeSampleInterval = kson::kResolution4 / 16;
 
 		/// @brief scrollSpeedに負の値が含まれているかを判定
 		/// @param beatInfo kson.beat
@@ -75,6 +79,38 @@ namespace MusicGame::Scroll
 			}
 		}
 
+		/// @brief scrollSpeedをstartPulseからendPulseまで積分(台形則、始点After/終点Beforeで即時変更に対応)
+		double CalcScrollSpeedIntegral(const kson::Graph& scrollSpeed, double startPulse, double endPulse)
+		{
+			if (scrollSpeed.empty())
+			{
+				return endPulse - startPulse;
+			}
+
+			if (endPulse < startPulse)
+			{
+				return -CalcScrollSpeedIntegral(scrollSpeed, endPulse, startPulse);
+			}
+
+			double totalRelPulse = 0.0;
+			for (double segmentStartPulse = startPulse; segmentStartPulse < endPulse; )
+			{
+				const auto nextItr = scrollSpeed.upper_bound(static_cast<kson::Pulse>(std::floor(segmentStartPulse)));
+				const double segmentEndPulse = (nextItr != scrollSpeed.end() && static_cast<double>(nextItr->first) < endPulse)
+					? static_cast<double>(nextItr->first)
+					: endPulse;
+
+				// 始点はAfter、終点はBeforeで即時変更に対応
+				const double startSpeed = kson::GraphValueAtDouble(scrollSpeed, segmentStartPulse, kson::GraphSide::After);
+				const double endSpeed = kson::GraphValueAtDouble(scrollSpeed, segmentEndPulse, kson::GraphSide::Before);
+				totalRelPulse += (segmentEndPulse - segmentStartPulse) * (startSpeed + endSpeed) / 2.0;
+
+				segmentStartPulse = segmentEndPulse;
+			}
+
+			return totalRelPulse;
+		}
+
 		/// @brief scrollSpeedを考慮したノーツの相対Pulse値を計算
 		/// @param notePulse ノーツのPulse位置
 		/// @param currentPulseDouble 現在のPulse位置
@@ -82,118 +118,7 @@ namespace MusicGame::Scroll
 		/// @return scrollSpeedを考慮した相対Pulse値
 		double CalcScrollSpeedAdjustedRelPulse(kson::Pulse notePulse, double currentPulseDouble, const kson::Graph& scrollSpeed)
 		{
-			if (scrollSpeed.empty())
-			{
-				return static_cast<double>(notePulse - currentPulseDouble);
-			}
-
-			const kson::Pulse currentPulse = static_cast<kson::Pulse>(currentPulseDouble);
-
-			// notePulseが現在位置より未来の場合
-			if (notePulse > currentPulse)
-			{
-				double totalRelPulse = 0.0;
-				kson::Pulse segmentStartPulse = currentPulse;
-				double currentSpeed = kson::GraphValueAt(scrollSpeed, segmentStartPulse);
-
-				while (segmentStartPulse < notePulse)
-				{
-					auto nextItr = scrollSpeed.upper_bound(segmentStartPulse);
-
-					kson::Pulse segmentEndPulse;
-					double nextSpeed;
-					if (nextItr != scrollSpeed.end() && nextItr->first <= notePulse)
-					{
-						segmentEndPulse = nextItr->first;
-						nextSpeed = nextItr->second.v.v;
-					}
-					else
-					{
-						segmentEndPulse = notePulse;
-						nextSpeed = currentSpeed;
-					}
-
-					// 台形則で積分
-					const kson::Pulse length = segmentEndPulse - segmentStartPulse;
-					totalRelPulse += length * (currentSpeed + nextSpeed) / 2.0;
-
-					// 次の区間の開始速度を設定
-					if (nextItr != scrollSpeed.end() && nextItr->first == segmentEndPulse)
-					{
-						currentSpeed = nextItr->second.v.vf;
-					}
-					else
-					{
-						currentSpeed = nextSpeed;
-					}
-
-					segmentStartPulse = segmentEndPulse;
-				}
-
-				return totalRelPulse;
-			}
-			// notePulseが現在位置より過去の場合
-			else
-			{
-				double totalRelPulse = 0.0;
-				kson::Pulse segmentEndPulse = currentPulse;
-				double endSpeed = kson::GraphValueAt(scrollSpeed, segmentEndPulse);
-
-				while (segmentEndPulse > notePulse)
-				{
-					// segmentEndPulse未満で最大のscroll_speed変更点を探す
-					auto itr = scrollSpeed.lower_bound(segmentEndPulse);
-					if (itr != scrollSpeed.begin())
-					{
-						--itr;
-					}
-
-					kson::Pulse segmentStartPulse;
-					double startSpeed;
-					if (itr == scrollSpeed.begin() && itr->first > notePulse)
-					{
-						// scroll_speedの最初の変更点より前の区間
-						segmentStartPulse = notePulse;
-						startSpeed = itr->second.v.v;
-					}
-					else if (itr != scrollSpeed.end() && itr->first > notePulse)
-					{
-						segmentStartPulse = itr->first;
-						startSpeed = itr->second.v.v;
-					}
-					else
-					{
-						segmentStartPulse = notePulse;
-						startSpeed = endSpeed;
-					}
-
-					// 台形則で積分(負の方向)
-					const kson::Pulse length = segmentEndPulse - segmentStartPulse;
-					totalRelPulse -= length * (startSpeed + endSpeed) / 2.0;
-
-					// 次の区間へ移動
-					// 次の区間の終了速度を設定(scroll_speed変更点がある場合はその直前の速度)
-					if (itr != scrollSpeed.end() && itr->first == segmentStartPulse)
-					{
-						// itrがbeginの場合、これ以上前に戻れないのでループ終了
-						if (itr == scrollSpeed.begin())
-						{
-							break;
-						}
-						// 一つ前のscroll_speed変更点の終了速度を取得
-						auto prevItr = std::prev(itr);
-						endSpeed = prevItr->second.v.vf;
-					}
-					else
-					{
-						endSpeed = startSpeed;
-					}
-
-					segmentEndPulse = segmentStartPulse;
-				}
-
-				return totalRelPulse;
-			}
+			return CalcScrollSpeedIntegral(scrollSpeed, currentPulseDouble, static_cast<double>(notePulse));
 		}
 	}
 
@@ -211,6 +136,36 @@ namespace MusicGame::Scroll
 	int32 HighwayScrollContext::getPositionY(kson::Pulse pulse) const
 	{
 		return m_pHighwayScroll->getPositionY(pulse, *m_pBeatInfo, *m_pTimingCache, *m_pGameStatus);
+	}
+
+	bool HighwayScrollContext::isPulseRangeInDrawRange(kson::Pulse startPulse, kson::Pulse endPulse, int32 positionYOffset) const
+	{
+		if (endPulse < startPulse)
+		{
+			std::swap(startPulse, endPulse);
+		}
+
+		int32 minY = getPositionY(startPulse) + positionYOffset;
+		int32 maxY = minY;
+
+		const auto addPositionY = [&](kson::Pulse pulse)
+		{
+			const int32 positionY = getPositionY(pulse) + positionYOffset;
+			minY = Min(minY, positionY);
+			maxY = Max(maxY, positionY);
+		};
+
+		if (m_hasNegativeScrollSpeed)
+		{
+			for (kson::Pulse pulse = startPulse + kDrawRangeSampleInterval; pulse < endPulse; pulse += kDrawRangeSampleInterval)
+			{
+				addPositionY(pulse);
+			}
+		}
+
+		addPositionY(endPulse);
+
+		return maxY >= 0 && minY < Graphics::kHighwayTextureSize.y;
 	}
 
 	int32 HighwayScrollContext::relPulseToPixelHeight(kson::Pulse basePulse, kson::RelPulse relPulse) const
@@ -237,6 +192,41 @@ namespace MusicGame::Scroll
 		}
 
 		return kson::GraphValueAt(m_pBeatInfo->scrollSpeed, pulse) >= 0.0;
+	}
+
+	int32 HighwayScrollContext::currentHispeedWithScrollSpeed() const
+	{
+		const int32 hispeed = m_pHighwayScroll->currentHispeed();
+
+		// CModはscroll_speedを使わないのでそのまま返す
+		if (m_pHighwayScroll->hispeedSetting().type == HispeedType::CMod)
+		{
+			return hispeed;
+		}
+
+		// scroll_speedが空の場合はscroll_speedが1.0とみなす
+		if (m_pBeatInfo->scrollSpeed.empty())
+		{
+			return hispeed;
+		}
+
+		// 譜面停止中は0ではなく元のハイスピード値を採用
+		const kson::Pulse currentPulse = m_pGameStatus->currentPulse;
+		if (!m_pBeatInfo->stop.empty())
+		{
+			const auto it = m_pBeatInfo->stop.upper_bound(currentPulse);
+			if (it != m_pBeatInfo->stop.begin())
+			{
+				const auto prevIt = std::prev(it);
+				if (currentPulse < prevIt->first + prevIt->second)
+				{
+					return hispeed;
+				}
+			}
+		}
+
+		const double scrollSpeed = kson::GraphValueAt(m_pBeatInfo->scrollSpeed, currentPulse);
+		return static_cast<int32>(hispeed * Abs(scrollSpeed));
 	}
 
 	double HighwayScroll::pulseToSec(kson::Pulse pulse, const kson::BeatInfo& beatInfo, const kson::TimingCache& timingCache) const
@@ -266,13 +256,7 @@ namespace MusicGame::Scroll
 		}
 		else
 		{
-			// scrollSpeedがなければ単純な差分計算
-			if (beatInfo.scrollSpeed.empty())
-			{
-				return static_cast<double>(pulse) - gameStatus.currentPulseDouble;
-			}
-
-			// scrollSpeedがあれば現在地点からノーツ地点までの区間を積分計算
+			// 現在地点からノーツ地点までの区間を積分計算(scrollSpeedが空なら単純な差分になる)
 			return CalcScrollSpeedAdjustedRelPulse(pulse, gameStatus.currentPulseDouble, beatInfo.scrollSpeed);
 		}
 	}

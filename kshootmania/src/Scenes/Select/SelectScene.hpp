@@ -2,6 +2,7 @@
 #include <CoTaskLib.hpp>
 #include "SelectMenu.hpp"
 #include "SelectFolderState.hpp"
+#include "SelectSceneSearchParams.hpp"
 #include "Input/FXButtonUpDetection.hpp"
 #include "BTOptionPanel.hpp"
 #include "PlayStatsPanel.hpp"
@@ -19,6 +20,14 @@ private:
 
 	std::shared_ptr<noco::Canvas> m_canvas;
 
+	std::shared_ptr<noco::Node> m_searchResultNode;
+
+	SelectSceneSearchPhase m_searchPhase = SelectSceneSearchPhase::kNone;
+
+	String m_searchResultQuery;
+
+	bool m_searchInputReentryFromResult = false;
+
 	SelectMenu m_menu;
 
 	Array<String> m_playerNames;
@@ -29,9 +38,7 @@ private:
 
 	PlayStatsPanel m_playStatsPanel;
 
-	FavoriteAddDialog m_favoriteAddDialog;
-
-	FavoriteRemoveDialog m_favoriteRemoveDialog;
+	Optional<Co::ScopedTaskRunner> m_dialogRunner;
 
 	// Startボタン長押し検出
 	Stopwatch m_startKeyPressStopwatch;
@@ -49,13 +56,14 @@ private:
 
 	void updateStartKeyLongPress();
 
-	void updateDialogs();
+	void enterSearchInputPhase();
 
-	[[nodiscard]]
-	bool anyDialogVisible() const;
+	void exitSearchMode();
+
+	void onSearchInputDialogClosed(const Optional<String>& result);
 
 public:
-	SelectScene();
+	explicit SelectScene(const Optional<SelectSceneSearchParams>& initialSearchParams = none);
 
 	virtual void update() override;
 

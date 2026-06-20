@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-inline constexpr StringView kAppVersion = U"v2.0.0-alpha7";
+inline constexpr StringView kAppVersion = U"v2.0.0-beta3";
 
 enum DifficultyIdx : int32
 {
@@ -93,7 +93,6 @@ enum class AssistTickMode : int32
 	kCount,
 };
 
-// TODO: プレイ側で実装
 enum class AutoSyncMode : int32
 {
 	kOff = 0,

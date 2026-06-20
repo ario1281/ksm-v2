@@ -1,6 +1,5 @@
 ﻿#include "SelectMenuLevelSongItem.hpp"
 #include "RuntimeConfig.hpp"
-#include "NocoExtensions/NocoUtils.hpp"
 
 SelectMenuLevelSongItem::SelectMenuLevelSongItem(
 	FilePathView chartFilePath,
@@ -9,14 +8,31 @@ SelectMenuLevelSongItem::SelectMenuLevelSongItem(
 	: m_songDirectoryPath(songDirectoryPath)
 	, m_difficultyIdx(difficultyIdx)
 {
-	auto chartInfo = std::make_unique<SelectChartInfo>(chartFilePath);
+	auto chartInfo = std::make_shared<SelectChartInfo>(chartFilePath);
 	if (!chartInfo->hasError())
 	{
-		m_chartInfo = std::move(chartInfo);
+		m_chartInfo = chartInfo;
 	}
 	else
 	{
 		Logger << U"[ksm warning] SelectMenuLevelSongItem: Chart Loading Error (error:'{}', chartFilePath:'{}')"_fmt(chartInfo->errorString(), chartFilePath);
+	}
+}
+
+SelectMenuLevelSongItem::SelectMenuLevelSongItem(
+	std::shared_ptr<const SelectChartInfo> chartInfo,
+	FilePathView songDirectoryPath,
+	int32 difficultyIdx)
+	: m_songDirectoryPath(songDirectoryPath)
+	, m_difficultyIdx(difficultyIdx)
+{
+	if (chartInfo != nullptr && !chartInfo->hasError())
+	{
+		m_chartInfo = std::move(chartInfo);
+	}
+	else if (chartInfo != nullptr)
+	{
+		Logger << U"[ksm warning] SelectMenuLevelSongItem: Chart Loading Error (error:'{}', chartFilePath:'{}')"_fmt(chartInfo->errorString(), chartInfo->chartFilePath());
 	}
 }
 
@@ -50,7 +66,7 @@ void SelectMenuLevelSongItem::decide(const SelectMenuEventContext& context, [[ma
 	const FilePath chartFilePath = FilePath{ m_chartInfo->chartFilePath() };
 	if (!FileSystem::Exists(chartFilePath))
 	{
-		MessageBoxUtils::ShowOK(I18n::Get(I18n::Play::ErrorChartFileNotFound), MessageBoxStyle::Error);
+		context.fnShowErrorDialog(I18n::Get(I18n::Play::ErrorChartFileNotFound));
 		return;
 	}
 
@@ -67,7 +83,7 @@ void SelectMenuLevelSongItem::decideAutoPlay(const SelectMenuEventContext& conte
 	const FilePath chartFilePath = FilePath{ m_chartInfo->chartFilePath() };
 	if (!FileSystem::Exists(chartFilePath))
 	{
-		MessageBoxUtils::ShowOK(I18n::Get(I18n::Play::ErrorChartFileNotFound), MessageBoxStyle::Error);
+		context.fnShowErrorDialog(I18n::Get(I18n::Play::ErrorChartFileNotFound));
 		return;
 	}
 
@@ -88,13 +104,13 @@ const SelectChartInfo* SelectMenuLevelSongItem::chartInfoPtr(int difficultyIdx, 
 	return nullptr;
 }
 
-Optional<HighScoreInfo> SelectMenuLevelSongItem::highScoreInfo([[maybe_unused]] int32 difficultyIdx) const
+Optional<HighScoreInfo> SelectMenuLevelSongItem::highScoreInfo(const SelectMenuEventContext& context, [[maybe_unused]] int32 difficultyIdx) const
 {
 	if (m_chartInfo == nullptr)
 	{
 		return none;
 	}
-	return m_chartInfo->highScoreInfo();
+	return context.fnGetHighScore(m_chartInfo->chartFilePath());
 }
 
 bool SelectMenuLevelSongItem::difficultyMenuExists() const
@@ -170,58 +186,35 @@ void SelectMenuLevelSongItem::setCanvasParamsCenter(const SelectMenuEventContext
 		throw Error{ U"SelectMenuLevelSongItem::setCanvasParamsCenter: m_chartInfo is null (songDirectoryPath={})"_fmt(m_songDirectoryPath) };
 	}
 
-	const HighScoreInfo& highScore = m_chartInfo->highScoreInfo();
+	const HighScoreInfo highScore = context.fnGetHighScore(m_chartInfo->chartFilePath());
 	const GaugeType gaugeType = RuntimeConfig::GetGaugeType();
 
+	const FilePath jacketPath = m_chartInfo->jacketFilePath();
+	const FilePath iconPath = m_chartInfo->iconFilePath();
+	const SongInfoTextDisplayParams titleParams = MakeSongInfoTextDisplayParams(m_chartInfo->title(), m_chartInfo->titleTranslit());
+	const SongInfoTextDisplayParams artistParams = MakeSongInfoTextDisplayParams(m_chartInfo->artist(), m_chartInfo->artistTranslit());
+
 	canvas.setSubCanvasParamValuesByTag(U"center", {
-		{ U"title", m_chartInfo->title() },
-		{ U"artist", m_chartInfo->artist() },
+		{ U"title", titleParams.text },
+		{ U"titleTranslit", titleParams.translitText },
+		{ U"titleTranslitFadeRate", titleParams.translitFadeRate },
+		{ U"artist", artistParams.text },
+		{ U"artistTranslit", artistParams.translitText },
+		{ U"artistTranslitFadeRate", artistParams.translitFadeRate },
 		{ U"bpm", m_chartInfo->dispBPM() },
 		{ U"jacketAuthor", m_chartInfo->jacketAuthor() },
 		{ U"information", m_chartInfo->information() },
 		{ U"chartAuthor", m_chartInfo->chartAuthor() },
-		{ U"difficultyCursorState", U"difficulty{}"_fmt(m_difficultyIdx) },
+		{ U"difficultyIndex", m_difficultyIdx },
 		{ U"medalIndex", static_cast<int32>(highScore.medal()) },
 		{ U"highScoreGradeIndex", static_cast<int32>(highScore.grade(gaugeType)) },
-		{ U"highScore", U"{:08d}"_fmt(highScore.score(gaugeType)) },
-		{ U"gaugePercentage", ToString(highScore.percent(gaugeType)) },
+		{ U"highScore", highScore.score(gaugeType) },
+		{ U"gaugePercentage", highScore.percent(gaugeType) },
+		{ U"jacketFilePath", jacketPath },
+		{ U"jacketActive", !jacketPath.isEmpty() && FileSystem::IsFile(jacketPath) },
+		{ U"iconFilePath", iconPath },
+		{ U"iconActive", !iconPath.isEmpty() && FileSystem::IsFile(iconPath) },
 	});
-
-	// ジャケット画像を設定
-	const Texture jacketTexture = context.fnGetJacketTexture(m_chartInfo->jacketFilePath());
-	if (const auto songNode = NocoUtils::GetSubCanvasNodeByName(&canvas, U"center", U"Song"))
-	{
-		if (const auto sprite = songNode->findByName(U"JacketImage")->getComponent<noco::Sprite>())
-		{
-			sprite->setTexture(jacketTexture);
-			if (jacketTexture.isEmpty())
-			{
-				sprite->setColor(ColorF{ 0.0, 0.0 });
-			}
-			else
-			{
-				sprite->setColor(Palette::White);
-			}
-		}
-
-		// アイコン画像を設定
-		if (const auto iconNode = songNode->findByName(U"Icon"))
-		{
-			if (m_chartInfo->iconFilePath().isEmpty())
-			{
-				iconNode->setActive(false);
-			}
-			else
-			{
-				const Texture iconTexture = context.fnGetIconTexture(m_chartInfo->iconFilePath());
-				iconNode->setActive(!iconTexture.isEmpty());
-				if (const auto sprite = iconNode->getComponent<noco::Sprite>())
-				{
-					sprite->setTexture(iconTexture);
-				}
-			}
-		}
-	}
 }
 
 void SelectMenuLevelSongItem::setCanvasParamsTopBottom(const SelectMenuEventContext& context, noco::Canvas& canvas, [[maybe_unused]] int32 difficultyIdx, StringView tag) const
@@ -233,57 +226,34 @@ void SelectMenuLevelSongItem::setCanvasParamsTopBottom(const SelectMenuEventCont
 	}
 
 	// 常に自身の難易度のデータを表示
-	const HighScoreInfo& highScore = m_chartInfo->highScoreInfo();
+	const HighScoreInfo highScore = context.fnGetHighScore(m_chartInfo->chartFilePath());
 	const GaugeType gaugeType = RuntimeConfig::GetGaugeType();
+
+	const FilePath jacketPath = m_chartInfo->jacketFilePath();
+	const FilePath iconPath = m_chartInfo->iconFilePath();
+	const SongInfoTextDisplayParams titleParams = MakeSongInfoTextDisplayParams(m_chartInfo->title(), m_chartInfo->titleTranslit());
+	const SongInfoTextDisplayParams artistParams = MakeSongInfoTextDisplayParams(m_chartInfo->artist(), m_chartInfo->artistTranslit());
 
 	canvas.setSubCanvasParamValuesByTag(tag, {
 		{ U"isSong", true },
 		{ U"isDirectory", false },
 		{ U"isSubDirectory", false },
 		{ U"isCourse", false },
-		{ U"title", m_chartInfo->title() },
-		{ U"artist", m_chartInfo->artist() },
+		{ U"title", titleParams.text },
+		{ U"titleTranslit", titleParams.translitText },
+		{ U"titleTranslitFadeRate", titleParams.translitFadeRate },
+		{ U"artist", artistParams.text },
+		{ U"artistTranslit", artistParams.translitText },
+		{ U"artistTranslitFadeRate", artistParams.translitFadeRate },
 		{ U"levelIndex", m_chartInfo->level() - 1 },
 		{ U"medalIndex", static_cast<int32>(highScore.medal()) },
 		{ U"highScoreGradeIndex", static_cast<int32>(highScore.grade(gaugeType)) },
-		{ U"gaugePercentage", ToString(highScore.percent(gaugeType)) },
+		{ U"gaugePercentage", highScore.percent(gaugeType) },
+		{ U"jacketFilePath", jacketPath },
+		{ U"jacketActive", !jacketPath.isEmpty() && FileSystem::IsFile(jacketPath) },
+		{ U"iconFilePath", iconPath },
+		{ U"iconActive", !iconPath.isEmpty() && FileSystem::IsFile(iconPath) },
 	});
-
-	// ジャケット画像・アイコン画像を設定
-	const Texture jacketTexture = context.fnGetJacketTexture(m_chartInfo->jacketFilePath());
-	if (const auto songNode = NocoUtils::GetSubCanvasNodeByName(&canvas, tag, U"Song"))
-	{
-		if (const auto sprite = songNode->findByName(U"JacketImage")->getComponent<noco::Sprite>())
-		{
-			sprite->setTexture(jacketTexture);
-			if (jacketTexture.isEmpty())
-			{
-				sprite->setColor(ColorF{ 0.0, 0.0 });
-			}
-			else
-			{
-				sprite->setColor(Palette::White);
-			}
-		}
-
-		// アイコン画像を設定
-		if (const auto iconNode = songNode->findByName(U"Icon"))
-		{
-			if (m_chartInfo->iconFilePath().isEmpty())
-			{
-				iconNode->setActive(false);
-			}
-			else
-			{
-				const Texture iconTexture = context.fnGetIconTexture(m_chartInfo->iconFilePath());
-				iconNode->setActive(!iconTexture.isEmpty());
-				if (const auto sprite = iconNode->getComponent<noco::Sprite>())
-				{
-					sprite->setTexture(iconTexture);
-				}
-			}
-		}
-	}
 }
 
 void SelectMenuLevelSongItem::showInFileManager([[maybe_unused]] int32 difficultyIdx) const

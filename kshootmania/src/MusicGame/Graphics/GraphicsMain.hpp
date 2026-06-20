@@ -3,11 +3,8 @@
 #include "Jdgline/Jdgline3DGraphics.hpp"
 #include "Jdgline/Jdgoverlay3DGraphics.hpp"
 #include "Jdgline/LaserCursor3DGraphics.hpp"
-#include "HUD/SongInfoPanel.hpp"
-#include "HUD/ScorePanel.hpp"
 #include "HUD/GaugePanel.hpp"
 #include "HUD/ComboOverlay.hpp"
-#include "HUD/FrameRateMonitor.hpp"
 #include "HUD/AchievementPanel.hpp"
 #include "HUD/LaserApproachIndicator.hpp"
 #include "HUD/MoviePanel.hpp"
@@ -19,6 +16,24 @@
 
 namespace MusicGame::Graphics
 {
+	/// @brief スコア表示のアニメーション補間
+	class ScoreAnimator
+	{
+	private:
+		int32 m_targetScore = 0;
+		int32 m_startScore = 0;
+		int32 m_displayedScore = 0;
+		Stopwatch m_animationTimer;
+
+		static constexpr Duration kAnimationDuration = 0.2s;
+
+	public:
+		void update(int32 score);
+
+		[[nodiscard]]
+		int32 displayedScore() const;
+	};
+
 	class GraphicsMain
 	{
 	private:
@@ -28,7 +43,7 @@ namespace MusicGame::Graphics
 		const Mesh m_bgBillboardMesh;
 		std::array<Texture, 2> m_bgTextures;
 		const Mat4x4 m_bgTransform;
-		std::array<Array<RenderTexture>, 2> m_layerFrameTextures;
+		std::array<Array<Texture>, 2> m_layerFrameTextures;
 		const Mat4x4 m_layerTransform;
 
 		Highway3DGraphics m_highway3DGraphics;
@@ -37,23 +52,27 @@ namespace MusicGame::Graphics
 		Jdgoverlay3DGraphics m_jdgoverlay3DGraphics;
 		LaserCursor3DGraphics m_laserCursor3DGraphics;
 
-		SongInfoPanel m_songInfoPanel;
-		ScorePanel m_scorePanel;
+		std::shared_ptr<noco::Canvas> m_hudCanvas;
+		ScoreAnimator m_scoreAnimator;
+
 		GaugePanel m_gaugePanel;
 		ComboOverlay m_comboOverlay;
-		FrameRateMonitor m_frameRateMonitor;
 		AchievementPanel m_achievementPanel;
 		LaserApproachIndicator m_laserApproachIndicator;
 		MoviePanel m_moviePanel;
 
 		const PlayOption m_playOption;
 
+		const double m_layerFrameOriginTimeSec;
+
+		const kson::Pulse m_layerFrameOriginPulse;
+
 		void drawBG(const ViewStatus& viewStatus) const;
 
 		void drawLayer(const kson::ChartData& chartData, const GameStatus& gameStatus, const ViewStatus& viewStatus) const;
 
 	public:
-		explicit GraphicsMain(const kson::ChartData& chartData, FilePathView parentPath, const PlayOption& playOption);
+		explicit GraphicsMain(const kson::ChartData& chartData, const kson::TimingCache& timingCache, FilePathView parentPath, const PlayOption& playOption);
 
 		void prepareMovie(double globalOffsetSec);
 

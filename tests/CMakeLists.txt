@@ -21,11 +21,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/Ap
 file(GLOB TEST_SOURCES "*.cpp")
 
 file(GLOB_RECURSE KSHOOTMANIA_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/src/*.cpp")
-file(GLOB_RECURSE EDITOR_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/src/Editor/*.cpp")
 list(REMOVE_ITEM KSHOOTMANIA_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/src/stdafx.cpp)
 list(REMOVE_ITEM KSHOOTMANIA_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/src/Main.cpp)
-list(REMOVE_ITEM KSHOOTMANIA_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../kshootmania/src/EditorMain.cpp)
-list(REMOVE_ITEM KSHOOTMANIA_SOURCES ${EDITOR_SOURCES})
 
 add_executable(${TARGET_NAME}
     ${TEST_SOURCES}
@@ -64,6 +61,7 @@ target_link_libraries(${TARGET_NAME} PRIVATE
     ksmaudio
     ksmaxis
     NocoUI
+    SQLiteCpp
     Catch2::Catch2
 )
 

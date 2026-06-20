@@ -92,25 +92,32 @@ void CourseResultChartList::refreshCanvasParams(const CoursePlayState& courseSta
 			m_canvas->setSubCanvasParamValuesByTag(U"chartItem{}"_fmt(i + 1), {
 				{ U"title", U"---" },
 				{ U"artist", U"---" },
-				{ U"jacketImageFilePath", U"" },
+				{ U"jacketFilePath", U"" },
 				{ U"difficultyIndex", 0 },
-				{ U"levelNumber", U"0" },
+				{ U"levelNumber", 0 },
 				{ U"gradeIndex", static_cast<double>(GradeToIndex(result.grade())) },
-				{ U"scoreNumber", U"{:08d}"_fmt(result.score) },
+				{ U"scoreNumber", result.score },
 			});
 			continue;
 		}
 
 		const SelectChartInfo chartInfo{ chartPath };
 
+		const FilePath titleImgPath = chartInfo.titleImgFilePath();
+		const bool hasTitleImg = !titleImgPath.isEmpty() && FileSystem::IsFile(titleImgPath);
+		const FilePath artistImgPath = chartInfo.artistImgFilePath();
+		const bool hasArtistImg = !artistImgPath.isEmpty() && FileSystem::IsFile(artistImgPath);
+
 		m_canvas->setSubCanvasParamValuesByTag(U"chartItem{}"_fmt(i + 1), {
-			{ U"title", chartInfo.title() },
-			{ U"artist", chartInfo.artist() },
-			{ U"jacketImageFilePath", chartInfo.jacketFilePath() },
+			{ U"title", hasTitleImg ? U"" : chartInfo.title() },
+			{ U"titleImgFilePath", titleImgPath },
+			{ U"artist", hasArtistImg ? U"" : chartInfo.artist() },
+			{ U"artistImgFilePath", artistImgPath },
+			{ U"jacketFilePath", chartInfo.jacketFilePath() },
 			{ U"difficultyIndex", static_cast<double>(chartInfo.difficultyIdx()) },
-			{ U"levelNumber", U"{}"_fmt(chartInfo.level()) },
+			{ U"levelNumber", chartInfo.level() },
 			{ U"gradeIndex", static_cast<double>(GradeToIndex(result.grade())) },
-			{ U"scoreNumber", U"{:08d}"_fmt(result.score) },
+			{ U"scoreNumber", result.score },
 		});
 	}
 }

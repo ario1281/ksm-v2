@@ -8,6 +8,10 @@
 #include "Input/PlatformKey.hpp"
 #include "MenuItem/ISelectMenuItem.hpp"
 #include "SelectChartInfo.hpp"
+#include "UI/SimpleDialog.hpp"
+#include "Input/KeyConfig.hpp"
+#include "NocoExtensions/NocoUtils.hpp"
+#include "SearchInputDialog.hpp"
 
 namespace
 {
@@ -54,12 +58,6 @@ namespace
 		});
 
 		return playerNames;
-	}
-
-	FilePath GetFavoriteFilePath(int32 favoriteNumber)
-	{
-		const FilePath songsDir = FsUtils::SongsDirectoryPath();
-		return FileSystem::PathAppend(songsDir, U"Favorite{}.fav"_fmt(favoriteNumber));
 	}
 
 	bool RemoveFromFavorite(StringView favoriteName, StringView songPath)
@@ -133,8 +131,19 @@ namespace
 
 void SelectScene::moveToPlayScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay, const Optional<CoursePlayState>& courseState)
 {
+	// 復元用に検索パラメータを保持
+	Optional<SelectSceneSearchParams> searchParams;
+	if (m_searchPhase == SelectSceneSearchPhase::kResult)
+	{
+		SelectSceneSearchParams params;
+		params.phase = m_searchPhase;
+		params.query = m_searchResultQuery;
+		params.cursorChartPath = FilePath{ chartFilePath };
+		searchParams = std::move(params);
+	}
+
 	m_fadeOutColor = Palette::White;
-	requestNextScene<PlayPrepareScene>(FilePath{ chartFilePath }, isAutoPlay, courseState);
+	requestNextScene<PlayPrepareScene>(FilePath{ chartFilePath }, isAutoPlay, courseState, none, searchParams);
 }
 
 void SelectScene::refreshCanvasPlayerName()
@@ -178,7 +187,8 @@ void SelectScene::updatePlayerSwitching()
 	ConfigIni::Save();
 
 	refreshCanvasPlayerName();
-	m_menu.reloadCurrentDirectory();
+	m_menu.clearHighScoreCache();
+	m_menu.reloadCurrentDirectory(RefreshSongPreviewYN::No, ReloadFromDiskYN::Yes);
 }
 
 void SelectScene::updateAlphabetJump()
@@ -234,21 +244,131 @@ void SelectScene::updateAlphabetJump()
 	}
 }
 
-SelectScene::SelectScene()
+void SelectScene::enterSearchInputPhase()
+{
+	if (m_searchPhase == SelectSceneSearchPhase::kInput)
+	{
+		return;
+	}
+
+	const bool wasNone = m_searchPhase == SelectSceneSearchPhase::kNone;
+
+	if (m_searchResultNode)
+	{
+		m_searchResultNode->setActive(false);
+	}
+
+	// Ctrl+Fと同フレームでBTボタンが押されていた場合にパネル表示が残らないようにする
+	m_btOptionPanel.hide();
+	m_playStatsPanel.hide();
+
+	const Optional<FilePath> preservedChartPath = m_menu.currentChartFilePath();
+
+	if (wasNone)
+	{
+		m_menu.enterSearchMode(preservedChartPath);
+	}
+	else
+	{
+		m_menu.setSearchPreservedChartPath(preservedChartPath);
+	}
+
+	m_searchInputReentryFromResult = !wasNone;
+	m_searchPhase = SelectSceneSearchPhase::kInput;
+
+	const String initialQuery = wasNone ? String{} : m_searchResultQuery;
+	m_dialogRunner = Co::Play<SearchInputDialog>(
+		initialQuery,
+		[this](StringView q) { m_menu.setSearchQuery(q); }
+	).runScoped([this](const Optional<String>& result) { onSearchInputDialogClosed(result); });
+}
+
+void SelectScene::onSearchInputDialogClosed(const Optional<String>& result)
+{
+	if (m_searchPhase != SelectSceneSearchPhase::kInput)
+	{
+		return;
+	}
+
+	m_menu.setSearchPreservedChartPath(none);
+
+	const bool reentryFromResult = m_searchInputReentryFromResult;
+	m_searchInputReentryFromResult = false;
+
+	if (result.has_value())
+	{
+		m_searchResultQuery = *result;
+		m_canvas->setParamValue(U"searchQueryText", m_searchResultQuery);
+		if (m_searchResultNode)
+		{
+			m_searchResultNode->setActive(true);
+		}
+		m_searchPhase = SelectSceneSearchPhase::kResult;
+
+		// ダイアログ確定のStartボタンのUpで誤って曲決定が走らないよう抑制
+		m_ignoreNextStartUp = true;
+	}
+	else if (reentryFromResult)
+	{
+		// 検索結果から再度検索入力ダイアログを開いてEscで閉じた時は、復帰先は検索結果とする
+		m_menu.setSearchQuery(m_searchResultQuery);
+		if (m_searchResultNode)
+		{
+			m_searchResultNode->setActive(true);
+		}
+		m_searchPhase = SelectSceneSearchPhase::kResult;
+	}
+	else
+	{
+		// 検索入力ダイアログを抜ける
+		m_searchPhase = SelectSceneSearchPhase::kNone;
+		if (m_searchResultNode)
+		{
+			m_searchResultNode->setActive(false);
+		}
+		m_searchResultQuery.clear();
+		m_menu.exitSearchMode();
+	}
+}
+
+void SelectScene::exitSearchMode()
+{
+	if (m_searchPhase == SelectSceneSearchPhase::kNone)
+	{
+		return;
+	}
+
+	m_searchPhase = SelectSceneSearchPhase::kNone;
+	m_searchResultQuery.clear();
+
+	if (m_searchResultNode)
+	{
+		m_searchResultNode->setActive(false);
+	}
+
+	m_menu.exitSearchMode();
+}
+
+SelectScene::SelectScene(const Optional<SelectSceneSearchParams>& initialSearchParams)
 	: m_folderCloseButton(
 		ConfigIni::GetInt(ConfigIni::Key::kSelectCloseFolderKey) == ConfigIni::Value::SelectCloseFolderKey::kBackButton
 			? static_cast<Button>(kButtonBack)
 			: static_cast<Button>(kButtonBackspace))
 	, m_canvas(LoadSelectSceneCanvas())
-	, m_menu(m_canvas, [this](FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlayYN, Optional<CoursePlayState> courseState) { moveToPlayScene(chartFilePath, isAutoPlayYN, courseState); })
+	, m_menu(
+		m_canvas,
+		[this](FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlayYN, Optional<CoursePlayState> courseState) { moveToPlayScene(chartFilePath, isAutoPlayYN, courseState); },
+		[this](StringView msg) { m_dialogRunner = Co::Play<SimpleDialog>(String{ U"ERROR" }, String{ msg }).runScoped(); },
+		[this]() { exitSearchMode(); })
 	, m_playerNames(GetPlayerNames())
 	, m_fxButtonUpDetection({ KeyShift })
 	, m_btOptionPanel(m_canvas)
 	, m_playStatsPanel(m_canvas)
-	, m_favoriteAddDialog(m_canvas)
-	, m_favoriteRemoveDialog(m_canvas)
 {
 	AutoMuteAddon::SetEnabled(true);
+
+	// 検索結果表示ノードを取得
+	m_searchResultNode = NocoUtils::GetNodeByPath(m_canvas, { U"SearchResult" });
 
 	// iniから読み込んだプレイヤー名が空文字列の場合は"PLAYER"に修正
 	const String currentPlayer{ ConfigIni::GetString(ConfigIni::Key::kCurrentPlayer) };
@@ -270,16 +390,53 @@ SelectScene::SelectScene()
 		MessageBoxUtils::ShowOK(U"譜面データが見つかりませんでした。", MessageBoxStyle::Warning);
 		m_skipFadeout = true;
 		requestNextScene<TitleScene>(TitleMenuItem::kStart);
+		return;
+	}
+
+	// 検索の初期状態を復元
+	if (initialSearchParams.has_value() && initialSearchParams->phase != SelectSceneSearchPhase::kNone)
+	{
+		const String& restoreQuery = initialSearchParams->query;
+		const Optional<FilePath>& cursorPath = initialSearchParams->cursorChartPath;
+
+		m_menu.enterSearchMode(cursorPath);
+		if (!restoreQuery.isEmpty())
+		{
+			m_menu.setSearchQuery(restoreQuery);
+		}
+		if (cursorPath.has_value())
+		{
+			m_menu.setCursorByChartFilePath(*cursorPath);
+		}
+
+		if (initialSearchParams->phase == SelectSceneSearchPhase::kInput)
+		{
+			m_searchPhase = SelectSceneSearchPhase::kInput;
+			m_dialogRunner = Co::Play<SearchInputDialog>(
+				restoreQuery,
+				[this](StringView q) { m_menu.setSearchQuery(q); }
+			).runScoped([this](const Optional<String>& result) { onSearchInputDialogClosed(result); });
+		}
+		else
+		{
+			m_searchResultQuery = restoreQuery;
+			m_canvas->setParamValue(U"searchQueryText", m_searchResultQuery);
+			if (m_searchResultNode)
+			{
+				m_searchResultNode->setActive(true);
+			}
+			m_searchPhase = SelectSceneSearchPhase::kResult;
+		}
 	}
 }
 
 void SelectScene::update()
 {
-	// ダイアログ表示中はダイアログ更新のみ実行
-	if (anyDialogVisible())
+	// ダイアログ表示中は必要な更新のみ実行
+	if (Co::HasActiveModal())
 	{
-		updateDialogs();
-		m_canvas->update();
+		m_menu.update(SongPreviewOnlyYN::Yes);
+		m_canvas->update(noco::HitTestEnabledYN::No);
 		return;
 	}
 
@@ -297,8 +454,31 @@ void SelectScene::update()
 	// いずれかのパネルが表示中かチェック
 	const bool anyPanelVisible = m_btOptionPanel.isVisible() || m_playStatsPanel.isVisible();
 
-	// Backキー処理(パネル表示中でも有効にする)
-	const bool closeFolder = m_menu.isFolderOpen() && KeyConfig::Down(m_folderCloseButton/* ← kBackspace・kBackのいずれかが入っている */);
+	// 検索結果表示中はBackキーまたはBackspaceキーで検索モードを終了
+	if (m_searchPhase == SelectSceneSearchPhase::kResult && (KeyConfig::Down(kButtonBack) || KeyConfig::Down(kButtonBackspace)))
+	{
+		exitSearchMode();
+		m_canvas->update();
+		return;
+	}
+
+	// Ctrl+Fで検索入力へ
+	if (PlatformKey::KeyCommandControl.pressed() && KeyF.down() && m_menu.isFolderOpen())
+	{
+		enterSearchInputPhase();
+	}
+
+	const bool inSearchMode = m_searchPhase != SelectSceneSearchPhase::kNone;
+
+	// F5で現在のディレクトリのキャッシュを破棄して再読み込み
+	if (!inSearchMode && KeyF5.down())
+	{
+		m_menu.forceReloadCurrentDirectory();
+		m_canvas->update();
+		return;
+	}
+
+	const bool closeFolder = !inSearchMode && m_menu.isFolderOpen() && KeyConfig::Down(m_folderCloseButton/* ← kBackspace・kBackのいずれかが入っている */);
 
 	// BackSpaceキーまたはBackボタン(Escキー)でフォルダを閉じる
 	if (closeFolder)
@@ -448,13 +628,77 @@ void SelectScene::updateStartKeyLongPress()
 
 			if (m_menu.folderState().folderType == SelectFolderState::kFavorite)
 			{
-				// 削除ダイアログ(お気に入り内の場合)
-				m_favoriteRemoveDialog.show();
+				// 削除ダイアログ
+				// お気に入り名を取得(例: "?Favorite1" → "Favorite1")
+				String favoriteName = m_menu.folderState().fullPath;
+				if (favoriteName.starts_with(U'?'))
+				{
+					favoriteName = favoriteName.substr(1);
+				}
+				const FilePath songFullPath{ m_menu.cursorMenuItem().fullPath() };
+				const String songRelativePath = FsUtils::RelativePathFromSongsDir(songFullPath);
+
+				m_dialogRunner = Co::Play<FavoriteRemoveDialog>().runScoped(
+					[this, favoriteName, songRelativePath](const Optional<FavoriteRemoveChoice>& choice)
+					{
+						if (!choice.has_value())
+						{
+							// キャンセル時は何もしない
+							return;
+						}
+						if (*choice == FavoriteRemoveChoice::Yes)
+						{
+							const bool fileRemoved = RemoveFromFavorite(favoriteName, songRelativePath);
+							if (fileRemoved)
+							{
+								const FilePath songsDir = FsUtils::SongsDirectoryPath();
+								const FilePath favPath = FileSystem::PathAppend(songsDir, favoriteName + U".fav");
+								if (!FileSystem::Exists(favPath))
+								{
+									m_menu.closeFolder(PlaySeYN::No);
+								}
+								else
+								{
+									m_menu.reloadCurrentDirectory(RefreshSongPreviewYN::Yes, ReloadFromDiskYN::Yes);
+								}
+							}
+						}
+						m_ignoreNextStartUp = true;
+					});
 			}
 			else
 			{
 				// 追加ダイアログ
-				m_favoriteAddDialog.show();
+				const FilePath songFullPath{ m_menu.cursorMenuItem().fullPath() };
+				FilePath songFolderFullPath = songFullPath;
+				if (!FileSystem::IsDirectory(songFullPath))
+				{
+					songFolderFullPath = FileSystem::ParentPath(songFullPath);
+				}
+				const String songRelativePath = FsUtils::RelativePathFromSongsDir(songFolderFullPath);
+
+				m_dialogRunner = Co::Play<FavoriteAddDialog>().runScoped(
+					[this, songRelativePath](const Optional<int32>& selectedNumber)
+					{
+						if (!selectedNumber.has_value())
+						{
+							// キャンセル時は何もしない
+							return;
+						}
+
+						// .favファイルが新規作成される場合、他フォルダ表示の更新が必要
+						const bool needsReloadAfterAdd =
+							ConfigIni::GetBool(ConfigIni::Key::kAlwaysShowOtherFolders) &&
+							!FileSystem::Exists(GetFavoriteFilePath(*selectedNumber));
+
+						const bool added = AddSongToFavorite(*selectedNumber, songRelativePath);
+
+						if (added && needsReloadAfterAdd)
+						{
+							m_menu.reloadCurrentDirectory(RefreshSongPreviewYN::No, ReloadFromDiskYN::Yes);
+						}
+						m_ignoreNextStartUp = true;
+					});
 			}
 
 			m_startKeyPressStopwatch.reset();
@@ -464,107 +708,6 @@ void SelectScene::updateStartKeyLongPress()
 	{
 		m_startKeyPressStopwatch.reset();
 	}
-}
-
-void SelectScene::updateDialogs()
-{
-	if (m_favoriteAddDialog.isVisible())
-	{
-		m_favoriteAddDialog.update();
-
-		// Startボタンで決定
-		if (KeyConfig::Down(kButtonStart))
-		{
-			// 楽曲の相対パス
-			const FilePath songFullPath{ m_menu.cursorMenuItem().fullPath() };
-
-			// ゲーム上では楽曲単位での登録のみ対応するため、単一譜面の場合は親フォルダを取得
-			FilePath songFolderFullPath = songFullPath;
-			if (!FileSystem::IsDirectory(songFullPath))
-			{
-				songFolderFullPath = FileSystem::ParentPath(songFullPath);
-			}
-
-			const String songRelativePath = FsUtils::RelativePathFromSongsDir(songFolderFullPath);
-
-			// .favファイルが新規作成される場合、他フォルダ表示の更新が必要
-			// (ファイル存在判定するため、お気に入り追加実行より前で判定する必要があるので注意)
-			const bool needsReloadAfterAdd =
-				ConfigIni::GetBool(ConfigIni::Key::kAlwaysShowOtherFolders) &&
-				!FileSystem::Exists(GetFavoriteFilePath(m_favoriteAddDialog.selectedNumber()));
-
-			// お気に入り追加実行
-			const bool added = m_favoriteAddDialog.addToFavorite(songRelativePath);
-
-			if (added && needsReloadAfterAdd)
-			{
-				m_menu.reloadCurrentDirectory();
-			}
-
-			m_favoriteAddDialog.hide();
-			m_ignoreNextStartUp = true;
-		}
-		// Backボタンでキャンセル
-		else if (KeyConfig::Down(kButtonBack))
-		{
-			m_favoriteAddDialog.hide();
-		}
-	}
-	else if (m_favoriteRemoveDialog.isVisible())
-	{
-		m_favoriteRemoveDialog.update();
-
-		// Startボタンで決定
-		if (KeyConfig::Down(kButtonStart))
-		{
-			if (m_favoriteRemoveDialog.selectedChoice() == FavoriteRemoveChoice::Yes)
-			{
-				// お気に入り名を取得
-				// (例: "?Favorite1" → "Favorite1")
-				String favoriteName = m_menu.folderState().fullPath;
-				if (favoriteName.starts_with(U'?'))
-				{
-					favoriteName = favoriteName.substr(1);
-				}
-
-				// 楽曲の相対パスを取得
-				const FilePath songFullPath{ m_menu.cursorMenuItem().fullPath() };
-				const String songRelativePath = FsUtils::RelativePathFromSongsDir(songFullPath);
-
-				// お気に入り削除実行
-				const bool fileRemoved = RemoveFromFavorite(favoriteName, songRelativePath);
-
-				if (fileRemoved)
-				{
-					// .favファイルが削除された場合はフォルダを閉じる
-					const FilePath songsDir = FsUtils::SongsDirectoryPath();
-					const FilePath favPath = FileSystem::PathAppend(songsDir, favoriteName + U".fav");
-					if (!FileSystem::Exists(favPath))
-					{
-						m_menu.closeFolder(PlaySeYN::No);
-					}
-					else
-					{
-						// リロード
-						m_menu.reloadCurrentDirectory(RefreshSongPreviewYN::Yes);
-					}
-				}
-			}
-
-			m_favoriteRemoveDialog.hide();
-			m_ignoreNextStartUp = true;
-		}
-		// Backボタンでキャンセル
-		else if (KeyConfig::Down(kButtonBack))
-		{
-			m_favoriteRemoveDialog.hide();
-		}
-	}
-}
-
-bool SelectScene::anyDialogVisible() const
-{
-	return m_favoriteAddDialog.isVisible() || m_favoriteRemoveDialog.isVisible();
 }
 
 void SelectScene::draw() const

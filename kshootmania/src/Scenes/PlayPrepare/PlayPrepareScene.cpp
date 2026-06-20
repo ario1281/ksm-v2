@@ -64,7 +64,7 @@ namespace
 	}
 }
 
-PlayPrepareScene::PlayPrepareScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay, const Optional<CoursePlayState>& courseState, const Optional<MusicGame::TestPlayOption>& testPlayOption)
+PlayPrepareScene::PlayPrepareScene(FilePathView chartFilePath, MusicGame::IsAutoPlayYN isAutoPlay, const Optional<CoursePlayState>& courseState, const Optional<MusicGame::TestPlayOption>& testPlayOption, const Optional<SelectSceneSearchParams>& selectSearchParams)
 	: m_chartFilePath(chartFilePath)
 	, m_isAutoPlay(isAutoPlay)
 	, m_chartData(FsUtils::HasKsonExtension(chartFilePath)
@@ -72,6 +72,7 @@ PlayPrepareScene::PlayPrepareScene(FilePathView chartFilePath, MusicGame::IsAuto
 		: kson::LoadKshChartData(chartFilePath.toUTF8()))
 	, m_courseState(courseState)
 	, m_testPlayOption(testPlayOption)
+	, m_selectSearchParams(selectSearchParams)
 	, m_canvas(LoadPlayPrepareSceneCanvas())
 	, m_hispeedMenu(ConfigIni::LoadAvailableHispeedTypes(), LoadHispeedSettingFromConfigIni(), kson::GetEffectiveStdBPM(m_chartData), GetInitialBPM(m_chartData))
 	, m_highwayScroll(m_chartData)
@@ -81,39 +82,52 @@ PlayPrepareScene::PlayPrepareScene(FilePathView chartFilePath, MusicGame::IsAuto
 	// ハイスピード設定でHighwayScrollを更新
 	m_highwayScroll.update(m_hispeedMenu.hispeedSetting(), startBPM);
 
-	m_canvas->setParamValues({
-		{ U"title", Unicode::FromUTF8(m_chartData.meta.title) },
-		{ U"artist", Unicode::FromUTF8(m_chartData.meta.artist) },
-		{ U"levelNumber", Format(m_chartData.meta.level) },
-		{ U"bpmNumber", Format(static_cast<int32>(startBPM)) },
-		{ U"difficultyIndex", m_chartData.meta.difficulty.idx },
-		{ U"hispeedValue", MusicGame::HispeedUtils::ToDisplayString(m_hispeedMenu.hispeedSetting()) },
-		{ U"hispeedValueEffective", Format(m_highwayScroll.currentHispeed()) },
-	});
-
-	// ジャケット画像を設定
 	const FilePath parentPath = FileSystem::ParentPath(chartFilePath);
-	const String jacketFilename = Unicode::FromUTF8(m_chartData.meta.jacketFilename);
-	FilePath jacketPath;
+	const FilePath jacketPath = FsUtils::ResolveJacketPath(parentPath, Unicode::FromUTF8(m_chartData.meta.jacketFilename));
 
-	// 拡張子なしの場合はimgs/jacket内の画像を使用
-	if (FileSystem::Extension(jacketFilename).isEmpty())
-	{
-		jacketPath = FileSystem::PathAppend(U"imgs/jacket", jacketFilename + U".jpg");
-	}
-	else
-	{
-		jacketPath = FileSystem::PathAppend(parentPath, jacketFilename);
-	}
+	String title = Unicode::FromUTF8(m_chartData.meta.title);
+	String artist = Unicode::FromUTF8(m_chartData.meta.artist);
+	FilePath titleImgPath;
+	FilePath artistImgPath;
 
-	const Texture jacketTexture{ jacketPath };
-	if (const auto jacketNode = m_canvas->findByName(U"Jacket"))
+	if (!m_chartData.meta.titleImgFilename.empty())
 	{
-		if (const auto sprite = jacketNode->getComponent<noco::Sprite>())
+		titleImgPath = FileSystem::PathAppend(parentPath, Unicode::FromUTF8(m_chartData.meta.titleImgFilename));
+		if (FileSystem::IsFile(titleImgPath))
 		{
-			sprite->setTexture(jacketTexture);
+			title = U"";
+		}
+		else
+		{
+			titleImgPath.clear();
 		}
 	}
+
+	if (!m_chartData.meta.artistImgFilename.empty())
+	{
+		artistImgPath = FileSystem::PathAppend(parentPath, Unicode::FromUTF8(m_chartData.meta.artistImgFilename));
+		if (FileSystem::IsFile(artistImgPath))
+		{
+			artist = U"";
+		}
+		else
+		{
+			artistImgPath.clear();
+		}
+	}
+
+	m_canvas->setParamValues({
+		{ U"title", title },
+		{ U"titleImgFilePath", titleImgPath },
+		{ U"artist", artist },
+		{ U"artistImgFilePath", artistImgPath },
+		{ U"levelNumber", m_chartData.meta.level },
+		{ U"bpmNumberText", Format(static_cast<int32>(startBPM)) },
+		{ U"difficultyIndex", m_chartData.meta.difficulty.idx },
+		{ U"hispeedValueText", MusicGame::HispeedUtils::ToDisplayString(m_hispeedMenu.hispeedSetting()) },
+		{ U"hispeedValueTextEffective", Format(m_highwayScroll.currentHispeed()) },
+		{ U"jacketFilePath", jacketPath },
+	});
 }
 
 Co::Task<void> PlayPrepareScene::start()
@@ -130,7 +144,7 @@ Co::Task<void> PlayPrepareScene::start()
 		{
 			// 自動終了
 			SaveHispeedSettingToConfigIni(m_hispeedMenu.hispeedSetting());
-			requestNextScene<PlayScene>(m_chartFilePath, m_isAutoPlay, m_courseState, m_testPlayOption);
+			requestNextScene<PlayScene>(m_chartFilePath, m_isAutoPlay, m_courseState, m_testPlayOption, m_selectSearchParams);
 			break;
 		}
 
@@ -146,12 +160,12 @@ Co::Task<void> PlayPrepareScene::start()
 			else if (m_courseState.has_value() && m_courseState->currentChartIdx() > 0)
 			{
 				// コースモードの2曲目以降の場合はコースリザルトへ
-				requestNextScene<CourseResultScene>(*m_courseState);
+				requestNextScene<CourseResultScene>(*m_courseState, m_selectSearchParams);
 			}
 			else
 			{
 				// 通常モードまたはコースの1曲目の場合は選曲画面へ
-				requestNextScene<SelectScene>();
+				requestNextScene<SelectScene>(m_selectSearchParams);
 			}
 			break;
 		}
@@ -160,7 +174,7 @@ Co::Task<void> PlayPrepareScene::start()
 		{
 			// 一定時間経過後はStartボタンでスキップ可能
 			SaveHispeedSettingToConfigIni(m_hispeedMenu.hispeedSetting());
-			requestNextScene<PlayScene>(m_chartFilePath, m_isAutoPlay, m_courseState, m_testPlayOption);
+			requestNextScene<PlayScene>(m_chartFilePath, m_isAutoPlay, m_courseState, m_testPlayOption, m_selectSearchParams);
 			break;
 		}
 
@@ -185,8 +199,8 @@ void PlayPrepareScene::update()
 
 		// ハイスピード表示を更新
 		m_canvas->setParamValues({
-			{ U"hispeedValue", MusicGame::HispeedUtils::ToDisplayString(m_hispeedMenu.hispeedSetting()) },
-			{ U"hispeedValueEffective", Format(m_highwayScroll.currentHispeed()) },
+			{ U"hispeedValueText", MusicGame::HispeedUtils::ToDisplayString(m_hispeedMenu.hispeedSetting()) },
+			{ U"hispeedValueTextEffective", Format(m_highwayScroll.currentHispeed()) },
 		});
 	}
 }
@@ -214,5 +228,5 @@ Co::Task<void> PlayPrepareScene::fadeIn()
 
 Co::Task<void> PlayPrepareScene::postFadeOut()
 {
-	co_await ShowLoadingOneFrame::Play(HasBgYN::No);
+	co_await ShowLoadingOneFrame::Play(LoadingBgMode::kBlack);
 }

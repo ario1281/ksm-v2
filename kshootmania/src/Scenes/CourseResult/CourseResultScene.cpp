@@ -40,9 +40,10 @@ namespace
 	}
 }
 
-CourseResultScene::CourseResultScene(const CoursePlayState& courseState)
+CourseResultScene::CourseResultScene(const CoursePlayState& courseState, const Optional<SelectSceneSearchParams>& selectSearchParams)
 	: m_canvas(LoadCourseResultSceneCanvas())
 	, m_courseState(courseState)
+	, m_selectSearchParams(selectSearchParams)
 	, m_newRecordPanel(m_canvas)
 	, m_chartList(m_canvas, m_courseState)
 	, m_snsShare(BuildCourseTweetText(m_courseState))
@@ -76,7 +77,7 @@ void CourseResultScene::updateCanvasParams()
 	m_canvas->setParamValues({
 		{ U"courseTitle", courseInfo.title },
 		{ U"resultTopIndex", m_courseState.isCleared() ? 1.0 : 0.0 },
-		{ U"gaugePercentageNumber", U"{}"_fmt(newAchievementRate) },
+		{ U"gaugePercentageNumber", newAchievementRate },
 		{ U"gaugeTextureIndex", 1.0 },
 		{ U"bottomRightText", U"" },
 	});
@@ -137,7 +138,7 @@ Co::Task<void> CourseResultScene::start()
 		}
 	}
 
-	requestNextScene<SelectScene>();
+	requestNextScene<SelectScene>(m_selectSearchParams);
 }
 
 Co::Task<bool> CourseResultScene::waitForNewRecordPanelClose()
@@ -210,5 +211,5 @@ Co::Task<void> CourseResultScene::fadeIn()
 Co::Task<void> CourseResultScene::postFadeOut()
 {
 	// SelectSceneはコンストラクタの処理に時間がかかるので、ローディングはここで出しておく
-	return ShowLoadingOneFrame::Play(HasBgYN::Yes);
+	return ShowLoadingOneFrame::Play(LoadingBgMode::kMainBg);
 }

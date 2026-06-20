@@ -326,6 +326,7 @@ ResultScene::ResultScene(const ResultSceneArgs& args)
 	, m_newRecordPanel(m_canvas)
 	, m_snsShare(BuildResultTweetText(args.chartData, args.playResult, args.chartFilePath, args.courseState))
 	, m_courseState(args.courseState)
+	, m_selectSearchParams(args.selectSearchParams)
 {
 	// コースモードの場合は結果を記録
 	if (m_courseState)
@@ -362,33 +363,29 @@ ResultScene::ResultScene(const ResultSceneArgs& args)
 	updateCanvasParams();
 
 	// ジャケット画像を設定
-	FilePath jacketFilePath = FileSystem::PathAppend(FileSystem::ParentPath(args.chartFilePath), Unicode::FromUTF8(m_chartData.meta.jacketFilename));
+	const FilePath chartDir = FileSystem::ParentPath(args.chartFilePath);
+	const FilePath jacketPath = FsUtils::ResolveJacketPath(chartDir, Unicode::FromUTF8(m_chartData.meta.jacketFilename));
+	const bool jacketExists = !jacketPath.isEmpty() && FileSystem::IsFile(jacketPath);
+	m_canvas->setParamValues({
+		{ U"jacketFilePath", jacketPath },
+		{ U"jacketActive", jacketExists },
+	});
 
-	// 拡張子なしの場合はimgs/jacket内の画像を使用
-	if (FileSystem::Extension(jacketFilePath).isEmpty())
+	// title_img/artist_imgを設定(updateCanvasParams内で使用)
+	if (!m_chartData.meta.titleImgFilename.empty())
 	{
-		const String baseName = FileSystem::BaseName(jacketFilePath);
-		if (!baseName.isEmpty())
+		const FilePath titleImgPath = FileSystem::PathAppend(chartDir, Unicode::FromUTF8(m_chartData.meta.titleImgFilename));
+		if (FileSystem::IsFile(titleImgPath))
 		{
-			jacketFilePath = FileSystem::PathAppend(U"imgs/jacket", baseName + U".jpg");
+			m_canvas->setParamValue(U"songTitleImgFilePath", titleImgPath);
 		}
 	}
-
-	Texture jacketTexture;
-	if (FileSystem::IsFile(jacketFilePath))
+	if (!m_chartData.meta.artistImgFilename.empty())
 	{
-		jacketTexture = Texture{ jacketFilePath };
-	}
-
-	if (const auto jacketNode = m_canvas->findByName(U"JacketImage"))
-	{
-		if (const auto sprite = jacketNode->getComponent<noco::Sprite>())
+		const FilePath artistImgPath = FileSystem::PathAppend(chartDir, Unicode::FromUTF8(m_chartData.meta.artistImgFilename));
+		if (FileSystem::IsFile(artistImgPath))
 		{
-			sprite->setTexture(jacketTexture);
-			if (jacketTexture.isEmpty())
-			{
-				sprite->setColor(ColorF{ 0.0, 0.0 });
-			}
+			m_canvas->setParamValue(U"artistNameImgFilePath", artistImgPath);
 		}
 	}
 
@@ -412,18 +409,18 @@ void ResultScene::updateCanvasParams()
 	const int32 errorCountWithUnjudged = m_playResult.comboStats.error + unjudgedCombo;
 
 	m_canvas->setParamValues({
-		{ U"songTitle", Unicode::FromUTF8(m_chartData.meta.title) },
-		{ U"artistName", Unicode::FromUTF8(m_chartData.meta.artist) },
+		{ U"songTitle", m_chartData.meta.titleImgFilename.empty() ? Unicode::FromUTF8(m_chartData.meta.title) : U"" },
+		{ U"artistName", m_chartData.meta.artistImgFilename.empty() ? Unicode::FromUTF8(m_chartData.meta.artist) : U"" },
 		{ U"difficultyIndex", static_cast<double>(m_chartData.meta.difficulty.idx) },
 		{ U"levelIndex", static_cast<double>(m_chartData.meta.level - 1) },
 		{ U"resultTopIndex", static_cast<double>(TopTextureRow(m_playResult)) },
 		{ U"gradeIndex", static_cast<double>(GradeToIndex(m_playResult.grade())) },
-		{ U"scoreNumber", U"{:08d}"_fmt(m_playResult.score) },
-		{ U"maxComboNumber", U"{:04d}"_fmt(m_playResult.maxCombo) },
-		{ U"criticalCount", U"{:04d}"_fmt(m_playResult.comboStats.critical) },
-		{ U"nearCount", U"{:04d}"_fmt(m_playResult.comboStats.totalNear()) },
-		{ U"errorCount", U"{:04d}"_fmt(errorCountWithUnjudged) },
-		{ U"gaugePercentageNumber", U"{}"_fmt(static_cast<int32>(m_playResult.gaugePercentage)) },
+		{ U"scoreNumber", m_playResult.score },
+		{ U"maxComboNumber", m_playResult.maxCombo },
+		{ U"criticalCount", m_playResult.comboStats.critical },
+		{ U"nearCount", m_playResult.comboStats.totalNear() },
+		{ U"errorCount", errorCountWithUnjudged },
+		{ U"gaugePercentageNumber", static_cast<int32>(m_playResult.gaugePercentage) },
 		{ U"gaugeTextureIndex", static_cast<double>(gaugeTextureIndex) },
 		{ U"bottomRightText", U"" },
 	});
@@ -505,8 +502,8 @@ Co::Task<void> ResultScene::start()
 			const FilePath nextChartPath = m_courseState->currentChartPath();
 
 			// 次の曲へ
-			co_await ShowLoadingOneFrame::Play(HasBgYN::Yes);
-			requestNextScene<PlayPrepareScene>(nextChartPath, m_playResult.playOption.isAutoPlay, m_courseState);
+			co_await ShowLoadingOneFrame::Play(LoadingBgMode::kMainBg);
+			requestNextScene<PlayPrepareScene>(nextChartPath, m_playResult.playOption.isAutoPlay, m_courseState, none, m_selectSearchParams);
 		}
 	}
 	else if (m_playResult.playOption.testPlayOption.has_value())
@@ -516,7 +513,7 @@ Co::Task<void> ResultScene::start()
 	}
 	else
 	{
-		requestNextScene<SelectScene>();
+		requestNextScene<SelectScene>(m_selectSearchParams);
 	}
 }
 
@@ -589,5 +586,5 @@ Co::Task<void> ResultScene::fadeIn()
 Co::Task<void> ResultScene::postFadeOut()
 {
 	// SelectSceneはコンストラクタの処理に時間がかかるので、ローディングはここで出しておく
-	return ShowLoadingOneFrame::Play(HasBgYN::Yes);
+	return ShowLoadingOneFrame::Play(LoadingBgMode::kMainBg);
 }
